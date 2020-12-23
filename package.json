@@ -1,0 +1,26 @@
+{
+  "name": "radash",
+  "version": "0.0.0-alpha",  
+  "description": "A collection of useful and helpful functions",
+  "type": "module",
+  "main": "index.js",
+  "author": "",
+  "private": false,
+  "license": "MIT",
+  "scripts": {
+    "test": "c8 inforce --targetPath ./test"
+  },
+  "c8": {
+    "check-coverage": true,
+    "lines": 69,
+    "functions": 60,
+    "branches": 100,
+    "reporter": "html",
+    "report-dir": ".coverage"
+  },
+  "devDependencies": {
+    "c8": "^7.3.5",
+    "chai": "^4.2.0",
+    "inforce": "^0.0.10"
+  }
+}
