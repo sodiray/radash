@@ -1,14 +1,15 @@
 {
   "name": "radash",
-  "version": "0.0.0-alpha",  
+  "version": "0.0.2",
   "description": "A collection of useful and helpful functions",
   "type": "module",
   "main": "index.js",
-  "author": "",
+  "author": "rayepps",
   "private": false,
   "license": "MIT",
   "scripts": {
-    "test": "c8 inforce --targetPath ./test"
+    "test": "c8 inforce --targetPath ./test",
+    "workaround": "./node_modules/.bin/c8 ./node_modules/.bin/inforce --targetPath ./test"
   },
   "c8": {
     "check-coverage": true,
