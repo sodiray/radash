@@ -18,9 +18,15 @@ export const group = (array, getGropuId) => {
 
 export const boil = (array, compareFunc) => array.reduce(compareFunc)
 export const sum = (array, fn) => (array || []).reduce((acc, item) => acc + fn(item), 0)
-export const sort = (array, sortKeyFn) => array ? [...array].sort((a, b) => sortKeyFn(b) - sortKeyFn(a)) : []
 export const first = (array) => array?.length > 0 ? array[0] : null
 export const last = (array) => array?.length > 0 ? array[array.length - 1] : null
+
+export const sort = (array, getter, desc = false) => {
+  if (!array) return []
+  const sorter = (a, b) => getter(b) - getter(a)
+  const swap = (fn) => (...args) => fn(...(args.reverse()))
+  return [...array].sort(desc === true ? sorter : swap(sorter))
+}
 
 export const replace = (array, index, item) => {
   const copy = [...array]

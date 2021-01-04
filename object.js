@@ -1,3 +1,4 @@
+import zlib from 'zlib'
 
 /**
  * Removes (shakes out) any null or undefined entries from
@@ -25,3 +26,9 @@ export const clone = (obj) => Object.getOwnPropertyNames(obj).reduce((acc, name)
   ...acc,
   [name]: obj[name]
 }), {})
+
+export const compress = (data) => Buffer.from(JSON.stringify(data ?? {})).toString('base64')
+export const decompress = (str) => str ? JSON.parse(Buffer.from(str, 'base64').toString()) : {}
+
+export const xcomp = (data) => zlib.brotliCompressSync(JSON.stringify(data ?? {}))
+export const xdecomp = (str) => str ? JSON.parse(zlib.brotliDecompressSync(str).toString()) : {}

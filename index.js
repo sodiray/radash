@@ -30,12 +30,17 @@ import {
   mapValues,
   lowerize,
   upperize,
-  clone
+  clone,
+  compress,
+  decompress,
+  xcomp,
+  xdecomp
 } from './object.js'
 
 import {
   camal,
-  snake
+  snake,
+  template
 } from './string.js'
 
 import {
@@ -68,8 +73,13 @@ export default {
   lowerize,
   upperize,
   clone,
+  compress,
+  decompress,
+  xcomp,
+  xdecomp,
   camal,
   snake,
+  template,
   isArray,
   isObject,
   isFunction

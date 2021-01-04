@@ -24,3 +24,10 @@ export const snake = (...parts) => {
   })
 }
 
+const defaultRegex = /\{\{(.+?)\}\}/g
+
+export const template = (str, data, regex = defaultRegex) => {
+  return Array.from(str.matchAll(regex)).reduce((acc, match) => {
+    return acc.replace(match[0], data[match[1]])
+  }, str)
+}
