@@ -1,6 +1,6 @@
 {
   "name": "radash",
-  "version": "1.0.0",
+  "version": "1.0.4",
   "description": "A collection of useful and helpful functions",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

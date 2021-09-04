@@ -140,3 +140,17 @@ export const shuffle = <T>(array: T[]): T[] => {
     .sort((a, b) => a.rand - b.rand)
     .map((a) => a.value)
 }
+
+/**
+ * Draw a random item from a list. Returns
+ * null if the list is empty
+ */
+export const draw = <T> (array: T[]): T | null => {
+  const min = 0
+  const max = array.length
+  if (max === 0) {
+    return null
+  }
+  const index = Math.floor(Math.random() * (max - min + 1) + min)
+  return array[index]
+}
