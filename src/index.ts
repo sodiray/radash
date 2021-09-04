@@ -28,7 +28,8 @@ import {
   partial,
   proxied,
   partob,
-  tryit
+  tryit,
+  memo
 } from './curry'
 
 import {
@@ -49,7 +50,8 @@ import {
 import {
   isArray,
   isObject,
-  isFunction
+  isFunction,
+  isString
 } from './typed'
 
 import {
@@ -84,6 +86,7 @@ export default {
   isArray,
   isObject,
   isFunction,
+  isString,
   select,
   min,
   max,
@@ -92,5 +95,6 @@ export default {
   shuffle,
   dict,
   draw,
-  random
+  random,
+  memo
 }

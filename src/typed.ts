@@ -10,3 +10,7 @@ export const isObject = (value: any) => {
 export const isFunction = (value: any) => {
   return !!(value && value.constructor && value.call && value.apply)
 }
+
+export const isString = (val: any) => {
+  return typeof val === 'string' || val instanceof String
+}
