@@ -1,27 +1,28 @@
 {
   "name": "radash",
-  "version": "0.1.1",
+  "version": "1.0.0",
   "description": "A collection of useful and helpful functions",
-  "type": "module",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/**/*"
+  ],
   "author": "rayepps",
   "private": false,
   "license": "MIT",
   "scripts": {
-    "test": "c8 inforce --targetPath ./test",
-    "workaround": "./node_modules/.bin/c8 ./node_modules/.bin/inforce --targetPath ./test"
-  },
-  "c8": {
-    "check-coverage": true,
-    "lines": 69,
-    "functions": 60,
-    "branches": 100,
-    "reporter": "html",
-    "report-dir": ".coverage"
+    "test": "jest",
+    "check": "yarn lint && yarn test && yarn build",
+    "build": "tsc",
+    "lint": "tslint -p tsconfig.json"
   },
   "devDependencies": {
-    "c8": "^7.3.5",
-    "chai": "^4.2.0",
-    "inforce": "^0.0.10"
+    "@types/chai": "^4.2.21",
+    "@types/jest": "^27.0.1",
+    "chai": "^4.3.4",
+    "jest": "^27.1.0",
+    "ts-jest": "^27.0.5",
+    "tslint": "^6.0.0",
+    "typescript": "^4.4.2"
   }
 }
