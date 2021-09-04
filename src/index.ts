@@ -13,13 +13,14 @@ import {
   cluster,
   unique,
   shuffle,
-  dict
-} from './array.js'
+  dict,
+  draw
+} from './array'
 
 import {
   asyncMap,
   asyncReduce
-} from './async.js'
+} from './async'
 
 import {
   chain,
@@ -28,7 +29,7 @@ import {
   proxied,
   partob,
   tryit
-} from './curry.js'
+} from './curry'
 
 import {
   shake,
@@ -37,20 +38,23 @@ import {
   lowerize,
   upperize,
   clone
-} from './object.js'
+} from './object'
 
 import {
   camal,
   snake,
   template
-} from './string.js'
+} from './string'
 
 import {
   isArray,
   isObject,
   isFunction
-} from './typed.js'
+} from './typed'
 
+import {
+  random
+} from './number'
 
 export default {
   group,
@@ -86,5 +90,7 @@ export default {
   cluster,
   unique,
   shuffle,
-  dict
+  dict,
+  draw,
+  random
 }
