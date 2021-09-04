@@ -3,25 +3,28 @@
   "version": "0.1.1",
   "description": "A collection of useful and helpful functions",
   "type": "module",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/**/*"
+  ],
   "author": "rayepps",
   "private": false,
   "license": "MIT",
   "scripts": {
-    "test": "c8 inforce --targetPath ./test",
-    "workaround": "./node_modules/.bin/c8 ./node_modules/.bin/inforce --targetPath ./test"
-  },
-  "c8": {
-    "check-coverage": true,
-    "lines": 69,
-    "functions": 60,
-    "branches": 100,
-    "reporter": "html",
-    "report-dir": ".coverage"
+    "test": "jest --config jestconfig.json",
+    "check": "npm run lint && npm test && npm run tscov",
+    "build": "tsc",
+    "lint": "tslint -p tsconfig.json",
+    "tscov": "tscov -m 90"
   },
   "devDependencies": {
-    "c8": "^7.3.5",
-    "chai": "^4.2.0",
-    "inforce": "^0.0.10"
+    "@liftr/tscov": "^1.4.4",
+    "@types/jest": "^25.1.0",
+    "jest": "^25.1.0",
+    "rimraf": "^3.0.1",
+    "ts-jest": "^25.0.0",
+    "tslint": "^6.0.0",
+    "typescript": "^3.7.5"
   }
 }

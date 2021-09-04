@@ -7,7 +7,13 @@ import {
   first,
   last,
   replace,
-  groupReduce
+  select,
+  min,
+  max,
+  cluster,
+  unique,
+  shuffle,
+  dict
 } from './array.js'
 
 import {
@@ -30,11 +36,7 @@ import {
   mapValues,
   lowerize,
   upperize,
-  clone,
-  compress,
-  decompress,
-  xcomp,
-  xdecomp
+  clone
 } from './object.js'
 
 import {
@@ -58,7 +60,6 @@ export default {
   first,
   last,
   replace,
-  groupReduce,
   asyncMap,
   asyncReduce,
   chain,
@@ -73,14 +74,17 @@ export default {
   lowerize,
   upperize,
   clone,
-  compress,
-  decompress,
-  xcomp,
-  xdecomp,
   camal,
   snake,
   template,
   isArray,
   isObject,
-  isFunction
+  isFunction,
+  select,
+  min,
+  max,
+  cluster,
+  unique,
+  shuffle,
+  dict
 }
