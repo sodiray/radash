@@ -1,15 +1,16 @@
 import chai from 'chai'
 
-import * as _ from '../curry.js'
+import * as _ from '../curry'
 
 const { assert } = chai
 
-export const test_compose = () => {
 
-  const useZero = (fn) => () => fn(0)
-  const objectize = (fn) => (num) => fn({ num })
-  const incrament = (fn) => ({ num }) => fn({ num: num + 1 })
-  const returnArg = arg => (args) => args[arg]
+test('compose', () => {
+
+  const useZero = (fn: any) => () => fn(0)
+  const objectize = (fn: any) => (num: any) => fn({ num })
+  const incrament = (fn: any) => ({ num }: any) => fn({ num: num + 1 })
+  const returnArg = (arg: any) => (args: any) => args[arg]
 
   const composed = _.compose(
     useZero,
@@ -31,14 +32,14 @@ export const test_compose = () => {
 
   assert.equal(result, expected)
 
-}
+})
 
-export const test_compose_composesAsync = async () => {
+test('compose composes async', async () => {
 
-  const useZero = (fn) => async () => await fn(0)
-  const objectize = (fn) => async (num) => await fn({ num })
-  const incrament = (fn) => async ({ num }) => await fn({ num: num + 1 })
-  const returnArg = (arg) => async (args) => await args[arg]
+  const useZero = (fn: any) => async () => await fn(0)
+  const objectize = (fn: any) => async (num: any) => await fn({ num })
+  const incrament = (fn: any) => async ({ num }: any) => await fn({ num: num + 1 })
+  const returnArg = (arg: any) => async (args: any) => await args[arg]
 
   const composed = _.compose(
     useZero,
@@ -60,49 +61,49 @@ export const test_compose_composesAsync = async () => {
 
   assert.equal(result, expected)
 
-}
+})
 
-export const test_partial_passesSingleArgs = () => {
+test('partial passes single args', () => {
 
-  const add = (a, b) => a + b
+  const add = (a: number, b: number) => a + b
 
   const expected = 20
   const result = _.partial(add, 10)(10)
 
   assert.equal(result, expected)
 
-}
+})
 
-export const test_partial_passesManyArgs = () => {
+test('partial_passesManyArgs', () => {
 
-  const add = (...nums) => nums.reduce((a, b) => a + b, 0)
+  const add = (...nums: number[]) => nums.reduce((a, b) => a + b, 0)
 
   const expected = 10
   const result = _.partial(add, 2, 2, 2)(2, 2)
 
   assert.equal(result, expected)
 
-}
+})
 
-export const test_partob_passesSingleArgs = () => {
+test('partob passes single args', () => {
 
-  const add = ({ a, b }) => a + b
+  const add = ({ a, b }: { a: number, b: number }) => a + b
 
   const expected = 20
   const result = _.partob(add, { a: 10 })({ b: 10 })
 
   assert.equal(result, expected)
 
-}
+})
 
-export const test_partob_overridesInitalWithLater = () => {
+test('partob overrides inital with later', () => {
 
-  const add = ({ a, b }) => a + b
+  const add = ({ a, b }: { a: number, b: number }) => a + b
 
   const expected = 15
-  const result = _.partob(add, { a: 10 })({ a: 5, b: 10 })
+  const result = _.partob(add, { a: 10 })({ a: 5, b: 10 } as any)
 
   assert.equal(result, expected)
 
-}
+})
 

@@ -34,9 +34,8 @@ export const snake = (...parts: string[]) => {
  * Ex. tempalte('Hello, {{name}}', { name: 'ray' })
  * Ex. template('Hello, <name>', { name: 'ray' }, /<(.+?)>/g)
  */
-export const template = (str: string, data: object, regex = /\{\{(.+?)\}\}/g) => {
-  const d = data as any
+export const template = (str: string, data: Record<string, any>, regex = /\{\{(.+?)\}\}/g) => {
   return Array.from(str.matchAll(regex)).reduce((acc, match) => {
-    return acc.replace(match[0], d[match[1]])
+    return acc.replace(match[0], data[match[1]])
   }, str)
 }

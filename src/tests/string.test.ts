@@ -1,12 +1,11 @@
 import chai from 'chai'
 
-import * as str from '../string.js'
+import * as str from '../string'
 
 const { assert } = chai
 
 
-
-export const test_template_replacesAllOccurrences = () => {
+test('template replaces all occurrences', () => {
 
   const tmp = `
     Hello my name is {{name}}. I am a {{type}}.
@@ -31,4 +30,4 @@ export const test_template_replacesAllOccurrences = () => {
 
   assert.equal(result, expected)
 
-}
+})

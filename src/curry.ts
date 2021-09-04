@@ -21,11 +21,11 @@ export const partial = (fn: Func, ...args: any[]) => {
 
 export const tryit = <ResultType, ErrorType = Error>(func: Func) => async (
   ...args: any[]
-): Promise<[ErrorType | null, ResultType] | [ErrorType, ResultType | null]> => {
+): Promise<[null, ResultType] | [ErrorType, null]> => {
   try {
     return [null, await func(...args)]
   } catch (err) {
-    return [err, null]
+    return [err as any, null]
   }
 }
 

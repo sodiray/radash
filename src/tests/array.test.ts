@@ -1,11 +1,11 @@
 import chai from 'chai'
 
-import * as ary from '../array.js'
+import * as ary from '../array'
 
 const { assert } = chai
 
 
-export const test_sort_usesGetter = () => {
+test('sort uses getter', () => {
 
   const list = [{ index: 2 }, { index: 0 }, { index: 1 }]
 
@@ -15,10 +15,10 @@ export const test_sort_usesGetter = () => {
   assert.equal(result[1].index, 1)
   assert.equal(result[2].index, 2)
 
-}
+})
 
 
-export const test_sort_descendingOrder = () => {
+test('sort descending order', () => {
 
   const list = [{ index: 2 }, { index: 0 }, { index: 1 }]
 
@@ -28,4 +28,4 @@ export const test_sort_descendingOrder = () => {
   assert.equal(result[1].index, 1)
   assert.equal(result[2].index, 0)
 
-}
+})
