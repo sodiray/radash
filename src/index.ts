@@ -14,7 +14,8 @@ import {
   unique,
   shuffle,
   dict,
-  draw
+  draw,
+  range
 } from './array'
 
 import {
@@ -29,7 +30,8 @@ import {
   proxied,
   partob,
   tryit,
-  memo
+  memo,
+  iter
 } from './curry'
 
 import {
@@ -44,7 +46,8 @@ import {
 import {
   camal,
   snake,
-  template
+  template,
+  uid
 } from './string'
 
 import {
@@ -96,5 +99,8 @@ export default {
   dict,
   draw,
   random,
-  memo
+  memo,
+  iter,
+  range,
+  uid
 }
