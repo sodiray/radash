@@ -1,3 +1,5 @@
+import { random } from './number'
+import { iter } from './curry'
 
 /**
  * Joins all string arguments in a camal case fashion
@@ -38,4 +40,11 @@ export const template = (str: string, data: Record<string, any>, regex = /\{\{(.
   return Array.from(str.matchAll(regex)).reduce((acc, match) => {
     return acc.replace(match[0], data[match[1]])
   }, str)
+}
+
+export const uid = (length: number, specials: string = '') => {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789' + (specials ?? '')
+  return iter(length, (acc) => {
+    return acc + characters.charAt(random(0, characters.length))
+  }, '')
 }

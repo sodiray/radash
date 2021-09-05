@@ -1,4 +1,4 @@
-
+import { iter } from './curry'
 
 /**
  * Sorts an array of items into groups. The return value is a map where the keys are
@@ -145,7 +145,7 @@ export const shuffle = <T>(array: T[]): T[] => {
  * Draw a random item from a list. Returns
  * null if the list is empty
  */
-export const draw = <T> (array: T[]): T | null => {
+export const draw = <T>(array: T[]): T | null => {
   const min = 0
   const max = array.length
   if (max === 0) {
@@ -153,4 +153,17 @@ export const draw = <T> (array: T[]): T | null => {
   }
   const index = Math.floor(Math.random() * (max - min + 1) + min)
   return array[index]
+}
+
+/**
+ * Creates a generator that will produce an iteration through
+ * the range of number as requested.
+ * 
+ * @example for (const i of _.range(3, 3*3, 3))
+ */
+export const range = (start: number, end: number, step: number = 1): number[] => {
+  const itemCount = (end - start) / step
+  return iter(itemCount, (list, idx) => {
+    return [...list, ((idx * step) + start)]
+  }, [start])
 }

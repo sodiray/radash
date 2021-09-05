@@ -1,5 +1,4 @@
-import chai from 'chai'
-
+import * as chai from 'chai'
 import * as _ from '../curry'
 
 const { assert } = chai
@@ -107,3 +106,7 @@ test('partob overrides inital with later', () => {
 
 })
 
+test('iter iterates correct number of times', () => {
+  const result = _.iter(5, (acc, idx) => acc + idx, 0)
+  assert.equal(result, 15)
+})
