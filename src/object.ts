@@ -3,13 +3,13 @@
  * Removes (shakes out) any null or undefined entries from
  * the given object
  */
-export const shake = <T>(obj: Record<string, T>) => {
+export const shake = <T extends object = object>(obj: object): T => {
   return Object.keys(obj).reduce((acc, key) => {
     if (obj[key] === null || obj[key] === undefined) {
       return acc
     }
     else return { ...acc, [key]: obj[key] }
-  }, {} as Partial<T>)
+  }, {} as T)
 }
 
 /**
@@ -36,9 +36,9 @@ export const mapValues = <T, K>(obj: Record<string, T>, mapFunc: (item: T) => K)
 export const lowerize = <T>(obj: Record<string, T>) => mapKeys(obj, k => k.toLowerCase())
 export const upperize = <T>(obj: Record<string, T>) => mapKeys(obj, k => k.toUpperCase())
 
-export const clone = <T>(obj: Record<string, T>) => {
+export const clone = <T extends object = object>(obj: T): T => {
   return Object.getOwnPropertyNames(obj).reduce((acc, name) => ({
     ...acc,
     [name]: obj[name]
-  }), {})
+  }), {} as T)
 }

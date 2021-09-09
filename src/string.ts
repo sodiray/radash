@@ -9,8 +9,8 @@ import { iter } from './curry'
  */
 export const camal = (...parts: string[]) => {
   if (parts.length === 0) return ''
-  if (parts.length === 1) return parts[1]
-  return parts.slice(1).reduce((acc, part) => {
+  if (parts.length === 1) return parts[0]
+  return parts.reduce((acc, part) => {
     return `${acc}${part.charAt(0).toUpperCase()}${part.slice(1)}`
   })
 }
@@ -23,8 +23,8 @@ export const camal = (...parts: string[]) => {
  */
 export const snake = (...parts: string[]) => {
   if (parts.length === 0) return ''
-  if (parts.length === 1) return parts[1]
-  return parts.slice(1).reduce((acc, part) => {
+  if (parts.length === 1) return parts[0]
+  return parts.reduce((acc, part) => {
     return `${acc}_${part.toLowerCase()}`
   })
 }
@@ -43,8 +43,8 @@ export const template = (str: string, data: Record<string, any>, regex = /\{\{(.
 }
 
 export const uid = (length: number, specials: string = '') => {
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789' + (specials ?? '')
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789' + specials
   return iter(length, (acc) => {
-    return acc + characters.charAt(random(0, characters.length))
+    return acc + characters.charAt(random(0, characters.length - 1))
   }, '')
 }
