@@ -1,4 +1,5 @@
 import { iter } from './curry'
+import { random } from './number'
 
 /**
  * Sorts an array of items into groups. The return value is a map where the keys are
@@ -36,7 +37,6 @@ export const sum = <T extends number | object>(array: T[], fn?: (item: T) => num
  * Get the first item in an array or a default value
  */
 export const first = <T>(array: T[], defaultValue: T | null | undefined = null) => {
-  if (!array) return defaultValue
   return array?.length > 0 ? array[0] : defaultValue
 }
 
@@ -44,7 +44,6 @@ export const first = <T>(array: T[], defaultValue: T | null | undefined = null) 
  * Get the last item in an array or a default value
  */
 export const last = <T>(array: T[], defaultValue: T | null | undefined = null) => {
-  if (!array) return defaultValue
   return array?.length > 0 ? array[array.length - 1] : defaultValue
 }
 
@@ -79,11 +78,11 @@ export const replace = <T>(array: T[], index: number, item: T) => {
  * Convert an array to a dictionary by mapping each item
  * into a dictionary key & value 
  */
-export const dict = <T>(array: T[], getId: (item: T) => string | number) => {
+export const dict = <T, K extends string | number | symbol>(array: T[], getId: (item: T) => K): Record<K, T> => {
   return array.reduce((acc, item) => ({
     ...acc,
     [getId(item)]: item
-  }), {})
+  }), {} as Record<K, T>)
 }
 
 /**
@@ -104,8 +103,9 @@ export const select = <T, K>(array: T[], mapper: (item: T) => K, condition: (ite
  * 
  * Ex. max([{ num: 1 }, { num: 2 }], x => x.num) == 2
  */
-export const max = <T>(array: T[], getter: (item: T) => number) => {
-  return boil(array, (a, b) => getter(a) > getter(b) ? a : b)
+export const max = <T extends number | object>(array: T[], getter?: (item: T) => number) => {
+  const get = getter ? getter : (v: any) => v
+  return boil(array, (a, b) => get(a) > get(b) ? a : b)
 }
 
 /**
@@ -113,8 +113,9 @@ export const max = <T>(array: T[], getter: (item: T) => number) => {
  * 
  * Ex. max([{ num: 1 }, { num: 2 }], x => x.num) == 1
  */
-export const min = <T>(array: T[], getter: (item: T) => number) => {
-  return boil(array, (a, b) => getter(a) < getter(b) ? a : b)
+export const min = <T extends number | object>(array: T[], getter?: (item: T) => number) => {
+  const get = getter ? getter : (v: any) => v
+  return boil(array, (a, b) => get(a) < get(b) ? a : b)
 }
 
 
@@ -125,13 +126,13 @@ export const cluster = <T>(list: T[], size: number = 2): T[][] => {
   })
 }
 
-export const unique = <T, K extends string | number | symbol>(array: T[], getter: (item: T) => K) => {
-  const valueMap = array.reduce((acc: Record<string | number | symbol, any>, item: T) => {
-    const value = getter(item)
-    if (acc[value]) return acc
-    return { ...acc, [value]: true }
-  }, {})
-  return Object.keys(valueMap)
+export const unique = <T, K extends string | number | symbol>(array: T[], toKey?: (item: T) => K): T[] => {
+  const valueMap = array.reduce((acc, item) => {
+    const key = toKey ? toKey(item) : (item as any as string | number | symbol)
+    if (acc[key]) return acc
+    return { ...acc, [key]: item }
+  }, {} as Record<string | number | symbol, T>)
+  return Object.values(valueMap)
 }
 
 export const shuffle = <T>(array: T[]): T[] => {
@@ -151,7 +152,7 @@ export const draw = <T>(array: T[]): T | null => {
   if (max === 0) {
     return null
   }
-  const index = Math.floor(Math.random() * (max - min + 1) + min)
+  const index = random(0, max - 1)
   return array[index]
 }
 

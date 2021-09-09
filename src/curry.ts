@@ -29,9 +29,9 @@ export const tryit = <ResultType, ErrorType = Error>(func: Func) => async (
   }
 }
 
-export const proxied = <T, K>(cb: (arg: T) => K): Record<string, (arg: T) => K> => {
+export const proxied = <T, K>(handler: (propertyName: T) => K): Record<string, K> => {
   return new Proxy({}, {
-    get: (target, arg: any) => cb(arg)
+    get: (target, propertyName: any) => handler(propertyName)
   })
 }
 
@@ -44,7 +44,7 @@ const memoize = <T>(
   ttl: number
 ) => {
   return function callWithMemo(...args: any): T {
-    const key = keyFunc ? keyFunc(args) : JSON.stringify({ args })
+    const key = keyFunc ? keyFunc(...args) : JSON.stringify({ args })
     const existing = cache[key]
     if (existing !== undefined) {
       if (existing.exp > new Date().getTime()) {
@@ -64,7 +64,7 @@ export const memo = <TFunc extends Function>(func: TFunc, {
   key = null,
   ttl = 300
 }: {
-  key?: Func<string> | null
+  key?: Func<any, string> | null
   ttl?: number
 } = {}) => {
   return memoize({}, func as any, key, ttl) as any as TFunc

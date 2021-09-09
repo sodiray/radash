@@ -77,6 +77,7 @@ export default {
   proxied,
   partob,
   tryit,
+  try: tryit,
   shake,
   mapKeys,
   mapValues,
