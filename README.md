@@ -1,5 +1,5 @@
 # Radash
-Its like Ramda or Lodash because its just a library of simple, small, utility functions. Its not like Ramda or Lodash because you can open it up and read everyone of them.
+Its like Ramda or Lodash because its just a library of simple, small, utility functions. Its not like Ramda or Lodash because you can open it up and easily read and understand all of them.
 
 ## Install
 ```
