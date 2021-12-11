@@ -15,7 +15,8 @@ import {
   shuffle,
   dict,
   draw,
-  range
+  range,
+  flat
 } from './array'
 
 import {
@@ -103,5 +104,6 @@ export default {
   memo,
   iter,
   range,
-  uid
+  uid,
+  flat
 }

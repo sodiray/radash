@@ -168,3 +168,13 @@ export const range = (start: number, end: number, step: number = 1): number[] =>
     return [...list, ((idx * step) + start)]
   }, [start])
 }
+
+/**
+ * Given an array of arrays, returns a single
+ * dimentional array with all items in it.
+ */
+export const flat = <T>(lists: T[][]): T[] => {
+  return lists.reduce((acc, list) => {
+    return [...acc, ...list]
+  }, [])
+}
