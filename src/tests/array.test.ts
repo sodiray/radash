@@ -336,4 +336,14 @@ describe('array module', () => {
     })
   })
 
+  describe('flat function', () => {
+    test('returns all items in all arrays', () => {
+      const lists = [['a', 'b'], ['c', 'd'], ['e']]
+      const result = _.flat(lists)
+      assert.deepEqual(result, ['a', 'b', 'c', 'd', 'e'])
+      assert.equal(result[0], 'a')
+      assert.equal(result[4], 'e')
+    })
+  })
+
 })

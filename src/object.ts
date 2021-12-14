@@ -3,7 +3,7 @@
  * Removes (shakes out) any null or undefined entries from
  * the given object
  */
-export const shake = <T extends object = object>(obj: object): T => {
+export const shake = <RemovedKeys extends string, T>(obj: T): Omit<T, RemovedKeys> => {
   return Object.keys(obj).reduce((acc, key) => {
     if (obj[key] === null || obj[key] === undefined) {
       return acc
