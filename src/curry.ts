@@ -19,13 +19,16 @@ export const partial = (fn: Func, ...args: any[]) => {
   return (...rest: any[]) => fn(...args, ...rest)
 }
 
-export const tryit = <ResultType, ErrorType = Error>(func: Func) => async (
-  ...args: any[]
-): Promise<[null, ResultType] | [ErrorType, null]> => {
-  try {
-    return [null, await func(...args)]
-  } catch (err) {
-    return [err as any, null]
+type ArgumentsType<T> = T extends (...args: infer U) => any ? U : never
+type UnwrapPromisify<T> = T extends Promise<infer U> ? U : T
+
+export const tryit = <TFunction extends (...args: any) => any>(func: TFunction) => {
+  return async (...args: ArgumentsType<TFunction>): Promise<[Error, UnwrapPromisify<ReturnType<TFunction>>]> => {
+    try {
+      return [null, await func(...(args as any))]
+    } catch (err) {
+      return [err as any, null]
+    }
   }
 }
 
