@@ -22,6 +22,13 @@ describe('string module', () => {
     })
   })
 
+  describe('camalCase function', () => {
+    test('returns non alphanumerics with -space and capital', () => {
+      const result = _.camalCase('Exobase Starter_flash AND-go')
+      assert.equal(result, 'exobaseStarterFlashAndGo')
+    })
+  })
+
   describe('snake function', () => {
     test('returns correctly cased string', () => {
       const result = _.snake(
@@ -38,6 +45,39 @@ describe('string module', () => {
     test('returns empty string for empty input', () => {
       const result = _.snake()
       assert.equal(result, '')
+    })
+  })
+
+  describe('snakeCase function', () => {
+    test('returns non alphanumerics with _', () => {
+      const result = _.snakeCase('Exobase Starter_flash AND-go')
+      assert.equal(result, 'exobase_starter_flash_and_go')
+    })
+  })
+
+  describe('dash function', () => {
+    test('returns correctly cased string', () => {
+      const result = _.dash(
+        'hello', 'world'
+      )
+      assert.equal(result, 'hello-world')
+    })
+    test('returns single word', () => {
+      const result = _.dash(
+        'hello'
+      )
+      assert.equal(result, 'hello')
+    })
+    test('returns empty string for empty input', () => {
+      const result = _.dash()
+      assert.equal(result, '')
+    })
+  })
+
+  describe('dashCase function', () => {
+    test('returns non alphanumerics with -', () => {
+      const result = _.dashCase('Exobase Starter_flash AND-go')
+      assert.equal(result, 'exobase-starter-flash-and-go')
     })
   })
 

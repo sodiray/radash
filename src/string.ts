@@ -15,6 +15,10 @@ export const camal = (...parts: string[]) => {
   })
 }
 
+export const camalCase = (str: string): string => {
+  return camal(...str.split(/[\.\-\s_]/).map(x => x.toLowerCase()))
+}
+
 /**
  * Joins all string arguments in a snake case fashion
  * 
@@ -27,6 +31,28 @@ export const snake = (...parts: string[]) => {
   return parts.reduce((acc, part) => {
     return `${acc}_${part.toLowerCase()}`
   })
+}
+
+export const snakeCase = (str: string): string => {
+  return snake(...str.split(/[\.\-\s_]/).map(x => x.toLowerCase()))
+}
+
+/**
+ * Joins all string arguments in a dash case fashion
+ * 
+ * camal('hello', 'world')   -> 'hello-world'
+ * camal('va', 'va', 'voom') -> 'va-va-voom'
+ */
+ export const dash = (...parts: string[]) => {
+  if (parts.length === 0) return ''
+  if (parts.length === 1) return parts[0]
+  return parts.reduce((acc, part) => {
+    return `${acc}-${part.toLowerCase()}`
+  })
+}
+
+export const dashCase = (str: string): string => {
+  return dash(...str.split(/[\.\-\s_]/).map(x => x.toLowerCase()))
 }
 
 /**
