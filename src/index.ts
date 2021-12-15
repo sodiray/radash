@@ -46,7 +46,11 @@ import {
 
 import {
   camal,
+  camalCase,
   snake,
+  snakeCase,
+  dash,
+  dashCase,
   template,
   uid
 } from './string'
@@ -86,7 +90,11 @@ export default {
   upperize,
   clone,
   camal,
+  camalCase,
   snake,
+  snakeCase,
+  dash,
+  dashCase,
   template,
   isArray,
   isObject,
