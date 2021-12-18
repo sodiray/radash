@@ -123,16 +123,16 @@ export type Defer = (cb: (err?: Error) => any) => void
  * })
  * ```
  */
-export const defered = <TArgs extends { [key: string]: any, defer: (cb: (err?: Error) => any) => void }, TResponse>(func: (args?: TArgs) => TResponse) => {
-  return (args?: Omit<TArgs, 'defer'>) => {
+export const defered = <TArgs extends { [key: string]: any, defer: (cb: (err?: Error) => any) => void }, TResponse>(func: (args?: TArgs) => Promise<TResponse>) => {
+  return async (args?: Omit<TArgs, 'defer'>) => {
     let funcs: Function[] = []
     try {
-      const result = func({
+      const result = await func({
         ...args,
         defer: funcs.push.bind(funcs)
       } as TArgs)
       for (const f of funcs) f()
-      return result
+      return result as TResponse
     } catch (err) {
       for (const f of funcs) f(err)
       throw err
