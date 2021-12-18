@@ -177,27 +177,27 @@ describe('curry module', () => {
   })
 
   describe('defered function', () => {
-    test('calls registered defer function', () => {
+    test('calls registered defer function', async () => {
       let val = 0
-      _.defered(({ defer }) => {
+      await _.defered(async ({ defer }) => {
         defer(() => val = 1)
       })()
       assert.equal(val, 1)
     })
-    test('returns the resulting value of the given function', () => {
+    test('returns the resulting value of the given function', async () => {
       let val = 0
-      const result = _.defered(({ defer }) => {
+      const result = await _.defered(async ({ defer }) => {
         defer(() => val = 1)
         return 'x'
       })()
       assert.equal(val, 1)
       assert.equal(result, 'x')
     })
-    test('calls all registered defer functions', () => {
+    test('calls all registered defer functions', async () => {
       let one = 0
       let two = 0
       let three = 0
-      const result = _.defered(({ defer }) => {
+      const result = await _.defered(async ({ defer }) => {
         defer(() => one = 1)
         defer(() => two = 2)
         defer(() => three = 3)
@@ -208,11 +208,11 @@ describe('curry module', () => {
       assert.equal(three, 3)
       assert.equal(result, 'x')
     })
-    test('calls all registered defer functions when error is thrown', () => {
+    test('calls all registered defer functions when error is thrown', async () => {
       let one = 0
       let two = 0
       let three = 0
-      const func = _.defered(({ defer }) => {
+      const func = _.defered(async ({ defer }) => {
         defer(() => one = 1)
         defer(() => two = 2)
         defer(() => three = 3)
@@ -220,19 +220,19 @@ describe('curry module', () => {
         return 'x'
       })
       try {
-        func()
+        await func()
       } catch {}
       assert.equal(one, 1)
       assert.equal(two, 2)
       assert.equal(three, 3)
     })
-    test('rethrows the error', () => {
+    test('rethrows the error', async () => {
       let error: Error | null = null
       const func = _.defered(() => {
         throw new Error('soooo broken')
       })
       try {
-        func()
+        await func()
       } catch (err) { error = err }
       assert.isNotNull(error)
       assert.equal(error.message, 'soooo broken')
