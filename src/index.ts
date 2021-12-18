@@ -32,7 +32,8 @@ import {
   partob,
   tryit,
   memo,
-  iter
+  iter,
+  defered
 } from './curry'
 
 import {
@@ -65,6 +66,8 @@ import {
 import {
   random
 } from './number'
+
+export type { Defer } from './curry'
 
 export default {
   group,
@@ -113,5 +116,6 @@ export default {
   iter,
   range,
   uid,
-  flat
+  flat,
+  defered
 }

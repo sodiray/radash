@@ -1,5 +1,5 @@
 import { assert } from 'chai'
-import _ from '..'
+import _, { Defer } from '..'
 
 
 describe('curry module', () => {
@@ -173,6 +173,88 @@ describe('curry module', () => {
       await new Promise(res => setTimeout(res, 100))
       const resultB = func()
       assert.notEqual(resultA, resultB)
+    })
+  })
+
+  describe('defered function', () => {
+    test('calls registered defer function', () => {
+      let val = 0
+      _.defered(({ defer }) => {
+        defer(() => val = 1)
+      })()
+      assert.equal(val, 1)
+    })
+    test('returns the resulting value of the given function', () => {
+      let val = 0
+      const result = _.defered(({ defer }) => {
+        defer(() => val = 1)
+        return 'x'
+      })()
+      assert.equal(val, 1)
+      assert.equal(result, 'x')
+    })
+    test('calls all registered defer functions', () => {
+      let one = 0
+      let two = 0
+      let three = 0
+      const result = _.defered(({ defer }) => {
+        defer(() => one = 1)
+        defer(() => two = 2)
+        defer(() => three = 3)
+        return 'x'
+      })()
+      assert.equal(one, 1)
+      assert.equal(two, 2)
+      assert.equal(three, 3)
+      assert.equal(result, 'x')
+    })
+    test('calls all registered defer functions when error is thrown', () => {
+      let one = 0
+      let two = 0
+      let three = 0
+      const func = _.defered(({ defer }) => {
+        defer(() => one = 1)
+        defer(() => two = 2)
+        defer(() => three = 3)
+        if (!!true) throw new Error('soooo broken')
+        return 'x'
+      })
+      try {
+        func()
+      } catch {}
+      assert.equal(one, 1)
+      assert.equal(two, 2)
+      assert.equal(three, 3)
+    })
+    test('rethrows the error', () => {
+      let error: Error | null = null
+      const func = _.defered(() => {
+        throw new Error('soooo broken')
+      })
+      try {
+        func()
+      } catch (err) { error = err }
+      assert.isNotNull(error)
+      assert.equal(error.message, 'soooo broken')
+    })
+    test('returns awaited async results', async () => {
+      const func = _.defered(() => {
+        return new Promise<string>((res) => res('x'))
+      })
+      const result = await func()
+      assert.equal(result, 'x')
+    })
+    test('passes given arguments through to function', async () => {
+      let one = 0
+      const func = _.defered(({ defer, name }: { defer: Defer, name: string }) => {
+        defer(() => one = 1)
+        return new Promise<string>((res) => res(name))
+      })
+      const result = await func({
+        name: 'radash'
+      })
+      assert.equal(one, 1)
+      assert.equal(result, 'radash')
     })
   })
 

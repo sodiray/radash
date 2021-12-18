@@ -38,11 +38,11 @@ export const proxied = <T, K>(handler: (propertyName: T) => K): Record<string, K
   })
 }
 
-type Cache <T> = Record<string, { exp: number, value: T }>
+type Cache<T> = Record<string, { exp: number, value: T }>
 
 const memoize = <T>(
-  cache: Cache<T>, 
-  func: Func<any, T>, 
+  cache: Cache<T>,
+  func: Func<any, T>,
   keyFunc: Func<string> | null,
   ttl: number
 ) => {
@@ -82,10 +82,60 @@ export const memo = <TFunc extends Function>(func: TFunc, {
  * you will get 1, 2, 3, 4, 5 iteration in the callback
  * function
  */
-export const iter = <T> (count: number, func: (currentValue: T, iteration: number) => T, initValue: T) => {
+export const iter = <T>(count: number, func: (currentValue: T, iteration: number) => T, initValue: T) => {
   let value = initValue
   for (let i = 1; i <= count; i++) {
     value = func(value, i)
   }
   return value
+}
+
+export type Defer = (cb: (err?: Error) => any) => void
+
+/**
+ * Useful when for script like things where cleanup 
+ * should be done on fail or sucess no matter.
+ * 
+ * You can call defer many times to register many
+ * defered functions that will all be called when
+ * the function exits in any state.
+ * 
+ * 
+ * Ex.
+ * ```
+ * const main = _.defered(async (defer) => {
+ * 
+ *     fs.writeFile(`${deployment.id}.logs`)
+ *     defer(() => {
+ *         fs.remove(`${deployment.id}.logs`)
+ *     })
+ * 
+ *     s3.download(...)
+ *     defer(() => {
+ *         fs.remove(...)
+ *     })
+ * 
+ *     api.deployments.updateStatus('in_progress')
+ *     defer((err) => {
+ *         api.deployments.updateStatus(err ? 'failed' : 'success')
+ *     })
+ * 
+ * })
+ * ```
+ */
+export const defered = <TArgs extends { [key: string]: any, defer: (cb: (err?: Error) => any) => void }, TResponse>(func: (args?: TArgs) => TResponse) => {
+  return (args?: Omit<TArgs, 'defer'>) => {
+    let funcs: Function[] = []
+    try {
+      const result = func({
+        ...args,
+        defer: funcs.push.bind(funcs)
+      } as TArgs)
+      for (const f of funcs) f()
+      return result
+    } catch (err) {
+      for (const f of funcs) f(err)
+      throw err
+    }
+  }
 }
