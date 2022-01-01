@@ -34,6 +34,18 @@ describe('array module', () => {
       assert.equal(result.game, 'e')
       assert.equal(result.score, 500)
     })
+    test('does not fail when provided array is empty', () => {
+      const result = _.boil([], () => true)
+      assert.isNull(result)
+    })
+    test('does not fail when provided array is null', () => {
+      const result = _.boil(null, () => true)
+      assert.isNull(result)
+    })
+    test('does not fail when provided array is funky shaped', () => {
+      const result = _.boil({} as any, () => true)
+      assert.isNull(result)
+    })
   })
 
   describe('sum function', () => {
