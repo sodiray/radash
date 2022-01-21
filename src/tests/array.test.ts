@@ -358,4 +358,23 @@ describe('array module', () => {
     })
   })
 
+  describe('intersects function', () => {
+    test('returns true if list a & b have items in common', () => {
+      const listA = ['a', 'b']
+      const listB = [1, 2, 'b', 'x']
+      const result = _.intersects(listA, listB)
+      assert.isTrue(result)
+    })
+    test('returns false if list a & b have no items in common', () => {
+      const listA = ['a', 'b', 'c']
+      const listB = ['x', 'y']
+      const result = _.intersects(listA, listB)
+      assert.isFalse(result)
+    })
+    test('returns false without failing if either list is null', () => {
+      assert.isFalse(_.intersects(null, []))
+      assert.isFalse(_.intersects([], null))
+    })
+  })
+
 })

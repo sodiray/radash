@@ -107,4 +107,26 @@ describe('object module', () => {
     })
   })
 
+  describe('listify function', () => {
+    test('handles null input', () => {
+      const result = _.listify(null as any as Record<string, string>, () => 1)
+      assert.deepEqual(result, [])
+    })
+    test('handles empty object', () => {
+      const result = _.listify({} as Record<string, string>, () => 1)
+      assert.deepEqual(result, [])
+    })
+    test('calls toItem to convert to list', () => {
+      const obj = {
+        1: { name: 'ray' },
+        2: { name: 'ash' }
+      }
+      const result = _.listify(obj, ({ value }) => value)
+      assert.deepEqual(result, [
+        { name: 'ray' },
+        { name: 'ash' }
+      ])
+    })
+  })
+
 })

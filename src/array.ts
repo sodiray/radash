@@ -179,3 +179,16 @@ export const flat = <T>(lists: T[][]): T[] => {
     return [...acc, ...list]
   }, [])
 }
+
+/**
+ * Given two arrays, returns true if any
+ * elements intersect
+ */
+export const intersects = <T> (listA: T[], listB: T[]): boolean => {
+  if (!listA || !listB) return false
+  // Iterate the shorter list
+  const [root, other] = listA.length > listB.length
+    ? [listB, listA]
+    : [listA, listB]
+  return root.some(value => other.includes(value))
+}
