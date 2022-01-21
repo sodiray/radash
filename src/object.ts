@@ -42,3 +42,12 @@ export const clone = <T extends object = object>(obj: T): T => {
     [name]: obj[name]
   }), {} as T)
 }
+
+export const listify = <T, K>(obj: Record<string | number | symbol, T>, toItem: (record: { key: string, value: T }) => K) => {
+  if (!obj) return []
+  const entries = Object.entries(obj)
+  if (entries.length === 0) return []
+  return entries.reduce((acc, entry) => {
+    return [...acc, toItem({ key: entry[0], value: entry[1] })]
+  }, [] as K[])
+}

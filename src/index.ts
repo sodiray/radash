@@ -16,7 +16,8 @@ import {
   dict,
   draw,
   range,
-  flat
+  flat,
+  intersects
 } from './array'
 
 import {
@@ -42,7 +43,8 @@ import {
   mapValues,
   lowerize,
   upperize,
-  clone
+  clone,
+  listify
 } from './object'
 
 import {
@@ -110,8 +112,11 @@ export default {
   unique,
   shuffle,
   dict,
+  objectify: dict,
+  listify,
   draw,
   random,
+  intersects,
   memo,
   iter,
   range,
