@@ -17,7 +17,8 @@ import {
   draw,
   range,
   flat,
-  intersects
+  intersects,
+  fork
 } from './array'
 
 import {
@@ -124,5 +125,6 @@ export default {
   range,
   uid,
   flat,
-  defered
+  defered,
+  fork
 }

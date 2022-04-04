@@ -377,4 +377,34 @@ describe('array module', () => {
     })
   })
 
+  describe('fork function', () => {
+    test('returns two empty arrays for null input', () => {
+      const [a, b] = _.fork(null, x => !!x)
+      assert.deepEqual(a, [])
+      assert.deepEqual(b, [])
+    })
+    test('returns two empty arrays for one empty array input', () => {
+      const [a, b] = _.fork([], x => !!x)
+      assert.deepEqual(a, [])
+      assert.deepEqual(b, [])
+    })
+    test('returns correctly forked list', () => {
+      const input = [
+        { name: 'ray', group: 'X' },
+        { name: 'sara', group: 'X' },
+        { name: 'bo', group: 'Y' },
+        { name: 'mary', group: 'Y' },
+      ]
+      const [xs, ys] = _.fork(input, x => x.group === 'X')
+      assert.lengthOf(xs, 2)
+      assert.lengthOf(ys, 2)
+      const [r, s] = xs
+      assert.equal(r.name, 'ray')
+      assert.equal(s.name, 'sara')
+      const [b, m] = ys
+      assert.equal(b.name, 'bo')
+      assert.equal(m.name, 'mary')
+    })
+  })
+
 })
