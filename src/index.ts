@@ -44,7 +44,8 @@ import {
   lowerize,
   upperize,
   clone,
-  listify
+  listify,
+  pick
 } from './object'
 
 import {
@@ -114,6 +115,7 @@ export default {
   dict,
   objectify: dict,
   listify,
+  pick,
   draw,
   random,
   intersects,

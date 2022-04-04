@@ -51,3 +51,10 @@ export const listify = <T, K>(obj: Record<string | number | symbol, T>, toItem: 
     return [...acc, toItem({ key: entry[0], value: entry[1] })]
   }, [] as K[])
 }
+
+export const pick = <T, TKeys extends keyof T>(obj: T, keys: TKeys[]): Pick<T, TKeys> => {
+  if (!obj) return {} as Pick<T, TKeys>
+  return keys.reduce((acc, key) => {
+    return { ...acc, [key]: obj[key] }
+  }, {} as Pick<T, TKeys>)
+}

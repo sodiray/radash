@@ -128,5 +128,22 @@ describe('object module', () => {
       ])
     })
   })
+  
+  describe('pick function', () => {
+    test('handles null input', () => {
+      const result = _.pick(null, [])
+      assert.deepEqual(result, {})
+    })
+    test('handles empty keys', () => {
+      const result = _.pick({ a: 2 }, [])
+      assert.deepEqual(result, {})
+    })
+    test('calls toItem to convert to list', () => {
+      const result = _.pick({ a: 2, b: 4 }, ['a'])
+      assert.deepEqual(result, {
+        a: 2
+      })
+    })
+  })
 
 })
