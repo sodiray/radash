@@ -208,3 +208,20 @@ export const fork = <T> (list: T[], condition: (item: T) => boolean): [T[], T[]]
     }
   }, [[], []] as [T[], T[]])
 }
+
+/**
+ * Given two lists of the same type, iterate the first list
+ * and replace items matched by the matcher func in the
+ * first place.
+ */
+export const zip = <T> (root: T[], others: T[], matcher: (item: T) => any) => {
+  if (!others && !root) return []
+  if (!others) return root
+  if (!root) return []
+  if (!matcher) return root
+  return root.reduce((acc, r) => {
+    const matched = others.find(o => matcher(r) === matcher(o))
+    if (matched) return [...acc, matched]
+    else return [...acc, r]
+  }, [])
+}

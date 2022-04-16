@@ -18,7 +18,8 @@ import {
   range,
   flat,
   intersects,
-  fork
+  fork,
+  zip
 } from './array'
 
 import {
@@ -83,6 +84,8 @@ export default {
   replace,
   asyncMap,
   asyncReduce,
+  map: asyncMap,
+  reduce: asyncReduce,
   chain,
   compose,
   partial,
@@ -126,5 +129,6 @@ export default {
   uid,
   flat,
   defered,
-  fork
+  fork,
+  zip
 }

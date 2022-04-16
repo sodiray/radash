@@ -406,5 +406,45 @@ describe('array module', () => {
       assert.equal(m.name, 'mary')
     })
   })
+  
+  describe('zip function', () => {
+    test('returns empty array for two null inputs', () => {
+      const result = _.zip(null, null, x => '')
+      assert.deepEqual(result, [])
+    })
+    test('returns an empty array for two empty array inputs', () => {
+      const result = _.zip([], [], x => '')
+      assert.deepEqual(result, [])
+    })
+    test('returns root for a null other input', () => {
+      const result = _.zip([], null, x => '')
+      assert.deepEqual(result, [])
+    })
+    test('returns empty array for a null root input', () => {
+      const result = _.zip(null, [], x => '')
+      assert.deepEqual(result, [])
+    })
+    test('returns root for a null matcher input', () => {
+      const result = _.zip(['a'], [], null)
+      assert.deepEqual(result, ['a'])
+    })
+    test('returns correctly zipped lists', () => {
+      const inputA = [
+        { name: 'ray', group: 'X' },
+        { name: 'sara', group: 'X' },
+        { name: 'bo', group: 'Y' },
+        { name: 'mary', group: 'Y' },
+      ]
+      const inputB = [
+        { name: 'ray', group: 'XXX'},
+        { name: 'mary', group: 'YYY'},
+      ]
+      const result = _.zip(inputA, inputB, x => x.name)
+      assert.equal(result[0].group, 'XXX')
+      assert.equal(result[1].group, 'X')
+      assert.equal(result[2].group, 'Y')
+      assert.equal(result[3].group, 'YYY')
+    })
+  })
 
 })
