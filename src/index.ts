@@ -24,7 +24,9 @@ import {
 
 import {
   asyncMap,
-  asyncReduce
+  asyncReduce,
+  asyncMapV2,
+  asyncReduceV2
 } from './async'
 
 import {
@@ -84,8 +86,8 @@ export default {
   replace,
   asyncMap,
   asyncReduce,
-  map: asyncMap,
-  reduce: asyncReduce,
+  map: asyncMapV2,
+  reduce: asyncReduceV2,
   chain,
   compose,
   partial,
