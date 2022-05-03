@@ -68,22 +68,27 @@ export const sort = <T>(
  * item without modifying the array and return
  * the new value
  */
-export const replace = <T>(array: T[], index: number, item: T) => {
-  const copy = array.slice()
-  if (index >= copy.length) return copy
-  copy[index] = item
-  return copy
+export const replace = <T>(list: T[], newItem: T, match: (item: T) => boolean): T[] => {
+  if (!list) return []
+  if (!newItem) return [...list]
+  for (let idx = 0; idx < list.length; idx++) {
+    const item = list[idx]
+    if (match(item)) {
+      return [...list.slice(0, idx), newItem, ...list.slice(idx + 1, list.length)]
+    }
+  }
+  return [...list]
 }
 
 /**
  * Convert an array to a dictionary by mapping each item
  * into a dictionary key & value 
  */
-export const dict = <T, K extends string | number | symbol>(array: T[], getId: (item: T) => K): Record<K, T> => {
+export const dict = <T, Key extends string | number | symbol, Value>(array: T[], getKey: (item: T) => Key, getValue: (item: T) => Value): Record<Key, Value> => {
   return array.reduce((acc, item) => ({
     ...acc,
-    [getId(item)]: item
-  }), {} as Record<K, T>)
+    [getKey(item)]: getValue(item)
+  }), {} as Record<Key, Value>)
 }
 
 /**
@@ -224,4 +229,33 @@ export const zip = <T> (root: T[], others: T[], matcher: (item: T) => any) => {
     if (matched) return [...acc, matched]
     else return [...acc, r]
   }, [])
+}
+
+/**
+ * Replace an item in an array by a match function condition. If
+ * no items match the function condition, appends the new item to
+ * the end of the list.
+ */
+export const replaceOrAppend = <T> (list: T[], newItem: T, match: (a: T) => boolean) => {
+  if (!list && !newItem) return []
+  if (!newItem) return [...list]
+  if (!list) return [newItem]
+  for (let idx = 0; idx < list.length; idx++) {
+    const item = list[idx]
+    if (match(item)) {
+      return [...list.slice(0, idx), newItem, ...list.slice(idx + 1, list.length)]
+    }
+  }
+  return [...list, newItem]
+}
+
+/**
+ * Remove an item from an array given a matching function
+ */
+export const remove = <T> (list: T[], match: (a: T) => boolean) => {
+  if (!list) return []
+  return list.reduce((acc, item) => {
+    if (match(item)) return acc
+    else return [...acc, item]
+  }, [] as T[])
 }

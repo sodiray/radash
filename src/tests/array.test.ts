@@ -142,23 +142,46 @@ describe('array module', () => {
     })
   })
 
+  describe('remove function', () => {
+    test('returns empty list for null input list', () => {
+      const result = _.remove(null, () => false)
+      assert.deepEqual(result, [])
+    })
+    test('returns the list with the item removed', () => {
+      const result = _.remove(['a', 'b', 'c'], (item) => item === 'b')
+      assert.deepEqual(result, ['a', 'c'])
+    })
+    test('returns the list unchanged for no match', () => {
+      const result = _.remove(['a', 'b', 'c'], (item) => item === 'xx')
+      assert.deepEqual(result, ['a', 'b', 'c'])
+    })
+  })
+
   describe('replace function', () => {
+    test('returns empty list for null input list', () => {
+      const result = _.replace(null, 'x', () => false)
+      assert.deepEqual(result, [])
+    })
+    test('returns the list for a null new item', () => {
+      const result = _.replace(['a'], null, () => false)
+      assert.deepEqual(result, ['a'])
+    })
     test('returns copy of list with replaced item', () => {
       const list = [
         { game: 'a', score: 100 },
         { game: 'b', score: 200 }
       ]
-      const result = _.replace(list, 1, { game: 'x', score: 800 })
-      assert.equal(result[1].game, 'x')
+      const result = _.replace(list, { game: 'x', score: 800 }, (item) => item.game === 'a')
+      assert.equal(result[0].game, 'x')
       assert.equal(list[1].game, 'b')
     })
-    test('returns copy of list without error when index is out of range', () => {
+    test('returns copy of list without changing', () => {
       const list = [
         { game: 'a', score: 100 },
         { game: 'b', score: 200 }
       ]
-      const result = _.replace(list, 5, { game: 'x', score: 800 })
-      assert.equal(result[1].game, 'b')
+      const result = _.replace(list, { game: 'x', score: 800 }, (item) => item.game === 'XX')
+      assert.equal(result[0].game, 'a')
       assert.equal(list[1].game, 'b')
     })
   })
@@ -172,13 +195,13 @@ describe('array module', () => {
         { id: 'd', word: 'hey' },
         { id: 'e', word: 'ok' }
       ]
-      const result = _.dict(list, x => x.id)
+      const result = _.dict(list, x => x.id, x => x)
       assert.equal(result.a.word, 'hello')
       assert.equal(result.b.word, 'bye')
     })
     test('does not fail on empty input list', () => {
       const list = []
-      const result = _.dict(list, x => x.id)
+      const result = _.dict(list, x => x.id, x => x)
       assert.deepEqual(result, {})
     })
   })
@@ -444,6 +467,42 @@ describe('array module', () => {
       assert.equal(result[1].group, 'X')
       assert.equal(result[2].group, 'Y')
       assert.equal(result[3].group, 'YYY')
+    })
+  })
+
+  describe('replaceOrAppend', () => {
+    const letters = ['a', 'b', 'c', 'd', 'e']
+    const lettersXA = ['XA', 'b', 'c', 'd', 'e']
+    const lettersXC = ['a', 'b', 'XC', 'd', 'e']
+    const lettersXE = ['a', 'b', 'c', 'd', 'XE']
+    const lettersXX = ['a', 'b', 'c', 'd', 'e', 'XX']
+    test('returns empty empty array for two null inputs', () => {
+      const result = _.replaceOrAppend(null, null, (x) => false)
+      assert.deepEqual(result, [])
+    })
+    test('returns array with new item for null list input', () => {
+      const result = _.replaceOrAppend(null, 'a', (x) => false)
+      assert.deepEqual(result, ['a'])
+    })
+    test('returns list for null new item input', () => {
+      const result = _.replaceOrAppend(['a'], null, (x) => false)
+      assert.deepEqual(result, ['a'])
+    })
+    test('returns list with item replacing match', () => {
+      const result = _.replaceOrAppend(letters, 'XA', (x) => x === 'a')
+      assert.deepEqual(result, lettersXA)
+    })
+    test('returns list with item replacing match in middle', () => {
+      const result = _.replaceOrAppend(letters, 'XC', (x) => x === 'c')
+      assert.deepEqual(result, lettersXC)
+    })
+    test('returns list with item replacing match at end', () => {
+      const result = _.replaceOrAppend(letters, 'XE', (x) => x === 'e')
+      assert.deepEqual(result, lettersXE)
+    })
+    test('returns list with item appended', () => {
+      const result = _.replaceOrAppend(letters, 'XX', (x) => x === 'x')
+      assert.deepEqual(result, lettersXX)
     })
   })
 

@@ -19,7 +19,9 @@ import {
   flat,
   intersects,
   fork,
-  zip
+  zip,
+  replaceOrAppend,
+  remove
 } from './array'
 
 import {
@@ -84,6 +86,7 @@ export default {
   first,
   last,
   replace,
+  replaceOrAppend,
   asyncMap,
   asyncReduce,
   map: asyncMapV2,
@@ -132,5 +135,6 @@ export default {
   flat,
   defered,
   fork,
-  zip
+  zip,
+  remove
 }
