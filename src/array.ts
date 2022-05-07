@@ -68,12 +68,12 @@ export const sort = <T>(
  * item without modifying the array and return
  * the new value
  */
-export const replace = <T>(list: T[], newItem: T, match: (item: T) => boolean): T[] => {
+export const replace = <T>(list: T[], newItem: T, match: (item: T, idx: number) => boolean): T[] => {
   if (!list) return []
   if (!newItem) return [...list]
   for (let idx = 0; idx < list.length; idx++) {
     const item = list[idx]
-    if (match(item)) {
+    if (match(item, idx)) {
       return [...list.slice(0, idx), newItem, ...list.slice(idx + 1, list.length)]
     }
   }
@@ -236,13 +236,13 @@ export const zip = <T> (root: T[], others: T[], matcher: (item: T) => any) => {
  * no items match the function condition, appends the new item to
  * the end of the list.
  */
-export const replaceOrAppend = <T> (list: T[], newItem: T, match: (a: T) => boolean) => {
+export const replaceOrAppend = <T> (list: T[], newItem: T, match: (a: T, idx: number) => boolean) => {
   if (!list && !newItem) return []
   if (!newItem) return [...list]
   if (!list) return [newItem]
   for (let idx = 0; idx < list.length; idx++) {
     const item = list[idx]
-    if (match(item)) {
+    if (match(item, idx)) {
       return [...list.slice(0, idx), newItem, ...list.slice(idx + 1, list.length)]
     }
   }

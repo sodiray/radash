@@ -166,6 +166,10 @@ describe('array module', () => {
       const result = _.replace(['a'], null, () => false)
       assert.deepEqual(result, ['a'])
     })
+    test('returns replaced item by index', () => {
+      const result = _.replace(['a', 'b', 'c', 'd'], 'BB', (letter, idx) => idx === 1)
+      assert.equal(result[1], 'BB')
+    })
     test('returns copy of list with replaced item', () => {
       const list = [
         { game: 'a', score: 100 },
@@ -487,6 +491,10 @@ describe('array module', () => {
     test('returns list for null new item input', () => {
       const result = _.replaceOrAppend(['a'], null, (x) => false)
       assert.deepEqual(result, ['a'])
+    })
+    test('returns list with item replacing match by index', () => {
+      const result = _.replaceOrAppend(['a', 'b', 'c', 'd'], 'BB', (letter, idx) => idx === 1)
+      assert.equal(result[1], 'BB')
     })
     test('returns list with item replacing match', () => {
       const result = _.replaceOrAppend(letters, 'XA', (x) => x === 'a')

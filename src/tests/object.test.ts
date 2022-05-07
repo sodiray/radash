@@ -5,7 +5,7 @@ import _ from '..'
 describe('object module', () => {
 
   describe('shake function', () => {
-    test('removes all null and undefined values', () => {
+    test('removes all undefined values', () => {
       const result = _.shake({
         x: 2,
         y: null,
@@ -15,7 +15,20 @@ describe('object module', () => {
       })
       assert.deepEqual(result, {
         x: 2,
+        y: null,
         o: false,
+        r: 'x'
+      })
+    })
+    test('removes values based on filter function input', () => {
+      const result = _.shake({
+        x: 2,
+        y: null,
+        z: undefined,
+        o: false,
+        r: 'x'
+      }, val => val !== 'x')
+      assert.deepEqual(result, {
         r: 'x'
       })
     })
