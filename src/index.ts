@@ -1,5 +1,5 @@
 
-import {
+export {
   group,
   boil,
   sum,
@@ -13,37 +13,41 @@ import {
   cluster,
   unique,
   shuffle,
-  dict,
+  objectify,
   draw,
   range,
   flat,
   intersects,
   fork,
-  zip,
+  merge,
   replaceOrAppend,
-  remove
+  sift,
+  iterate
 } from './array'
 
-import {
-  asyncMap,
-  asyncReduce,
-  asyncMapV2,
-  asyncReduceV2
+export {
+  series
+} from './series'
+
+export {
+  map,
+  reduce,
+  defer,
+  retry,
+  tryit as try,
+  sleep,
 } from './async'
 
-import {
+export {
   chain,
   compose,
   partial,
   proxied,
   partob,
-  tryit,
   memo,
-  iter,
-  defered
 } from './curry'
 
-import {
+export {
   shake,
   mapKeys,
   mapValues,
@@ -51,90 +55,29 @@ import {
   upperize,
   clone,
   listify,
-  pick
+  pick,
+  omit,
+  get
 } from './object'
 
-import {
+export {
   camal,
-  camalCase,
   snake,
-  snakeCase,
   dash,
-  dashCase,
   template,
   uid
 } from './string'
 
-import {
-  isArray,
-  isObject,
-  isFunction,
-  isString
-} from './typed'
-
-import {
-  random
-} from './number'
-
-export type { Defer } from './curry'
-
-export default {
-  group,
-  boil,
-  sum,
-  sort,
-  first,
-  last,
-  replace,
-  replaceOrAppend,
-  asyncMap,
-  asyncReduce,
-  map: asyncMapV2,
-  reduce: asyncReduceV2,
-  chain,
-  compose,
-  partial,
-  proxied,
-  partob,
-  tryit,
-  try: tryit,
-  shake,
-  mapKeys,
-  mapValues,
-  lowerize,
-  upperize,
-  clone,
-  camal,
-  camalCase,
-  snake,
-  snakeCase,
-  dash,
-  dashCase,
-  template,
+export {
   isArray,
   isObject,
   isFunction,
   isString,
-  select,
-  min,
-  max,
-  cluster,
-  unique,
-  shuffle,
-  dict,
-  objectify: dict,
-  listify,
-  pick,
-  draw,
-  random,
-  intersects,
-  memo,
-  iter,
-  range,
-  uid,
-  flat,
-  defered,
-  fork,
-  zip,
-  remove
-}
+  isEmpty,
+  isNumber,
+  isSymbol,
+} from './typed'
+
+export {
+  random
+} from './number'

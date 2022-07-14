@@ -1,22 +1,69 @@
 # Radash
-Its like Ramda or Lodash because its just a library of simple, small, utility functions. Its not like Ramda or Lodash because you can open it up and easily read and understand all of them.
+
+:loud_sound: `/raw-dash/`
+
+<div align="center">
+  <p align="center">
+    <img src="./banner.png" alt="radash" width="100%" style="border-radius:4px" />
+  </p>
+</div>
+<div>
+  <h3 align="center">
+    Functional utility library - modern, simple, typed, powerful
+    <br />
+    <h4 align="center">
+        <a href="https://radash-docs.vercel.app" target="_blank">
+            Full Documentation
+        </a>
+    </h4>
+  </h3>
+</div>
 
 ## Install
 ```
 yarn add radash
 ```
-or
-```
-npm install radash
-```
-Types are included, if your into that.
 
 ## Usage
+A very brief kitchen sink. See the full documentation [here](https://radash-docs.vercel.app).
+
 ```ts
-import _ from 'radash'
+import * as _ from 'radash'
 
-const list = [1, 2, 3, 4, 5, 6]
+const gods = [{
+  name: 'Ra',
+  power: 'sun',
+  rank: 100,
+  culture: 'egypt'
+}, {
+  name: 'Loki',
+  power: 'tricks',
+  rank: 72,
+  culture: 'norse'
+}, {
+  name: 'Zeus',
+  power: 'lightning',
+  rank: 96,
+  culture: 'greek'
+}]
 
-const oddsSquared = _.select(list, x = x*x, x => x % 2)
-const { odds, evens } = _.group(list, x => x % 2 ? 'odds' : 'evens' )
+_.max(gods, g => g.rank) // => ra
+_.sum(gods, g => g.rank) // => 268
+_.fork(gods, g => g.culture === 'norse') // => [[loki], [ra, zues]]
+_.sort(gods, g => g.rank) // => [ra, zues, loki]
+_.boil(gods, (a, b) => a.rank > b.rank ? a : b) // => ra
+
+_.objectify(
+  gods, 
+  g => g.name.toLowerCase(), 
+  g => _.pick(g, ['power', 'rank', 'culture'])
+) // => { ra, zues, loki }
+
+const godName = _.get(gods, g => g[0].name)
+
+const [err, god] = await _.try(api.gods.findByName)(godName)
+
+const allGods = await _.map(gods, async ({ name }) => {
+  return api.gods.findByName(name)
+})
 ```

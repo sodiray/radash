@@ -1,6 +1,5 @@
 import { assert } from 'chai'
-import _ from '..'
-
+import * as _ from '..'
 
 describe('array module', () => {
 
@@ -142,21 +141,6 @@ describe('array module', () => {
     })
   })
 
-  describe('remove function', () => {
-    test('returns empty list for null input list', () => {
-      const result = _.remove(null, () => false)
-      assert.deepEqual(result, [])
-    })
-    test('returns the list with the item removed', () => {
-      const result = _.remove(['a', 'b', 'c'], (item) => item === 'b')
-      assert.deepEqual(result, ['a', 'c'])
-    })
-    test('returns the list unchanged for no match', () => {
-      const result = _.remove(['a', 'b', 'c'], (item) => item === 'xx')
-      assert.deepEqual(result, ['a', 'b', 'c'])
-    })
-  })
-
   describe('replace function', () => {
     test('returns empty list for null input list', () => {
       const result = _.replace(null, 'x', () => false)
@@ -190,7 +174,7 @@ describe('array module', () => {
     })
   })
 
-  describe('dict function', () => {
+  describe('objectify function', () => {
     test('returns correct map of values', () => {
       const list = [
         { id: 'a', word: 'hello' },
@@ -199,13 +183,13 @@ describe('array module', () => {
         { id: 'd', word: 'hey' },
         { id: 'e', word: 'ok' }
       ]
-      const result = _.dict(list, x => x.id, x => x)
+      const result = _.objectify(list, x => x.id, x => x)
       assert.equal(result.a.word, 'hello')
       assert.equal(result.b.word, 'bye')
     })
     test('does not fail on empty input list', () => {
       const list = []
-      const result = _.dict(list, x => x.id, x => x)
+      const result = _.objectify(list, x => x.id, x => x)
       assert.deepEqual(result, {})
     })
   })
@@ -359,19 +343,21 @@ describe('array module', () => {
 
   describe('range function', () => {
     test('creates correct list', () => {
-      const r = _.range(0, 4)
-      const total = [...r].reduce((a, b) => a + b)
+      let items: number[] = []
+      for (const item of _.range(0, 4)) items.push(item)
+      const total = items.reduce((a, b) => a + b)
       assert.equal(total, 10)
-      assert.equal(r[0], 0)
-      assert.equal(r[4], 4)
+      assert.equal(items[0], 0)
+      assert.equal(items[4], 4)
     })
     test('creates correct list with step', () => {
-      const r = _.range(0, 10, 2)
-      const total = [...r].reduce((a, b) => a + b)
+      let items: number[] = []
+      for (const item of _.range(0, 10, 2)) items.push(item)
+      const total = items.reduce((a, b) => a + b)
       assert.equal(total, 30)
-      assert.equal(r[0], 0)
-      assert.equal(r[4], 8)
-      assert.equal(r[5], 10)
+      assert.equal(items[0], 0)
+      assert.equal(items[4], 8)
+      assert.equal(items[5], 10)
     })
   })
 
@@ -397,6 +383,12 @@ describe('array module', () => {
       const listB = ['x', 'y']
       const result = _.intersects(listA, listB)
       assert.isFalse(result)
+    })
+    test('returns true using custom identity', () => {
+      const listA = [{ value: 23 }, { value: 12 }]
+      const listB = [{ value: 12 }]
+      const result = _.intersects(listA, listB, x => x.value)
+      assert.isTrue(result)
     })
     test('returns false without failing if either list is null', () => {
       assert.isFalse(_.intersects(null, []))
@@ -434,28 +426,28 @@ describe('array module', () => {
     })
   })
   
-  describe('zip function', () => {
+  describe('merge function', () => {
     test('returns empty array for two null inputs', () => {
-      const result = _.zip(null, null, x => '')
+      const result = _.merge(null, null, x => '')
       assert.deepEqual(result, [])
     })
     test('returns an empty array for two empty array inputs', () => {
-      const result = _.zip([], [], x => '')
+      const result = _.merge([], [], x => '')
       assert.deepEqual(result, [])
     })
     test('returns root for a null other input', () => {
-      const result = _.zip([], null, x => '')
+      const result = _.merge([], null, x => '')
       assert.deepEqual(result, [])
     })
     test('returns empty array for a null root input', () => {
-      const result = _.zip(null, [], x => '')
+      const result = _.merge(null, [], x => '')
       assert.deepEqual(result, [])
     })
     test('returns root for a null matcher input', () => {
-      const result = _.zip(['a'], [], null)
+      const result = _.merge(['a'], [], null)
       assert.deepEqual(result, ['a'])
     })
-    test('returns correctly zipped lists', () => {
+    test('returns correctly mergeped lists', () => {
       const inputA = [
         { name: 'ray', group: 'X' },
         { name: 'sara', group: 'X' },
@@ -466,7 +458,7 @@ describe('array module', () => {
         { name: 'ray', group: 'XXX'},
         { name: 'mary', group: 'YYY'},
       ]
-      const result = _.zip(inputA, inputB, x => x.name)
+      const result = _.merge(inputA, inputB, x => x.name)
       assert.equal(result[0].group, 'XXX')
       assert.equal(result[1].group, 'X')
       assert.equal(result[2].group, 'Y')
@@ -480,7 +472,7 @@ describe('array module', () => {
     const lettersXC = ['a', 'b', 'XC', 'd', 'e']
     const lettersXE = ['a', 'b', 'c', 'd', 'XE']
     const lettersXX = ['a', 'b', 'c', 'd', 'e', 'XX']
-    test('returns empty empty array for two null inputs', () => {
+    test('returns empty array for two null inputs', () => {
       const result = _.replaceOrAppend(null, null, (x) => false)
       assert.deepEqual(result, [])
     })
@@ -511,6 +503,31 @@ describe('array module', () => {
     test('returns list with item appended', () => {
       const result = _.replaceOrAppend(letters, 'XX', (x) => x === 'x')
       assert.deepEqual(result, lettersXX)
+    })
+  })
+  
+  describe('sift', () => {
+    const people = [
+      null,
+      'hello',
+      undefined,
+      false,
+      23,
+    ]
+    test('returns empty array for null input array', () => {
+      const result = _.sift(null)
+      assert.deepEqual(result, [])
+    })
+    test('returns array with falsy values filtered out', () => {
+      const result = _.sift(people)
+      assert.deepEqual(result, ['hello', 23])
+    })
+  })
+
+  describe('iterate function', () => {
+    test('iterates correct number of times', () => {
+      const result = _.iterate(5, (acc, idx) => acc + idx, 0)
+      assert.equal(result, 15)
     })
   })
 

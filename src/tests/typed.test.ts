@@ -1,5 +1,5 @@
 import { assert } from 'chai'
-import _ from '..'
+import * as _ from '..'
 
 describe('typed module', () => {
 
@@ -160,7 +160,7 @@ describe('typed module', () => {
       const result = _.isString([ 1, 2, 3])
       assert.isFalse(result)
     })
-    test('returns true for object', () => {
+    test('returns false for object', () => {
       const result = _.isString({})
       assert.isFalse(result)
     })
@@ -171,6 +171,260 @@ describe('typed module', () => {
     test('returns true for string class', () => {
       const result = _.isString(String('abc'))
       assert.isTrue(result)
+    })
+  })
+  
+  describe('isNumber function', () => {
+    test('returns false for null', () => {
+      const result = _.isNumber(null)
+      assert.isFalse(result)
+    })
+    test('returns false for undefined', () => {
+      const result = _.isNumber(undefined)
+      assert.isFalse(result)
+    })
+    test('returns false for boolean', () => {
+      const result = _.isNumber(false)
+      assert.isFalse(result)
+    })
+    test('returns false for class instance', () => {
+      class Data {}
+      const result = _.isNumber(new Data())
+      assert.isFalse(result)
+    })
+    test('returns true for number', () => {
+      const result = _.isNumber(22)
+      assert.isTrue(result)
+    })
+    test('returns false for NaN', () => {
+      const result = _.isNumber(NaN)
+      assert.isFalse(result)
+    })
+    test('returns false for array', () => {
+      const result = _.isNumber([ 1, 2, 3])
+      assert.isFalse(result)
+    })
+    test('returns false for object', () => {
+      const result = _.isNumber({})
+      assert.isFalse(result)
+    })
+    test('returns false for string', () => {
+      const result = _.isNumber('abc')
+      assert.isFalse(result)
+    })
+    test('returns false for string class', () => {
+      const result = _.isNumber(String('abc'))
+      assert.isFalse(result)
+    })
+  })
+  
+  describe('isEmpty function', () => {
+    test('returns true for null', () => {
+      const input = null
+      const result = _.isEmpty(input)
+      assert.isTrue(result)
+    })
+    test('returns true for undefined', () => {
+      const input = undefined
+      const result = _.isEmpty(input)
+      assert.isTrue(result)
+    })
+    test('returns true for empty class instance', () => {
+      class Data {}
+      const input = new Data()
+      const result = _.isEmpty(input)
+      assert.isTrue(result)
+    })
+    test('returns false for class instance with properties', () => {
+      class Data {
+        name: string = 'ray'
+      }
+      const input = new Data()
+      const result = _.isEmpty(input)
+      assert.isFalse(result)
+    })
+    test('returns true for number greater than 0', () => {
+      const input = 22
+      const result = _.isEmpty(input)
+      assert.isTrue(result)
+    })
+    test('returns true for number 0', () => {
+      const input = 0
+      const result = _.isEmpty(input)
+      assert.isTrue(result)
+    })
+    test('returns false for array with values', () => {
+      const input = [1, 2, 3]
+      const result = _.isEmpty(input)
+      assert.isFalse(result)
+    })
+    test('returns true for empty array', () => {
+      const input = []
+      const result = _.isEmpty(input)
+      assert.isTrue(result)
+    })
+    test('returns true for true', () => {
+      const input = true
+      const result = _.isEmpty(input)
+      assert.isTrue(result)
+    })
+    test('returns true for false', () => {
+      const input = false
+      const result = _.isEmpty(input)
+      assert.isTrue(result)
+    })
+    test('returns true for empty object', () => {
+      const input = {}
+      const result = _.isEmpty(input)
+      assert.isTrue(result)
+    })
+    test('returns false for object with values', () => {
+      const input = { name: 'x' }
+      const result = _.isEmpty(input)
+      assert.isFalse(result)
+    })
+    test('returns false for string with chars', () => {
+      const input = 'abc'
+      const result = _.isEmpty(input)
+      assert.isFalse(result)
+    })
+    test('returns true for empty string', () => {
+      const input = ''
+      const result = _.isEmpty(input)
+      assert.isTrue(result)
+    })
+    test('returns true for empty string class', () => {
+      const input = ''
+      const result = _.isEmpty(input)
+      assert.isTrue(result)
+    })
+    test('returns false for string class with chars', () => {
+      const input = 'abc'
+      const result = _.isEmpty(input)
+      assert.isFalse(result)
+    })
+    test('returns true for empty Map', () => {
+      const input = new Map()
+      const result = _.isEmpty(input)
+      assert.isTrue(result)
+    })
+    test('returns false for Map with values', () => {
+      const input = new Map()
+      input.set('a', 1)
+      input.set('b', 2)
+      input.set('c', 3)
+      const result = _.isEmpty(input)
+      assert.isFalse(result)
+    })
+  })
+ 
+  describe('isSymbol function', () => {
+    test('returns false for null', () => {
+      const input = null
+      const result = _.isSymbol(input)
+      assert.isFalse(result)
+    })
+    test('returns false for undefined', () => {
+      const input = undefined
+      const result = _.isSymbol(input)
+      assert.isFalse(result)
+    })
+    test('returns false for empty class instance', () => {
+      class Data {}
+      const input = new Data()
+      const result = _.isSymbol(input)
+      assert.isFalse(result)
+    })
+    test('returns false for class instance with properties', () => {
+      class Data {
+        name: string = 'ray'
+      }
+      const input = new Data()
+      const result = _.isSymbol(input)
+      assert.isFalse(result)
+    })
+    test('returns false for number greater than 0', () => {
+      const input = 22
+      const result = _.isSymbol(input)
+      assert.isFalse(result)
+    })
+    test('returns false for number 0', () => {
+      const input = 0
+      const result = _.isSymbol(input)
+      assert.isFalse(result)
+    })
+    test('returns false for array with values', () => {
+      const input = [1, 2, 3]
+      const result = _.isSymbol(input)
+      assert.isFalse(result)
+    })
+    test('returns false for empty array', () => {
+      const input = []
+      const result = _.isSymbol(input)
+      assert.isFalse(result)
+    })
+    test('returns false for true', () => {
+      const input = true
+      const result = _.isSymbol(input)
+      assert.isFalse(result)
+    })
+    test('returns false for false', () => {
+      const input = false
+      const result = _.isSymbol(input)
+      assert.isFalse(result)
+    })
+    test('returns false for empty object', () => {
+      const input = {}
+      const result = _.isSymbol(input)
+      assert.isFalse(result)
+    })
+    test('returns false for object with values', () => {
+      const input = { name: 'x' }
+      const result = _.isSymbol(input)
+      assert.isFalse(result)
+    })
+    test('returns false for string with chars', () => {
+      const input = 'abc'
+      const result = _.isSymbol(input)
+      assert.isFalse(result)
+    })
+    test('returns false for empty string', () => {
+      const input = ''
+      const result = _.isSymbol(input)
+      assert.isFalse(result)
+    })
+    test('returns false for empty string class', () => {
+      const input = ''
+      const result = _.isSymbol(input)
+      assert.isFalse(result)
+    })
+    test('returns false for string class with chars', () => {
+      const input = 'abc'
+      const result = _.isSymbol(input)
+      assert.isFalse(result)
+    })
+    test('returns false for empty Map', () => {
+      const input = new Map()
+      const result = _.isSymbol(input)
+      assert.isFalse(result)
+    })
+    test('returns true for empty Symbol', () => {
+      const input = Symbol('')
+      const result = _.isSymbol(input)
+      assert.isTrue(result)
+    })
+    test('returns true for Symbol instance', () => {
+      const input = Symbol('hello')
+      const result = _.isSymbol(input)
+      assert.isTrue(result)
+    })
+    test('returns false for Map with values', () => {
+      const input = new Map()
+      input.set('a', 1)
+      input.set('b', 2)
+      input.set('c', 3)
+      const result = _.isSymbol(input)
+      assert.isFalse(result)
     })
   })
 

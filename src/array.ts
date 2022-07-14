@@ -1,4 +1,3 @@
-import { iter } from './curry'
 import { random } from './number'
 
 /**
@@ -37,14 +36,14 @@ export const sum = <T extends number | object>(array: T[], fn?: (item: T) => num
 /**
  * Get the first item in an array or a default value
  */
-export const first = <T>(array: T[], defaultValue: T | null | undefined = null) => {
+export const first = <T>(array: T[], defaultValue: T | null | undefined = undefined) => {
   return array?.length > 0 ? array[0] : defaultValue
 }
 
 /**
  * Get the last item in an array or a default value
  */
-export const last = <T>(array: T[], defaultValue: T | null | undefined = null) => {
+export const last = <T>(array: T[], defaultValue: T | null | undefined = undefined) => {
   return array?.length > 0 ? array[array.length - 1] : defaultValue
 }
 
@@ -84,7 +83,7 @@ export const replace = <T>(list: T[], newItem: T, match: (item: T, idx: number) 
  * Convert an array to a dictionary by mapping each item
  * into a dictionary key & value 
  */
-export const dict = <T, Key extends string | number | symbol, Value>(array: T[], getKey: (item: T) => Key, getValue: (item: T) => Value): Record<Key, Value> => {
+export const objectify = <T, Key extends string | number | symbol, Value>(array: T[], getKey: (item: T) => Key, getValue: (item: T) => Value): Record<Key, Value> => {
   return array.reduce((acc, item) => ({
     ...acc,
     [getKey(item)]: getValue(item)
@@ -153,7 +152,6 @@ export const shuffle = <T>(array: T[]): T[] => {
  * null if the list is empty
  */
 export const draw = <T>(array: T[]): T | null => {
-  const min = 0
   const max = array.length
   if (max === 0) {
     return null
@@ -166,13 +164,13 @@ export const draw = <T>(array: T[]): T | null => {
  * Creates a generator that will produce an iteration through
  * the range of number as requested.
  * 
- * @example for (const i of _.range(3, 3*3, 3))
+ * @example for (const i of _.range(3, 3*3, 3)) { console.log(i) }
  */
-export const range = (start: number, end: number, step: number = 1): number[] => {
-  const itemCount = (end - start) / step
-  return iter(itemCount, (list, idx) => {
-    return [...list, ((idx * step) + start)]
-  }, [start])
+ export function * range (start: number, end: number, step: number = 1): Generator<number> {
+  const count = (end - start) / step
+  for (let idx = start; idx <= count; idx++) {
+    yield ((idx * step) + start)
+  }
 }
 
 /**
@@ -189,13 +187,13 @@ export const flat = <T>(lists: T[][]): T[] => {
  * Given two arrays, returns true if any
  * elements intersect
  */
-export const intersects = <T> (listA: T[], listB: T[]): boolean => {
+export const intersects = <T, K extends string | number | symbol> (listA: T[], listB: T[], identity?: (t: T) => K): boolean => {
   if (!listA || !listB) return false
-  // Iterate the shorter list
-  const [root, other] = listA.length > listB.length
-    ? [listB, listA]
-    : [listA, listB]
-  return root.some(value => other.includes(value))
+  const ident = identity ?? ((x: T) => x as unknown as K)
+  const dictB = listB.reduce((acc, item) => ({ 
+    ...acc, [ident(item)]: true 
+  }), {} as Record<string | number | symbol, true>)
+  return listA.some(value => dictB[ident(value)])
 }
 
 /**
@@ -219,7 +217,7 @@ export const fork = <T> (list: T[], condition: (item: T) => boolean): [T[], T[]]
  * and replace items matched by the matcher func in the
  * first place.
  */
-export const zip = <T> (root: T[], others: T[], matcher: (item: T) => any) => {
+export const merge = <T> (root: T[], others: T[], matcher: (item: T) => any) => {
   if (!others && !root) return []
   if (!others) return root
   if (!root) return []
@@ -249,13 +247,27 @@ export const replaceOrAppend = <T> (list: T[], newItem: T, match: (a: T, idx: nu
   return [...list, newItem]
 }
 
+export const sift = <T> (list: T[]) => {
+  return list?.filter(x => !!x) ?? []
+}
+
 /**
- * Remove an item from an array given a matching function
+ * Like a reduce but does not require an array.
+ * Only need a number and will iterate the function
+ * as many times as specified.
+ * 
+ * NOTE: This is NOT zero indexed. If you pass count=5 
+ * you will get 1, 2, 3, 4, 5 iteration in the callback
+ * function
  */
-export const remove = <T> (list: T[], match: (a: T) => boolean) => {
-  if (!list) return []
-  return list.reduce((acc, item) => {
-    if (match(item)) return acc
-    else return [...acc, item]
-  }, [] as T[])
+export const iterate = <T>(
+  count: number, 
+  func: (currentValue: T, iteration: number) => T, 
+  initValue: T
+) => {
+  let value = initValue
+  for (let i = 1; i <= count; i++) {
+    value = func(value, i)
+  }
+  return value
 }

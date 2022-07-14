@@ -58,3 +58,23 @@ export const pick = <T, TKeys extends keyof T>(obj: T, keys: TKeys[]): Pick<T, T
     return { ...acc, [key]: obj[key] }
   }, {} as Pick<T, TKeys>)
 }
+
+export const omit = <T, TKeys extends keyof T>(obj: T, keys: TKeys[]): Omit<T, TKeys> => {
+  if (!obj) return {} as Omit<T, TKeys>
+  if (!keys || keys.length === 0) return obj as Omit<T, TKeys>
+  const keyMap = keys.reduce((acc, key) => {
+    return { ...acc, [key]: true }
+  }, {} as Record<TKeys, true>)
+  return Object.keys(obj).reduce((acc, key) => {
+    if (keyMap[key] === true) return acc
+    return { ...acc, [key]: obj[key] }
+  }, {} as Omit<T, TKeys>)
+}
+
+export const get = <T, K> (value: T, getter: (t: T) => K, defaultValue: K | null = null) => {
+  try {
+    return getter(value) ?? defaultValue
+  } catch {
+    return defaultValue
+  }
+}

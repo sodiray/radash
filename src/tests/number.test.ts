@@ -1,5 +1,5 @@
 import { assert } from 'chai'
-import _ from '..'
+import * as _ from '..'
 
 
 describe('number module', () => {

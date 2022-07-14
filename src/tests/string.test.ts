@@ -1,82 +1,83 @@
 import { assert } from 'chai'
-import _ from '..'
+import * as _ from '..'
+import { _camal, _snake, _dash } from '../string'
 
 describe('string module', () => {
 
   describe('camal function', () => {
     test('returns correctly cased string', () => {
-      const result = _.camal(
+      const result = _camal(
         'hello', 'world'
       )
       assert.equal(result, 'helloWorld')
     })
     test('returns single word', () => {
-      const result = _.camal(
+      const result = _camal(
         'hello'
       )
       assert.equal(result, 'hello')
     })
     test('returns empty string for empty input', () => {
-      const result = _.camal()
+      const result = _camal()
       assert.equal(result, '')
     })
   })
 
   describe('camalCase function', () => {
     test('returns non alphanumerics with -space and capital', () => {
-      const result = _.camalCase('Exobase Starter_flash AND-go')
+      const result = _.camal('Exobase Starter_flash AND-go')
       assert.equal(result, 'exobaseStarterFlashAndGo')
     })
   })
 
   describe('snake function', () => {
     test('returns correctly cased string', () => {
-      const result = _.snake(
+      const result = _snake(
         'hello', 'world'
       )
       assert.equal(result, 'hello_world')
     })
     test('returns single word', () => {
-      const result = _.snake(
+      const result = _snake(
         'hello'
       )
       assert.equal(result, 'hello')
     })
     test('returns empty string for empty input', () => {
-      const result = _.snake()
+      const result = _snake()
       assert.equal(result, '')
     })
   })
 
   describe('snakeCase function', () => {
     test('returns non alphanumerics with _', () => {
-      const result = _.snakeCase('Exobase Starter_flash AND-go')
+      const result = _.snake('Exobase Starter_flash AND-go')
       assert.equal(result, 'exobase_starter_flash_and_go')
     })
   })
 
   describe('dash function', () => {
     test('returns correctly cased string', () => {
-      const result = _.dash(
+      const result = _dash(
         'hello', 'world'
       )
       assert.equal(result, 'hello-world')
     })
     test('returns single word', () => {
-      const result = _.dash(
+      const result = _dash(
         'hello'
       )
       assert.equal(result, 'hello')
     })
     test('returns empty string for empty input', () => {
-      const result = _.dash()
+      const result = _dash()
       assert.equal(result, '')
     })
   })
 
   describe('dashCase function', () => {
     test('returns non alphanumerics with -', () => {
-      const result = _.dashCase('Exobase Starter_flash AND-go')
+      const result = _.dash('Exobase Starter_flash AND-go')
       assert.equal(result, 'exobase-starter-flash-and-go')
     })
   })

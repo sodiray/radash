@@ -1,5 +1,5 @@
 import { assert } from 'chai'
-import _ from '..'
+import * as _ from '..'
 
 
 describe('object module', () => {
@@ -151,11 +151,76 @@ describe('object module', () => {
       const result = _.pick({ a: 2 }, [])
       assert.deepEqual(result, {})
     })
-    test('calls toItem to convert to list', () => {
+    test('returns picked properties only', () => {
       const result = _.pick({ a: 2, b: 4 }, ['a'])
       assert.deepEqual(result, {
         a: 2
       })
+    })
+  })
+
+  describe('omit function', () => {
+    const person = {
+      name: 'jay',
+      age: 20,
+      active: true
+    }
+    test('handles null input', () => {
+      const result = _.omit(null, [])
+      assert.deepEqual(result, {})
+    })
+    test('handles empty keys', () => {
+      const result = _.omit(person, [])
+      assert.deepEqual(result, person)
+    })
+    test('handles null keys', () => {
+      const result = _.omit(person, null)
+      assert.deepEqual(result, person)
+    })
+    test('returns object without omitted properties', () => {
+      const result = _.omit(person, ['name'])
+      assert.deepEqual(result, {
+        age: 20,
+        active: true
+      })
+    })
+  })
+  
+  describe('get function', () => {
+    type Person = {
+      name: string
+      age: number
+      friends: Person[]
+    }
+    const person: Person = {
+      name: 'jay',
+      age: 17,
+      friends: [{
+        name: 'chris',
+        age: 19,
+        friends: []
+      }]
+    }
+    test('handles null input', () => {
+      const result = _.get(null, x => x.name)
+      assert.equal(result, null)
+    })
+    test('returns specified value', () => {
+      const result = _.get(person, x => x.name)
+      assert.equal(result, 'jay')
+    })
+    test('returns deep specified value', () => {
+      const result = _.get(person, x => x.friends[0].age)
+      assert.equal(result, 19)
+    })
+    test('returns default if value is undefined', () => {
+      const myPerson = { ...person, age: undefined }
+      const result = _.get(myPerson, x => x.age, 22)
+      assert.equal(result, 22)
+    })
+    test('returns given default if failure', () => {
+      const result = _.get(person, x => x.friends[0].friends[0].friends[0].age, 22)
+      assert.equal(result, 22)
     })
   })
 
