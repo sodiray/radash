@@ -16,7 +16,7 @@ export const shake = <RemovedKeys extends string, T>(obj: T, filter: (value: any
  * Map over all the keys of an object to return
  * a new object
  */
-export const mapKeys = <T>(obj: Record<string, T>, mapFunc: (key: string) => string) => {
+export const mapKeys = <T>(obj: Record<string | number | symbol, T>, mapFunc: (key: string) => string) => {
   return Object.keys(obj).reduce((acc, key) => ({
     ...acc,
     [mapFunc(key)]: obj[key]
@@ -26,11 +26,48 @@ export const mapKeys = <T>(obj: Record<string, T>, mapFunc: (key: string) => str
 /**
  * Map over all the keys to create a new object
  */
-export const mapValues = <T, K>(obj: Record<string, T>, mapFunc: (item: T) => K) => {
+export const mapValues = <T, K>(obj: Record<string | number | symbol, T>, mapFunc: (item: T) => K) => {
   return Object.keys(obj).reduce((acc, key) => ({
     ...acc,
     [key]: mapFunc(obj[key])
   }), {})
+}
+
+/**
+ * Map over all the keys to create a new object
+ */
+export const mapEntries = <
+  TKey extends string | number | symbol, 
+  TValue,
+  TNewKey extends string | number | symbol,  
+  TNewValue
+>(
+  obj: Record<TKey, TValue>, 
+  toKey: (kv: { key: TKey; value: TValue }) => TNewKey, 
+  toValue: (kv: { key: TKey; value: TValue }) => TNewValue
+): Record<TNewKey, TNewValue> => {
+  if (!obj) return {} as Record<TNewKey, TNewValue>
+  return Object.entries(obj).reduce((acc, [key, value]) => ({
+      ...acc,
+      [toKey({ key: key as TKey, value: value as TValue })]: toValue({ key: key as TKey, value: value as TValue })
+  }), {} as Record<TNewKey, TNewValue>)
+}
+
+/**
+ * Returns an object with { [keys]: value }
+ * inverted as { [value]: key }
+ */
+export const invert = <
+  TKey extends string | number | symbol, 
+  TValue extends string | number | symbol
+>(
+  obj: Record<TKey, TValue>
+): Record<TValue, TKey> => {
+ if (!obj) return {} as Record<TValue, TKey>
+ return Object.keys(obj).reduce((acc, key) => ({
+     ...acc,
+     [obj[key]]: key
+ }), {} as Record<TValue, TKey>)
 }
 
 export const lowerize = <T>(obj: Record<string, T>) => mapKeys(obj, k => k.toLowerCase())

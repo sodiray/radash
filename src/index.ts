@@ -12,9 +12,7 @@ export {
   max,
   cluster,
   unique,
-  shuffle,
   objectify,
-  draw,
   range,
   flat,
   intersects,
@@ -24,6 +22,13 @@ export {
   sift,
   iterate
 } from './array'
+
+export {
+  uid,
+  random,
+  draw,
+  shuffle
+} from './random'
 
 export {
   series
@@ -51,13 +56,15 @@ export {
   shake,
   mapKeys,
   mapValues,
+  mapEntries,
+  invert,
   lowerize,
   upperize,
   clone,
   listify,
   pick,
   omit,
-  get
+  get,
 } from './object'
 
 export {
@@ -65,7 +72,7 @@ export {
   snake,
   dash,
   template,
-  uid
+  capitalize
 } from './string'
 
 export {
@@ -79,5 +86,6 @@ export {
 } from './typed'
 
 export {
-  random
+  toInt,
+  toFloat
 } from './number'

@@ -109,24 +109,18 @@ describe('string module', () => {
     })
   })
 
-  describe('uid function', () => {
-    test('generates the correct length string', () => {
-      const result = _.uid(10)
-      assert.equal(result.length, 10)
+  describe('capitalize function', () => {
+    test('handles null', () => {
+      const result = _.capitalize(null)
+      assert.equal(result, '')
     })
-    /**
-     * @warning This is potentially a flaky test.
-     * We're trying to assert that given additional
-     * special chars our function will include them
-     * in the random selection process to generate the
-     * uid. However, there is always a small chance that
-     * one is never selected. If the test is flaky, increase
-     * the size of the uid and/or the number of underscores
-     * in the special char addition.
-     */
-    test('uid generates string including special', () => {
-      const result = _.uid(300, '________________________________________________________________')
-      assert.include(result, '_')
+    test('converts hello as Hello', () => {
+      const result = _.capitalize('hello')
+      assert.equal(result, 'Hello')
+    })
+    test('converts hello Bob as Hello bob', () => {
+      const result = _.capitalize('hello Bob')
+      assert.equal(result, 'Hello bob')
     })
   })
 

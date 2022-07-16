@@ -224,4 +224,44 @@ describe('object module', () => {
     })
   })
 
+  describe('mapEntries function', () => {
+    const peopleByRole = {
+      admin: 'jay',
+      user: 'fey',
+      guest: 'bray'
+    }
+    test('handles null input', () => {
+      const result = _.mapEntries(null, null, null)
+      assert.deepEqual(result, {})
+    })
+    test('correctly maps keys and values', () => {
+      const result = _.mapEntries(
+        peopleByRole,
+        x => x.value,
+        x => x.key.toUpperCase()  
+      )
+      assert.equal(result.jay, 'ADMIN')
+      assert.equal(result.fey, 'USER')
+      assert.equal(result.bray, 'GUEST')
+    })
+  })
+  
+  describe('invert function', () => {
+    const peopleByRole = {
+      admin: 'jay',
+      user: 'fey',
+      guest: 'bray'
+    }
+    test('handles null input', () => {
+      const result = _.invert(null)
+      assert.deepEqual(result, {})
+    })
+    test('correctly maps keys and values', () => {
+      const result = _.invert(peopleByRole)
+      assert.equal(result.jay, 'admin')
+      assert.equal(result.fey, 'user')
+      assert.equal(result.bray, 'guest')
+    })
+  })
+
 })

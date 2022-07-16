@@ -298,49 +298,6 @@ describe('array module', () => {
     })
   })
 
-  describe('shuffle function', () => {
-    test('returns list with same number of items', () => {
-      const list = [1, 2, 3, 4, 5]
-      const result = _.shuffle(list)
-      assert.equal(list.length, result.length)
-    })
-    test('returns list with same value', () => {
-      const list = [1, 2, 3, 4, 5]
-      const totalBefore = _.sum(list)
-      const result = _.shuffle(list)
-      const totalAfter = _.sum(result)
-      assert.equal(totalBefore, totalAfter)
-    })
-    test('returns copy of list without mutatuing input', () => {
-      const list = [1, 2, 3, 4, 5]
-      const result = _.shuffle(list)
-      assert.notEqual(list, result)
-      assert.deepEqual(list, [1, 2, 3, 4, 5])
-    })
-  })
-
-  describe('draw function', () => {
-    test('returns a string from the list', () => {
-      const letters = 'abcde'
-      const result = _.draw(letters.split(''))
-      assert.include(letters, result)
-    })
-    test('returns a item from the list', () => {
-      const list = [
-        { id: 'a', word: 'hello' },
-        { id: 'b', word: 'oh' },
-        { id: 'c', word: 'yolo' }
-      ]
-      const result = _.draw(list)
-      assert.include('abc', result.id)
-    })
-    test('returns null given empty input', () => {
-      const list = []
-      const result = _.draw(list)
-      assert.isNull(result)
-    })
-  })
-
   describe('range function', () => {
     test('creates correct list', () => {
       let items: number[] = []
