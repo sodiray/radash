@@ -14,6 +14,7 @@ export {
   unique,
   objectify,
   range,
+  list,
   flat,
   intersects,
   fork,
@@ -41,6 +42,7 @@ export {
   retry,
   tryit as try,
   sleep,
+  parallel
 } from './async'
 
 export {

@@ -302,19 +302,31 @@ describe('array module', () => {
     test('creates correct list', () => {
       let items: number[] = []
       for (const item of _.range(0, 4)) items.push(item)
-      const total = items.reduce((a, b) => a + b)
-      assert.equal(total, 10)
-      assert.equal(items[0], 0)
-      assert.equal(items[4], 4)
+      assert.deepEqual(items, [0, 1, 2, 3, 4])
     })
     test('creates correct list with step', () => {
       let items: number[] = []
       for (const item of _.range(0, 10, 2)) items.push(item)
-      const total = items.reduce((a, b) => a + b)
-      assert.equal(total, 30)
-      assert.equal(items[0], 0)
-      assert.equal(items[4], 8)
-      assert.equal(items[5], 10)
+      assert.deepEqual(items, [0, 2, 4, 6, 8, 10])
+    })
+  })
+  
+  describe('list function', () => {
+    test('creates correct list', () => {
+      const result = _.list(0, 4)
+      assert.deepEqual(result, [0, 1, 2, 3, 4])
+    })
+    test('creates correct list with step', () => {
+      const result = _.list(3, 12, 3)
+      assert.deepEqual(result, [3, 6, 9, 12])
+    })
+    test('omits end if step does not land on it', () => {
+      const result = _.list(0, 5, 2)
+      assert.deepEqual(result, [0, 2, 4])
+    })
+    test('returns start only if step larger than end', () => {
+      const result = _.list(0, 5, 20)
+      assert.deepEqual(result, [0])
     })
   })
 

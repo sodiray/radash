@@ -146,10 +146,21 @@ export const unique = <T, K extends string | number | symbol>(array: T[], toKey?
  * @example for (const i of _.range(3, 3*3, 3)) { console.log(i) }
  */
  export function * range (start: number, end: number, step: number = 1): Generator<number> {
-  const count = (end - start) / step
-  for (let idx = start; idx <= count; idx++) {
-    yield ((idx * step) + start)
+  for (let i = start; i <= end; i += step) {
+    yield i
+    if (i + step > end) break
   }
+}
+
+/**
+ * Creates a list with numbers ranging from the
+ * start to the end by the given step.
+ * 
+ * @example list(0, 3) // [0, 1, 2, 3]
+ * @example list(2, 10, 2) // [2, 4, 6, 8 ,10]
+ */
+ export const list = (start: number, end: number, step: number = 1): number[] => {
+  return Array.from(range(start, end, step))
 }
 
 /**

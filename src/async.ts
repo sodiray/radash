@@ -1,3 +1,4 @@
+import { list, sort } from "./array"
 
 export const reduce = async <T, K> (
   array: T[],
@@ -74,6 +75,47 @@ export const defer = async <
     throw err
   }
 }
+
+
+type WorkItemResult<K> = {
+  index: number
+  result: K
+  error: any
+}
+
+export const parallel = async <T, K>(
+  limit: number,
+  array: T[],
+  func: (item: T) => Promise<K>,
+): Promise<{ result: K; error: any }[]> => {
+  const work = array.map((item, index) => ({
+    index,
+    item,
+  }))
+  // Process array items
+  const processor = async (res: (value: WorkItemResult<K>[]) => void) => {
+    const results: WorkItemResult<K>[] = []
+    while (true) {
+      const next = work.pop()
+      if (!next) return res(results)
+      const [error, result] = await tryit(func)(next.item)
+      results.push({
+        error,
+        result,
+        index: next.index,
+      })
+    }
+  }
+  // Create queues
+  const queues = list(1, limit).map(() => new Promise(processor))
+  // Wait for all queues to complete
+  const results = await Promise.all(queues) as WorkItemResult<K>[][]
+  return sort(results.flat(), (r) => r.index).map((r) => ({
+    result: r.result,
+    error: r.error,
+  }))
+}
+
 
 /**
  * Simple retry

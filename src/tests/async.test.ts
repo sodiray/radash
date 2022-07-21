@@ -171,6 +171,37 @@ describe("async module", () => {
       assert.isAtLeast(after, before + 1000)
     })
   })
+  
+  describe('_.parallel function', () => {
+    test('returns all results from all functions', async () => {
+      const result = await _.parallel(1, _.list(1, 3), async (num) => {
+        await _.sleep(1000)
+        return `hi_${num}`
+      })
+      assert.deepEqual(result, [
+        { error: null, result: 'hi_1' },
+        { error: null, result: 'hi_2' },
+        { error: null, result: 'hi_3' }
+      ])
+    })
+    test('does not run more than the limit at once', async () => {
+      let numInProgress = 0
+      const tracking: number[] = []
+      await _.parallel(3, _.list(1, 14), async () => {
+        numInProgress++;
+        tracking.push(numInProgress)
+        await _.sleep(300)
+        numInProgress--;
+      })
+      assert.deepEqual(tracking, [
+        1, 2, 3, 
+        3, 3, 3, 
+        3, 3, 3, 
+        3, 3, 3, 
+        3, 3
+      ])
+    })
+  })
 
   describe('_.retry', () => {
     test('returns result of given function', async () => {
