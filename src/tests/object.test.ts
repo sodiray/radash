@@ -32,6 +32,10 @@ describe('object module', () => {
         r: 'x'
       })
     })
+    test('handles undefined input', () => {
+      const result = _.shake(undefined)
+      assert.deepEqual(result, {})
+    })
   })
 
   describe('mapKeys function', () => {
