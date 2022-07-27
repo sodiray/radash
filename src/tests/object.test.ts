@@ -267,5 +267,46 @@ describe('object module', () => {
       assert.equal(result.bray, 'guest')
     })
   })
+  
+  describe('zip function', () => {
+    const a = {
+      name: 'jay',
+      cards: ['ac'],
+      location: {
+        street: '23 main',
+        state: {
+          abbrv: 'FL',
+          name: 'Florida'
+        }
+      }
+    }
+    const b = {
+      name: 'charles',
+      cards: ['4c'],
+      location: {
+        street: '8114 capo',
+        state: {
+          abbrv: 'TX',
+          name: 'Texas'
+        }
+      }
+    }
+    test('handles both null input', () => {
+      const result = _.zip(null, null)
+      assert.deepEqual(result, {})
+    })
+    test('handles null first input', () => {
+      const result = _.zip({ a: 'y' }, null)
+      assert.deepEqual(result, { a: 'y' })
+    })
+    test('handles null last input', () => {
+      const result = _.zip(null, { a: 'y' })
+      assert.deepEqual(result, { a: 'y' })
+    })
+    test('correctly zips a with values from b', () => {
+      const result = _.zip(a, b)
+      assert.deepEqual(result, b)
+    })
+  })
 
 })

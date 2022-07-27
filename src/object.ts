@@ -1,3 +1,4 @@
+import { isObject } from './typed'
 
 /**
  * Removes (shakes out) any null or undefined entries from
@@ -115,4 +116,24 @@ export const get = <T, K> (value: T, getter: (t: T) => K, defaultValue: K | null
   } catch {
     return defaultValue
   }
+}
+
+export const zip = <
+  X extends Record<string | symbol | number, any>
+> (
+  a: X,
+  b: X
+): X => {
+  if (!a && !b) return {} as X
+  if (!a) return b as X
+  if (!b) return a as X
+  return Object.entries(a).reduce((acc, [key, value]) => {
+    return {
+      ...acc,
+      [key]: (() => {
+        if (isObject(value)) return zip(value, b[key])
+        return b[key]
+      })()
+    }
+  }, {} as X)
 }

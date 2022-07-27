@@ -21,7 +21,8 @@ export {
   merge,
   replaceOrAppend,
   sift,
-  iterate
+  iterate,
+  diff
 } from './array'
 
 export {
@@ -67,6 +68,7 @@ export {
   pick,
   omit,
   get,
+  zip,
 } from './object'
 
 export {
