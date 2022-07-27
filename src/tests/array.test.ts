@@ -175,22 +175,27 @@ describe('array module', () => {
   })
 
   describe('objectify function', () => {
+    const list = [
+      { id: 'a', word: 'hello' },
+      { id: 'b', word: 'bye' },
+      { id: 'c', word: 'oh' },
+      { id: 'd', word: 'hey' },
+      { id: 'e', word: 'ok' }
+    ]
     test('returns correct map of values', () => {
-      const list = [
-        { id: 'a', word: 'hello' },
-        { id: 'b', word: 'bye' },
-        { id: 'c', word: 'oh' },
-        { id: 'd', word: 'hey' },
-        { id: 'e', word: 'ok' }
-      ]
       const result = _.objectify(list, x => x.id, x => x)
       assert.equal(result.a.word, 'hello')
       assert.equal(result.b.word, 'bye')
     })
     test('does not fail on empty input list', () => {
-      const list = []
-      const result = _.objectify(list, x => x.id, x => x)
+      const result = _.objectify([], x => x.id, x => x)
       assert.deepEqual(result, {})
+    })
+    test('defaults value to array item', () => {
+      const result = _.objectify(list.slice(0, 1), x => x.id)
+      assert.deepEqual(result, {
+        a: { id: 'a', word: 'hello' }
+      })
     })
   })
 

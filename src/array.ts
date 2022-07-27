@@ -82,7 +82,15 @@ export const replace = <T>(list: T[], newItem: T, match: (item: T, idx: number) 
  * Convert an array to a dictionary by mapping each item
  * into a dictionary key & value 
  */
-export const objectify = <T, Key extends string | number | symbol, Value>(array: T[], getKey: (item: T) => Key, getValue: (item: T) => Value): Record<Key, Value> => {
+export const objectify = <
+  T, 
+  Key extends string | number | symbol, 
+  Value = T
+>(
+  array: T[], 
+  getKey: (item: T) => Key, 
+  getValue: (item: T) => Value = (item) => item as unknown as Value
+): Record<Key, Value> => {
   return array.reduce((acc, item) => ({
     ...acc,
     [getKey(item)]: getValue(item)
