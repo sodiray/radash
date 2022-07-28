@@ -205,20 +205,20 @@ describe("async module", () => {
 
   describe('_.retry', () => {
     test('returns result of given function', async () => {
-      const result = await _.retry(async (bail) => { 
+      const result = await _.retry(null, async (bail) => { 
         return 'hello'
       })
       assert.equal(result, 'hello')
     })
     test('simple + quick + happy path', async () => {
-      const result = await _.retry(async () => { 
+      const result = await _.retry(null, async () => { 
         return 'hello'
       })
       assert.equal(result, 'hello')
     })
     test('retries on failure', async () => {
       let failedOnce = false
-      const result = await _.retry(async (bail) => { 
+      const result = await _.retry(null, async (bail) => { 
         if (!failedOnce) {
           failedOnce = true
           throw 'Failing for test'
@@ -229,7 +229,7 @@ describe("async module", () => {
     })
     test('quits on bail', async () => {
       try {
-        await _.retry(async (bail) => { 
+        await _.retry({}, async (bail) => { 
           bail('iquit')
         })
       } catch (err) {
@@ -240,7 +240,7 @@ describe("async module", () => {
     })
     test('quits after max retries', async () => {
       try {
-        await _.retry(async () => { 
+        await _.retry({}, async () => { 
           throw 'quitagain'
         })
       } catch (err) {
@@ -254,7 +254,19 @@ describe("async module", () => {
         const func = async () => { 
           throw 'quitagain'
         }
-        await _.retry(func, 3, null)
+        await _.retry({ times: 3 }, func)
+      } catch (err) {
+        assert.equal(err, 'quitagain')
+        return
+      }
+      assert.fail('error should have been thrown')
+    })
+    test('quits after max retries with delay', async () => {
+      try {
+        const func = async () => { 
+          throw 'quitagain'
+        }
+        await _.retry({ delay: 100 }, func)
       } catch (err) {
         assert.equal(err, 'quitagain')
         return

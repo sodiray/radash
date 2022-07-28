@@ -140,18 +140,22 @@ export const parallel = async <T, K>(
 export const retry = async <
   TResponse
 > (
+  options: {
+    times?: number
+    delay?: number | null
+  },
   func: (exit: (err: any) => void) => Promise<TResponse>,
-  retries: number = 3,
-  delay: number | null = 100
 ): Promise<TResponse> => {
-  for (let i = 1; i <= retries; i++) {
+  const times = options?.times ?? 3
+  const delay = options?.delay
+  for (let i = 1; i <= times; i++) {
     try {
       return await func((err: any) => {
         throw { _exited: err }
       })
     } catch (err) {
       if (err._exited) throw err._exited
-      if (i === retries) throw err
+      if (i === times) throw err
     }
     if (delay) {
       await sleep(delay)
