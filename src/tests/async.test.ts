@@ -79,14 +79,14 @@ describe("async module", () => {
     test("calls registered defer function", async () => {
       let val = 0;
       await _.defer(async (defer) => {
-        defer(() => (val = 1));
+        defer(async () => {val = 1});
       })
       assert.equal(val, 1);
     });
     test("returns the resulting value of the given function", async () => {
       let val = 0;
       const result = await _.defer(async (defer) => {
-        defer(() => (val = 1));
+        defer(async () => {val = 1});
         return "x";
       });
       assert.equal(val, 1);
@@ -97,9 +97,9 @@ describe("async module", () => {
       let two = 0;
       let three = 0;
       const result = await _.defer(async (defer) => {
-        defer(() => (one = 1));
-        defer(() => (two = 2));
-        defer(() => (three = 3));
+        defer(async () => {one = 1});
+        defer(async () => {two = 2});
+        defer(async () => {three = 3});
         return "x";
       })
       assert.equal(one, 1);
@@ -113,9 +113,9 @@ describe("async module", () => {
       let three = 0;
       try {
         await _.defer(async (defer) => {
-          defer(() => (one = 1));
-          defer(() => (two = 2));
-          defer(() => (three = 3));
+          defer(async () => {one = 1});
+          defer(async () => {two = 2});
+          defer(async () => {three = 3});
           if (!!true) throw new Error("soooo broken");
           return "x";
         });
@@ -124,17 +124,57 @@ describe("async module", () => {
       assert.equal(two, 2);
       assert.equal(three, 3);
     });
-    test("rethrows the error", async () => {
+    test("throws the error", async () => {
       let error: Error | null = null;
       try {
-        await _.defer(() => {
+        await _.defer(async () => {
           throw new Error("soooo broken");
         });
       } catch (err) {
         error = err;
       }
       assert.isNotNull(error);
-      assert.equal(error.message, "soooo broken");
+      assert.equal(error?.message, "soooo broken");
+    });
+    test("rethrows the rethrown error when rethrow is true", async () => {
+      let error: Error | null = null;
+      try {
+        await _.defer(async (register) => {
+          register(async () =>{ 
+            throw new Error("soooo broken");
+          }, { rethrow: true })
+        });
+      } catch (err) {
+        error = err;
+      }
+      assert.isNotNull(error);
+      assert.equal(error?.message, "soooo broken");
+    });
+    test("does not rethrow the rethrown error when rethrow is false", async () => {
+      let error: Error | null = null;
+      try {
+        await _.defer(async (register) => {
+          register(async () =>{ 
+            throw new Error("soooo broken");
+          }, { rethrow: false })
+        });
+      } catch (err) {
+        error = err;
+      }
+      assert.isNull(error);
+    });
+    test("does not rethrow the rethrown error by default", async () => {
+      let error: Error | null = null;
+      try {
+        await _.defer(async (register) => {
+          register(async () =>{ 
+            throw new Error("soooo broken");
+          })
+        });
+      } catch (err) {
+        error = err;
+      }
+      assert.isNull(error);
     });
     test("returns awaited async results", async () => {
       const result = await _.defer(() => {

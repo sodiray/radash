@@ -60,21 +60,33 @@ export const map = async <T, K> (
  * })
  * ```
  */
-export const defer = async <
-  TResponse
->(
-  func: (register: (fn: (error?: any) => void) => void) => Promise<TResponse>
+ export const defer = async <TResponse>(
+  func: (
+    register: (
+      fn: (error?: any) => Promise<void>,
+      options?: { rethrow?: boolean }
+    ) => void
+  ) => Promise<TResponse>
 ): Promise<TResponse> => {
-  let funcs: Function[] = []
-  try {
-    const result = await func(funcs.push.bind(funcs))
-    for (const f of funcs) f()
-    return result as TResponse
-  } catch (err) {
-    for (const f of funcs) f(err)
-    throw err
+  const callbacks: {
+    fn: (error?: any) => Promise<void>;
+    rethrow: boolean;
+  }[] = [];
+  const register = (
+    fn: (error?: any) => Promise<void>, 
+    options?: { rethrow?: boolean }
+  ) => callbacks.push({
+    fn,
+    rethrow: options?.rethrow ?? false,
+  })
+  const [err, response] = await tryit(func)(register);
+  for (const { fn, rethrow } of callbacks) {
+    const [rethrown] = await tryit(fn)(err);
+    if (rethrow) throw rethrown;
   }
-}
+  if (err) throw err;
+  return response;
+};
 
 
 type WorkItemResult<K> = {
