@@ -1,6 +1,6 @@
 {
   "name": "radash",
-  "version": "3.2.0",
+  "version": "3.2.1",
   "description": "Functional utility library - modern, simple, typed, powerful",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

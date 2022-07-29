@@ -64,17 +64,17 @@ export const map = async <T, K> (
  export const defer = async <TResponse>(
   func: (
     register: (
-      fn: (error?: any) => Promise<void>,
+      fn: (error?: any) => Promise<any>,
       options?: { rethrow?: boolean }
     ) => void
   ) => Promise<TResponse>
 ): Promise<TResponse> => {
   const callbacks: {
-    fn: (error?: any) => Promise<void>;
+    fn: (error?: any) => Promise<any>;
     rethrow: boolean;
   }[] = [];
   const register = (
-    fn: (error?: any) => Promise<void>, 
+    fn: (error?: any) => Promise<any>, 
     options?: { rethrow?: boolean }
   ) => callbacks.push({
     fn,

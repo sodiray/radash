@@ -82,7 +82,9 @@ describe("async module", () => {
     test("calls registered defer function", async () => {
       let val = 0;
       await _.defer(async (defer) => {
-        defer(async () => {val = 1});
+        defer(async () => {
+          return val = 1
+        });
       })
       assert.equal(val, 1);
     });
