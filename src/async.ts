@@ -1,4 +1,5 @@
 import { list, sort } from "./array"
+import { isFunction } from "./typed"
 
 export const reduce = async <T, K> (
   array: T[],
@@ -155,23 +156,22 @@ export const retry = async <
   options: {
     times?: number
     delay?: number | null
+    backoff?: (count: number) => number
   },
   func: (exit: (err: any) => void) => Promise<TResponse>,
 ): Promise<TResponse> => {
   const times = options?.times ?? 3
   const delay = options?.delay
-  for (let i = 1; i <= times; i++) {
-    try {
-      return await func((err: any) => {
-        throw { _exited: err }
-      })
-    } catch (err) {
-      if (err._exited) throw err._exited
-      if (i === times) throw err
-    }
-    if (delay) {
-      await sleep(delay)
-    }
+  const backoff = options?.backoff ?? null
+  for (const i of list(1, times)) {
+    const [err, result] = await tryit(func)((err: any) => {
+      throw { _exited: err }
+    }) as [any, TResponse]
+    if (!err) return result
+    if (err._exited) throw err._exited
+    if (i === times) throw err
+    if (delay) await sleep(delay)
+    if (backoff) await sleep(backoff(i))
   }
 }
 

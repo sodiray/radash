@@ -1,5 +1,8 @@
 import { assert } from "chai";
 import * as _ from "..";
+import { performance } from 'node:perf_hooks'
+
+jest.useRealTimers()
 
 describe("async module", () => {
   describe("asyncReduce function", () => {
@@ -312,6 +315,31 @@ describe("async module", () => {
         return
       }
       assert.fail('error should have been thrown')
+    })
+    test('uses backoff between retries', async () => {
+      let count = 0
+      let backoffs: number = 0
+      const start = performance.now()
+      await _.retry({ 
+        times: 3, 
+        backoff: i => {
+          backoffs += i**10
+          return i**10
+        },
+      }, async () => {
+        count++;
+        if (count < 3) throw 'error'
+      })
+      const diff = performance.now() - start
+      assert.equal(count, 3)
+      // Time taken should at least be the
+      // total ms backed off. Using exponential
+      // backoff (above) 3 times (passing on
+      // the third try) that is:
+      //   - 10**1 + 10**2 = 1025
+      // The performance typically comes in 1
+      // or 2 milliseconds after.
+      assert.isAtLeast(diff, backoffs)
     })
   })
 
