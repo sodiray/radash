@@ -1,8 +1,9 @@
 import { isObject } from './typed'
 
 /**
- * Removes (shakes out) any null or undefined entries from
- * the given object
+ * Removes (shakes out) undefined entries from an
+ * object. Optional second argument shakes out values
+ * by custom evaluation.
  */
 export const shake = <RemovedKeys extends string, T>(obj: T, filter: (value: any) => boolean = (x) => x === undefined): Omit<T, RemovedKeys> => {
   if (!obj) return {} as T
