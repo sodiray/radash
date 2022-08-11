@@ -235,14 +235,13 @@ describe('object module', () => {
       guest: 'bray'
     }
     test('handles null input', () => {
-      const result = _.mapEntries(null, null, null)
+      const result = _.mapEntries(null, null)
       assert.deepEqual(result, {})
     })
     test('correctly maps keys and values', () => {
       const result = _.mapEntries(
         peopleByRole,
-        x => x.value,
-        x => x.key.toUpperCase()  
+        x => [x.value, x.key.toUpperCase()]
       )
       assert.equal(result.jay, 'ADMIN')
       assert.equal(result.fey, 'USER')
