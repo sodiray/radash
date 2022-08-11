@@ -241,7 +241,7 @@ describe('object module', () => {
     test('correctly maps keys and values', () => {
       const result = _.mapEntries(
         peopleByRole,
-        x => [x.value, x.key.toUpperCase()]
+        (key, value) => [value, key.toUpperCase()]
       )
       assert.equal(result.jay, 'ADMIN')
       assert.equal(result.fey, 'USER')
