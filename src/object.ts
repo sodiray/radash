@@ -5,13 +5,15 @@ import { isObject } from './typed'
  * object. Optional second argument shakes out values
  * by custom evaluation.
  */
-export const shake = <RemovedKeys extends string, T>(obj: T, filter: (value: any) => boolean = (x) => x === undefined): Omit<T, RemovedKeys> => {
+export const shake = <RemovedKeys extends string, T>(
+  obj: T,
+  filter: (value: any) => boolean = x => x === undefined
+): Omit<T, RemovedKeys> => {
   if (!obj) return {} as T
   return Object.keys(obj).reduce((acc, key) => {
     if (filter(obj[key])) {
       return acc
-    }
-    else return { ...acc, [key]: obj[key] }
+    } else return { ...acc, [key]: obj[key] }
   }, {} as T)
 }
 
@@ -19,96 +21,115 @@ export const shake = <RemovedKeys extends string, T>(obj: T, filter: (value: any
  * Map over all the keys of an object to return
  * a new object
  */
- export const mapKeys = <
- TValue,
- TKey extends string | number | symbol,
- TNewKey extends string | number | symbol
+export const mapKeys = <
+  TValue,
+  TKey extends string | number | symbol,
+  TNewKey extends string | number | symbol
 >(
- obj: Record<TKey, TValue>,
- mapFunc: (key: TKey, value: TValue) => TNewKey
+  obj: Record<TKey, TValue>,
+  mapFunc: (key: TKey, value: TValue) => TNewKey
 ): Record<TNewKey, TValue> => {
- return Object.keys(obj).reduce(
-   (acc, key) => ({
-     ...acc,
-     [mapFunc(key as TKey, obj[key])]: obj[key],
-   }),
-   {} as Record<TNewKey, TValue>
- );
-};
+  return Object.keys(obj).reduce(
+    (acc, key) => ({
+      ...acc,
+      [mapFunc(key as TKey, obj[key])]: obj[key]
+    }),
+    {} as Record<TNewKey, TValue>
+  )
+}
 
 /**
-* Map over all the keys to create a new object
-*/
+ * Map over all the keys to create a new object
+ */
 export const mapValues = <
- TValue,
- TKey extends string | number | symbol,
- TNewValue
+  TValue,
+  TKey extends string | number | symbol,
+  TNewValue
 >(
- obj: Record<TKey, TValue>,
- mapFunc: (value: TValue, key: string) => TNewValue
+  obj: Record<TKey, TValue>,
+  mapFunc: (value: TValue, key: string) => TNewValue
 ): Record<TKey, TNewValue> => {
- return Object.keys(obj).reduce(
-   (acc, key) => ({
-     ...acc,
-     [key]: mapFunc(obj[key], key),
-   }),
-   {} as Record<TKey, TNewValue>
- );
-};
+  return Object.keys(obj).reduce(
+    (acc, key) => ({
+      ...acc,
+      [key]: mapFunc(obj[key], key)
+    }),
+    {} as Record<TKey, TNewValue>
+  )
+}
 
 /**
-* Map over all the keys to create a new object
-*/
+ * Map over all the keys to create a new object
+ */
 export const mapEntries = <
- TKey extends string | number | symbol,
- TValue,
- TNewKey extends string | number | symbol,
- TNewValue
+  TKey extends string | number | symbol,
+  TValue,
+  TNewKey extends string | number | symbol,
+  TNewValue
 >(
- obj: Record<TKey, TValue>,
- toEntry: (key: TKey, value: TValue) => [TNewKey, TNewValue]
+  obj: Record<TKey, TValue>,
+  toEntry: (key: TKey, value: TValue) => [TNewKey, TNewValue]
 ): Record<TNewKey, TNewValue> => {
- if (!obj) return {} as Record<TNewKey, TNewValue>;
- return Object.entries(obj).reduce(
-   (acc, [key, value]) => {
+  if (!obj) return {} as Record<TNewKey, TNewValue>
+  return Object.entries(obj).reduce((acc, [key, value]) => {
     const [newKey, newValue] = toEntry(key as TKey, value as TValue)
     return {
-     ...acc,
-     [newKey]: newValue
+      ...acc,
+      [newKey]: newValue
     }
-   },
-   {} as Record<TNewKey, TNewValue>
- );
-};
+  }, {} as Record<TNewKey, TNewValue>)
+}
 
 /**
  * Returns an object with { [keys]: value }
  * inverted as { [value]: key }
  */
 export const invert = <
-  TKey extends string | number | symbol, 
+  TKey extends string | number | symbol,
   TValue extends string | number | symbol
 >(
   obj: Record<TKey, TValue>
 ): Record<TValue, TKey> => {
- if (!obj) return {} as Record<TValue, TKey>
- return Object.keys(obj).reduce((acc, key) => ({
-     ...acc,
-     [obj[key]]: key
- }), {} as Record<TValue, TKey>)
+  if (!obj) return {} as Record<TValue, TKey>
+  return Object.keys(obj).reduce(
+    (acc, key) => ({
+      ...acc,
+      [obj[key]]: key
+    }),
+    {} as Record<TValue, TKey>
+  )
 }
 
-export const lowerize = <T>(obj: Record<string, T>) => mapKeys(obj, k => k.toLowerCase())
-export const upperize = <T>(obj: Record<string, T>) => mapKeys(obj, k => k.toUpperCase())
+/**
+ * Convert all keys in an object to lower case
+ */
+export const lowerize = <T>(obj: Record<string, T>) =>
+  mapKeys(obj, k => k.toLowerCase())
+
+/**
+ * Convert all keys in an object to upper case
+ */
+export const upperize = <T>(obj: Record<string, T>) =>
+  mapKeys(obj, k => k.toUpperCase())
 
 export const clone = <T extends object = object>(obj: T): T => {
-  return Object.getOwnPropertyNames(obj).reduce((acc, name) => ({
-    ...acc,
-    [name]: obj[name]
-  }), {} as T)
+  return Object.getOwnPropertyNames(obj).reduce(
+    (acc, name) => ({
+      ...acc,
+      [name]: obj[name]
+    }),
+    {} as T
+  )
 }
 
-export const listify = <T, K>(obj: Record<string | number | symbol, T>, toItem: (record: { key: string, value: T }) => K) => {
+/**
+ * Convert an object to a list, mapping each entry
+ * into a list item
+ */
+export const listify = <T, K>(
+  obj: Record<string | number | symbol, T>,
+  toItem: (record: { key: string; value: T }) => K
+) => {
   if (!obj) return []
   const entries = Object.entries(obj)
   if (entries.length === 0) return []
@@ -117,14 +138,29 @@ export const listify = <T, K>(obj: Record<string | number | symbol, T>, toItem: 
   }, [] as K[])
 }
 
-export const pick = <T, TKeys extends keyof T>(obj: T, keys: TKeys[]): Pick<T, TKeys> => {
+/**
+ * Pick a list of properties from an object
+ * into a new object
+ */
+export const pick = <T, TKeys extends keyof T>(
+  obj: T,
+  keys: TKeys[]
+): Pick<T, TKeys> => {
   if (!obj) return {} as Pick<T, TKeys>
   return keys.reduce((acc, key) => {
     return { ...acc, [key]: obj[key] }
   }, {} as Pick<T, TKeys>)
 }
 
-export const omit = <T, TKeys extends keyof T>(obj: T, keys: TKeys[]): Omit<T, TKeys> => {
+/**
+ * Omit a list of properties from an object
+ * returning a new object with the properties
+ * that remain
+ */
+export const omit = <T, TKeys extends keyof T>(
+  obj: T,
+  keys: TKeys[]
+): Omit<T, TKeys> => {
   if (!obj) return {} as Omit<T, TKeys>
   if (!keys || keys.length === 0) return obj as Omit<T, TKeys>
   const keyMap = keys.reduce((acc, key) => {
@@ -136,7 +172,11 @@ export const omit = <T, TKeys extends keyof T>(obj: T, keys: TKeys[]): Omit<T, T
   }, {} as Omit<T, TKeys>)
 }
 
-export const get = <T, K> (value: T, getter: (t: T) => K, defaultValue: K | null = null) => {
+export const get = <T, K>(
+  value: T,
+  getter: (t: T) => K,
+  defaultValue: K | null = null
+) => {
   try {
     return getter(value) ?? defaultValue
   } catch {
@@ -144,9 +184,12 @@ export const get = <T, K> (value: T, getter: (t: T) => K, defaultValue: K | null
   }
 }
 
-export const zip = <
-  X extends Record<string | symbol | number, any>
-> (
+/**
+ * Zip two objects together recursivly into a new
+ * object applying values from right to left. 
+ * Recursion only applies to child object properties.
+ */
+export const zip = <X extends Record<string | symbol | number, any>>(
   a: X,
   b: X
 ): X => {

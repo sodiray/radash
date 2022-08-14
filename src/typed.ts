@@ -1,14 +1,13 @@
-
 export const isSymbol = (value: any) => {
-  return (!!value) && (value.constructor === Symbol)
+  return !!value && value.constructor === Symbol
 }
 
 export const isArray = (value: any) => {
-  return (!!value) && (value.constructor === Array)
+  return !!value && value.constructor === Array
 }
 
 export const isObject = (value: any) => {
-  return (!!value) && (value.constructor === Object)
+  return !!value && value.constructor === Object
 }
 
 export const isFunction = (value: any) => {

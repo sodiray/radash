@@ -1,98 +1,73 @@
-
 export {
-  group,
   boil,
-  sum,
-  sort,
-  first,
-  last,
-  replace,
-  select,
-  min,
-  max,
   cluster,
-  unique,
+  diff,
+  first,
+  flat,
+  fork,
+  group,
+  intersects,
+  iterate,
+  last,
+  list,
+  max,
+  merge,
+  min,
   objectify,
   range,
-  list,
-  flat,
-  intersects,
-  fork,
-  merge,
+  replace,
   replaceOrAppend,
+  select,
   sift,
-  iterate,
-  diff
+  sort,
+  sum,
+  unique
 } from './array'
-
 export {
-  uid,
-  random,
-  draw,
-  shuffle
-} from './random'
-
-export {
-  series
-} from './series'
-
-export {
-  map,
-  reduce,
   defer,
+  map,
+  parallel,
+  reduce,
   retry,
-  tryit as try,
   sleep,
-  parallel
+  tryit as try
 } from './async'
 export type { AggregateError } from './async'
-
 export {
   chain,
   compose,
-  partial,
-  proxied,
-  partob,
-  memo,
   debounce,
+  memo,
+  partial,
+  partob,
+  proxied,
   throttle
 } from './curry'
-
+export { toFloat, toInt } from './number'
 export {
-  shake,
+  clone,
+  get,
+  invert,
+  listify,
+  lowerize,
+  mapEntries,
   mapKeys,
   mapValues,
-  mapEntries,
-  invert,
-  lowerize,
-  upperize,
-  clone,
-  listify,
-  pick,
   omit,
-  get,
-  zip,
+  pick,
+  shake,
+  upperize,
+  zip
 } from './object'
-
-export {
-  camal,
-  snake,
-  dash,
-  template,
-  capitalize
-} from './string'
-
+export { draw, random, shuffle, uid } from './random'
+export { series } from './series'
+export { camal, capitalize, dash, snake, template } from './string'
 export {
   isArray,
-  isObject,
-  isFunction,
-  isString,
   isEmpty,
+  isFunction,
   isNumber,
-  isSymbol,
+  isObject,
+  isString,
+  isSymbol
 } from './typed'
-
-export {
-  toInt,
-  toFloat
-} from './number'

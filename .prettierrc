@@ -1,0 +1,13 @@
+{
+  "_docs": "https://prettier.io/docs/en/options.html",
+  "tabWidth": 2,
+  "tabs": false,
+  "semi": false,
+  "singleQuote": true,
+  "printWidth": 80,
+  "trailingComma": "none",
+  "bracketSpacing": true,
+  "bracketSameLine": false,
+  "arrowParens": "avoid",
+  "singleAttributePerLine": true
+}

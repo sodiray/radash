@@ -1,9 +1,13 @@
-import { fork, list, sort } from "./array"
-import { isFunction } from "./typed"
+import { fork, list, sort } from './array'
 
-export const reduce = async <T, K> (
+/**
+ * An async reduce function. Works like the
+ * built-in Array.reduce function but handles
+ * an async reducer function
+ */
+export const reduce = async <T, K>(
   array: T[],
-  asyncReducer: (acc: K, item: T) => Promise<K>, 
+  asyncReducer: (acc: K, item: T) => Promise<K>,
   initValue?: K
 ): Promise<K> => {
   const initProvided = initValue !== undefined
@@ -13,12 +17,17 @@ export const reduce = async <T, K> (
   const iter = initProvided ? array : array.slice(1)
   let value: any = initProvided ? initValue : array[0]
   for (const item of iter) {
-    value = await asyncReducer(value, item);
+    value = await asyncReducer(value, item)
   }
   return value
 }
 
-export const map = async <T, K> (
+/**
+ * An async map function. Works like the
+ * built-in Array.map function but handles
+ * an async mapper function
+ */
+export const map = async <T, K>(
   array: T[],
   asyncMapFunc: (item: T) => Promise<K>
 ): Promise<K[]> => {
@@ -31,37 +40,14 @@ export const map = async <T, K> (
 }
 
 /**
- * Useful when for script like things where cleanup 
+ * Useful when for script like things where cleanup
  * should be done on fail or sucess no matter.
- * 
+ *
  * You can call defer many times to register many
  * defered functions that will all be called when
  * the function exits in any state.
- * 
- * 
- * Ex.
- * ```
- * const main = _.defered(async (defer) => {
- * 
- *     fs.writeFile(`${deployment.id}.logs`)
- *     defer(() => {
- *         fs.remove(`${deployment.id}.logs`)
- *     })
- * 
- *     s3.download(...)
- *     defer(() => {
- *         fs.remove(...)
- *     })
- * 
- *     api.deployments.updateStatus('in_progress')
- *     defer((err) => {
- *         api.deployments.updateStatus(err ? 'failed' : 'success')
- *     })
- * 
- * })
- * ```
  */
- export const defer = async <TResponse>(
+export const defer = async <TResponse>(
   func: (
     register: (
       fn: (error?: any) => any,
@@ -70,25 +56,25 @@ export const map = async <T, K> (
   ) => Promise<TResponse>
 ): Promise<TResponse> => {
   const callbacks: {
-    fn: (error?: any) => any;
-    rethrow: boolean;
-  }[] = [];
+    fn: (error?: any) => any
+    rethrow: boolean
+  }[] = []
   const register = (
-    fn: (error?: any) => any, 
+    fn: (error?: any) => any,
     options?: { rethrow?: boolean }
-  ) => callbacks.push({
-    fn,
-    rethrow: options?.rethrow ?? false,
-  })
-  const [err, response] = await tryit(func)(register);
+  ) =>
+    callbacks.push({
+      fn,
+      rethrow: options?.rethrow ?? false
+    })
+  const [err, response] = await tryit(func)(register)
   for (const { fn, rethrow } of callbacks) {
-    const [rethrown] = await tryit(fn)(err);
-    if (rethrow) throw rethrown;
+    const [rethrown] = await tryit(fn)(err)
+    if (rethrow) throw rethrown
   }
-  if (err) throw err;
-  return response;
-};
-
+  if (err) throw err
+  return response
+}
 
 type WorkItemResult<K> = {
   index: number
@@ -110,14 +96,20 @@ export class AggregateError extends Error {
   }
 }
 
+/**
+ * Executes many async functions in parallel. Returns the
+ * results from all functions as an array. After all functions
+ * have resolved, if any errors were thrown, they are rethrown
+ * in an instance of AggregateError
+ */
 export const parallel = async <T, K>(
   limit: number,
   array: T[],
-  func: (item: T) => Promise<K>,
+  func: (item: T) => Promise<K>
 ): Promise<K[]> => {
   const work = array.map((item, index) => ({
     index,
-    item,
+    item
   }))
   // Process array items
   const processor = async (res: (value: WorkItemResult<K>[]) => void) => {
@@ -129,59 +121,43 @@ export const parallel = async <T, K>(
       results.push({
         error,
         result,
-        index: next.index,
+        index: next.index
       })
     }
   }
   // Create queues
   const queues = list(1, limit).map(() => new Promise(processor))
   // Wait for all queues to complete
-  const itemResults = await Promise.all(queues) as WorkItemResult<K>[][]
-  const [errors, results] = fork(sort(itemResults.flat(), (r) => r.index), x => !!x.error)
+  const itemResults = (await Promise.all(queues)) as WorkItemResult<K>[][]
+  const [errors, results] = fork(
+    sort(itemResults.flat(), r => r.index),
+    x => !!x.error
+  )
   if (errors.length > 0) {
     throw new AggregateError(errors.map(error => error.error))
   }
   return results.map(r => r.result)
 }
 
-
 /**
- * Simple retry
- * 
- * Ex.
- * ```
- * await _.async.retry(async (exit) => {
- *   const { error, result } = await api.users.list()
- *   if (error.reason === 'UNAUTHORIZED') {
- *     exit('Not Authenticated)
- *   }
- *   return result
- * })()
- *
- * const listUsers = _.async.retry(async (exit, args) => {
- *   const { result } = await api.users.list(args)
- *   return result
- * })
- * await listUsers({ page: 2, limit: 200 })
- * ```
+ * Retries the given function the specified number
+ * of times.
  */
-export const retry = async <
-  TResponse
-> (
+export const retry = async <TResponse>(
   options: {
     times?: number
     delay?: number | null
     backoff?: (count: number) => number
   },
-  func: (exit: (err: any) => void) => Promise<TResponse>,
+  func: (exit: (err: any) => void) => Promise<TResponse>
 ): Promise<TResponse> => {
   const times = options?.times ?? 3
   const delay = options?.delay
   const backoff = options?.backoff ?? null
   for (const i of list(1, times)) {
-    const [err, result] = await tryit(func)((err: any) => {
+    const [err, result] = (await tryit(func)((err: any) => {
       throw { _exited: err }
-    }) as [any, TResponse]
+    })) as [any, TResponse]
     if (!err) return result
     if (err._exited) throw err._exited
     if (i === times) throw err
@@ -190,6 +166,9 @@ export const retry = async <
   }
 }
 
+/**
+ * Async wait
+ */
 export const sleep = (milliseconds: number) => {
   return new Promise(res => setTimeout(res, milliseconds))
 }
@@ -197,8 +176,17 @@ export const sleep = (milliseconds: number) => {
 type ArgumentsType<T> = T extends (...args: infer U) => any ? U : never
 type UnwrapPromisify<T> = T extends Promise<infer U> ? U : T
 
-export const tryit = <TFunction extends (...args: any) => any>(func: TFunction) => {
-  return async (...args: ArgumentsType<TFunction>): Promise<[Error, UnwrapPromisify<ReturnType<TFunction>>]> => {
+/**
+ * A helper to try an async function without forking
+ * the control flow. Returns an error first callback _like_
+ * array response as [Error, result]
+ */
+export const tryit = <TFunction extends (...args: any) => any>(
+  func: TFunction
+) => {
+  return async (
+    ...args: ArgumentsType<TFunction>
+  ): Promise<[Error, UnwrapPromisify<ReturnType<TFunction>>]> => {
     try {
       return [null, await func(...(args as any))]
     } catch (err) {

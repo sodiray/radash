@@ -1,8 +1,12 @@
-export type Func<TArgs = any, KReturn = any | void> = (...args: TArgs[]) => KReturn
+export type Func<TArgs = any, KReturn = any | void> = (
+  ...args: TArgs[]
+) => KReturn
 
-export const chain = (...funcs: Func[]) => (...args: any[]) => {
-  return funcs.slice(1).reduce((acc, fn) => fn(acc), funcs[0](...args))
-}
+export const chain =
+  (...funcs: Func[]) =>
+  (...args: any[]) => {
+    return funcs.slice(1).reduce((acc, fn) => fn(acc), funcs[0](...args))
+  }
 
 export const compose = (...funcs: Func[]) => {
   return funcs.reverse().reduce((acc, fn) => fn(acc))
@@ -13,22 +17,37 @@ export const partial = (fn: Func, ...args: any[]) => {
 }
 
 /**
- * Like partial but for unary functions
+ * Like partial but for unary functions that accept
+ * a single object argument
  */
-export const partob = <T, K, PartialArgs extends Partial<T>>(fn: (args: T) => K, argobj: PartialArgs) => {
-  return (restobj: Omit<T, keyof PartialArgs>): K => fn({
-    ...(argobj as Partial<T>),
-    ...(restobj as Partial<T>)
-  } as T)
+export const partob = <T, K, PartialArgs extends Partial<T>>(
+  fn: (args: T) => K,
+  argobj: PartialArgs
+) => {
+  return (restobj: Omit<T, keyof PartialArgs>): K =>
+    fn({
+      ...(argobj as Partial<T>),
+      ...(restobj as Partial<T>)
+    } as T)
 }
 
-export const proxied = <T, K>(handler: (propertyName: T) => K): Record<string, K> => {
-  return new Proxy({}, {
-    get: (target, propertyName: any) => handler(propertyName)
-  })
+/**
+ * Creates a Proxy object that will dynamically
+ * call the handler argument when attributes are
+ * accessed
+ */
+export const proxied = <T, K>(
+  handler: (propertyName: T) => K
+): Record<string, K> => {
+  return new Proxy(
+    {},
+    {
+      get: (target, propertyName: any) => handler(propertyName)
+    }
+  )
 }
 
-type Cache<T> = Record<string, { exp: number, value: T }>
+type Cache<T> = Record<string, { exp: number; value: T }>
 
 const memoize = <T>(
   cache: Cache<T>,
@@ -53,17 +72,30 @@ const memoize = <T>(
   }
 }
 
-export const memo = <TFunc extends Function>(func: TFunc, {
-  key = null,
-  ttl = 300
-}: {
-  key?: Func<any, string> | null
-  ttl?: number
-} = {}) => {
+/**
+ * Creates a memoized function using the key and ttl
+ * options. The returned function will only execute
+ * the source function when no value has previously
+ * been computed or the previous value has expired
+ */
+export const memo = <TFunc extends Function>(
+  func: TFunc,
+  {
+    key = null,
+    ttl = 300
+  }: {
+    key?: Func<any, string> | null
+    ttl?: number
+  } = {}
+) => {
   return memoize({}, func as any, key, ttl) as any as TFunc
 }
 
-
+/**
+ * Given a delay and a function returns a new function
+ * that will only call the source function after delay
+ * milliseconds have passed without any invocations
+ */
 export const debounce = <TArgs extends any[]>(
   { delay }: { delay: number },
   func: (...args: TArgs) => any
@@ -74,12 +106,17 @@ export const debounce = <TArgs extends any[]>(
     timer = setTimeout(() => func(...args), delay)
   }
   return debounced as unknown as (...args: TArgs) => void
-};
+}
 
+/**
+ * Given an interval and a function returns a new function
+ * that will only call the source function if interval milliseconds
+ * have passed since the last invocation
+ */
 export const throttle = <TArgs extends any[]>(
   { interval }: { interval: number },
   func: (...args: TArgs) => any
-): (...args: TArgs) => any => {
+): ((...args: TArgs) => any) => {
   let ready = true
   const throttled = (...args: TArgs) => {
     if (!ready) return
@@ -90,4 +127,4 @@ export const throttle = <TArgs extends any[]>(
     }, interval)
   }
   return throttled as unknown as (...args: TArgs) => any
-};
+}

@@ -1,4 +1,3 @@
-
 export const capitalize = (str: string): string => {
   if (!str || str.length === 0) return ''
   const lower = str.toLowerCase()
@@ -7,7 +6,7 @@ export const capitalize = (str: string): string => {
 
 /**
  * Joins all string arguments in a camal case fashion
- * 
+ *
  * camal('hello', 'world')   -> 'helloWorld'
  * camal('va', 'va', 'voom') -> 'vaVaVoom'
  */
@@ -25,7 +24,7 @@ export const camal = (str: string): string => {
 
 /**
  * Joins all string arguments in a snake case fashion
- * 
+ *
  * camal('hello', 'world')   -> 'hello_world'
  * camal('va', 'va', 'voom') -> 'va_va_voom'
  */
@@ -43,11 +42,11 @@ export const snake = (str: string): string => {
 
 /**
  * Joins all string arguments in a dash case fashion
- * 
+ *
  * camal('hello', 'world')   -> 'hello-world'
  * camal('va', 'va', 'voom') -> 'va-va-voom'
  */
- export const _dash = (...parts: string[]) => {
+export const _dash = (...parts: string[]) => {
   if (parts.length === 0) return ''
   if (parts.length === 1) return parts[0]
   return parts.reduce((acc, part) => {
@@ -62,11 +61,15 @@ export const dash = (str: string): string => {
 /**
  * template is used to replace data by name in template strings.
  * The default expression looks for {{name}} to identify names.
- * 
+ *
  * Ex. tempalte('Hello, {{name}}', { name: 'ray' })
  * Ex. template('Hello, <name>', { name: 'ray' }, /<(.+?)>/g)
  */
-export const template = (str: string, data: Record<string, any>, regex = /\{\{(.+?)\}\}/g) => {
+export const template = (
+  str: string,
+  data: Record<string, any>,
+  regex = /\{\{(.+?)\}\}/g
+) => {
   return Array.from(str.matchAll(regex)).reduce((acc, match) => {
     return acc.replace(match[0], data[match[1]])
   }, str)

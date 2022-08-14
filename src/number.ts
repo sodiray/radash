@@ -1,4 +1,3 @@
-
 export const toFloat = (value: any, defaultValue: number = 0.0) => {
   if (value === null || value === undefined) {
     return defaultValue
