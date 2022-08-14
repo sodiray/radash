@@ -1,4 +1,4 @@
-import { list, sort } from "./array"
+import { fork, list, sort } from "./array"
 import { isFunction } from "./typed"
 
 export const reduce = async <T, K> (
@@ -96,11 +96,25 @@ type WorkItemResult<K> = {
   error: any
 }
 
+/**
+ * Support for the built-in AggregateError
+ * is still new. Node <= 14 doesn't have it
+ * so patching here.
+ * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/AggregateError#browser_compatibility
+ */
+export class AggregateError extends Error {
+  errors: Error[]
+  constructor(errors: Error[]) {
+    super()
+    this.errors = errors
+  }
+}
+
 export const parallel = async <T, K>(
   limit: number,
   array: T[],
   func: (item: T) => Promise<K>,
-): Promise<{ result: K; error: any }[]> => {
+): Promise<K[]> => {
   const work = array.map((item, index) => ({
     index,
     item,
@@ -122,11 +136,12 @@ export const parallel = async <T, K>(
   // Create queues
   const queues = list(1, limit).map(() => new Promise(processor))
   // Wait for all queues to complete
-  const results = await Promise.all(queues) as WorkItemResult<K>[][]
-  return sort(results.flat(), (r) => r.index).map((r) => ({
-    result: r.result,
-    error: r.error,
-  }))
+  const itemResults = await Promise.all(queues) as WorkItemResult<K>[][]
+  const [errors, results] = fork(sort(itemResults.flat(), (r) => r.index), x => !!x.error)
+  if (errors.length > 0) {
+    throw new AggregateError(errors.map(error => error.error))
+  }
+  return results.map(r => r.result)
 }
 
 

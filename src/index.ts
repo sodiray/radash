@@ -45,6 +45,7 @@ export {
   sleep,
   parallel
 } from './async'
+export type { AggregateError } from './async'
 
 export {
   chain,

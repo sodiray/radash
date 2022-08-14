@@ -219,15 +219,31 @@ describe("async module", () => {
   
   describe('_.parallel function', () => {
     test('returns all results from all functions', async () => {
-      const result = await _.parallel(1, _.list(1, 3), async (num) => {
-        await _.sleep(1000)
-        return `hi_${num}`
-      })
-      assert.deepEqual(result, [
-        { error: null, result: 'hi_1' },
-        { error: null, result: 'hi_2' },
-        { error: null, result: 'hi_3' }
+      const [errors, results] = await _.try(async () => {
+        return _.parallel(1, _.list(1, 3), async (num) => {
+          await _.sleep(1000)
+          return `hi_${num}`
+        })
+      })()
+      assert.isNull(errors)
+      assert.deepEqual(results, [
+        'hi_1',
+        'hi_2',
+        'hi_3',
       ])
+    })
+    test('throws erros as array of all errors', async () => {
+      const [error, results] = await _.try(async () => {
+        return _.parallel(1, _.list(1, 3), async (num) => {
+          await _.sleep(1000)
+          if (num === 2) throw new Error('number is 2')
+          return `hi_${num}`
+        })
+      })()
+      const err = error as _.AggregateError
+      assert.isNull(results)
+      assert.equal(err.errors.length, 1)
+      assert.equal(err.errors[0].message, 'number is 2')
     })
     test('does not run more than the limit at once', async () => {
       let numInProgress = 0
