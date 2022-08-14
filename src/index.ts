@@ -53,6 +53,8 @@ export {
   proxied,
   partob,
   memo,
+  debounce,
+  throttle
 } from './curry'
 
 export {

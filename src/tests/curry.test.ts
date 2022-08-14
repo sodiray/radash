@@ -150,4 +150,33 @@ describe('curry module', () => {
     })
   })
 
+  describe('debounce function', () => {
+    test('only executes once when called rapidly', async () => {
+      let calls = 0
+      const func = _.debounce({ delay: 600 }, () => calls++)
+      func()
+      func()
+      func()
+      assert.equal(calls, 0)
+      await _.sleep(610)
+      assert.equal(calls, 1)
+    })
+  })
+  
+  describe('throttle function', () => {
+    test('', async () => {
+      let calls = 0
+      const func = _.throttle({ interval: 600 }, () => calls++)
+      func()
+      func()
+      func()
+      assert.equal(calls, 1)
+      await _.sleep(610)
+      func()
+      func()
+      func()
+      assert.equal(calls, 2)
+    })
+  })
+
 })

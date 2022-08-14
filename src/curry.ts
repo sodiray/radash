@@ -62,3 +62,32 @@ export const memo = <TFunc extends Function>(func: TFunc, {
 } = {}) => {
   return memoize({}, func as any, key, ttl) as any as TFunc
 }
+
+
+export const debounce = <TArgs extends any[]>(
+  { delay }: { delay: number },
+  func: (...args: TArgs) => any
+): ((...args: TArgs) => void) => {
+  let timer: any = null
+  const debounced = (...args: TArgs) => {
+    clearTimeout(timer)
+    timer = setTimeout(() => func(...args), delay)
+  }
+  return debounced as unknown as (...args: TArgs) => void
+};
+
+export const throttle = <TArgs extends any[]>(
+  { interval }: { interval: number },
+  func: (...args: TArgs) => any
+): (...args: TArgs) => any => {
+  let ready = true
+  const throttled = (...args: TArgs) => {
+    if (!ready) return
+    func(...args)
+    ready = false
+    setTimeout(() => {
+      ready = true
+    }, interval)
+  }
+  return throttled as unknown as (...args: TArgs) => any
+};
