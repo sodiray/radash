@@ -1,6 +1,8 @@
 export {
+  alphabetical,
   boil,
   cluster,
+  counting,
   diff,
   first,
   flat,

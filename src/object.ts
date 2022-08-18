@@ -126,16 +126,16 @@ export const clone = <T extends object = object>(obj: T): T => {
  * Convert an object to a list, mapping each entry
  * into a list item
  */
-export const listify = <T, K>(
-  obj: Record<string | number | symbol, T>,
-  toItem: (record: { key: string; value: T }) => K
+export const listify = <TValue, TKey extends string | number | symbol, KResult>(
+  obj: Record<TKey, TValue>,
+  toItem: (key: TKey, value: TValue) => KResult
 ) => {
   if (!obj) return []
   const entries = Object.entries(obj)
   if (entries.length === 0) return []
   return entries.reduce((acc, entry) => {
-    return [...acc, toItem({ key: entry[0], value: entry[1] })]
-  }, [] as K[])
+    return [...acc, toItem(entry[0] as TKey, entry[1] as TValue)]
+  }, [] as KResult[])
 }
 
 /**
@@ -186,7 +186,7 @@ export const get = <T, K>(
 
 /**
  * Zip two objects together recursivly into a new
- * object applying values from right to left. 
+ * object applying values from right to left.
  * Recursion only applies to child object properties.
  */
 export const zip = <X extends Record<string | symbol | number, any>>(

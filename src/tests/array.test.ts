@@ -540,4 +540,49 @@ describe('array module', () => {
     })
   })
 
+  describe('alphabetical function', () => {
+    test('uses getter', () => {
+      const list = [
+        { name: 'Leo' }, 
+        { name: 'AJ' }, 
+        { name: 'Cynthia' }
+      ]
+      const result = _.alphabetical(list, i => i.name)
+      assert.equal(result[0].name, 'AJ')
+      assert.equal(result[1].name, 'Cynthia')
+      assert.equal(result[2].name, 'Leo')
+    })
+    test('uses descending order', () => {
+      const list = [
+        { name: 'Leo' }, 
+        { name: 'AJ' }, 
+        { name: 'Cynthia' }
+      ]
+      const result = _.alphabetical(list, i => i.name, 'desc')
+      assert.equal(result[0].name, 'Leo')
+      assert.equal(result[1].name, 'Cynthia')
+      assert.equal(result[2].name, 'AJ')
+    })
+    test('gracefully handles null input list', () => {
+      const result = _.alphabetical(null as any as string[], x => x)
+      assert.deepEqual(result, [])
+    })
+  })
+
+  describe('counting function', () => {
+    const people = [
+      { name: 'ray', group: 'X' },
+      { name: 'sara', group: 'X' },
+      { name: 'bo', group: 'Y' },
+      { name: 'mary', group: 'Y' },
+    ]
+    test('returns correctly counted items object', () => {
+      const result = _.counting(people, p => p.group)
+      assert.deepEqual(result, {
+        X: 2,
+        Y: 2
+      })
+    })
+  })
+
 })

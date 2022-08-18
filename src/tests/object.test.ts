@@ -134,14 +134,15 @@ describe('object module', () => {
       assert.deepEqual(result, [])
     })
     test('calls toItem to convert to list', () => {
-      const obj = {
-        1: { name: 'ray' },
-        2: { name: 'ash' }
+      type Index = 'one' | 'two'
+      const obj: Record<Index, any> = {
+        one: { name: 'ray' },
+        two: { name: 'ash' }
       }
-      const result = _.listify(obj, ({ value }) => value)
+      const result = _.listify(obj, (key, value) => ({ index: key, name: value.name }))
       assert.deepEqual(result, [
-        { name: 'ray' },
-        { name: 'ash' }
+        { index: 'one', name: 'ray' },
+        { index: 'two', name: 'ash' }
       ])
     })
   })

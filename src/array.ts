@@ -73,6 +73,35 @@ export const sort = <T>(
 }
 
 /**
+ * Sort an array without modifying it and return
+ * the newly sorted value. Allows for a string
+ * sorting value.
+ */
+export const alphabetical = <T>(
+  array: T[],
+  getter: (item: T) => string,
+  dir: 'asc' | 'desc' = 'asc'
+) => {
+  if (!array) return []
+  const asc = (a: T, b: T) => `${getter(a)}`.localeCompare(getter(b))
+  const dsc = (a: T, b: T) => `${getter(b)}`.localeCompare(getter(a))
+  return array.slice().sort(dir === 'desc' ? dsc : asc)
+}
+
+export const counting = <T, TId extends string | number | symbol>(
+  list: T[],
+  identity: (item: T) => TId
+): Record<TId, number> => {
+  return list.reduce((acc, item) => {
+    const id = identity(item)
+    return {
+      ...acc,
+      [id]: (acc[id] ?? 0) + 1
+    }
+  }, {} as Record<TId, number>)
+}
+
+/**
  * Replace an element in an array with a new
  * item without modifying the array and return
  * the new value
@@ -172,7 +201,7 @@ export const cluster = <T>(list: T[], size: number = 2): T[][] => {
 
 /**
  * Given a list of items returns a new list with only
- * unique items. Accepts an optional identity function 
+ * unique items. Accepts an optional identity function
  * to convert each item in the list to a comparable identity
  * value
  */
