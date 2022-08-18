@@ -7,6 +7,9 @@
   "files": [
     "dist/**/*"
   ],
+  "repository": {
+    "url": "https://github.com/rayepps/radash"
+  },
   "author": "rayepps",
   "private": false,
   "license": "MIT",
