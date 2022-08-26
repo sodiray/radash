@@ -1,31 +1,31 @@
 import { assert } from 'chai'
 import * as _ from '..'
-import { _camal, _snake, _dash } from '../string'
+import { _camel, _snake, _dash } from '../string'
 
 describe('string module', () => {
 
-  describe('camal function', () => {
+  describe('camel function', () => {
     test('returns correctly cased string', () => {
-      const result = _camal(
+      const result = _camel(
         'hello', 'world'
       )
       assert.equal(result, 'helloWorld')
     })
     test('returns single word', () => {
-      const result = _camal(
+      const result = _camel(
         'hello'
       )
       assert.equal(result, 'hello')
     })
     test('returns empty string for empty input', () => {
-      const result = _camal()
+      const result = _camel()
       assert.equal(result, '')
     })
   })
 
-  describe('camalCase function', () => {
+  describe('camelCase function', () => {
     test('returns non alphanumerics with -space and capital', () => {
-      const result = _.camal('Exobase Starter_flash AND-go')
+      const result = _.camel('Exobase Starter_flash AND-go')
       assert.equal(result, 'exobaseStarterFlashAndGo')
     })
   })
