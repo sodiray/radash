@@ -208,22 +208,9 @@ describe("async module", () => {
     })
   })
 
-  describe('_.tryit function', () => {
-    test('returns error when error is thrown', async () => {
-      const [err, result] = await _.tryit(async () => {
-        throw new Error('not good enough')
-      })()
-      assert.isNull(result)
-      assert.isNotNull(err)
-      assert.equal(err.message, 'not good enough')
-    })
-    test('returns result when no error is thrown', async () => {
-      const [err, result] = await _.tryit(async () => {
-        return 'hello'
-      })()
-      assert.isNull(err)
-      assert.isNotNull(result)
-      assert.equal(result, 'hello')
+  describe('_.tryit alias', () => {
+    test('alias exists', () => {
+      assert.isNotNull(_.tryit)
     })
   })
   
