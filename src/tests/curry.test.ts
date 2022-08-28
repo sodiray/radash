@@ -8,22 +8,22 @@ describe('curry module', () => {
     test('composes functions', () => {
       const useZero = (fn: any) => () => fn(0)
       const objectize = (fn: any) => (num: any) => fn({ num })
-      const incrament = (fn: any) => ({ num }: any) => fn({ num: num + 1 })
+      const increment = (fn: any) => ({ num }: any) => fn({ num: num + 1 })
       const returnArg = (arg: any) => (args: any) => args[arg]
 
       const composed = _.compose(
         useZero,
         objectize,
-        incrament,
-        incrament,
+        increment,
+        increment,
         returnArg('num')
       )
 
       const decomposed = (
         useZero(
           objectize(
-            incrament(
-              incrament(
+            increment(
+              increment(
                 returnArg('num'))))))
 
       const expected = decomposed()
@@ -35,22 +35,22 @@ describe('curry module', () => {
 
       const useZero = (fn: any) => async () => await fn(0)
       const objectize = (fn: any) => async (num: any) => await fn({ num })
-      const incrament = (fn: any) => async ({ num }: any) => await fn({ num: num + 1 })
+      const increment = (fn: any) => async ({ num }: any) => await fn({ num: num + 1 })
       const returnArg = (arg: any) => async (args: any) => await args[arg]
 
       const composed = _.compose(
         useZero,
         objectize,
-        incrament,
-        incrament,
+        increment,
+        increment,
         returnArg('num')
       )
 
       const decomposed = (
         useZero(
           objectize(
-            incrament(
-              incrament(
+            increment(
+              increment(
                 returnArg('num'))))))
 
       const expected = await decomposed()
