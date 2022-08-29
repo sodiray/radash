@@ -206,6 +206,9 @@ describe("async module", () => {
       assert.isNotNull(result)
       assert.equal(result, 'hello')
     })
+    test('alias exists', () => {
+      assert.isNotNull(_.tryit)
+    })
   })
   
   describe('_.sleep function', () => {
