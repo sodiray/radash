@@ -317,21 +317,32 @@ describe('array module', () => {
   })
   
   describe('list function', () => {
-    test('creates correct list', () => {
-      const result = _.list(0, 4)
-      assert.deepEqual(result, [0, 1, 2, 3, 4])
+    test('creates empty list of size N', () => {
+      const N = 5
+      const result = _.list(N)
+      assert.equal(result.length, N)
+      assert.isUndefined(result[0])
     })
-    test('creates correct list with step', () => {
-      const result = _.list(3, 12, 3)
-      assert.deepEqual(result, [3, 6, 9, 12])
+    test('creates list of N items', () => {
+      const N = 5
+      const value = {}
+      const result = _.list(N, value)
+      assert.deepEqual(result, [value, value, value, value, value])
     })
-    test('omits end if step does not land on it', () => {
-      const result = _.list(0, 5, 2)
-      assert.deepEqual(result, [0, 2, 4])
+    test('creates list of N items using callback', () => {
+      const N = 5
+      const result = _.list(5, () => ({}))
+      assert.equal(result.length, N)
+      result.forEach((v) => assert.isObject(v))
     })
-    test('returns start only if step larger than end', () => {
-      const result = _.list(0, 5, 20)
-      assert.deepEqual(result, [0])
+    test('creates list of N consecutive numbers using callback', () => {
+      const N = 5
+      const result = _.list(5, (_, ix) => ix + 1)
+      assert.deepEqual(result, [1, 2, 3, 4, 5])
+    })
+    test('creates list of N consecutive numbers using range', () => {
+      const result = _.list(_.range(1, 5))
+      assert.deepEqual(result, [1, 2, 3, 4, 5])
     })
   })
 

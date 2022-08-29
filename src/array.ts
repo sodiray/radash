@@ -234,19 +234,24 @@ export function* range(
   }
 }
 
+type ItemOf<I extends Iterable<any>|ArrayLike<any>|number> = I extends Iterable<infer Item> ? Item : I extends ArrayLike<infer Item> ? Item : unknown;
+
 /**
- * Creates a list with numbers ranging from the
- * start to the end by the given step.
+ * Creates a list of given length or using an iterable
  *
- * @example list(0, 3) // [0, 1, 2, 3]
- * @example list(2, 10, 2) // [2, 4, 6, 8 ,10]
+ * @example list(5, {}) // [{}, {}, {}, {}, {}]
+ * @example list(range(2, 10, 2)) // [2, 4, 6, 8 ,10]
+ * @example list(range(97, 107, 2), (x) => String.fromCharCode(x)) // ['a', 'c', 'e', 'g', 'i', 'k']
  */
-export const list = (
-  start: number,
-  end: number,
-  step: number = 1
-): number[] => {
-  return Array.from(range(start, end, step))
+export const list = <I extends Iterable<any>|ArrayLike<any>|number, T>(
+  ...args: [from: I, map?: T|((v: ItemOf<I>, k: number) => T)]
+): T extends {} ? T[] : I extends number ? unknown extends T ? undefined[] : T[] : ItemOf<I>[] => {
+  const [from, map] = args;
+  const arg1 = typeof from === 'number' ? Array(from) : from as Iterable<any>;
+  if (args.length < 2) return Array.from(arg1) as any;
+
+  const arg2 = (typeof map === 'function' ? map : () => map) as (v: ItemOf<I>, k: number) => T;
+  return Array.from(arg1, arg2) as any;
 }
 
 /**
