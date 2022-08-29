@@ -67,3 +67,7 @@ const allGods = await _.map(gods, async ({ name }) => {
   return api.gods.findByName(name)
 })
 ```
+
+## Contributing
+
+Contributions are welcomed and apprecaited! Check out the [contribuing guide](./.github/contributing.md) before you dive in.
