@@ -1,6 +1,5 @@
 import { assert } from "chai";
 import * as _ from "..";
-import { performance } from 'node:perf_hooks'
 
 jest.useRealTimers()
 
@@ -340,7 +339,7 @@ describe("async module", () => {
     test('uses backoff between retries', async () => {
       let count = 0
       let backoffs: number = 0
-      const start = performance.now()
+      const start = Date.now()
       await _.retry({ 
         times: 3, 
         backoff: i => {
@@ -351,7 +350,7 @@ describe("async module", () => {
         count++;
         if (count < 3) throw 'error'
       })
-      const diff = performance.now() - start
+      const diff = Date.now() - start
       assert.equal(count, 3)
       // Time taken should at least be the
       // total ms backed off. Using exponential
