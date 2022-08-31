@@ -344,7 +344,7 @@ describe('typed module', () => {
       assert.isTrue(result)
     })
     test('returns true for empty string class', () => {
-      const input = ''
+      const input = String()
       const result = _.isEmpty(input)
       assert.isTrue(result)
     })
