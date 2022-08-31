@@ -192,8 +192,12 @@ describe('typed module', () => {
       const result = _.isNumber(new Data())
       assert.isFalse(result)
     })
-    test('returns true for number', () => {
+    test('returns true for int', () => {
       const result = _.isNumber(22)
+      assert.isTrue(result)
+    })
+    test('returns true for float', () => {
+      const result = _.isNumber(22.0567)
       assert.isTrue(result)
     })
     test('returns false for NaN', () => {
@@ -215,6 +219,52 @@ describe('typed module', () => {
     test('returns false for string class', () => {
       const result = _.isNumber(String('abc'))
       assert.isFalse(result)
+    })
+  })
+  
+  describe('isInt function', () => {
+    class Data {}
+    test('returns false for non-number values', () => {
+      assert.isFalse(_.isInt(undefined))
+      assert.isFalse(_.isInt(null))
+      assert.isFalse(_.isInt(false))
+      assert.isFalse(_.isInt(new Data()))
+      assert.isFalse(_.isInt(NaN))
+      assert.isFalse(_.isInt([ 1, 2, 3]))
+      assert.isFalse(_.isInt({}))
+      assert.isFalse(_.isInt('abc'))
+      assert.isFalse(_.isInt(String('abc')))
+    })
+    test('returns true for int', () => {
+      const result = _.isInt(22)
+      assert.isTrue(result)
+    })
+    test('returns false for float', () => {
+      const result = _.isInt(22.0567)
+      assert.isFalse(result)
+    })
+  })
+  
+  describe('isFloat function', () => {
+    class Data {}
+    test('returns false for non-number values', () => {
+      assert.isFalse(_.isFloat(undefined))
+      assert.isFalse(_.isFloat(null))
+      assert.isFalse(_.isFloat(false))
+      assert.isFalse(_.isFloat(new Data()))
+      assert.isFalse(_.isFloat(NaN))
+      assert.isFalse(_.isFloat([ 1, 2, 3]))
+      assert.isFalse(_.isFloat({}))
+      assert.isFalse(_.isFloat('abc'))
+      assert.isFalse(_.isFloat(String('abc')))
+    })
+    test('returns false for int', () => {
+      const result = _.isFloat(22)
+      assert.isFalse(result)
+    })
+    test('returns true for float', () => {
+      const result = _.isFloat(22.0567)
+      assert.isTrue(result)
     })
   })
   
