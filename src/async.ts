@@ -103,9 +103,9 @@ export class AggregateError extends Error {
  * in an instance of AggregateError
  */
 export const parallel = async <T, K>(
-  limit: number,
   array: T[],
-  func: (item: T) => Promise<K>
+  func: (item: T) => Promise<K>,
+  limit: number = array.length
 ): Promise<K[]> => {
   const work = array.map((item, index) => ({
     index,
