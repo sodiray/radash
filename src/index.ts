@@ -70,6 +70,8 @@ export {
   isEmpty,
   isFunction,
   isNumber,
+  isFloat,
+  isInt,
   isObject,
   isString,
   isSymbol

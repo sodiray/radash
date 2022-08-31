@@ -18,10 +18,16 @@ export const isString = (value: any) => {
   return typeof value === 'string' || value instanceof String
 }
 
+export const isInt = (value: any) => {
+  return Number(value) === value && value % 1 === 0
+}
+
+export const isFloat = (value: any) => {
+  return Number(value) === value && value % 1 !== 0
+}
+
 export const isNumber = (value: any) => {
-  if (isNaN(value)) return false
-  const x = parseFloat(value)
-  return (x | 0) === x
+  return Number(value) === value
 }
 
 export const isEmpty = (value: any) => {
