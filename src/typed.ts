@@ -53,34 +53,28 @@ export const isEmpty = (value: any) => {
   return keys === 0
 }
 
-export const isEqual = <TType>(a: TType, b: TType): boolean => {
-  const equals = (x: any, y: any, map: WeakMap<object, any>): boolean => {
-    if (Object.is(x, y)) return true
-    if (x instanceof Date && y instanceof Date) {
-      return x.getTime() === y.getTime()
-    }
-    if (x instanceof RegExp && y instanceof RegExp) {
-      return x.toString() === y.toString()
-    }
-    if (
-      typeof x !== 'object' ||
-      x === null ||
-      typeof y !== 'object' ||
-      y === null
-    ) {
-      return false
-    }
-    if (map.get(x) === y) return true
-    map.set(x, y)
-    const keysX = Reflect.ownKeys(x)
-    const keysY = Reflect.ownKeys(y)
-    if (keysX.length !== keysY.length) return false
-    for (let i = 0; i < keysX.length; i++) {
-      if (!Reflect.has(y, keysX[i]) || !equals(x[keysX[i]], y[keysX[i]], map)) {
-        return false
-      }
-    }
-    return true
+export const isEqual = <TType>(x: TType, y: TType): boolean => {
+  if (Object.is(x, y)) return true
+  if (x instanceof Date && y instanceof Date) {
+    return x.getTime() === y.getTime()
   }
-  return equals(a, b, new WeakMap())
+  if (x instanceof RegExp && y instanceof RegExp) {
+    return x.toString() === y.toString()
+  }
+  if (
+    typeof x !== 'object' ||
+    x === null ||
+    typeof y !== 'object' ||
+    y === null
+  ) {
+    return false
+  }
+  const keysX = Reflect.ownKeys(x as unknown as object)
+  const keysY = Reflect.ownKeys(y as unknown as object)
+  if (keysX.length !== keysY.length) return false
+  for (let i = 0; i < keysX.length; i++) {
+    if (!Reflect.has(y as unknown as object, keysX[i])) return false
+    if (!isEqual(x[keysX[i]], y[keysX[i]])) return false
+  }
+  return true
 }

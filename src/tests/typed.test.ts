@@ -436,6 +436,36 @@ describe('typed module', () => {
   })
 
   describe('isEqual function', () => {
+    class Person {
+      name: string
+      friends: Person[] = []
+      self?: Person
+      constructor(name: string) {
+        this.name = name
+      }
+    }
+    const jake = new Person('jake')
+    jake.self = jake
+    jake.friends = [jake, jake]
+    const symbolKey = Symbol('symkey')
+    const complex = {
+      num: 0,
+      str: '',
+      boolean: true,
+      unf: void 0,
+      nul: null,
+      obj: { name: 'object', id: 1, chilren: [0, 1, 2] },
+      arr: [0, 1, 2],
+      func() {
+        console.log('function');
+      },
+      loop: null as any,
+      person: jake,
+      date: new Date(0),
+      reg: new RegExp('/regexp/ig'),
+      [symbolKey]: 'symbol'
+    }
+    complex.loop = complex
     test('returns true for equal things', () => {
       assert.isTrue(_.isEqual(0, 0))
       assert.isTrue(_.isEqual('a', 'a'))
@@ -443,44 +473,24 @@ describe('typed module', () => {
       assert.isTrue(_.isEqual(hello, hello))
       assert.isTrue(_.isEqual({}, {}))
       assert.isTrue(_.isEqual(true, true))
+      assert.isTrue(_.isEqual(new RegExp(/a*s/), new RegExp(/a*s/)))
       const now = new Date()
       assert.isTrue(_.isEqual(now, now))
       assert.isTrue(_.isEqual([], []))
-      const complex = {
-        name: 'Jake',
-        pets: [{
-          name: 'Bently',
-          type: 'dog',
-          legs: 4,
-          attributes: {
-            color: 'yello',
-            tail: true
-          }
-        }]
-      }
       assert.isTrue(_.isEqual(complex, { ...complex }))
+      assert.isTrue(_.isEqual([complex, complex], [{ ...complex }, { ...complex }]))
     })
     test('returns false for non-equal things', () => {
       assert.isFalse(_.isEqual(0, 1))
       assert.isFalse(_.isEqual('a', 'b'))
+      assert.isFalse(_.isEqual(new RegExp(/^http:/), new RegExp(/https/)))
       assert.isFalse(_.isEqual(Symbol('hello'), Symbol('goodbye')))
-      assert.isFalse(_.isEqual({}, { a: 1 }))
+      assert.isFalse(_.isEqual({ z: 23 }, { a: 1 }))
       assert.isFalse(_.isEqual(true, false))
       assert.isFalse(_.isEqual(new Date(), new Date('2022-09-01T03:25:12.750Z')))
       assert.isFalse(_.isEqual([], [1]))
-      const complex = {
-        name: 'Jake',
-        pets: [{
-          name: 'Bently',
-          type: 'dog',
-          legs: 4,
-          attributes: {
-            color: 'yello',
-            tail: true
-          }
-        }]
-      }
-      assert.isFalse(_.isEqual(complex, { ...complex, pets: [...complex.pets, 1] }))
+      assert.isFalse(_.isEqual(complex, { ...complex, num: 222 }))
+      assert.isFalse(_.isEqual([complex], [{ ...complex, num: 222 }]))
     })
   })
 
