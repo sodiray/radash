@@ -11,7 +11,7 @@ export const random = (min: number, max: number) => {
  * Draw a random item from a list. Returns
  * null if the list is empty
  */
-export const draw = <T>(array: T[]): T | null => {
+export const draw = <T>(array: readonly T[]): T | null => {
   const max = array.length
   if (max === 0) {
     return null
@@ -20,7 +20,7 @@ export const draw = <T>(array: T[]): T | null => {
   return array[index]
 }
 
-export const shuffle = <T>(array: T[]): T[] => {
+export const shuffle = <T>(array: readonly T[]): T[] => {
   return array
     .map(a => ({ rand: Math.random(), value: a }))
     .sort((a, b) => a.rand - b.rand)
