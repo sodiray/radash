@@ -6,7 +6,7 @@ import { fork, list, sort } from './array'
  * an async reducer function
  */
 export const reduce = async <T, K>(
-  array: T[],
+  array: readonly T[],
   asyncReducer: (acc: K, item: T) => Promise<K>,
   initValue?: K
 ): Promise<K> => {
@@ -28,7 +28,7 @@ export const reduce = async <T, K>(
  * an async mapper function
  */
 export const map = async <T, K>(
-  array: T[],
+  array: readonly T[],
   asyncMapFunc: (item: T, index: number) => Promise<K>
 ): Promise<K[]> => {
   let result = []
@@ -105,7 +105,7 @@ export class AggregateError extends Error {
  */
 export const parallel = async <T, K>(
   limit: number,
-  array: T[],
+  array: readonly T[],
   func: (item: T) => Promise<K>
 ): Promise<K[]> => {
   const work = array.map((item, index) => ({

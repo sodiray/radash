@@ -3,7 +3,7 @@
  * the group ids the given getGroupId function produced and the value is an array of
  * each item in that group.
  */
-export const group = <T>(array: T[], getGropuId: (item: T) => string) => {
+export const group = <T>(array: readonly T[], getGropuId: (item: T) => string) => {
   return array.reduce((acc, item) => {
     const groupId = getGropuId(item)
     const groupList = acc[groupId] ?? []
@@ -18,7 +18,7 @@ export const group = <T>(array: T[], getGropuId: (item: T) => string) => {
  *
  * Ex. const greatest = () => boil(numbers, (a, b) => a > b)
  */
-export const boil = <T>(array: T[], compareFunc: (a: T, b: T) => T) => {
+export const boil = <T>(array: readonly T[], compareFunc: (a: T, b: T) => T) => {
   if (!array || (array.length ?? 0) === 0) return null
   return array.reduce(compareFunc)
 }
@@ -28,7 +28,7 @@ export const boil = <T>(array: T[], compareFunc: (a: T, b: T) => T) => {
  * to convert objects in the array to number values.
  */
 export const sum = <T extends number | object>(
-  array: T[],
+  array: readonly T[],
   fn?: (item: T) => number
 ) => {
   return (array || []).reduce(
@@ -41,7 +41,7 @@ export const sum = <T extends number | object>(
  * Get the first item in an array or a default value
  */
 export const first = <T>(
-  array: T[],
+  array: readonly T[],
   defaultValue: T | null | undefined = undefined
 ) => {
   return array?.length > 0 ? array[0] : defaultValue
@@ -51,7 +51,7 @@ export const first = <T>(
  * Get the last item in an array or a default value
  */
 export const last = <T>(
-  array: T[],
+  array: readonly T[],
   defaultValue: T | null | undefined = undefined
 ) => {
   return array?.length > 0 ? array[array.length - 1] : defaultValue
@@ -62,7 +62,7 @@ export const last = <T>(
  * the newly sorted value
  */
 export const sort = <T>(
-  array: T[],
+  array: readonly T[],
   getter: (item: T) => number,
   desc = false
 ) => {
@@ -78,7 +78,7 @@ export const sort = <T>(
  * sorting value.
  */
 export const alphabetical = <T>(
-  array: T[],
+  array: readonly T[],
   getter: (item: T) => string,
   dir: 'asc' | 'desc' = 'asc'
 ) => {
@@ -89,7 +89,7 @@ export const alphabetical = <T>(
 }
 
 export const counting = <T, TId extends string | number | symbol>(
-  list: T[],
+  list: readonly T[],
   identity: (item: T) => TId
 ): Record<TId, number> => {
   return list.reduce((acc, item) => {
@@ -107,7 +107,7 @@ export const counting = <T, TId extends string | number | symbol>(
  * the new value
  */
 export const replace = <T>(
-  list: T[],
+  list: readonly T[],
   newItem: T,
   match: (item: T, idx: number) => boolean
 ): T[] => {
@@ -131,7 +131,7 @@ export const replace = <T>(
  * into a dictionary key & value
  */
 export const objectify = <T, Key extends string | number | symbol, Value = T>(
-  array: T[],
+  array: readonly T[],
   getKey: (item: T) => Key,
   getValue: (item: T) => Value = item => item as unknown as Value
 ): Record<Key, Value> => {
@@ -151,7 +151,7 @@ export const objectify = <T, Key extends string | number | symbol, Value = T>(
  * Ex. select([1, 2, 3, 4], x => x*x, x > 2) == [9, 16]
  */
 export const select = <T, K>(
-  array: T[],
+  array: readonly T[],
   mapper: (item: T) => K,
   condition: (item: T) => boolean
 ) => {
@@ -167,7 +167,7 @@ export const select = <T, K>(
  * Ex. max([{ num: 1 }, { num: 2 }], x => x.num) == 2
  */
 export const max = <T extends number | object>(
-  array: T[],
+  array: readonly T[],
   getter?: (item: T) => number
 ) => {
   const get = getter ? getter : (v: any) => v
@@ -180,7 +180,7 @@ export const max = <T extends number | object>(
  * Ex. max([{ num: 1 }, { num: 2 }], x => x.num) == 1
  */
 export const min = <T extends number | object>(
-  array: T[],
+  array: readonly T[],
   getter?: (item: T) => number
 ) => {
   const get = getter ? getter : (v: any) => v
@@ -192,7 +192,7 @@ export const min = <T extends number | object>(
  * given a list of 10 items and a size of 2, it will return 5
  * lists with 2 items each
  */
-export const cluster = <T>(list: T[], size: number = 2): T[][] => {
+export const cluster = <T>(list: readonly T[], size: number = 2): T[][] => {
   const clusterCount = Math.ceil(list.length / size)
   return new Array(clusterCount).fill(null).map((_c: null, i: number) => {
     return list.slice(i * size, i * size + size)
@@ -206,7 +206,7 @@ export const cluster = <T>(list: T[], size: number = 2): T[][] => {
  * value
  */
 export const unique = <T, K extends string | number | symbol>(
-  array: T[],
+  array: readonly T[],
   toKey?: (item: T) => K
 ): T[] => {
   const valueMap = array.reduce((acc, item) => {
@@ -253,7 +253,7 @@ export const list = (
  * Given an array of arrays, returns a single
  * dimentional array with all items in it.
  */
-export const flat = <T>(lists: T[][]): T[] => {
+export const flat = <T>(lists: readonly T[][]): T[] => {
   return lists.reduce((acc, list) => {
     return [...acc, ...list]
   }, [])
@@ -264,8 +264,8 @@ export const flat = <T>(lists: T[][]): T[] => {
  * elements intersect
  */
 export const intersects = <T, K extends string | number | symbol>(
-  listA: T[],
-  listB: T[],
+  listA: readonly T[],
+  listB: readonly T[],
   identity?: (t: T) => K
 ): boolean => {
   if (!listA || !listB) return false
@@ -285,7 +285,7 @@ export const intersects = <T, K extends string | number | symbol>(
  * a true/false condition function
  */
 export const fork = <T>(
-  list: T[],
+  list: readonly T[],
   condition: (item: T) => boolean
 ): [T[], T[]] => {
   if (!list) return [[], []]
@@ -307,7 +307,7 @@ export const fork = <T>(
  * and replace items matched by the matcher func in the
  * first place.
  */
-export const merge = <T>(root: T[], others: T[], matcher: (item: T) => any) => {
+export const merge = <T>(root: readonly T[], others: readonly T[], matcher: (item: T) => any) => {
   if (!others && !root) return []
   if (!others) return root
   if (!root) return []
@@ -325,7 +325,7 @@ export const merge = <T>(root: T[], others: T[], matcher: (item: T) => any) => {
  * the end of the list.
  */
 export const replaceOrAppend = <T>(
-  list: T[],
+  list: readonly T[],
   newItem: T,
   match: (a: T, idx: number) => boolean
 ) => {
@@ -349,7 +349,7 @@ export const replaceOrAppend = <T>(
  * Given a list returns a new list with
  * only truthy values
  */
-export const sift = <T>(list: T[]) => {
+export const sift = <T>(list: readonly T[]) => {
   return list?.filter(x => !!x) ?? []
 }
 
@@ -379,14 +379,14 @@ export const iterate = <T>(
  * do not exist in the second list.
  */
 export const diff = <T>(
-  root: T[],
-  other: T[],
+  root: readonly T[],
+  other: readonly T[],
   identity: (item: T) => string | number | symbol = (t: T) =>
     t as unknown as string | number | symbol
 ): T[] => {
   if (!root?.length && !other?.length) return []
-  if (!root?.length) return other
-  if (!other?.length) return root
+  if (!root?.length) return [...other]
+  if (!other?.length) return [...root]
   const bKeys = other.reduce(
     (acc, item) => ({
       ...acc,
