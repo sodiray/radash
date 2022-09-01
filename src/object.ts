@@ -1,4 +1,4 @@
-import { isObject } from './typed'
+import { isFunction, isObject } from './typed'
 
 /**
  * Removes (shakes out) undefined entries from an
@@ -178,14 +178,27 @@ export const omit = <T, TKeys extends keyof T>(
 
 export const get = <T, K>(
   value: T,
-  getter: (t: T) => K,
+  funcOrPath: ((t: T) => K) | string,
   defaultValue: K | null = null
-) => {
-  try {
-    return getter(value) ?? defaultValue
-  } catch {
+): K => {
+  if (value === null || value === undefined) {
     return defaultValue
   }
+  if (isFunction(funcOrPath)) {
+    try {
+      return (funcOrPath as Function)(value) ?? defaultValue
+    } catch {
+      return defaultValue
+    }
+  }
+  const segments = (funcOrPath as string).split(/[\.\[\]]/g)
+  let current: any = value
+  for (const key of segments) {
+    if (key.trim() === '') continue
+    current = current[key]
+    if (current === undefined) return defaultValue
+  }
+  return current
 }
 
 /**
