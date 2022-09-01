@@ -176,6 +176,10 @@ export const omit = <T, TKeys extends keyof T>(
   )
 }
 
+/**
+ * Note: Passing a function has been @deprecated
+ * and will be removed in the next major version.
+ */
 export const get = <T, K>(
   value: T,
   funcOrPath: ((t: T) => K) | string,
