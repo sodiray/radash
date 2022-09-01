@@ -64,7 +64,20 @@ export {
 } from './object'
 export { draw, random, shuffle, uid } from './random'
 export { series } from './series'
-export { camal, capitalize, dash, snake, template } from './string'
+export {
+  camel,
+  /** 
+   * Warning: This is exported for compatability 
+   * but is @deprecated and will be removed in 
+   * the next major version. Someone spelled 
+   * camel wrong when it was implemented...
+   */
+  camel as camal, 
+  capitalize, 
+  dash, 
+  snake, 
+  template 
+} from './string'
 export {
   isArray,
   isEmpty,

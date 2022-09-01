@@ -1,50 +1,54 @@
 import { assert } from 'chai'
 import * as _ from '..'
-import { _camal, _snake, _dash } from '../string'
+import { camel, snake, dash } from '../string'
 
 describe('string module', () => {
 
-  describe('camal function', () => {
+  describe('camel function', () => {
+    test('camal alias is available', () => {
+      // NOTE: Remove in next major version
+      assert.isFunction(_.camal)
+    })
     test('returns correctly cased string', () => {
-      const result = _camal(
-        'hello', 'world'
+      const result = camel(
+        'hello world'
       )
       assert.equal(result, 'helloWorld')
     })
     test('returns single word', () => {
-      const result = _camal(
+      const result = camel(
         'hello'
       )
       assert.equal(result, 'hello')
     })
     test('returns empty string for empty input', () => {
-      const result = _camal()
+      const result = camel(null as any)
       assert.equal(result, '')
     })
   })
 
-  describe('camalCase function', () => {
+  describe('camelCase function', () => {
     test('returns non alphanumerics with -space and capital', () => {
-      const result = _.camal('Exobase Starter_flash AND-go')
+      const result = _.camel('Exobase Starter_flash AND-go')
       assert.equal(result, 'exobaseStarterFlashAndGo')
     })
   })
 
   describe('snake function', () => {
     test('returns correctly cased string', () => {
-      const result = _snake(
-        'hello', 'world'
+      const result = snake(
+        'hello world'
       )
       assert.equal(result, 'hello_world')
     })
     test('returns single word', () => {
-      const result = _snake(
+      const result = snake(
         'hello'
       )
       assert.equal(result, 'hello')
     })
     test('returns empty string for empty input', () => {
-      const result = _snake()
+      const result = snake(null as any)
       assert.equal(result, '')
     })
   })
@@ -58,19 +62,19 @@ describe('string module', () => {
 
   describe('dash function', () => {
     test('returns correctly cased string', () => {
-      const result = _dash(
-        'hello', 'world'
+      const result = dash(
+        'hello world'
       )
       assert.equal(result, 'hello-world')
     })
     test('returns single word', () => {
-      const result = _dash(
+      const result = dash(
         'hello'
       )
       assert.equal(result, 'hello')
     })
     test('returns empty string for empty input', () => {
-      const result = _dash()
+      const result = dash(null as any)
       assert.equal(result, '')
     })
   })
@@ -111,7 +115,7 @@ describe('string module', () => {
 
   describe('capitalize function', () => {
     test('handles null', () => {
-      const result = _.capitalize(null)
+      const result = _.capitalize(null as any)
       assert.equal(result, '')
     })
     test('converts hello as Hello', () => {

@@ -5,12 +5,13 @@ export const capitalize = (str: string): string => {
 }
 
 /**
- * Joins all string arguments in a camal case fashion
+ * Joins all string arguments in a camel case fashion
  *
- * camal('hello', 'world')   -> 'helloWorld'
- * camal('va', 'va', 'voom') -> 'vaVaVoom'
+ * camel('hello', 'world')   -> 'helloWorld'
+ * camel('va', 'va', 'voom') -> 'vaVaVoom'
  */
-export const _camal = (...parts: string[]) => {
+export const camel = (str: string): string => {
+  const parts = str?.split(/[\.\-\s_]/).map(x => x.toLowerCase()) ?? []
   if (parts.length === 0) return ''
   if (parts.length === 1) return parts[0]
   return parts.reduce((acc, part) => {
@@ -18,17 +19,14 @@ export const _camal = (...parts: string[]) => {
   })
 }
 
-export const camal = (str: string): string => {
-  return _camal(...str.split(/[\.\-\s_]/).map(x => x.toLowerCase()))
-}
-
 /**
  * Joins all string arguments in a snake case fashion
  *
- * camal('hello', 'world')   -> 'hello_world'
- * camal('va', 'va', 'voom') -> 'va_va_voom'
+ * camel('hello', 'world')   -> 'hello_world'
+ * camel('va', 'va', 'voom') -> 'va_va_voom'
  */
-export const _snake = (...parts: string[]) => {
+export const snake = (str: string): string => {
+  const parts = str?.split(/[\.\-\s_]/).map(x => x.toLowerCase()) ?? []
   if (parts.length === 0) return ''
   if (parts.length === 1) return parts[0]
   return parts.reduce((acc, part) => {
@@ -36,26 +34,19 @@ export const _snake = (...parts: string[]) => {
   })
 }
 
-export const snake = (str: string): string => {
-  return _snake(...str.split(/[\.\-\s_]/).map(x => x.toLowerCase()))
-}
-
 /**
  * Joins all string arguments in a dash case fashion
  *
- * camal('hello', 'world')   -> 'hello-world'
- * camal('va', 'va', 'voom') -> 'va-va-voom'
+ * camel('hello', 'world')   -> 'hello-world'
+ * camel('va', 'va', 'voom') -> 'va-va-voom'
  */
-export const _dash = (...parts: string[]) => {
+export const dash = (str: string): string => {
+  const parts = str?.split(/[\.\-\s_]/).map(x => x.toLowerCase()) ?? []
   if (parts.length === 0) return ''
   if (parts.length === 1) return parts[0]
   return parts.reduce((acc, part) => {
     return `${acc}-${part.toLowerCase()}`
   })
-}
-
-export const dash = (str: string): string => {
-  return _dash(...str.split(/[\.\-\s_]/).map(x => x.toLowerCase()))
 }
 
 /**
