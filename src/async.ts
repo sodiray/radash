@@ -29,11 +29,12 @@ export const reduce = async <T, K>(
  */
 export const map = async <T, K>(
   array: T[],
-  asyncMapFunc: (item: T) => Promise<K>
+  asyncMapFunc: (item: T, index: number) => Promise<K>
 ): Promise<K[]> => {
   let result = []
+  let index = 0
   for (const value of array) {
-    const newValue = await asyncMapFunc(value)
+    const newValue = await asyncMapFunc(value, index++)
     result.push(newValue)
   }
   return result
