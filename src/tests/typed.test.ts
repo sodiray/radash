@@ -269,102 +269,59 @@ describe('typed module', () => {
   })
   
   describe('isEmpty function', () => {
-    test('returns true for null', () => {
-      const input = null
-      const result = _.isEmpty(input)
-      assert.isTrue(result)
+    class Data {}
+    class Person {
+      name: string = 'ray'
+    }
+    test('returns true for empty values', () => {
+      assert.isTrue(_.isEmpty(null))
+      assert.isTrue(_.isEmpty(undefined))
+      assert.isTrue(_.isEmpty(new Data()))
+      assert.isTrue(_.isEmpty(0))
+      assert.isTrue(_.isEmpty(true))
+      assert.isTrue(_.isEmpty([]))
+      assert.isTrue(_.isEmpty(false))
+      assert.isTrue(_.isEmpty({}))
+      assert.isTrue(_.isEmpty(''))
+      assert.isTrue(_.isEmpty(String()))
+      assert.isTrue(_.isEmpty(new Map()))
+      assert.isTrue(_.isEmpty(new Date('invalid value')))
     })
-    test('returns true for undefined', () => {
-      const input = undefined
-      const result = _.isEmpty(input)
-      assert.isTrue(result)
+    test('returns false for non-empty values', () => {
+      assert.isFalse(_.isEmpty(new Date()))
+      assert.isFalse(_.isEmpty(new Date('2022-09-01T02:19:55.976Z')))
+      assert.isFalse(_.isEmpty(22))
+      assert.isFalse(_.isEmpty(new Person()))
+      assert.isFalse(_.isEmpty({ name: 'x' }))
+      assert.isFalse(_.isEmpty('abc'))
+      assert.isFalse(_.isEmpty(String('abc')))
+      assert.isFalse(_.isEmpty([1, 2, 3]))
+      assert.isFalse(_.isEmpty(function work() {}))
+      assert.isFalse(_.isEmpty(() => {}))
+      assert.isFalse(_.isEmpty(Symbol('')))
+      assert.isFalse(_.isEmpty(Symbol('hello')))
+      const map = new Map()
+      map.set('a', 1)
+      assert.isFalse(_.isEmpty(map))
     })
-    test('returns true for empty class instance', () => {
-      class Data {}
-      const input = new Data()
-      const result = _.isEmpty(input)
-      assert.isTrue(result)
+  })
+
+  describe('isDate function', () => {
+    test('return true for Date values', () => {
+      assert.isTrue(_.isDate(new Date()))
+      assert.isTrue(_.isDate(new Date('2022-09-01T02:19:55.976Z')))
+      assert.isTrue(_.isDate(new Date('invalid value')))
     })
-    test('returns false for class instance with properties', () => {
-      class Data {
-        name: string = 'ray'
-      }
-      const input = new Data()
-      const result = _.isEmpty(input)
-      assert.isFalse(result)
-    })
-    test('returns true for number greater than 0', () => {
-      const input = 22
-      const result = _.isEmpty(input)
-      assert.isTrue(result)
-    })
-    test('returns true for number 0', () => {
-      const input = 0
-      const result = _.isEmpty(input)
-      assert.isTrue(result)
-    })
-    test('returns false for array with values', () => {
-      const input = [1, 2, 3]
-      const result = _.isEmpty(input)
-      assert.isFalse(result)
-    })
-    test('returns true for empty array', () => {
-      const input = []
-      const result = _.isEmpty(input)
-      assert.isTrue(result)
-    })
-    test('returns true for true', () => {
-      const input = true
-      const result = _.isEmpty(input)
-      assert.isTrue(result)
-    })
-    test('returns true for false', () => {
-      const input = false
-      const result = _.isEmpty(input)
-      assert.isTrue(result)
-    })
-    test('returns true for empty object', () => {
-      const input = {}
-      const result = _.isEmpty(input)
-      assert.isTrue(result)
-    })
-    test('returns false for object with values', () => {
-      const input = { name: 'x' }
-      const result = _.isEmpty(input)
-      assert.isFalse(result)
-    })
-    test('returns false for string with chars', () => {
-      const input = 'abc'
-      const result = _.isEmpty(input)
-      assert.isFalse(result)
-    })
-    test('returns true for empty string', () => {
-      const input = ''
-      const result = _.isEmpty(input)
-      assert.isTrue(result)
-    })
-    test('returns true for empty string class', () => {
-      const input = String()
-      const result = _.isEmpty(input)
-      assert.isTrue(result)
-    })
-    test('returns false for string class with chars', () => {
-      const input = 'abc'
-      const result = _.isEmpty(input)
-      assert.isFalse(result)
-    })
-    test('returns true for empty Map', () => {
-      const input = new Map()
-      const result = _.isEmpty(input)
-      assert.isTrue(result)
-    })
-    test('returns false for Map with values', () => {
-      const input = new Map()
-      input.set('a', 1)
-      input.set('b', 2)
-      input.set('c', 3)
-      const result = _.isEmpty(input)
-      assert.isFalse(result)
+    test('return false for non-Date values', () => {
+      assert.isFalse(_.isDate(22))
+      assert.isFalse(_.isDate({ name: 'x' }))
+      assert.isFalse(_.isDate('abc'))
+      assert.isFalse(_.isDate(String('abc')))
+      assert.isFalse(_.isDate([1, 2, 3]))
+      assert.isFalse(_.isDate(function work() {}))
+      assert.isFalse(_.isDate(() => {}))
+      assert.isFalse(_.isDate(Symbol('')))
+      assert.isFalse(_.isDate(Symbol('hello')))
     })
   })
  

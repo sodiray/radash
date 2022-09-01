@@ -74,5 +74,6 @@ export {
   isInt,
   isObject,
   isString,
-  isSymbol
+  isSymbol,
+  isDate
 } from './typed'
