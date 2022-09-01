@@ -69,27 +69,17 @@ describe("async module", () => {
   describe("map/asyncMapV2 function", () => {
     test("calls asyncMap", async () => {
       const numbers = [1, 2, 3, 4]
-      const asyncSquare = async (a: number): Promise<number> => {
-        return new Promise((res) => res(a * a))
-      }
-      const result = await _.map<number, number>(numbers, asyncSquare)
-      assert.deepEqual(result, [1, 4, 9, 16])
-    })
-
-    test("calls asyncMap with index", async () => {
-      const numbers = [1, 2, 3, 4]
-      let num = -1, lenght = numbers.length - 1
-
+	  let num = -1;
       const asyncSquare = async (a: number, index: number): Promise<number> => {
-        num = index
+		num = index;
         return new Promise((res) => res(a * a))
       }
       const result = await _.map<number, number>(numbers, asyncSquare)
       assert.deepEqual(result, [1, 4, 9, 16])
 
-      if(num !== lenght) {
-        assert.fail("Expected index to be incremented")
-      }
+	  if(num === -1 || num !== numbers.length - 1) {
+		assert.fail("Expected asyncMap to be called with the correct index");
+	  }
     })
   })
 
