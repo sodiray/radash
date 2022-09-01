@@ -177,7 +177,7 @@ export const omit = <T, TKeys extends keyof T>(
 }
 
 /**
- * Note: Passing a function has been @deprecated
+ * Warning: Passing a function has been @deprecated
  * and will be removed in the next major version.
  */
 export const get = <T, K>(
@@ -185,9 +185,6 @@ export const get = <T, K>(
   funcOrPath: ((t: T) => K) | string,
   defaultValue: K | null = null
 ): K => {
-  if (value === null || value === undefined) {
-    return defaultValue
-  }
   if (isFunction(funcOrPath)) {
     try {
       return (funcOrPath as Function)(value) ?? defaultValue
@@ -198,10 +195,12 @@ export const get = <T, K>(
   const segments = (funcOrPath as string).split(/[\.\[\]]/g)
   let current: any = value
   for (const key of segments) {
+    if (current === null) return defaultValue
+    if (current === undefined) return defaultValue
     if (key.trim() === '') continue
     current = current[key]
-    if (current === undefined) return defaultValue
   }
+  if (current === undefined) return defaultValue
   return current
 }
 
