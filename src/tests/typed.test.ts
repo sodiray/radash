@@ -435,4 +435,53 @@ describe('typed module', () => {
     })
   })
 
+  describe('isEqual function', () => {
+    test('returns true for equal things', () => {
+      assert.isTrue(_.isEqual(0, 0))
+      assert.isTrue(_.isEqual('a', 'a'))
+      const hello = Symbol('hello')
+      assert.isTrue(_.isEqual(hello, hello))
+      assert.isTrue(_.isEqual({}, {}))
+      assert.isTrue(_.isEqual(true, true))
+      const now = new Date()
+      assert.isTrue(_.isEqual(now, now))
+      assert.isTrue(_.isEqual([], []))
+      const complex = {
+        name: 'Jake',
+        pets: [{
+          name: 'Bently',
+          type: 'dog',
+          legs: 4,
+          attributes: {
+            color: 'yello',
+            tail: true
+          }
+        }]
+      }
+      assert.isTrue(_.isEqual(complex, { ...complex }))
+    })
+    test('returns false for non-equal things', () => {
+      assert.isFalse(_.isEqual(0, 1))
+      assert.isFalse(_.isEqual('a', 'b'))
+      assert.isFalse(_.isEqual(Symbol('hello'), Symbol('goodbye')))
+      assert.isFalse(_.isEqual({}, { a: 1 }))
+      assert.isFalse(_.isEqual(true, false))
+      assert.isFalse(_.isEqual(new Date(), new Date('2022-09-01T03:25:12.750Z')))
+      assert.isFalse(_.isEqual([], [1]))
+      const complex = {
+        name: 'Jake',
+        pets: [{
+          name: 'Bently',
+          type: 'dog',
+          legs: 4,
+          attributes: {
+            color: 'yello',
+            tail: true
+          }
+        }]
+      }
+      assert.isFalse(_.isEqual(complex, { ...complex, pets: [...complex.pets, 1] }))
+    })
+  })
+
 })

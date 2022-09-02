@@ -80,13 +80,14 @@ export {
 } from './string'
 export {
   isArray,
+  isDate,
   isEmpty,
+  isEqual,
   isFloat,
   isFunction,
   isInt,
   isNumber,
   isObject,
   isString,
-  isSymbol,
-  isDate
+  isSymbol
 } from './typed'
