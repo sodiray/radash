@@ -102,6 +102,43 @@ describe('object module', () => {
   })
 
   describe('clone function', () => {
+    test('copies the primitives', () => {
+      const arr = [1.1, 'How you doin?', false, Symbol('key'), BigInt('1'), undefined, null]
+      for(const elm of arr){
+        const newElm = _.clone(elm)
+        assert.equal(elm, newElm)
+      }
+    })
+    test('copies arrays', () => {
+      const arr = [{a: 0}, 1, 2, 3]
+      const result = _.clone(arr)
+      
+      assert.notEqual(arr, result)
+      for(const i in result){
+        assert.equal(arr[i], result[i])
+      }
+    })
+    test('copies functions', () => {
+      const fa = ()=>0;
+      const fb = _.clone(fa);
+
+      assert.notEqual(fa,fb)
+      assert.equal(fa(), fb());
+    })
+    test('copies objects (class instances) without losing the class type', () => {
+      class Data{
+        val= 0
+      }
+
+      const obj = new Data()
+      obj.val = 1;
+      const result = _.clone(obj);
+
+      assert.notEqual(obj, result)
+      assert.equal(obj.constructor.name, result.constructor.name)
+      assert.equal(obj.val, result.val)
+
+    })
     test('copies all attributes from object', () => {
       const obj = {
         x: 22,

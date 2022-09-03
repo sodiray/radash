@@ -1,4 +1,4 @@
-import { isFunction, isObject } from './typed'
+import { isPrimitive, isFunction, isObject } from './typed'
 
 type LowercasedKeys<T extends Record<string, any>> = {
   [P in keyof T & string as Lowercase<P>]: T[P]
@@ -124,14 +124,31 @@ export const lowerize = <T extends Record<string, any>>(obj: T) =>
 export const upperize = <T extends Record<string, any>>(obj: T) =>
   mapKeys(obj, k => k.toUpperCase()) as UppercasedKeys<T>
 
-export const clone = <T extends object = object>(obj: T): T => {
-  return Object.getOwnPropertyNames(obj).reduce(
-    (acc, name) => ({
-      ...acc,
-      [name]: obj[name as keyof T]
-    }),
-    {} as T
-  )
+/**
+ * Creates a shallow copy of the given obejct/value.
+ * @param {*} obj value to clone
+ * @returns {*} shallow clone of the given value
+ */
+export const clone = <T>(obj: T): T => {
+  // Primitive values do not need cloning.
+  if (isPrimitive(obj)) {
+    return obj
+  }
+
+  // Binding a function to an empty object creates a copy function.
+  if (typeof obj === 'function') {
+    return obj.bind({})
+  }
+
+  // Access the constructor and create a new object. This method can create an array as well.
+  const newObj = new ((obj as Object).constructor as { new (): T })()
+
+  // Assign the props.
+  Object.getOwnPropertyNames(obj).forEach(prop => {
+    newObj[prop] = obj[prop]
+  })
+
+  return newObj
 }
 
 /**
