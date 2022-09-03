@@ -50,9 +50,9 @@ export const dash = (str: string): string => {
 }
 
 /**
- * Joins all string arguments in a Pasacal case fashion
+ * Joins all string arguments in a Pascal case fashion
  *
- * pascal('hello world')   -> 'HelloWorld'
+ * pascal('hello world') -> 'HelloWorld'
  * pascal('va va boom') -> 'VaVaBoom'
  */
 export const pascal = (str: string): string => {
