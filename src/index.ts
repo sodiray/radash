@@ -19,6 +19,7 @@ export {
   range,
   replace,
   replaceOrAppend,
+  sample,
   select,
   sift,
   sort,

@@ -585,4 +585,20 @@ describe('array module', () => {
     })
   })
 
+  describe('sample function', () => {
+    const people = [
+      { name: 'ray', group: 'X' },
+      { name: 'sara', group: 'X' },
+      { name: 'bo', group: 'Y' },
+      { name: 'mary', group: 'Y' },
+    ]
+    test('returns sample item from given list', () => {
+      const result = _.sample(people)
+      assert.isOk(people.includes(result));
+    })
+    test('returns undefined if given list is empty', () => {
+      const result = _.sample([])
+      assert.isUndefined(result);
+    })
+  })
 })

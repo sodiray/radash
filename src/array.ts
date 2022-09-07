@@ -396,3 +396,10 @@ export const diff = <T>(
   )
   return root.filter(a => !bKeys[identity(a)])
 }
+
+/**
+ * Returns random item from list or undefined if list is empty.
+ */
+export const sample = <T>(list: readonly T[]) => {
+  return list[Math.floor(Math.random() * list.length)]
+}
