@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
     "outDir": "dist",
-    "lib": ["es2016"],
-    "declaration": true,
-    "sourceMap": true
+    "moduleResolution": "node",
+    "target": "es2018",
+    "lib": ["es2018"],
+    "esModuleInterop": true,
   },
   "include": [
     "src/**/*.ts"
