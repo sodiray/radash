@@ -34,6 +34,6 @@
     "rollup-plugin-esbuild": "^4.10.1",
     "ts-jest": "^27.0.5",
     "tslint": "^6.0.0",
-    "typescript": "^4.4.2"
+    "typescript": "^4.8.3"
   }
 }
