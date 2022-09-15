@@ -20,10 +20,10 @@ export const camel = (str: string): string => {
 }
 
 /**
- * Joins all string arguments in a snake case fashion
+ * Convert a string to snake case
  *
- * camel('hello', 'world')   -> 'hello_world'
- * camel('va', 'va', 'voom') -> 'va_va_voom'
+ * snake('green fish blue fish') -> 'green_fish_blue_fish'
+ * snake('hello world) -> 'hello_world'
  */
 export const snake = (str: string): string => {
   const parts = str?.split(/[\.\-\s_]/).map(x => x.toLowerCase()) ?? []
