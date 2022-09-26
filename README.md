@@ -70,4 +70,4 @@ const allGods = await _.map(gods, async ({ name }) => {
 
 ## Contributing
 
-Contributions are welcome and apprecaited! Check out the [contribuing guide](./.github/contributing.md) before you dive in.
+Contributions are welcome and appreciated! Check out the [contributing guide](./.github/contributing.md) before you dive in.
