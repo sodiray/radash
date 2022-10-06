@@ -585,4 +585,33 @@ describe('array module', () => {
     })
   })
 
+  describe('shift function', () => {
+    it('should shift array right 3 positions', () => {
+      const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+      const shiftNumber = 3;
+      const expected = [7, 8, 9, 1, 2, 3, 4, 5, 6];
+
+      const resArr = _.shift(arr, shiftNumber);
+      expect(resArr).toEqual(expected);
+    });
+
+    it('should shift array left 3 positions', () => {
+      const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+      const shiftNumber = -3;
+      const expected = [4, 5, 6, 7, 8, 9, 1, 2, 3];
+
+      const resArr = _.shift(arr, shiftNumber);
+      expect(resArr).toEqual(expected);
+    });
+
+    it('should keep array as is', () => {
+      const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+      const shiftNumber = 0;
+      const expected = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+      const resArr = _.shift(arr, shiftNumber);
+      expect(resArr).toEqual(expected);
+    });
+  });
+
 })

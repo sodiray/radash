@@ -396,3 +396,14 @@ export const diff = <T>(
   )
   return root.filter(a => !bKeys[identity(a)])
 }
+
+/**
+ * Shift array items by n steps
+ * If n > 0 items will shift n steps to the right
+ * If n < 0 items will shift n steps to the left
+ */
+export function shift<T>(arr: ReadonlyArray<T>, n: number) {
+  if (n === 0) return arr;
+
+  return [...arr.slice(-n, arr.length), ...arr.slice(0, -n)];
+}

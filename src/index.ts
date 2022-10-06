@@ -23,7 +23,8 @@ export {
   sift,
   sort,
   sum,
-  unique
+  unique,
+  shift
 } from './array'
 export {
   defer,
