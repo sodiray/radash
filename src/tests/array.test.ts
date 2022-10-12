@@ -586,32 +586,30 @@ describe('array module', () => {
   })
 
   describe('shift function', () => {
-    it('should shift array right 3 positions', () => {
-      const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-      const shiftNumber = 3;
-      const expected = [7, 8, 9, 1, 2, 3, 4, 5, 6];
-
-      const resArr = _.shift(arr, shiftNumber);
-      expect(resArr).toEqual(expected);
+    const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9];    
+    test('should shift array right 3 positions', () => {
+      const result = _.shift(arr, 3);
+      assert.deepEqual(result, [7, 8, 9, 1, 2, 3, 4, 5, 6])
     });
-
-    it('should shift array left 3 positions', () => {
-      const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-      const shiftNumber = -3;
-      const expected = [4, 5, 6, 7, 8, 9, 1, 2, 3];
-
-      const resArr = _.shift(arr, shiftNumber);
-      expect(resArr).toEqual(expected);
+    test('should shift array left 3 positions', () => {
+      const result = _.shift(arr, -3);      
+      assert.deepEqual(result, [4, 5, 6, 7, 8, 9, 1, 2, 3])
+    });    
+    test('should shift array right 6 positions', () => {
+      const result = _.shift(arr, 15);      
+      assert.deepEqual(result, [4, 5, 6, 7, 8, 9, 1, 2, 3])
+    });    
+    test('should shift array left 6 positions', () => {
+      const result = _.shift(arr, -15);      
+      assert.deepEqual(result, [ 7, 8, 9, 1, 2, 3, 4, 5, 6 ])
     });
-
-    it('should keep array as is', () => {
-      const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-      const shiftNumber = 0;
-      const expected = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-
-      const resArr = _.shift(arr, shiftNumber);
-      expect(resArr).toEqual(expected);
+    test('should keep array as is', () => {
+      const result = _.shift(arr, 0);      
+      assert.deepEqual(result, [1, 2, 3, 4, 5, 6, 7, 8, 9])
+    });    
+    test('should keep array as is', () => {
+      const result = _.shift(arr, 9);      
+      assert.deepEqual(result, [1, 2, 3, 4, 5, 6, 7, 8, 9])
     });
   });
-
 })

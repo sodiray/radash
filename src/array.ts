@@ -402,8 +402,10 @@ export const diff = <T>(
  * If n > 0 items will shift n steps to the right
  * If n < 0 items will shift n steps to the left
  */
-export function shift<T>(arr: ReadonlyArray<T>, n: number) {
-  if (n === 0) return arr;
+ export function shift<T>(arr: Array<T>, n: number) {
+  if (n === 0 || arr.length === 0 || arr.length === n || n === -arr.length) return arr;
 
-  return [...arr.slice(-n, arr.length), ...arr.slice(0, -n)];
+  const shiftNumber = n % arr.length;
+
+  return [...arr.slice(-shiftNumber, arr.length), ...arr.slice(0, -shiftNumber)];
 }
