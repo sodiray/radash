@@ -611,5 +611,11 @@ describe('array module', () => {
       const result = _.shift(arr, 9);      
       assert.deepEqual(result, [1, 2, 3, 4, 5, 6, 7, 8, 9])
     });
+    test('should return empty array',()=>{
+      const results = _.shift([],0)
+    })    
+    test('should return empty array',()=>{
+      const results = _.shift([],10)
+    })
   });
 })
