@@ -186,7 +186,7 @@ export const tryit = <TFunction extends (...args: any) => any>(
 ) => {
   return async (
     ...args: ArgumentsType<TFunction>
-  ): Promise<[Error, UnwrapPromisify<ReturnType<TFunction>>]> => {
+  ): Promise<[Error, null] | [null, UnwrapPromisify<ReturnType<TFunction>>]> => {
     try {
       return [null, await func(...(args as any))]
     } catch (err) {
