@@ -1,5 +1,13 @@
 import { isObject } from './typed'
 
+type LowercasedKeys<T extends Record<string, any>> = {
+  [P in keyof T & string as Lowercase<P>]: T[P]
+}
+
+type UppercasedKeys<T extends Record<string, any>> = {
+  [P in keyof T & string as Uppercase<P>]: T[P]
+}
+
 /**
  * Removes (shakes out) undefined entries from an
  * object. Optional second argument shakes out values
@@ -103,14 +111,14 @@ export const invert = <
 /**
  * Convert all keys in an object to lower case
  */
-export const lowerize = <T>(obj: Record<string, T>) =>
-  mapKeys(obj, k => k.toLowerCase())
+export const lowerize = <T extends Record<string, any>>(obj: T) =>
+  mapKeys(obj, k => k.toLowerCase()) as LowercasedKeys<T>
 
 /**
  * Convert all keys in an object to upper case
  */
-export const upperize = <T>(obj: Record<string, T>) =>
-  mapKeys(obj, k => k.toUpperCase())
+export const upperize = <T extends Record<string, any>>(obj: T) =>
+  mapKeys(obj, k => k.toUpperCase()) as UppercasedKeys<T>
 
 export const clone = <T extends object = object>(obj: T): T => {
   return Object.getOwnPropertyNames(obj).reduce(

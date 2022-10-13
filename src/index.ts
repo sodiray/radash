@@ -75,6 +75,7 @@ export {
   camel,
   capitalize,
   dash,
+  pascal,
   snake,
   template
 } from './string'
