@@ -2,7 +2,7 @@
 
 Thank you for investing your time in contributing to radash!
 
-> The [documentation site](https://radash-docs.vercel.app) has a [seperate project](https://github.com/rayepps/radash-docs). This repo and guide is specifically for the radash library source code.
+> The [documentation site](https://radash-docs.vercel.app) has a [separate project](https://github.com/rayepps/radash-docs). This repo and guide is specifically for the radash library source code.
 
 ## You have a question?
 
@@ -36,4 +36,4 @@ Once you submit your PR, I (@rayepps) will review it. I might ask questions or r
 
 ## Your PR gets merged!
 
-Congratulations :tada::tada: Currently, the package publishing process is manual. You're PR will be updated with a comment when the next release is published. This should happen within 24-48 hours of your PR being merged.
+Congratulations :tada::tada: Currently, the package publishing process is manual. Your PR will be updated with a comment when the next release is published. This should happen within 24-48 hours of your PR being merged.
