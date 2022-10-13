@@ -360,7 +360,7 @@ export const replaceOrAppend = <T>(
  * only truthy values
  */
 export const sift = <T>(list: readonly T[]): NonNullable<T>[] => {
-  return list?.filter(x => !!x) ?? []
+  return (list?.filter(x => !!x) as NonNullable<T>[]) ?? []
 }
 
 /**
