@@ -1,3 +1,9 @@
+/**
+ * Capitalize the first word of the string
+ *
+ * capitalize('hello')   -> 'Hello'
+ * capitalize('va va voom') -> 'Va va voom'
+ */
 export const capitalize = (str: string): string => {
   if (!str || str.length === 0) return ''
   const lower = str.toLowerCase()
@@ -5,10 +11,10 @@ export const capitalize = (str: string): string => {
 }
 
 /**
- * Joins all string arguments in a camel case fashion
+ * Joins all the words of the string in a camel case fashion
  *
- * camel('hello', 'world')   -> 'helloWorld'
- * camel('va', 'va', 'voom') -> 'vaVaVoom'
+ * camel('hello world')   -> 'helloWorld'
+ * camel('va va-VOOM') -> 'vaVaVoom'
  */
 export const camel = (str: string): string => {
   const parts = str?.split(/[\.\-\s_]/).map(x => x.toLowerCase()) ?? []
@@ -20,10 +26,10 @@ export const camel = (str: string): string => {
 }
 
 /**
- * Joins all string arguments in a snake case fashion
+ * Joins all the words of the string in a snake case fashion
  *
- * camel('hello', 'world')   -> 'hello_world'
- * camel('va', 'va', 'voom') -> 'va_va_voom'
+ * snake('hello world')   -> 'hello_world'
+ * snake('va va-VOOM') -> 'va_va_voom'
  */
 export const snake = (str: string): string => {
   const parts = str?.split(/[\.\-\s_]/).map(x => x.toLowerCase()) ?? []
@@ -35,10 +41,10 @@ export const snake = (str: string): string => {
 }
 
 /**
- * Joins all string arguments in a dash case fashion
+ * Joins all the words of the string in a dash case fashion
  *
- * camel('hello', 'world')   -> 'hello-world'
- * camel('va', 'va', 'voom') -> 'va-va-voom'
+ * dash('hello world')   -> 'hello-world'
+ * dash('va va_VOOM') -> 'va-va-voom'
  */
 export const dash = (str: string): string => {
   const parts = str?.split(/[\.\-\s_]/).map(x => x.toLowerCase()) ?? []
@@ -65,7 +71,7 @@ export const pascal = (str: string): string => {
  * template is used to replace data by name in template strings.
  * The default expression looks for {{name}} to identify names.
  *
- * Ex. tempalte('Hello, {{name}}', { name: 'ray' })
+ * Ex. template('Hello, {{name}}', { name: 'ray' })
  * Ex. template('Hello, <name>', { name: 'ray' }, /<(.+?)>/g)
  */
 export const template = (
