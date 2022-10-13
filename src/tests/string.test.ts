@@ -1,6 +1,6 @@
 import {assert} from 'chai'
 import * as _ from '..'
-import {camel, dash, snake} from '../string'
+import { camel, snake, dash, pascal } from '../string'
 
 describe('string module', () => {
 
@@ -139,4 +139,20 @@ describe('string module', () => {
     })
   })
 
+  describe('PascalCase function', () => {
+    test('returns non alphanumerics in PascalCase', () => {
+      const result = _.pascal('Exobase Starter_flash AND-go')
+      assert.equal(result, 'ExobaseStarterFlashAndGo')
+    })
+    test('returns single word', () => {
+      const result = pascal(
+        'hello'
+      )
+      assert.equal(result, 'Hello')
+    })
+    test('returns empty string for empty input', () => {
+      const result = pascal(null as any)
+      assert.equal(result, '')
+    })
+  })
 })
