@@ -195,37 +195,41 @@ describe('object module', () => {
     type Person = {
       name: string
       age: number
-      friends: Person[]
+      friends?: Person[]
     }
-    const person: Person = {
+    const jay: Person = {
       name: 'jay',
       age: 17,
       friends: [{
-        name: 'chris',
-        age: 19,
-        friends: []
+        name: 'carl',
+        age: 17,
+        friends: [{
+          name: 'sara',
+          age: 17
+        }]
       }]
     }
-    test('handles null input', () => {
-      const result = _.get(null, x => x.name)
-      assert.equal(result, null)
+    test('handles null and undefined input', () => {
+      assert.equal(_.get(null, 'name'), null)
+      assert.equal(_.get(undefined, 'name'), null)
     })
-    test('returns specified value', () => {
-      const result = _.get(person, x => x.name)
-      assert.equal(result, 'jay')
+    test('returns specified value or default using function', () => {
+      assert.equal(_.get(jay, x => x.name), 'jay')
+      assert.equal(_.get(jay, x => x.friends?.[0].age), 17)
+      assert.equal(_.get(jay, x => {throw 'error'}, 17), 17)
+      assert.equal(_.get({ age: undefined }, x => x.age, 22), 22)
+      assert.equal(_.get(jay, x => x.friends?.[0].friends?.[0].friends?.[0].age, 22), 22)
     })
-    test('returns deep specified value', () => {
-      const result = _.get(person, x => x.friends[0].age)
-      assert.equal(result, 19)
-    })
-    test('returns default if value is undefined', () => {
-      const myPerson = { ...person, age: undefined }
-      const result = _.get(myPerson, x => x.age, 22)
-      assert.equal(result, 22)
-    })
-    test('returns given default if failure', () => {
-      const result = _.get(person, x => x.friends[0].friends[0].friends[0].age, 22)
-      assert.equal(result, 22)
+    test('returns specified value or default using path', () => {
+      assert.equal(_.get({ age: undefined }, 'age', 22), 22)
+      assert.equal(_.get(jay, 'friends[0].age'), 17)
+      assert.equal(_.get(jay, 'friends.0.age'), 17)
+      assert.equal(_.get(jay, 'friends.1.age'), null)
+      assert.equal(_.get(jay, 'friends.0.friends[0].name'), 'sara')
+      assert.equal(_.get(jay, 'name'), 'jay')
+      assert.equal(_.get(jay, '[name]'), 'jay')
+      assert.equal(_.get(jay, 'friends[0][name]'), 'carl')
+      assert.equal(_.get(jay, 'friends[0].friends[0].friends[0].age', 22), 22)
     })
   })
 
