@@ -3,12 +3,15 @@
  * the group ids the given getGroupId function produced and the value is an array of
  * each item in that group.
  */
-export const group = <T>(array: readonly T[], getGroupId: (item: T) => string) => {
+ export const group = <T, Key extends string | number | symbol>(
+  array: readonly T[],
+  getGroupId: (item: T) => Key
+) => {
   return array.reduce((acc, item) => {
     const groupId = getGroupId(item)
     const groupList = acc[groupId] ?? []
     return { ...acc, [groupId]: [...groupList, item] }
-  }, {} as Record<string, T[]>)
+  }, {} as Record<Key, T[]>)
 }
 
 /**
