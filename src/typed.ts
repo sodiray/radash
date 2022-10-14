@@ -1,32 +1,32 @@
-export const isSymbol = (value: any) => {
+export const isSymbol = (value: any): value is symbol => {
   return !!value && value.constructor === Symbol
 }
 
-export const isArray = (value: any) => {
+export const isArray = (value: any): value is unknown[] => {
   return !!value && value.constructor === Array
 }
 
-export const isObject = (value: any) => {
+export const isObject = (value: any): value is object => {
   return !!value && value.constructor === Object
 }
 
-export const isFunction = (value: any) => {
+export const isFunction = (value: any): value is Function => {
   return !!(value && value.constructor && value.call && value.apply)
 }
 
-export const isString = (value: any) => {
+export const isString = (value: any): value is string => {
   return typeof value === 'string' || value instanceof String
 }
 
-export const isInt = (value: any) => {
+export const isInt = (value: any): value is number => {
   return isNumber(value) && value % 1 === 0
 }
 
-export const isFloat = (value: any) => {
+export const isFloat = (value: any): value is number => {
   return isNumber(value) && value % 1 !== 0
 }
 
-export const isNumber = (value: any) => {
+export const isNumber = (value: any): value is number => {
   try {
     return Number(value) === value
   } catch {
@@ -34,15 +34,15 @@ export const isNumber = (value: any) => {
   }
 }
 
-export const isDate = (value: any) => {
+export const isDate = (value: any): value is Date => {
   return Object.prototype.toString.call(value) === "[object Date]"
 }
 
 export const isEmpty = (value: any) => {
   if (value === true || value === false) return true
   if (value === null || value === undefined) return true
-  if (isNumber(value)) return parseInt(value) === 0
-  if (isDate(value)) return isNaN(value)
+  if (isNumber(value)) return value === 0
+  if (isDate(value)) return isNaN(value.getTime())
   if (isFunction(value)) return false
   if (isSymbol(value)) return false
   const length = (value as any).length
