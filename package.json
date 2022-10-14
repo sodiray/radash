@@ -2,8 +2,15 @@
   "name": "radash",
   "version": "7.1.0",
   "description": "Functional utility library - modern, simple, typed, powerful",
-  "main": "dist/index.js",
+  "main": "dist/cjs/index.cjs",
+  "module": "dist/esm/index.mjs",
   "types": "dist/index.d.ts",
+  "exports": {
+    "import": "./dist/esm/index.mjs",
+    "require": "./dist/cjs/index.cjs",
+    "types": "./dist/index.d.ts"
+  },
+  "sideEffects": false,
   "files": [
     "dist/**/*"
   ],
@@ -16,18 +23,23 @@
   "scripts": {
     "test": "jest --coverage",
     "check": "yarn lint && yarn test && yarn build",
-    "build": "tsc",
+    "build": "yarn tsc --noEmit && yarn rollup -c",
     "lint": "tslint -p tsconfig.json"
   },
   "devDependencies": {
+    "@rollup/plugin-typescript": "^8.5.0",
     "@types/chai": "^4.2.21",
     "@types/jest": "^27.0.1",
     "chai": "^4.3.4",
+    "esbuild": "^0.15.7",
     "jest": "^27.1.0",
     "prettier": "^2.7.1",
     "prettier-plugin-organize-imports": "^3.0.3",
+    "rollup": "^2.79.1",
+    "rollup-plugin-dts": "^4.2.2",
+    "rollup-plugin-esbuild": "^4.10.1",
     "ts-jest": "^27.0.5",
     "tslint": "^6.0.0",
-    "typescript": "^4.4.2"
+    "typescript": "^4.8.3"
   }
 }
