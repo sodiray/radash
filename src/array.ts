@@ -3,12 +3,15 @@
  * the group ids the given getGroupId function produced and the value is an array of
  * each item in that group.
  */
-export const group = <T>(array: readonly T[], getGroupId: (item: T) => string) => {
+ export const group = <T, Key extends string | number | symbol>(
+  array: readonly T[],
+  getGroupId: (item: T) => Key
+) => {
   return array.reduce((acc, item) => {
     const groupId = getGroupId(item)
     const groupList = acc[groupId] ?? []
     return { ...acc, [groupId]: [...groupList, item] }
-  }, {} as Record<string, T[]>)
+  }, {} as Record<Key, T[]>)
 }
 
 /**
@@ -395,4 +398,19 @@ export const diff = <T>(
     {}
   )
   return root.filter(a => !bKeys[identity(a)])
+}
+
+/**
+ * Shift array items by n steps
+ * If n > 0 items will shift n steps to the right
+ * If n < 0 items will shift n steps to the left
+ */
+ export function shift<T>(arr: Array<T>, n: number) {
+  if (arr.length === 0) return arr;
+
+  const shiftNumber = n % arr.length;
+
+  if(shiftNumber === 0) return arr;
+
+  return [...arr.slice(-shiftNumber, arr.length), ...arr.slice(0, -shiftNumber)];
 }

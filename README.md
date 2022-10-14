@@ -49,15 +49,15 @@ const gods = [{
 
 _.max(gods, g => g.rank) // => ra
 _.sum(gods, g => g.rank) // => 268
-_.fork(gods, g => g.culture === 'norse') // => [[loki], [ra, zues]]
-_.sort(gods, g => g.rank) // => [ra, zues, loki]
+_.fork(gods, g => g.culture === 'norse') // => [[loki], [ra, zeus]]
+_.sort(gods, g => g.rank) // => [ra, zeus, loki]
 _.boil(gods, (a, b) => a.rank > b.rank ? a : b) // => ra
 
 _.objectify(
   gods, 
   g => g.name.toLowerCase(), 
   g => _.pick(g, ['power', 'rank', 'culture'])
-) // => { ra, zues, loki }
+) // => { ra, zeus, loki }
 
 const godName = _.get(gods, g => g[0].name)
 
@@ -70,4 +70,4 @@ const allGods = await _.map(gods, async ({ name }) => {
 
 ## Contributing
 
-Contributions are welcome and apprecaited! Check out the [contribuing guide](./.github/contributing.md) before you dive in.
+Contributions are welcome and appreciated! Check out the [contributing guide](./.github/contributing.md) before you dive in.

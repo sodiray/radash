@@ -23,7 +23,8 @@ export {
   sift,
   sort,
   sum,
-  unique
+  unique,
+  shift
 } from './array'
 export {
   defer,
@@ -75,6 +76,7 @@ export {
   camel,
   capitalize,
   dash,
+  pascal,
   snake,
   template
 } from './string'

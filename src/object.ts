@@ -1,4 +1,12 @@
-import { isObject } from './typed'
+import { isFunction, isObject } from './typed'
+
+type LowercasedKeys<T extends Record<string, any>> = {
+  [P in keyof T & string as Lowercase<P>]: T[P]
+}
+
+type UppercasedKeys<T extends Record<string, any>> = {
+  [P in keyof T & string as Uppercase<P>]: T[P]
+}
 
 /**
  * Removes (shakes out) undefined entries from an
@@ -103,14 +111,14 @@ export const invert = <
 /**
  * Convert all keys in an object to lower case
  */
-export const lowerize = <T>(obj: Record<string, T>) =>
-  mapKeys(obj, k => k.toLowerCase())
+export const lowerize = <T extends Record<string, any>>(obj: T) =>
+  mapKeys(obj, k => k.toLowerCase()) as LowercasedKeys<T>
 
 /**
  * Convert all keys in an object to upper case
  */
-export const upperize = <T>(obj: Record<string, T>) =>
-  mapKeys(obj, k => k.toUpperCase())
+export const upperize = <T extends Record<string, any>>(obj: T) =>
+  mapKeys(obj, k => k.toUpperCase()) as UppercasedKeys<T>
 
 export const clone = <T extends object = object>(obj: T): T => {
   return Object.getOwnPropertyNames(obj).reduce(
@@ -176,16 +184,32 @@ export const omit = <T, TKeys extends keyof T>(
   )
 }
 
+/**
+ * Warning: Passing a function has been @deprecated
+ * and will be removed in the next major version.
+ */
 export const get = <T, K>(
   value: T,
-  getter: (t: T) => K,
+  funcOrPath: ((t: T) => K) | string,
   defaultValue: K | null = null
-) => {
-  try {
-    return getter(value) ?? defaultValue
-  } catch {
-    return defaultValue
+): K => {
+  if (isFunction(funcOrPath)) {
+    try {
+      return (funcOrPath as Function)(value) ?? defaultValue
+    } catch {
+      return defaultValue
+    }
   }
+  const segments = (funcOrPath as string).split(/[\.\[\]]/g)
+  let current: any = value
+  for (const key of segments) {
+    if (current === null) return defaultValue
+    if (current === undefined) return defaultValue
+    if (key.trim() === '') continue
+    current = current[key]
+  }
+  if (current === undefined) return defaultValue
+  return current
 }
 
 /**
