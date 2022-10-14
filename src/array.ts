@@ -3,7 +3,7 @@
  * the group ids the given getGroupId function produced and the value is an array of
  * each item in that group.
  */
- export const group = <T, Key extends string | number | symbol>(
+export const group = <T, Key extends string | number | symbol>(
   array: readonly T[],
   getGroupId: (item: T) => Key
 ) => {
@@ -21,7 +21,10 @@
  *
  * Ex. const greatest = () => boil(numbers, (a, b) => a > b)
  */
-export const boil = <T>(array: readonly T[], compareFunc: (a: T, b: T) => T) => {
+export const boil = <T>(
+  array: readonly T[],
+  compareFunc: (a: T, b: T) => T
+) => {
   if (!array || (array.length ?? 0) === 0) return null
   return array.reduce(compareFunc)
 }
@@ -310,7 +313,11 @@ export const fork = <T>(
  * and replace items matched by the matcher func in the
  * first place.
  */
-export const merge = <T>(root: readonly T[], others: readonly T[], matcher: (item: T) => any) => {
+export const merge = <T>(
+  root: readonly T[],
+  others: readonly T[],
+  matcher: (item: T) => any
+) => {
   if (!others && !root) return []
   if (!others) return root
   if (!root) return []
@@ -352,8 +359,8 @@ export const replaceOrAppend = <T>(
  * Given a list returns a new list with
  * only truthy values
  */
-export const sift = <T>(list: readonly T[]) => {
-  return list?.filter(x => !!x) ?? []
+export const sift = <T>(list: readonly T[]): NonNullable<T>[] => {
+  return (list?.filter(x => !!x) as NonNullable<T>[]) ?? []
 }
 
 /**
