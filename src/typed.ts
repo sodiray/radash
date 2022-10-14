@@ -2,7 +2,7 @@ export const isSymbol = (value: any): value is symbol => {
   return !!value && value.constructor === Symbol
 }
 
-export const isArray = (value: any): value is any[] => {
+export const isArray = (value: any): value is unknown[] => {
   return !!value && value.constructor === Array
 }
 
