@@ -1,4 +1,4 @@
-import { isObject } from './typed'
+import { isFunction, isObject } from './typed'
 
 type LowercasedKeys<T extends Record<string, any>> = {
   [P in keyof T & string as Lowercase<P>]: T[P]
@@ -184,16 +184,32 @@ export const omit = <T, TKeys extends keyof T>(
   )
 }
 
+/**
+ * Warning: Passing a function has been @deprecated
+ * and will be removed in the next major version.
+ */
 export const get = <T, K>(
   value: T,
-  getter: (t: T) => K,
+  funcOrPath: ((t: T) => K) | string,
   defaultValue: K | null = null
-) => {
-  try {
-    return getter(value) ?? defaultValue
-  } catch {
-    return defaultValue
+): K => {
+  if (isFunction(funcOrPath)) {
+    try {
+      return (funcOrPath as Function)(value) ?? defaultValue
+    } catch {
+      return defaultValue
+    }
   }
+  const segments = (funcOrPath as string).split(/[\.\[\]]/g)
+  let current: any = value
+  for (const key of segments) {
+    if (current === null) return defaultValue
+    if (current === undefined) return defaultValue
+    if (key.trim() === '') continue
+    current = current[key]
+  }
+  if (current === undefined) return defaultValue
+  return current
 }
 
 /**
