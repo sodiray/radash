@@ -29,8 +29,8 @@ jobs:
       - name: Read Release Version
         uses: martinbeentjes/npm-get-version-action@main
         id: get-version
-      - name: Build Release Artifacts
-        run: yarn archive
+      - name: Make Artifacts
+        run: yarn archive:zip && yarn archive:gzip
       - name: Create Release
         uses: actions/create-release@v1
         id: create-release
@@ -39,7 +39,6 @@ jobs:
           prerelease: false
           release_name: ${{ steps.get-version.outputs.current-version}}
           tag_name: v${{ steps.get-version.outputs.current-version}}
-          body_path: CHANGELOG.md
         env:
           GITHUB_TOKEN: ${{ github.token }}
       - name: Upload Release Artifact (zip)
@@ -50,7 +49,7 @@ jobs:
           upload_url: ${{ steps.create-release.outputs.upload_url }}
           asset_path: ./archive.zip
           asset_name: radash-${{ steps.get-version.outputs.current-version}}-source.zip
-          asset_content_type: application/gzip
+          asset_content_type: application/zip
       - name: Upload Release Artifact (gzip)
         uses: actions/upload-release-asset@v1
         env:
