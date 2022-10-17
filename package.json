@@ -27,7 +27,7 @@
     "lint": "tslint -p tsconfig.json"
   },
   "devDependencies": {
-    "@rollup/plugin-typescript": "^8.5.0",
+    "@rollup/plugin-typescript": "^9.0.1",
     "@types/chai": "^4.2.21",
     "@types/jest": "^27.0.1",
     "chai": "^4.3.4",
