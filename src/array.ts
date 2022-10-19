@@ -395,7 +395,7 @@ export const diff = <T>(
     t as unknown as string | number | symbol
 ): T[] => {
   if (!root?.length && !other?.length) return []
-  if (!root?.length) return [...other]
+  if (root?.length === undefined) return [...other]
   if (!other?.length) return [...root]
   const bKeys = other.reduce(
     (acc, item) => ({
