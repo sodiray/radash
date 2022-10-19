@@ -156,7 +156,9 @@ export const pick = <T, TKeys extends keyof T>(
 ): Pick<T, TKeys> => {
   if (!obj) return {} as Pick<T, TKeys>
   return keys.reduce((acc, key) => {
-    return { ...acc, [key]: obj[key] }
+    if(typeof(obj[key]) !== 'undefined')
+      acc[key] = obj[key]
+    return acc;
   }, {} as Pick<T, TKeys>)
 }
 
