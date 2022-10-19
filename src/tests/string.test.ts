@@ -41,6 +41,18 @@ describe('string module', () => {
       )
       assert.equal(result, 'hello_world')
     })
+    test('must handle strings that are camelCase', () => {
+      const result = snake(
+        'helloWorld'
+      )
+      assert.equal(result, 'hello_world')
+    })
+    test('must handle strings that are dash', () => {
+      const result = snake(
+        'hello-world'
+      )
+      assert.equal(result, 'hello_world')
+    })
     test('returns single word', () => {
       const result = snake(
         'hello'
