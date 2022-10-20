@@ -15,6 +15,7 @@ export const capitalize = (str: string): string => {
  *
  * camel('hello world')   -> 'helloWorld'
  * camel('va va-VOOM') -> 'vaVaVoom'
+ * camel('helloWorld') -> 'helloWorld'
  */
 export const camel = (str: string): string => {
   const parts = str
