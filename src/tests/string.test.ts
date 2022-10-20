@@ -89,6 +89,18 @@ describe('string module', () => {
       const result = dash(null as any)
       assert.equal(result, '')
     })
+    test('must handle strings that are camelCase', () => {
+      const result = dash(
+        'helloWorld'
+      )
+      assert.equal(result, 'hello-world')
+    })
+    test('must handle strings that are dash', () => {
+      const result = dash(
+        'hello-world'
+      )
+      assert.equal(result, 'hello-world')
+    })
   })
 
   describe('dashCase function', () => {
