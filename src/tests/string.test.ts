@@ -25,6 +25,12 @@ describe('string module', () => {
       const result = camel(null as any)
       assert.equal(result, '')
     })
+    test('a word in camel case should remain in camel case', () => {
+      const result = camel(
+        'helloWorld'
+      )
+      assert.equal(result, 'helloWorld')
+    })
   })
 
   describe('camelCase function', () => {
@@ -38,6 +44,18 @@ describe('string module', () => {
     test('returns correctly cased string', () => {
       const result = snake(
         'hello world'
+      )
+      assert.equal(result, 'hello_world')
+    })
+    test('must handle strings that are camelCase', () => {
+      const result = snake(
+        'helloWorld'
+      )
+      assert.equal(result, 'hello_world')
+    })
+    test('must handle strings that are dash', () => {
+      const result = snake(
+        'hello-world'
       )
       assert.equal(result, 'hello_world')
     })
@@ -76,6 +94,18 @@ describe('string module', () => {
     test('returns empty string for empty input', () => {
       const result = dash(null as any)
       assert.equal(result, '')
+    })
+    test('must handle strings that are camelCase', () => {
+      const result = dash(
+        'helloWorld'
+      )
+      assert.equal(result, 'hello-world')
+    })
+    test('must handle strings that are dash', () => {
+      const result = dash(
+        'hello-world'
+      )
+      assert.equal(result, 'hello-world')
     })
   })
 
