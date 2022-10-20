@@ -17,7 +17,10 @@ export const capitalize = (str: string): string => {
  * camel('va va-VOOM') -> 'vaVaVoom'
  */
 export const camel = (str: string): string => {
-  const parts = str?.split(/[\.\-\s_]/).map(x => x.toLowerCase()) ?? []
+  const parts = str
+    ?.replace(/([A-Z])+/g, capitalize)
+    ?.split(/(?=[A-Z])|[\.\-\s_]/)
+    .map(x => x.toLowerCase()) ?? []
   if (parts.length === 0) return ''
   if (parts.length === 1) return parts[0]
   return parts.reduce((acc, part) => {
