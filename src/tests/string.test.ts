@@ -25,6 +25,12 @@ describe('string module', () => {
       const result = camel(null as any)
       assert.equal(result, '')
     })
+    test('a word in camel case should remain in camel case', () => {
+      const result = camel(
+        'helloWorld'
+      )
+      assert.equal(result, 'helloWorld')
+    })
   })
 
   describe('camelCase function', () => {
