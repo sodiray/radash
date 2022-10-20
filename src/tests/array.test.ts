@@ -518,6 +518,14 @@ describe('array module', () => {
       const result = _.diff(null, null)
       assert.deepEqual(result, [])
     })
+    test('handles empty array root', () => {
+      const result = _.diff([], ['a'])
+      assert.deepEqual(result, [])
+    })
+    test('handles empty array other', () => {
+      const result = _.diff(['a'], [])
+      assert.deepEqual(result, ['a'])
+    })
     test('returns all items from root that dont exist in other', () => {
       const result = _.diff(
         ['a', 'b', 'c'],

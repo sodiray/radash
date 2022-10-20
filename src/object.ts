@@ -150,13 +150,15 @@ export const listify = <TValue, TKey extends string | number | symbol, KResult>(
  * Pick a list of properties from an object
  * into a new object
  */
-export const pick = <T, TKeys extends keyof T>(
+export const pick = <T extends Record<string, unknown>, TKeys extends keyof T>(
   obj: T,
   keys: TKeys[]
 ): Pick<T, TKeys> => {
   if (!obj) return {} as Pick<T, TKeys>
   return keys.reduce((acc, key) => {
-    return { ...acc, [key]: obj[key] }
+    if(obj.hasOwnProperty(key))
+      acc[key] = obj[key]
+    return acc;
   }, {} as Pick<T, TKeys>)
 }
 

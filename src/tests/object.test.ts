@@ -156,6 +156,18 @@ describe('object module', () => {
       const result = _.pick({ a: 2 }, [])
       assert.deepEqual(result, {})
     })
+    test('handle key not in object', () => {
+      const result = _.pick({ a: 2, b: 3 } as any, ['c'])
+      assert.deepEqual(result, {} as any)
+    })
+    test('handle one key not in object', () => {
+      const result = _.pick({ a: 2, b: 3 } as any, ['a', 'c'])
+      assert.deepEqual(result, { a: 2 } as any)
+    })
+    test('does not ignore undefined values', () => {
+      const result = _.pick({ a: 2, b: undefined }, ['b'])
+      assert.deepEqual(result, { b: undefined })
+    })
     test('returns picked properties only', () => {
       const result = _.pick({ a: 2, b: 4 }, ['a'])
       assert.deepEqual(result, {
