@@ -49,6 +49,7 @@ export const snake = (str: string): string => {
  *
  * dash('hello world')   -> 'hello-world'
  * dash('va va_VOOM') -> 'va-va-voom'
+ * dash('helloWord') -> 'hello-word'
  */
 export const dash = (str: string): string => {
   const parts = str
