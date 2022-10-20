@@ -30,6 +30,7 @@ export const camel = (str: string): string => {
  *
  * snake('hello world')   -> 'hello_world'
  * snake('va va-VOOM') -> 'va_va_voom'
+ * snake('helloWord') -> 'hello_world'
  */
 export const snake = (str: string): string => {
   const parts = str
