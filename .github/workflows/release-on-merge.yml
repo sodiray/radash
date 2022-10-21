@@ -1,0 +1,61 @@
+name: 'Release'
+on:
+  push:
+    branches: [master]
+jobs:
+  check:
+    name: 'Check if release is needed'
+    runs-on: 'ubuntu-latest'
+    outputs:
+      release-exists: ${{ steps.check-tag.outputs.exists }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Read Release Version
+        uses: martinbeentjes/npm-get-version-action@main
+        id: get-version
+      - uses: mukunku/tag-exists-action@v1.0.0
+        id: check-tag
+        with: 
+          tag: v${{ steps.get-version.outputs.current-version}}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  release:
+    name: 'Release'
+    needs: check
+    if: needs.check.outputs.release-exists == 'false'
+    runs-on: 'ubuntu-latest'
+    steps:
+      - uses: actions/checkout@v3
+      - name: Read Release Version
+        uses: martinbeentjes/npm-get-version-action@main
+        id: get-version
+      - name: Make Artifacts
+        run: yarn archive:zip && yarn archive:gzip
+      - name: Create Release
+        uses: actions/create-release@v1
+        id: create-release
+        with:
+          draft: false
+          prerelease: false
+          release_name: ${{ steps.get-version.outputs.current-version}}
+          tag_name: v${{ steps.get-version.outputs.current-version}}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+      - name: Upload Release Artifact (zip)
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create-release.outputs.upload_url }}
+          asset_path: ./archive.zip
+          asset_name: radash-${{ steps.get-version.outputs.current-version}}-source.zip
+          asset_content_type: application/zip
+      - name: Upload Release Artifact (gzip)
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create-release.outputs.upload_url }}
+          asset_path: ./archive.tar.gz
+          asset_name: radash-${{ steps.get-version.outputs.current-version}}-source.tar.gz
+          asset_content_type: application/gzip
