@@ -232,11 +232,17 @@ describe('async module', () => {
   })
 
   describe('_.sleep function', () => {
-    test('returns error when error is thrown', async () => {
-      const before = Date.now()
-      await _.sleep(1000)
-      const after = Date.now()
-      assert.isAtLeast(after, before + 1000)
+    beforeAll(() => jest.useFakeTimers());
+    afterAll(() => jest.useRealTimers());
+
+    test('waits no more than 1000ms', async () => {
+      const ONE_SECOND = 1000;
+      const before = Date.now();
+      const res = _.sleep(ONE_SECOND)
+      jest.runAllTimers()
+      await res;
+      const after = Date.now();
+      assert.isAtLeast(after, before + ONE_SECOND)
     })
   })
 
