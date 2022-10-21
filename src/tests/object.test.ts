@@ -1,6 +1,7 @@
 import { assert } from 'chai'
 import * as _ from '..'
 
+const NULL = null as unknown as {} 
 
 describe('object module', () => {
 
@@ -149,7 +150,7 @@ describe('object module', () => {
   
   describe('pick function', () => {
     test('handles null input', () => {
-      const result = _.pick(null, [])
+      const result = _.pick(null as unknown as Record<string, unknown>, [])
       assert.deepEqual(result, {})
     })
     test('handles empty keys', () => {
@@ -191,7 +192,7 @@ describe('object module', () => {
       assert.deepEqual(result, person)
     })
     test('handles null keys', () => {
-      const result = _.omit(person, null)
+      const result = _.omit(person, null as unknown as [])
       assert.deepEqual(result, person)
     })
     test('returns object without omitted properties', () => {
@@ -252,7 +253,9 @@ describe('object module', () => {
       guest: 'bray'
     }
     test('handles null input', () => {
-      const result = _.mapEntries(null, null)
+      const result = _.mapEntries(
+        NULL,
+        null as unknown as (key: never, value: never) => [string | number | symbol, unknown])
       assert.deepEqual(result, {})
     })
     test('correctly maps keys and values', () => {
@@ -273,7 +276,7 @@ describe('object module', () => {
       guest: 'bray'
     }
     test('handles null input', () => {
-      const result = _.invert(null)
+      const result = _.invert(NULL)
       assert.deepEqual(result, {})
     })
     test('correctly maps keys and values', () => {
@@ -308,15 +311,15 @@ describe('object module', () => {
       }
     }
     test('handles both null input', () => {
-      const result = _.zip(null, null)
+      const result = _.zip(NULL, NULL)
       assert.deepEqual(result, {})
     })
     test('handles null first input', () => {
-      const result = _.zip({ a: 'y' }, null)
+      const result = _.zip({ a: 'y' }, NULL)
       assert.deepEqual(result, { a: 'y' })
     })
     test('handles null last input', () => {
-      const result = _.zip(null, { a: 'y' })
+      const result = _.zip(NULL, { a: 'y' })
       assert.deepEqual(result, { a: 'y' })
     })
     test('correctly zips a with values from b', () => {
