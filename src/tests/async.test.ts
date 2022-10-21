@@ -57,7 +57,7 @@ describe("async module", () => {
     });
     test("throws on no init value and a null array input", async () => {
       try {
-        await _.reduce(null, reducer);
+        await _.reduce(null as unknown as number[], reducer);
       } catch (err) {
         assert.isNotNull(err);
         return;
@@ -195,7 +195,7 @@ describe("async module", () => {
       })()
       assert.isNull(result)
       assert.isNotNull(err)
-      assert.equal(err.message, 'not good enough')
+      assert.equal(err!.message, 'not good enough')
     })
     test('returns result when no error is thrown', async () => {
       const [err, result] = await _.try(async () => {
@@ -267,21 +267,30 @@ describe("async module", () => {
   })
 
   describe('_.retry', () => {
+
+    type Options = {
+      times?: number
+      delay?: number | null
+      backoff?: ((count: number) => number)
+    }
+
+    const NULL = null as unknown as Options
+
     test('returns result of given function', async () => {
-      const result = await _.retry(null, async (bail) => { 
+      const result = await _.retry(NULL, async (bail) => { 
         return 'hello'
       })
       assert.equal(result, 'hello')
     })
     test('simple + quick + happy path', async () => {
-      const result = await _.retry(null, async () => { 
+      const result = await _.retry(NULL, async () => { 
         return 'hello'
       })
       assert.equal(result, 'hello')
     })
     test('retries on failure', async () => {
       let failedOnce = false
-      const result = await _.retry(null, async (bail) => { 
+      const result = await _.retry(NULL, async (bail) => { 
         if (!failedOnce) {
           failedOnce = true
           throw 'Failing for test'
