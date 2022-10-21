@@ -1,4 +1,4 @@
-name: Check Pull Request
+name: Unit Test Pull Request
 on:
   pull_request:
     branches: [master]
@@ -16,13 +16,3 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: yarn
       - run: yarn test
-  verify-version:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: rayepps/require-semver-bump@v1
-        if: contains(github.event.pull_request.labels.*.name, 'release')
-        with:
-          file: package.json
-          pattern: >
-            \\"version\\":\s\\"(.+?)\\"
