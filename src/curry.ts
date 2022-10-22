@@ -106,7 +106,11 @@ type DebounceFunction<TArgs extends any[]> = {
 /**
  * Given a delay and a function returns a new function
  * that will only call the source function after delay
- * milliseconds have passed without any invocations
+ * milliseconds have passed without any invocations.
+ *  
+ * The debounce function comes with a `cancel` method 
+ * to cancel delayed `func` invocations and a `flush` 
+ * method to invoke them immediately
  */
 export const debounce = <TArgs extends any[]>(
   { delay }: { delay: number },
