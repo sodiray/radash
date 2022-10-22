@@ -91,7 +91,7 @@ export const memo = <TFunc extends Function>(
   return memoize({}, func as any, key, ttl) as any as TFunc
 }
 
-type DebounceFunction<TArgs extends any[]> = {
+export type DebounceFunction<TArgs extends any[]> = {
   (...args: TArgs): void;
   /**
    * Cancels the debounced function

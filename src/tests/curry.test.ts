@@ -1,5 +1,6 @@
 import { assert } from 'chai'
 import * as _ from '..'
+import { DebounceFunction } from '../curry'
 
 
 describe('curry module', () => {
@@ -151,46 +152,43 @@ describe('curry module', () => {
   })
 
   describe('debounce function', () => {
+    let func: DebounceFunction<any>
+    const mockFunc = jest.fn()
+    const runFunc3Times = () => _.iterate(3, func, undefined)
+
+    beforeEach(() => {
+      func = _.debounce({ delay: 600 }, mockFunc)
+
+    })
+    
+    afterEach(() => {
+      jest.clearAllMocks()
+    })
+    
     test('only executes once when called rapidly', async () => {
-      let calls = 0
-      const func = _.debounce({ delay: 600 }, () => calls++)
-      func()
-      func()
-      func()
-      assert.equal(calls, 0)
+      runFunc3Times()
+      expect(mockFunc).toHaveBeenCalledTimes(0)
       await _.sleep(610)
-      assert.equal(calls, 1)
+      expect(mockFunc).toHaveBeenCalledTimes(1)
     })
 
     test("after calling cancel there should be no more debounce", () => { 
-      const mockFunc = jest.fn()
-      const func = _.debounce({ delay: 600 }, mockFunc)
-      func()
-      func()
-      func()
+      runFunc3Times()
       expect(mockFunc).toHaveBeenCalledTimes(0)
       func.cancel()
-      func()
-      func()
-      func()
+      runFunc3Times()
       expect(mockFunc).toHaveBeenCalledTimes(3)
-      func()
-      func()
-      expect(mockFunc).toHaveBeenCalledTimes(5)
+      runFunc3Times()
+      expect(mockFunc).toHaveBeenCalledTimes(6)
     })
 
     test("when we call the flush method it should execute the function immediately", () => {
-      const mockFunc = jest.fn()
-      const func = _.debounce({ delay: 600 }, mockFunc)
       func.flush()
       expect(mockFunc).toHaveBeenCalledTimes(1)
     })
 
     test("I must ensure that when I call the flush method it will continue to debounce", async () => {
-      const mockFunc = jest.fn()
-      const func = _.debounce({ delay: 600 }, mockFunc)
-      func()
-      func()
+      runFunc3Times()
       expect(mockFunc).toHaveBeenCalledTimes(0)
       func.flush()
       expect(mockFunc).toHaveBeenCalledTimes(1)
@@ -203,8 +201,6 @@ describe('curry module', () => {
     })
 
     test("when I use .cancel it must also cancel n past invocations", async () => { 
-      const mockFunc = jest.fn()
-      const func = _.debounce({ delay: 600 }, mockFunc)
       func()
       func.cancel()
       await _.sleep(610)
