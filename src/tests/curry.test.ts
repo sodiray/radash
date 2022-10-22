@@ -161,6 +161,23 @@ describe('curry module', () => {
       await _.sleep(610)
       assert.equal(calls, 1)
     })
+
+    test("after calling cancel there should be no more debounce", () => { 
+      const mockFunc = jest.fn()
+      const func = _.debounce({ delay: 600 }, mockFunc)
+      func()
+      func()
+      func()
+      expect(mockFunc).toHaveBeenCalledTimes(0)
+      func.cancel()
+      func()
+      func()
+      func()
+      expect(mockFunc).toHaveBeenCalledTimes(3)
+      func()
+      func()
+      expect(mockFunc).toHaveBeenCalledTimes(5)
+    })
   })
   
   describe('throttle function', () => {
