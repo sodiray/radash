@@ -178,6 +178,29 @@ describe('curry module', () => {
       func()
       expect(mockFunc).toHaveBeenCalledTimes(5)
     })
+
+    test("when we call the flush method it should execute the function immediately", () => {
+      const mockFunc = jest.fn()
+      const func = _.debounce({ delay: 600 }, mockFunc)
+      func.flush()
+      expect(mockFunc).toHaveBeenCalledTimes(1)
+    })
+
+    test("I must ensure that when I call the flush method it will continue to debounce", async () => {
+      const mockFunc = jest.fn()
+      const func = _.debounce({ delay: 600 }, mockFunc)
+      func()
+      func()
+      expect(mockFunc).toHaveBeenCalledTimes(0)
+      func.flush()
+      expect(mockFunc).toHaveBeenCalledTimes(1)
+      func()
+      expect(mockFunc).toHaveBeenCalledTimes(1)
+      await _.sleep(610)
+      expect(mockFunc).toHaveBeenCalledTimes(2)
+      func.flush()
+      expect(mockFunc).toHaveBeenCalledTimes(3)
+    })
   })
   
   describe('throttle function', () => {
