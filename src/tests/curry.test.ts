@@ -200,7 +200,7 @@ describe('curry module', () => {
       expect(mockFunc).toHaveBeenCalledTimes(3)
     })
 
-    test("when I use .cancel it must also cancel n past invocations", async () => { 
+    test("cancels all pending invocations when cancel is called", async () => { 
       func()
       func.cancel()
       await _.sleep(610)
