@@ -117,13 +117,13 @@ export const debounce = <TArgs extends any[]>(
   func: (...args: TArgs) => any
 ) => {
   let timer: NodeJS.Timeout = null
-  let debouncedActive = true 
+  let active = true 
 
   const debounced: DebounceFunction<TArgs> = (...args: TArgs) => {
-    if (debouncedActive) {
+    if (active) {
       clearTimeout(timer)
       timer = setTimeout(() => { 
-        debouncedActive && func(...args)
+        active && func(...args)
       }, delay)
     }
     else { 
@@ -131,7 +131,7 @@ export const debounce = <TArgs extends any[]>(
     }
   }
   debounced.cancel = () => { 
-    debouncedActive = false
+    active = false
   }
   debounced.flush = (...args: TArgs) => func(...args)
 
