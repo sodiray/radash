@@ -1,9 +1,9 @@
 import { assert } from 'chai'
 import * as _ from '..'
 
-jest.useRealTimers()
-
 describe('async module', () => {
+  beforeEach(() => jest.useFakeTimers({ advanceTimers: true }));
+
   describe('asyncReduce function', () => {
     test('returns result of reducer', async () => {
       const numbers = [
@@ -232,15 +232,10 @@ describe('async module', () => {
   })
 
   describe('_.sleep function', () => {
-    beforeAll(() => jest.useFakeTimers());
-    afterAll(() => jest.useRealTimers());
-
-    test('waits no more than 1000ms', async () => {
+    test('suspends a thread for a specified number of milliseconds', async () => {
       const ONE_SECOND = 1000;
       const before = Date.now();
-      const res = _.sleep(ONE_SECOND)
-      jest.runAllTimers()
-      await res;
+      await _.sleep(ONE_SECOND)
       const after = Date.now();
       assert.isAtLeast(after, before + ONE_SECOND)
     })
@@ -279,7 +274,7 @@ describe('async module', () => {
         await _.sleep(300)
         numInProgress--
       })
-      assert.deepEqual(tracking, [1, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3])
+      assert.deepEqual(Math.max(...tracking), 3)
     })
   })
 
