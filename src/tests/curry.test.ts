@@ -154,7 +154,11 @@ describe('curry module', () => {
   describe('debounce function', () => {
     let func: DebounceFunction<any>
     const mockFunc = jest.fn()
-    const runFunc3Times = () => _.iterate(3, func, undefined)
+    const runFunc3Times = () => {
+      func()
+      func()
+      func()
+    }
 
     beforeEach(() => {
       func = _.debounce({ delay: 600 }, mockFunc)
