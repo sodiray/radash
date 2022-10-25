@@ -1,6 +1,8 @@
 import { assert } from 'chai'
 import * as _ from '..'
 
+const NULL = null as unknown as unknown[]
+
 describe('array module', () => {
 
   describe('group function', () => {
@@ -30,15 +32,15 @@ describe('array module', () => {
         { game: 'e', score: 500 }
       ]
       const result = _.boil(list, (a, b) => a.score > b.score ? a : b)
-      assert.equal(result.game, 'e')
-      assert.equal(result.score, 500)
+      assert.equal(result!.game, 'e')
+      assert.equal(result!.score, 500)
     })
     test('does not fail when provided array is empty', () => {
       const result = _.boil([], () => true)
       assert.isNull(result)
     })
     test('does not fail when provided array is null', () => {
-      const result = _.boil(null, () => true)
+      const result = _.boil(null as unknown as readonly boolean[], () => true)
       assert.isNull(result)
     })
     test('does not fail when provided array is funky shaped', () => {
@@ -64,7 +66,7 @@ describe('array module', () => {
       assert.equal(result, 22)
     })
     test('gracefully handles null input list', () => {
-      const result = _.sum(null)
+      const result = _.sum(null as unknown as readonly (number | object)[])
       assert.equal(result, 0)
     })
   })
@@ -76,8 +78,8 @@ describe('array module', () => {
         { game: 'b', score: 200 }
       ]
       const result = _.first(list)
-      assert.equal(result.game, 'a')
-      assert.equal(result.score, 100)
+      assert.equal(result!.game, 'a')
+      assert.equal(result!.score, 100)
     })
     test('returns default value without error when list is empty', () => {
       const list = [] as string[]
@@ -85,7 +87,7 @@ describe('array module', () => {
       assert.equal(result, 'yolo')
     })
     test('gracefully handles null input list', () => {
-      const result = _.first(null)
+      const result = _.first(NULL)
       assert.equal(result, null)
     })
   })
@@ -97,8 +99,8 @@ describe('array module', () => {
         { game: 'b', score: 200 }
       ]
       const result = _.last(list)
-      assert.equal(result.game, 'b')
-      assert.equal(result.score, 200)
+      assert.equal(result!.game, 'b')
+      assert.equal(result!.score, 200)
     })
     test('returns default value without error when list is empty', () => {
       const list = [] as string[]
@@ -106,7 +108,7 @@ describe('array module', () => {
       assert.equal(result, 'yolo')
     })
     test('gracefully handles null input list', () => {
-      const result = _.last(null)
+      const result = _.last(NULL)
       assert.equal(result, null)
     })
   })
@@ -143,7 +145,7 @@ describe('array module', () => {
 
   describe('replace function', () => {
     test('returns empty list for null input list', () => {
-      const result = _.replace(null, 'x', () => false)
+      const result = _.replace(null as unknown as readonly string[], 'x', () => false)
       assert.deepEqual(result, [])
     })
     test('returns the list for a null new item', () => {
@@ -188,7 +190,7 @@ describe('array module', () => {
       assert.equal(result.b.word, 'bye')
     })
     test('does not fail on empty input list', () => {
-      const result = _.objectify([], x => x.id, x => x)
+      const result = _.objectify([], (x: any) => x.id, x => x)
       assert.deepEqual(result, {})
     })
     test('defaults value to array item', () => {
@@ -213,7 +215,7 @@ describe('array module', () => {
     })
     test('does not fail on empty input list', () => {
       const list = []
-      const result = _.select(list, x => x.word, x => x.group === 'a')
+      const result = _.select(list, (x: any) => x.word, x => x.group === 'a')
       assert.deepEqual(result, [])
     })
   })
@@ -233,8 +235,8 @@ describe('array module', () => {
         { game: 'e', score: 500 }
       ]
       const result = _.max(list, x => x.score)
-      assert.equal(result.game, 'e')
-      assert.equal(result.score, 500)
+      assert.equal(result!.game, 'e')
+      assert.equal(result!.score, 500)
     })
   })
 
@@ -253,8 +255,8 @@ describe('array module', () => {
         { game: 'e', score: 500 }
       ]
       const result = _.min(list, x => x.score)
-      assert.equal(result.game, 'a')
-      assert.equal(result.score, 100)
+      assert.equal(result!.game, 'a')
+      assert.equal(result!.score, 100)
     })
   })
 
@@ -365,14 +367,14 @@ describe('array module', () => {
       assert.isTrue(result)
     })
     test('returns false without failing if either list is null', () => {
-      assert.isFalse(_.intersects(null, []))
-      assert.isFalse(_.intersects([], null))
+      assert.isFalse(_.intersects(null as unknown as never, []))
+      assert.isFalse(_.intersects([], null as unknown as never))
     })
   })
 
   describe('fork function', () => {
     test('returns two empty arrays for null input', () => {
-      const [a, b] = _.fork(null, x => !!x)
+      const [a, b] = _.fork(NULL, x => !!x)
       assert.deepEqual(a, [])
       assert.deepEqual(b, [])
     })
@@ -402,7 +404,10 @@ describe('array module', () => {
   
   describe('merge function', () => {
     test('returns empty array for two null inputs', () => {
-      const result = _.merge(null, null, x => '')
+      const result = _.merge(
+        NULL,
+        NULL
+        , x => '')
       assert.deepEqual(result, [])
     })
     test('returns an empty array for two empty array inputs', () => {
@@ -410,15 +415,15 @@ describe('array module', () => {
       assert.deepEqual(result, [])
     })
     test('returns root for a null other input', () => {
-      const result = _.merge([], null, x => '')
+      const result = _.merge([], NULL, x => '')
       assert.deepEqual(result, [])
     })
     test('returns empty array for a null root input', () => {
-      const result = _.merge(null, [], x => '')
+      const result = _.merge(NULL, [], x => '')
       assert.deepEqual(result, [])
     })
     test('returns root for a null matcher input', () => {
-      const result = _.merge(['a'], [], null)
+      const result = _.merge(['a'], [], null as unknown as (x: string) => string)
       assert.deepEqual(result, ['a'])
     })
     test('returns correctly mergeped lists', () => {
@@ -447,11 +452,11 @@ describe('array module', () => {
     const lettersXE = ['a', 'b', 'c', 'd', 'XE']
     const lettersXX = ['a', 'b', 'c', 'd', 'e', 'XX']
     test('returns empty array for two null inputs', () => {
-      const result = _.replaceOrAppend(null, null, (x) => false)
+      const result = _.replaceOrAppend(NULL, null, (x) => false)
       assert.deepEqual(result, [])
     })
     test('returns array with new item for null list input', () => {
-      const result = _.replaceOrAppend(null, 'a', (x) => false)
+      const result = _.replaceOrAppend(NULL, 'a', (x) => false)
       assert.deepEqual(result, ['a'])
     })
     test('returns list for null new item input', () => {
@@ -489,7 +494,7 @@ describe('array module', () => {
       23,
     ]
     test('returns empty array for null input array', () => {
-      const result = _.sift(null)
+      const result = _.sift(NULL)
       assert.deepEqual(result, [])
     })
     test('returns array with falsy values filtered out', () => {
@@ -507,15 +512,15 @@ describe('array module', () => {
 
   describe('diff function', () => {
     test('handles null root', () => {
-      const result = _.diff(null, ['a'])
+      const result = _.diff(NULL, ['a'])
       assert.deepEqual(result, ['a'])
     })
     test('handles null other', () => {
-      const result = _.diff(['a'], null)
+      const result = _.diff(['a'], NULL)
       assert.deepEqual(result, ['a'])
     })
     test('handles null inputs', () => {
-      const result = _.diff(null, null)
+      const result = _.diff(NULL, NULL)
       assert.deepEqual(result, [])
     })
     test('handles empty array root', () => {
