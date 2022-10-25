@@ -172,7 +172,7 @@ describe('curry module', () => {
       expect(mockFunc).toHaveBeenCalledTimes(1)
     })
 
-    test("after calling cancel there should be no more debounce", () => { 
+    test("does not debounce after cancel is called", () => { 
       runFunc3Times()
       expect(mockFunc).toHaveBeenCalledTimes(0)
       func.cancel()
