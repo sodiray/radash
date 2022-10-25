@@ -187,7 +187,7 @@ describe('curry module', () => {
       expect(mockFunc).toHaveBeenCalledTimes(1)
     })
 
-    test("I must ensure that when I call the flush method it will continue to debounce", async () => {
+    test("continues to debounce after flush is called", async () => {
       runFunc3Times()
       expect(mockFunc).toHaveBeenCalledTimes(0)
       func.flush()
