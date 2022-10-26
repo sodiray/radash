@@ -8,6 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        if: contains(github.event.pull_request.labels.*.name, 'release')
       - name: Get Pull Request Version
         id: pr-version
         run: |
@@ -28,11 +29,12 @@ jobs:
           result-encoding: string
           script: |
             const semver = require("semver")
-            const pr_version = "${{steps.pr-version.outputs.version}}"
-            const base_version = "${{steps.base-version.outputs.version}}"
-            const pr_is_higher = semver.gt(pr_version, base_version)
-            if (!pr_is_higher) {
-              core.setFailed(`The pr version (${pr_version}) is not greater than the base version (${base_version})`)
-            } else {
-              core.debug(`Success, the pr version (${pr_version}) is higher than the base version (${base_version}).`)
+            const pr = "${{steps.pr-version.outputs.version}}"
+            const base = "${{steps.base-version.outputs.version}}"
+            try {
+              semver.gt(pr, base)
+              core.debug(`Success, the pr version (${pr}) is higher than the base version (${base}).`)
+            } catch (err) {
+              core.setFailed(`The pr version (${pr}) is not greater than the base version (${base})`)
+              core.debug(`${err}`)
             }
