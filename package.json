@@ -24,7 +24,9 @@
     "test": "jest --coverage",
     "check": "yarn lint && yarn test && yarn build",
     "build": "yarn tsc --noEmit && yarn rollup -c",
-    "lint": "tslint -p tsconfig.json"
+    "lint": "tslint -p tsconfig.json",
+    "format": "prettier --write \"./**/*.ts\"",
+    "format:check": "prettier --check \"**/*.ts\" --ignore-unknown"
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "^8.5.0",
