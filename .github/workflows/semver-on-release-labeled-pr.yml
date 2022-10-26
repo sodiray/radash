@@ -30,10 +30,9 @@ jobs:
           script: |
             const semver = require("semver")
             const { PR_VERSION: pr, BASE_VERSION: base } = process.env
-            try {
-              semver.gt(pr, base)
+            const pr_is_greater = semver.gt(pr, base)
+            if (pr_is_greater) {
               core.debug(`Success, the pr version (${pr}) is higher than the base version (${base}).`)
-            } catch (err) {
+            } else {
               core.setFailed(`The pr version (${pr}) is not greater than the base version (${base})`)
-              core.debug(`${err}`)
             }
