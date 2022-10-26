@@ -45,21 +45,3 @@ jobs:
           tag_name: v${{ steps.get-version.outputs.version}}
         env:
           GITHUB_TOKEN: ${{ github.token }}
-      - name: Upload Release Artifact (zip)
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        with:
-          upload_url: ${{ steps.create-release.outputs.upload_url }}
-          asset_path: ./archive.zip
-          asset_name: radash-${{ steps.get-version.outputs.version}}-source.zip
-          asset_content_type: application/zip
-      - name: Upload Release Artifact (gzip)
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        with:
-          upload_url: ${{ steps.create-release.outputs.upload_url }}
-          asset_path: ./archive.tar.gz
-          asset_name: radash-${{ steps.get-version.outputs.version}}-source.tar.gz
-          asset_content_type: application/gzip
