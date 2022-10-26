@@ -5,15 +5,16 @@ jest.useRealTimers()
 
 describe('async module', () => {
   describe('asyncReduce function', () => {
-    test('returns result of reducer', 
-    async ( ) =>{
-      const numbers = [0,1,2,
-3,
+    test('returns result of reducer', async () => {
+      const numbers = [
+        0,
+        1,
+        2,
+        3,
         4 // => 10
       ]
-      const asyncSum = async (
-        a: number, b: number
-      ): Promise<number> => {return new Promise(res => res(a + b))
+      const asyncSum = async (a: number, b: number): Promise<number> => {
+        return new Promise(res => res(a + b))
       }
       const result = await _.reduce<number, number>(numbers, asyncSum, 0)
       assert.equal(result, 10)
