@@ -34,5 +34,5 @@ jobs:
             if (pr_is_greater) {
               core.debug(`Success, the pr version (${pr}) is higher than the base version (${base}).`)
             } else {
-              core.setFailed(`The pr version (${pr}) is not greater than the base version (${base})`)
+              core.setFailed(`The pr version (${pr}) is not greater than the base version (${base}). A pull request labeled with 'release' must have a valid version bump.`)
             }
