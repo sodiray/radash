@@ -24,9 +24,7 @@
     "test": "jest --coverage",
     "check": "yarn lint && yarn test && yarn build",
     "build": "yarn tsc --noEmit && yarn rollup -c",
-    "lint": "tslint -p tsconfig.json",
-    "archive:zip": "zip -r archive.zip . -x .git .git/**\\* dist dist/**\\* coverage coverage/**\\* node_modules node_modules/**\\* archive.zip archive.tar.gz",
-    "archive:gzip": "tar --exclude='.git' --exclude='dist' --exclude='node_modules' --exclude='coverage' --exclude='archive.tar.gz' --exclude='archive.zip' -zcvf archive.tar.gz ."
+    "lint": "tslint -p tsconfig.json"
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "^8.5.0",
