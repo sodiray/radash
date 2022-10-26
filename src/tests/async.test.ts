@@ -2,7 +2,7 @@ import { assert } from 'chai'
 import * as _ from '..'
 
 describe('async module', () => {
-  beforeEach(() => jest.useFakeTimers({ advanceTimers: true }));
+  beforeEach(() => jest.useFakeTimers({ advanceTimers: true }))
 
   describe('asyncReduce function', () => {
     test('returns result of reducer', async () => {
@@ -84,28 +84,7 @@ describe('async module', () => {
       await _.defer(async defer => {
         defer(() => {
           val = 1
-        });
-      })
-      assert.equal(val, 1);
-    });
-    test("returns the resulting value of the given function", async () => {
-      let val = 0;
-      const result = await _.defer(async (defer) => {
-        defer(() => {val = 1});
-        return "x";
-      });
-      assert.equal(val, 1);
-      assert.equal(result, "x");
-    });
-    test("calls all registered defer functions", async () => {
-      let one = 0;
-      let two = 0;
-      let three = 0;
-      const result = await _.defer(async (defer) => {
-        defer(async () => {one = 1});
-        defer(async () => {two = 2});
-        defer(async () => {three = 3});
-        return "x";
+        })
       })
       assert.equal(val, 1)
     })
@@ -254,10 +233,10 @@ describe('async module', () => {
 
   describe('_.sleep function', () => {
     test('suspends a thread for a specified number of milliseconds', async () => {
-      const ONE_SECOND = 1000;
-      const before = Date.now();
+      const ONE_SECOND = 1000
+      const before = Date.now()
       await _.sleep(ONE_SECOND)
-      const after = Date.now();
+      const after = Date.now()
       assert.isAtLeast(after, before + ONE_SECOND)
     })
   })
@@ -344,7 +323,7 @@ describe('async module', () => {
     })
     test('quits after max retries', async () => {
       try {
-        await _.retry({}, async () => { 
+        await _.retry({}, async () => {
           throw 'quitagain'
         })
       } catch (err) {
@@ -355,7 +334,7 @@ describe('async module', () => {
     })
     test('quits after max retries without delay', async () => {
       try {
-        const func = async () => { 
+        const func = async () => {
           throw 'quitagain'
         }
         await _.retry({ times: 3 }, func)
@@ -367,7 +346,7 @@ describe('async module', () => {
     })
     test('quits after max retries with delay', async () => {
       try {
-        const func = async () => { 
+        const func = async () => {
           throw 'quitagain'
         }
         await _.retry({ delay: 100 }, func)
