@@ -18,10 +18,11 @@ export const capitalize = (str: string): string => {
  * camel('helloWorld') -> 'helloWorld'
  */
 export const camel = (str: string): string => {
-  const parts = str
-    ?.replace(/([A-Z])+/g, capitalize)
-    ?.split(/(?=[A-Z])|[\.\-\s_]/)
-    .map(x => x.toLowerCase()) ?? []
+  const parts =
+    str
+      ?.replace(/([A-Z])+/g, capitalize)
+      ?.split(/(?=[A-Z])|[\.\-\s_]/)
+      .map(x => x.toLowerCase()) ?? []
   if (parts.length === 0) return ''
   if (parts.length === 1) return parts[0]
   return parts.reduce((acc, part) => {
@@ -37,10 +38,11 @@ export const camel = (str: string): string => {
  * snake('helloWord') -> 'hello_world'
  */
 export const snake = (str: string): string => {
-  const parts = str
-    ?.replace(/([A-Z])+/g, capitalize)
-    .split(/(?=[A-Z])|[\.\-\s_]/)
-    .map(x => x.toLowerCase()) ?? []
+  const parts =
+    str
+      ?.replace(/([A-Z])+/g, capitalize)
+      .split(/(?=[A-Z])|[\.\-\s_]/)
+      .map(x => x.toLowerCase()) ?? []
   if (parts.length === 0) return ''
   if (parts.length === 1) return parts[0]
   return parts.reduce((acc, part) => {
@@ -56,10 +58,11 @@ export const snake = (str: string): string => {
  * dash('helloWord') -> 'hello-word'
  */
 export const dash = (str: string): string => {
-  const parts = str
-    ?.replace(/([A-Z])+/g, capitalize)
-    ?.split(/(?=[A-Z])|[\.\-\s_]/)
-    .map(x => x.toLowerCase()) ?? []
+  const parts =
+    str
+      ?.replace(/([A-Z])+/g, capitalize)
+      ?.split(/(?=[A-Z])|[\.\-\s_]/)
+      .map(x => x.toLowerCase()) ?? []
   if (parts.length === 0) return ''
   if (parts.length === 1) return parts[0]
   return parts.reduce((acc, part) => {

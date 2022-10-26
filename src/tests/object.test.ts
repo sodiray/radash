@@ -1,10 +1,9 @@
 import { assert } from 'chai'
 import * as _ from '..'
 
-const NULL = null as unknown as {} 
+const NULL = null as unknown as {}
 
 describe('object module', () => {
-
   describe('shake function', () => {
     test('removes all undefined values', () => {
       const result = _.shake({
@@ -22,13 +21,16 @@ describe('object module', () => {
       })
     })
     test('removes values based on filter function input', () => {
-      const result = _.shake({
-        x: 2,
-        y: null,
-        z: undefined,
-        o: false,
-        r: 'x'
-      }, val => val !== 'x')
+      const result = _.shake(
+        {
+          x: 2,
+          y: null,
+          z: undefined,
+          o: false,
+          r: 'x'
+        },
+        val => val !== 'x'
+      )
       assert.deepEqual(result, {
         r: 'x'
       })
@@ -42,10 +44,13 @@ describe('object module', () => {
   describe('mapKeys function', () => {
     test('runs all keys against mapper function', () => {
       const prefixWith = (prefix: string) => (str: string) => `${prefix}${str}`
-      const result = _.mapKeys({
-        x: 22,
-        y: 8
-      }, prefixWith('x'))
+      const result = _.mapKeys(
+        {
+          x: 22,
+          y: 8
+        },
+        prefixWith('x')
+      )
       assert.deepEqual(result, {
         xx: 22,
         xy: 8
@@ -56,10 +61,13 @@ describe('object module', () => {
   describe('mapValues function', () => {
     test('runs all values against mapper function', () => {
       const prefixWith = (prefix: string) => (str: string) => `${prefix}${str}`
-      const result = _.mapValues({
-        x: 'hi',
-        y: 'bye'
-      }, prefixWith('x'))
+      const result = _.mapValues(
+        {
+          x: 'hi',
+          y: 'bye'
+        },
+        prefixWith('x')
+      )
       assert.deepEqual(result, {
         x: 'xhi',
         y: 'xbye'
@@ -71,11 +79,11 @@ describe('object module', () => {
     test('changes all keys to lower case', () => {
       const result = _.lowerize({
         'X-Api-Key': 'value',
-        'Bearer': 'value'
+        Bearer: 'value'
       })
       assert.deepEqual(result, {
         'x-api-key': 'value',
-        'bearer': 'value'
+        bearer: 'value'
       })
     })
   })
@@ -84,11 +92,11 @@ describe('object module', () => {
     test('changes all keys to upper case', () => {
       const result = _.upperize({
         'x-api-key': 'value',
-        'bearer': 'value'
+        bearer: 'value'
       })
       assert.deepEqual(result, {
         'X-API-KEY': 'value',
-        'BEARER': 'value'
+        BEARER: 'value'
       })
     })
   })
@@ -110,7 +118,7 @@ describe('object module', () => {
     test('copies all attributes from class instance', () => {
       class Data {
         public x: number = 22
-        public add (a: number, b: number) {
+        public add(a: number, b: number) {
           return a + b
         }
         public child: any = {
@@ -140,14 +148,17 @@ describe('object module', () => {
         one: { name: 'ray' },
         two: { name: 'ash' }
       }
-      const result = _.listify(obj, (key, value) => ({ index: key, name: value.name }))
+      const result = _.listify(obj, (key, value) => ({
+        index: key,
+        name: value.name
+      }))
       assert.deepEqual(result, [
         { index: 'one', name: 'ray' },
         { index: 'two', name: 'ash' }
       ])
     })
   })
-  
+
   describe('pick function', () => {
     test('handles null input', () => {
       const result = _.pick(null as unknown as Record<string, unknown>, [])
@@ -203,7 +214,7 @@ describe('object module', () => {
       })
     })
   })
-  
+
   describe('get function', () => {
     type Person = {
       name: string
@@ -213,25 +224,50 @@ describe('object module', () => {
     const jay: Person = {
       name: 'jay',
       age: 17,
-      friends: [{
-        name: 'carl',
-        age: 17,
-        friends: [{
-          name: 'sara',
-          age: 17
-        }]
-      }]
+      friends: [
+        {
+          name: 'carl',
+          age: 17,
+          friends: [
+            {
+              name: 'sara',
+              age: 17
+            }
+          ]
+        }
+      ]
     }
     test('handles null and undefined input', () => {
       assert.equal(_.get(null, 'name'), null)
       assert.equal(_.get(undefined, 'name'), null)
     })
     test('returns specified value or default using function', () => {
-      assert.equal(_.get(jay, x => x.name), 'jay')
-      assert.equal(_.get(jay, x => x.friends?.[0].age), 17)
-      assert.equal(_.get(jay, x => {throw 'error'}, 17), 17)
-      assert.equal(_.get({ age: undefined }, x => x.age, 22), 22)
-      assert.equal(_.get(jay, x => x.friends?.[0].friends?.[0].friends?.[0].age, 22), 22)
+      assert.equal(
+        _.get(jay, x => x.name),
+        'jay'
+      )
+      assert.equal(
+        _.get(jay, x => x.friends?.[0].age),
+        17
+      )
+      assert.equal(
+        _.get(
+          jay,
+          x => {
+            throw 'error'
+          },
+          17
+        ),
+        17
+      )
+      assert.equal(
+        _.get({ age: undefined }, x => x.age, 22),
+        22
+      )
+      assert.equal(
+        _.get(jay, x => x.friends?.[0].friends?.[0].friends?.[0].age, 22),
+        22
+      )
     })
     test('returns specified value or default using path', () => {
       assert.equal(_.get({ age: undefined }, 'age', 22), 22)
@@ -255,20 +291,24 @@ describe('object module', () => {
     test('handles null input', () => {
       const result = _.mapEntries(
         NULL,
-        null as unknown as (key: never, value: never) => [string | number | symbol, unknown])
+        null as unknown as (
+          key: never,
+          value: never
+        ) => [string | number | symbol, unknown]
+      )
       assert.deepEqual(result, {})
     })
     test('correctly maps keys and values', () => {
-      const result = _.mapEntries(
-        peopleByRole,
-        (key, value) => [value, key.toUpperCase()]
-      )
+      const result = _.mapEntries(peopleByRole, (key, value) => [
+        value,
+        key.toUpperCase()
+      ])
       assert.equal(result.jay, 'ADMIN')
       assert.equal(result.fey, 'USER')
       assert.equal(result.bray, 'GUEST')
     })
   })
-  
+
   describe('invert function', () => {
     const peopleByRole = {
       admin: 'jay',
@@ -286,7 +326,7 @@ describe('object module', () => {
       assert.equal(result.bray, 'guest')
     })
   })
-  
+
   describe('zip function', () => {
     const a = {
       name: 'jay',
@@ -327,5 +367,4 @@ describe('object module', () => {
       assert.deepEqual(result, b)
     })
   })
-
 })

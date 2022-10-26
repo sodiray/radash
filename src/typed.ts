@@ -35,7 +35,7 @@ export const isNumber = (value: any): value is number => {
 }
 
 export const isDate = (value: any): value is Date => {
-  return Object.prototype.toString.call(value) === "[object Date]"
+  return Object.prototype.toString.call(value) === '[object Date]'
 }
 
 export const isEmpty = (value: any) => {

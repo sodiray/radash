@@ -20,11 +20,11 @@ export {
   replace,
   replaceOrAppend,
   select,
+  shift,
   sift,
   sort,
   sum,
-  unique,
-  shift
+  unique
 } from './array'
 export {
   defer,

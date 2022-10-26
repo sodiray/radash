@@ -2,7 +2,6 @@ import { assert } from 'chai'
 import * as _ from '..'
 
 describe('typed module', () => {
-
   describe('isArray function', () => {
     test('returns false for null', () => {
       const result = _.isArray(null)
@@ -34,7 +33,7 @@ describe('typed module', () => {
       assert.isFalse(result)
     })
     test('returns true for array', () => {
-      const result = _.isArray([ 1, 2, 3])
+      const result = _.isArray([1, 2, 3])
       assert.isTrue(result)
     })
     test('returns true for empty array', () => {
@@ -70,7 +69,7 @@ describe('typed module', () => {
       assert.isFalse(result)
     })
     test('returns false for array', () => {
-      const result = _.isObject([ 1, 2, 3])
+      const result = _.isObject([1, 2, 3])
       assert.isFalse(result)
     })
     test('returns true for object', () => {
@@ -106,7 +105,7 @@ describe('typed module', () => {
       assert.isFalse(result)
     })
     test('returns false for array', () => {
-      const result = _.isFunction([ 1, 2, 3])
+      const result = _.isFunction([1, 2, 3])
       assert.isFalse(result)
     })
     test('returns false for object', () => {
@@ -114,7 +113,7 @@ describe('typed module', () => {
       assert.isFalse(result)
     })
     test('returns true for anonymous function', () => {
-      const result = _.isFunction(function() {
+      const result = _.isFunction(function () {
         return 'hello'
       })
       assert.isTrue(result)
@@ -157,7 +156,7 @@ describe('typed module', () => {
       assert.isFalse(result)
     })
     test('returns false for array', () => {
-      const result = _.isString([ 1, 2, 3])
+      const result = _.isString([1, 2, 3])
       assert.isFalse(result)
     })
     test('returns false for object', () => {
@@ -173,7 +172,7 @@ describe('typed module', () => {
       assert.isTrue(result)
     })
   })
-  
+
   describe('isNumber function', () => {
     test('returns false for null', () => {
       const result = _.isNumber(null)
@@ -205,7 +204,7 @@ describe('typed module', () => {
       assert.isFalse(result)
     })
     test('returns false for array', () => {
-      const result = _.isNumber([ 1, 2, 3])
+      const result = _.isNumber([1, 2, 3])
       assert.isFalse(result)
     })
     test('returns false for object', () => {
@@ -221,7 +220,7 @@ describe('typed module', () => {
       assert.isFalse(result)
     })
   })
-  
+
   describe('isInt function', () => {
     class Data {}
     test('returns false for non-number values', () => {
@@ -230,7 +229,7 @@ describe('typed module', () => {
       assert.isFalse(_.isInt(false))
       assert.isFalse(_.isInt(new Data()))
       assert.isFalse(_.isInt(NaN))
-      assert.isFalse(_.isInt([ 1, 2, 3]))
+      assert.isFalse(_.isInt([1, 2, 3]))
       assert.isFalse(_.isInt({}))
       assert.isFalse(_.isInt('abc'))
       assert.isFalse(_.isInt(String('abc')))
@@ -244,7 +243,7 @@ describe('typed module', () => {
       assert.isFalse(result)
     })
   })
-  
+
   describe('isFloat function', () => {
     class Data {}
     test('returns false for non-number values', () => {
@@ -253,7 +252,7 @@ describe('typed module', () => {
       assert.isFalse(_.isFloat(false))
       assert.isFalse(_.isFloat(new Data()))
       assert.isFalse(_.isFloat(NaN))
-      assert.isFalse(_.isFloat([ 1, 2, 3]))
+      assert.isFalse(_.isFloat([1, 2, 3]))
       assert.isFalse(_.isFloat({}))
       assert.isFalse(_.isFloat('abc'))
       assert.isFalse(_.isFloat(String('abc')))
@@ -267,7 +266,7 @@ describe('typed module', () => {
       assert.isTrue(result)
     })
   })
-  
+
   describe('isEmpty function', () => {
     class Data {}
     class Person {
@@ -324,7 +323,7 @@ describe('typed module', () => {
       assert.isFalse(_.isDate(Symbol('hello')))
     })
   })
- 
+
   describe('isSymbol function', () => {
     test('returns false for null', () => {
       const input = null
@@ -457,7 +456,7 @@ describe('typed module', () => {
       obj: { name: 'object', id: 1, chilren: [0, 1, 2] },
       arr: [0, 1, 2],
       func() {
-        console.log('function');
+        console.log('function')
       },
       loop: null as any,
       person: jake,
@@ -478,7 +477,9 @@ describe('typed module', () => {
       assert.isTrue(_.isEqual(now, now))
       assert.isTrue(_.isEqual([], []))
       assert.isTrue(_.isEqual(complex, { ...complex }))
-      assert.isTrue(_.isEqual([complex, complex], [{ ...complex }, { ...complex }]))
+      assert.isTrue(
+        _.isEqual([complex, complex], [{ ...complex }, { ...complex }])
+      )
     })
     test('returns false for non-equal things', () => {
       assert.isFalse(_.isEqual(0, 1))
@@ -487,11 +488,12 @@ describe('typed module', () => {
       assert.isFalse(_.isEqual(Symbol('hello'), Symbol('goodbye')))
       assert.isFalse(_.isEqual({ z: 23 }, { a: 1 }))
       assert.isFalse(_.isEqual(true, false))
-      assert.isFalse(_.isEqual(new Date(), new Date('2022-09-01T03:25:12.750Z')))
+      assert.isFalse(
+        _.isEqual(new Date(), new Date('2022-09-01T03:25:12.750Z'))
+      )
       assert.isFalse(_.isEqual([], [1]))
       assert.isFalse(_.isEqual(complex, { ...complex, num: 222 }))
       assert.isFalse(_.isEqual([complex], [{ ...complex, num: 222 }]))
     })
   })
-
 })

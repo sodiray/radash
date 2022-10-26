@@ -1,7 +1,5 @@
 {
-  "_docs": "https://prettier.io/docs/en/options.html",
   "tabWidth": 2,
-  "tabs": false,
   "semi": false,
   "singleQuote": true,
   "printWidth": 80,
