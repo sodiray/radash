@@ -11,13 +11,13 @@ jobs:
         if: contains(github.event.pull_request.labels.*.name, 'release')
       - name: Get Pull Request Version
         id: pr-version
-        run: echo ::set-output name=version::$(jq -r .version package.json)
+        run: echo "version=$(jq -r .version package.json)" >> $GITHUB_OUTPUT
       - uses: actions/checkout@v3
         with:
           ref: master
       - name: Get Base Version
         id: base-version
-        run: echo ::set-output name=version::$(jq -r .version package.json)
+        run: echo "version=$(jq -r .version package.json)" >> $GITHUB_OUTPUT
       - uses: actions/setup-node@v3
         with:
           node-version: 16
