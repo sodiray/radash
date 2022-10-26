@@ -1,11 +1,15 @@
 name: 'Release'
 on:
-  push:
+  # push:
+  #   branches: [master]
+  pull_request:
     branches: [master]
+    types: [labeled, unlabeled, opened, synchronize]
 jobs:
   check:
     name: 'Check if release is needed'
     runs-on: 'ubuntu-latest'
+    if: contains(github.event.pull_request.labels.*.name, 'action-testing')
     outputs:
       exists: ${{ steps.check-tag.outputs.exists }}
     steps:
