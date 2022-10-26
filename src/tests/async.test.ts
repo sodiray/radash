@@ -30,6 +30,18 @@ describe("async module", () => {
       const result = await _.map<number, number>(numbers, asyncSquare);
       assert.deepEqual(result, [1, 4, 9, 16]);
     });
+
+    test("handles null input", async () => {
+      const result = await _.map(null, async () => '');
+      assert.deepEqual(result, []);
+    });
+    
+    test("passes correct indexes", async () => {
+      const array = ['a', 'b', 'c', 'd'];
+      const mapper = async (l: string, index: number) => `${l}${index}`;
+      const result = await _.map(array, mapper);
+      assert.deepEqual(result, ['a0', 'b1', 'c2', 'd3']);
+    });
   });
 
   describe("reduce/asyncReduceV2 function", () => {
@@ -63,17 +75,6 @@ describe("async module", () => {
         return;
       }
       assert.fail("Expected error to be thrown");
-    });
-  });
-
-  describe("map/asyncMapV2 function", () => {
-    test("calls asyncMap", async () => {
-      const numbers = [1, 2, 3, 4];
-      const asyncSquare = async (a: number): Promise<number> => {
-        return new Promise((res) => res(a * a));
-      };
-      const result = await _.map<number, number>(numbers, asyncSquare);
-      assert.deepEqual(result, [1, 4, 9, 16]);
     });
   });
 

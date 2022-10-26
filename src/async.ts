@@ -29,11 +29,13 @@ export const reduce = async <T, K>(
  */
 export const map = async <T, K>(
   array: readonly T[],
-  asyncMapFunc: (item: T) => Promise<K>
+  asyncMapFunc: (item: T, index: number) => Promise<K>
 ): Promise<K[]> => {
+  if (!array) return []
   let result = []
+  let index = 0
   for (const value of array) {
-    const newValue = await asyncMapFunc(value)
+    const newValue = await asyncMapFunc(value, index++)
     result.push(newValue)
   }
   return result
@@ -186,7 +188,9 @@ export const tryit = <TFunction extends (...args: any) => any>(
 ) => {
   return async (
     ...args: ArgumentsType<TFunction>
-  ): Promise<[Error, null] | [null, UnwrapPromisify<ReturnType<TFunction>>]> => {
+  ): Promise<
+    [Error, null] | [null, UnwrapPromisify<ReturnType<TFunction>>]
+  > => {
     try {
       return [null, await func(...(args as any))]
     } catch (err) {
