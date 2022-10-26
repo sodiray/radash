@@ -1,0 +1,38 @@
+name: Check Semver for Pull Request
+on:
+  pull_request:
+    branches: [master]
+    types: [labeled, unlabeled, opened, synchronize]
+jobs:
+  verify-version:
+    if: contains(github.event.pull_request.labels.*.name, 'release')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Get Pull Request Version
+        id: pr-version
+        run: echo "version=$(jq -r .version package.json)" >> $GITHUB_OUTPUT
+      - uses: actions/checkout@v3
+        with:
+          ref: master
+      - name: Get Base Version
+        id: base-version
+        run: echo "version=$(jq -r .version package.json)" >> $GITHUB_OUTPUT
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - run: npm install semver
+      - uses: actions/github-script@v6
+        env:
+          PR_VERSION: ${{steps.pr-version.outputs.version}}
+          BASE_VERSION: ${{steps.base-version.outputs.version}}
+        with:
+          script: |
+            const semver = require("semver")
+            const { PR_VERSION: pr, BASE_VERSION: base } = process.env
+            const pr_is_greater = semver.gt(pr, base)
+            if (pr_is_greater) {
+              core.debug(`Success, the pr version (${pr}) is higher than the base version (${base}).`)
+            } else {
+              core.setFailed(`The pr version (${pr}) is not greater than the base version (${base}). A pull request labeled with 'release' must have a valid version bump.`)
+            }
