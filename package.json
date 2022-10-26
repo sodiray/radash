@@ -1,6 +1,6 @@
 {
   "name": "radash",
-  "version": "8.0.3-alpha.2",
+  "version": "8.0.3",
   "description": "Functional utility library - modern, simple, typed, powerful",
   "main": "dist/cjs/index.cjs",
   "module": "dist/esm/index.mjs",
@@ -24,9 +24,7 @@
     "test": "jest --coverage",
     "check": "yarn lint && yarn test && yarn build",
     "build": "yarn tsc --noEmit && yarn rollup -c",
-    "lint": "tslint -p tsconfig.json",
-    "archive:zip": "zip -r archive.zip src package.json README.md LICENSE.md",
-    "archive:gzip": "tar -zcvf archive.tar.gz src package.json README.md LICENSE.md"
+    "lint": "tslint -p tsconfig.json"
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "^8.5.0",

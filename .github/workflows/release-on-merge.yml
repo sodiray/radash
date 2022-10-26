@@ -1,15 +1,11 @@
 name: 'Release'
 on:
-  # push:
-  #   branches: [master]
-  pull_request:
+  push:
     branches: [master]
-    types: [labeled, unlabeled, opened, synchronize]
 jobs:
   check:
     name: 'Check if release is needed'
     runs-on: 'ubuntu-latest'
-    if: contains(github.event.pull_request.labels.*.name, 'action-testing')
     outputs:
       exists: ${{ steps.check-tag.outputs.exists }}
     steps:
@@ -33,8 +29,6 @@ jobs:
       - name: Get Current Version
         id: get-version
         run: echo "version=$(jq -r .version package.json)" >> $GITHUB_OUTPUT
-      - name: Make Artifacts
-        run: yarn archive:zip && yarn archive:gzip
       - name: Create Release
         uses: actions/create-release@v1
         id: create-release
