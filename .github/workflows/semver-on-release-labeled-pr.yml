@@ -25,12 +25,13 @@ jobs:
           node-version: 16
       - run: npm install semver
       - uses: actions/github-script@v6
+        env:
+            PR_VERSION: ${{steps.pr-version.outputs.version}}
+            BASE_VERSION: ${{steps.base-version.outputs.version}}
         with:
-          result-encoding: string
           script: |
             const semver = require("semver")
-            const pr = "${{steps.pr-version.outputs.version}}"
-            const base = "${{steps.base-version.outputs.version}}"
+            const { PR_VERSION, BASE_VERSION } = process.env
             try {
               semver.gt(pr, base)
               core.debug(`Success, the pr version (${pr}) is higher than the base version (${base}).`)
