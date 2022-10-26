@@ -5,19 +5,19 @@ describe('number module', () => {
   describe('toFloat function', () => {
     test('handles null', () => {
       const result = _.toFloat(null)
-      assert.strictEqual(result, 0.00)
+      assert.strictEqual(result, 0.0)
     })
     test('handles undefined', () => {
       const result = _.toFloat(undefined)
-      assert.strictEqual(result, 0.00)
+      assert.strictEqual(result, 0.0)
     })
     test('handles bad input', () => {
       const result = _.toFloat({})
-      assert.strictEqual(result, 0.00)
+      assert.strictEqual(result, 0.0)
     })
     test('converts 20.00 correctly', () => {
       const result = _.toFloat('20.00')
-      assert.strictEqual(result, 20.00)
+      assert.strictEqual(result, 20.0)
     })
   })
   describe('toInt function', () => {
