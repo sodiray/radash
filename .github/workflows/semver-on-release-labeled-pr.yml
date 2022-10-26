@@ -5,10 +5,10 @@ on:
     types: [labeled, unlabeled, opened, synchronize]
 jobs:
   verify-version:
+    if: contains(github.event.pull_request.labels.*.name, 'release')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-        if: contains(github.event.pull_request.labels.*.name, 'release')
       - name: Get Pull Request Version
         id: pr-version
         run: echo "version=$(jq -r .version package.json)" >> $GITHUB_OUTPUT
