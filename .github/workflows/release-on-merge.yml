@@ -7,28 +7,28 @@ jobs:
     name: 'Check if release is needed'
     runs-on: 'ubuntu-latest'
     outputs:
-      release-exists: ${{ steps.check-tag.outputs.exists }}
+      exists: ${{ steps.check-tag.outputs.exists }}
     steps:
       - uses: actions/checkout@v3
-      - name: Read Release Version
-        uses: martinbeentjes/npm-get-version-action@main
+      - name: Get Current Version
         id: get-version
+        run: echo "version=$(jq -r .version package.json)" >> $GITHUB_OUTPUT
       - uses: mukunku/tag-exists-action@v1.0.0
         id: check-tag
-        with: 
-          tag: v${{ steps.get-version.outputs.current-version}}
+        with:
+          tag: v${{ steps.get-version.outputs.version}}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   release:
     name: 'Release'
     needs: check
-    if: needs.check.outputs.release-exists == 'false'
+    if: needs.check.outputs.exists == 'false'
     runs-on: 'ubuntu-latest'
     steps:
       - uses: actions/checkout@v3
-      - name: Read Release Version
-        uses: martinbeentjes/npm-get-version-action@main
+      - name: Get Current Version
         id: get-version
+        run: echo "version=$(jq -r .version package.json)" >> $GITHUB_OUTPUT
       - name: Make Artifacts
         run: yarn archive:zip && yarn archive:gzip
       - name: Create Release
@@ -37,8 +37,8 @@ jobs:
         with:
           draft: false
           prerelease: false
-          release_name: ${{ steps.get-version.outputs.current-version}}
-          tag_name: v${{ steps.get-version.outputs.current-version}}
+          release_name: ${{ steps.get-version.outputs.version}}
+          tag_name: v${{ steps.get-version.outputs.version}}
         env:
           GITHUB_TOKEN: ${{ github.token }}
       - name: Upload Release Artifact (zip)
@@ -48,7 +48,7 @@ jobs:
         with:
           upload_url: ${{ steps.create-release.outputs.upload_url }}
           asset_path: ./archive.zip
-          asset_name: radash-${{ steps.get-version.outputs.current-version}}-source.zip
+          asset_name: radash-${{ steps.get-version.outputs.version}}-source.zip
           asset_content_type: application/zip
       - name: Upload Release Artifact (gzip)
         uses: actions/upload-release-asset@v1
@@ -57,5 +57,5 @@ jobs:
         with:
           upload_url: ${{ steps.create-release.outputs.upload_url }}
           asset_path: ./archive.tar.gz
-          asset_name: radash-${{ steps.get-version.outputs.current-version}}-source.tar.gz
+          asset_name: radash-${{ steps.get-version.outputs.version}}-source.tar.gz
           asset_content_type: application/gzip
