@@ -13,10 +13,10 @@ jobs:
       - name: Get Current Version
         id: get-version
         run: echo "version=$(jq -r .version package.json)" >> $GITHUB_OUTPUT
-      - uses: mukunku/tag-exists-action@v1.0.0
+      - uses: mukunku/tag-exists-action@v1.1.0
         id: check-tag
         with:
-          tag: v${{ steps.get-version.outputs.version}}
+          tag: v${{ steps.get-version.outputs.version }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   release:
