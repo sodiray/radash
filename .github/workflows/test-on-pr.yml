@@ -1,13 +1,9 @@
-name: Unit Test
-
+name: Check Pull Request
 on:
-  push:
-    branches: [ master ]
   pull_request:
-    branches: [ master ]
-
+    branches: [master]
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -20,3 +16,12 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: yarn
       - run: yarn test
+  check-format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+      - run: yarn
+      - run: yarn format:check

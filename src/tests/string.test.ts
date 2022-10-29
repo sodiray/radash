@@ -1,34 +1,26 @@
-import {assert} from 'chai'
+import { assert } from 'chai'
 import * as _ from '..'
-import { camel, snake, dash, pascal } from '../string'
 
 describe('string module', () => {
-
   describe('camel function', () => {
     test('camal alias is available', () => {
       // NOTE: Remove in next major version
       assert.isFunction(_.camal)
     })
     test('returns correctly cased string', () => {
-      const result = camel(
-        'hello world'
-      )
+      const result = _.camel('hello world')
       assert.equal(result, 'helloWorld')
     })
     test('returns single word', () => {
-      const result = camel(
-        'hello'
-      )
+      const result = _.camel('hello')
       assert.equal(result, 'hello')
     })
     test('returns empty string for empty input', () => {
-      const result = camel(null as any)
+      const result = _.camel(null as any)
       assert.equal(result, '')
     })
     test('a word in camel case should remain in camel case', () => {
-      const result = camel(
-        'helloWorld'
-      )
+      const result = _.camel('helloWorld')
       assert.equal(result, 'helloWorld')
     })
   })
@@ -42,31 +34,23 @@ describe('string module', () => {
 
   describe('snake function', () => {
     test('returns correctly cased string', () => {
-      const result = snake(
-        'hello world'
-      )
+      const result = _.snake('hello world')
       assert.equal(result, 'hello_world')
     })
     test('must handle strings that are camelCase', () => {
-      const result = snake(
-        'helloWorld'
-      )
+      const result = _.snake('helloWorld')
       assert.equal(result, 'hello_world')
     })
     test('must handle strings that are dash', () => {
-      const result = snake(
-        'hello-world'
-      )
+      const result = _.snake('hello-world')
       assert.equal(result, 'hello_world')
     })
     test('returns single word', () => {
-      const result = snake(
-        'hello'
-      )
+      const result = _.snake('hello')
       assert.equal(result, 'hello')
     })
     test('returns empty string for empty input', () => {
-      const result = snake(null as any)
+      const result = _.snake(null as any)
       assert.equal(result, '')
     })
   })
@@ -80,31 +64,23 @@ describe('string module', () => {
 
   describe('dash function', () => {
     test('returns correctly cased string', () => {
-      const result = dash(
-        'hello world'
-      )
+      const result = _.dash('hello world')
       assert.equal(result, 'hello-world')
     })
     test('returns single word', () => {
-      const result = dash(
-        'hello'
-      )
+      const result = _.dash('hello')
       assert.equal(result, 'hello')
     })
     test('returns empty string for empty input', () => {
-      const result = dash(null as any)
+      const result = _.dash(null as any)
       assert.equal(result, '')
     })
     test('must handle strings that are camelCase', () => {
-      const result = dash(
-        'helloWorld'
-      )
+      const result = _.dash('helloWorld')
       assert.equal(result, 'hello-world')
     })
     test('must handle strings that are dash', () => {
-      const result = dash(
-        'hello-world'
-      )
+      const result = _.dash('hello-world')
       assert.equal(result, 'hello-world')
     })
   })
@@ -118,7 +94,6 @@ describe('string module', () => {
 
   describe('template function', () => {
     test('replaces all occurrences', () => {
-
       const tmp = `
     Hello my name is {{name}}. I am a {{type}}.
     Not sure why I am {{reason}}.
@@ -143,7 +118,6 @@ describe('string module', () => {
     })
 
     test('replaces all occurrences given template', () => {
-
       const tmp = `Hello <name>.`
       const data = {
         name: 'Ray'
@@ -175,13 +149,11 @@ describe('string module', () => {
       assert.equal(result, 'ExobaseStarterFlashAndGo')
     })
     test('returns single word', () => {
-      const result = pascal(
-        'hello'
-      )
+      const result = _.pascal('hello')
       assert.equal(result, 'Hello')
     })
     test('returns empty string for empty input', () => {
-      const result = pascal(null as any)
+      const result = _.pascal(null as any)
       assert.equal(result, '')
     })
   })

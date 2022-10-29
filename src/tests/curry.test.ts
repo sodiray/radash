@@ -2,14 +2,15 @@ import { assert } from 'chai'
 import * as _ from '..'
 import { DebounceFunction } from '../curry'
 
-
 describe('curry module', () => {
-
   describe('compose function', () => {
     test('composes functions', () => {
       const useZero = (fn: any) => () => fn(0)
       const objectize = (fn: any) => (num: any) => fn({ num })
-      const increment = (fn: any) => ({ num }: any) => fn({ num: num + 1 })
+      const increment =
+        (fn: any) =>
+        ({ num }: any) =>
+          fn({ num: num + 1 })
       const returnArg = (arg: any) => (args: any) => args[arg]
 
       const composed = _.compose(
@@ -20,12 +21,9 @@ describe('curry module', () => {
         returnArg('num')
       )
 
-      const decomposed = (
-        useZero(
-          objectize(
-            increment(
-              increment(
-                returnArg('num'))))))
+      const decomposed = useZero(
+        objectize(increment(increment(returnArg('num'))))
+      )
 
       const expected = decomposed()
       const result = composed()
@@ -33,10 +31,12 @@ describe('curry module', () => {
       assert.equal(result, expected)
     })
     test('composes async function', async () => {
-
       const useZero = (fn: any) => async () => await fn(0)
       const objectize = (fn: any) => async (num: any) => await fn({ num })
-      const increment = (fn: any) => async ({ num }: any) => await fn({ num: num + 1 })
+      const increment =
+        (fn: any) =>
+        async ({ num }: any) =>
+          await fn({ num: num + 1 })
       const returnArg = (arg: any) => async (args: any) => await args[arg]
 
       const composed = _.compose(
@@ -47,12 +47,9 @@ describe('curry module', () => {
         returnArg('num')
       )
 
-      const decomposed = (
-        useZero(
-          objectize(
-            increment(
-              increment(
-                returnArg('num'))))))
+      const decomposed = useZero(
+        objectize(increment(increment(returnArg('num'))))
+      )
 
       const expected = await decomposed()
       const result = await composed()
@@ -78,13 +75,13 @@ describe('curry module', () => {
 
   describe('partob function', () => {
     test('partob passes single args', () => {
-      const add = ({ a, b }: { a: number, b: number }) => a + b
+      const add = ({ a, b }: { a: number; b: number }) => a + b
       const expected = 20
       const result = _.partob(add, { a: 10 })({ b: 10 })
       assert.equal(result, expected)
     })
     test('partob overrides inital with later', () => {
-      const add = ({ a, b }: { a: number, b: number }) => a + b
+      const add = ({ a, b }: { a: number; b: number }) => a + b
       const expected = 15
       const result = _.partob(add, { a: 10 })({ a: 5, b: 10 } as any)
       assert.equal(result, expected)
@@ -96,11 +93,7 @@ describe('curry module', () => {
       const genesis = () => 0
       const addFive = (num: number) => num + 5
       const twoX = (num: number) => num * 2
-      const func = _.chain(
-        genesis,
-        addFive,
-        twoX
-      )
+      const func = _.chain(genesis, addFive, twoX)
       const result = func()
       assert.equal(result, 10)
     })
@@ -128,12 +121,15 @@ describe('curry module', () => {
       assert.equal(resultA, resultB)
     })
     test('uses key to identify unique calls', () => {
-      const func = _.memo(({ id }: { id: string }) => {
-        const ts = new Date().getTime()
-        return `${ts}::${id}`
-      }, {
-        key: ({ id }: { id: string }) => id
-      })
+      const func = _.memo(
+        ({ id }: { id: string }) => {
+          const ts = new Date().getTime()
+          return `${ts}::${id}`
+        },
+        {
+          key: ({ id }: { id: string }) => id
+        }
+      )
       const resultA = func({ id: 'alpha' })
       const resultB = func({ id: 'beta' })
       const resultA2 = func({ id: 'alpha' })
@@ -211,7 +207,7 @@ describe('curry module', () => {
       expect(mockFunc).toHaveBeenCalledTimes(0)
     })
   })
-  
+
   describe('throttle function', () => {
     test('', async () => {
       let calls = 0

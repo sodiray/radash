@@ -2,7 +2,6 @@ import { assert } from 'chai'
 import * as _ from '..'
 
 describe('random module', () => {
-
   describe('random function', () => {
     test('returns a number', () => {
       const result = _.random(0, 100)
@@ -27,7 +26,10 @@ describe('random module', () => {
      * in the special char addition.
      */
     test('uid generates string including special', () => {
-      const result = _.uid(300, '________________________________________________________________')
+      const result = _.uid(
+        300,
+        '________________________________________________________________'
+      )
       assert.include(result, '_')
     })
   })
@@ -57,7 +59,7 @@ describe('random module', () => {
     test('returns a string from the list', () => {
       const letters = 'abcde'
       const result = _.draw(letters.split(''))
-      assert.include(letters, result)
+      assert.include(letters, result!)
     })
     test('returns a item from the list', () => {
       const list = [
@@ -66,7 +68,7 @@ describe('random module', () => {
         { id: 'c', word: 'yolo' }
       ]
       const result = _.draw(list)
-      assert.include('abc', result.id)
+      assert.include('abc', result!.id)
     })
     test('returns null given empty input', () => {
       const list = []
@@ -74,5 +76,4 @@ describe('random module', () => {
       assert.isNull(result)
     })
   })
-
 })
