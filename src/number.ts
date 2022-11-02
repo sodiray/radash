@@ -3,10 +3,10 @@ export const toFloat = <T extends number | null = number>(
   defaultValue?: T
 ): number | T => {
   if (value === null || value === undefined) {
-    return defaultValue ?? (0.0 as T)
+    return defaultValue ?? 0.0
   }
   const result = parseFloat(value)
-  return isNaN(result) ? defaultValue ?? (0.0 as T) : (result as T)
+  return isNaN(result) ? defaultValue ?? 0.0 : result
 }
 
 export const toInt = <T extends number | null>(
@@ -14,8 +14,8 @@ export const toInt = <T extends number | null>(
   defaultValue?: T
 ): number | T => {
   if (value === null || value === undefined) {
-    return defaultValue ?? (0 as T)
+    return defaultValue ?? 0
   }
   const result = parseInt(value)
-  return isNaN(result) ? defaultValue ?? (0 as T) : (result as T)
+  return isNaN(result) ? defaultValue ?? 0 : result
 }
