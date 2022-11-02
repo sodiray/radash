@@ -1,6 +1,6 @@
 {
   "name": "radash",
-  "version": "9.0.0",
+  "version": "9.0.1",
   "description": "Functional utility library - modern, simple, typed, powerful",
   "main": "dist/cjs/index.cjs",
   "module": "dist/esm/index.mjs",

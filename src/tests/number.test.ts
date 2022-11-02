@@ -11,6 +11,10 @@ describe('number module', () => {
       const result = _.toFloat(undefined)
       assert.strictEqual(result, 0.0)
     })
+    test('uses null default', () => {
+      const result = _.toFloat('x', null)
+      assert.strictEqual(result, null)
+    })
     test('handles bad input', () => {
       const result = _.toFloat({})
       assert.strictEqual(result, 0.0)
@@ -24,6 +28,10 @@ describe('number module', () => {
     test('handles null', () => {
       const result = _.toInt(null)
       assert.strictEqual(result, 0)
+    })
+    test('uses null default', () => {
+      const result = _.toInt('x', null)
+      assert.strictEqual(result, null)
     })
     test('handles undefined', () => {
       const result = _.toInt(undefined)
