@@ -21,7 +21,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-      - run: npm install semver
+      - run: yarn add semver
       - uses: actions/github-script@v6
         env:
           PR_VERSION: ${{steps.pr-version.outputs.version}}
