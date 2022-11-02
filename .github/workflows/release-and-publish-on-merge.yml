@@ -35,7 +35,19 @@ jobs:
         with:
           draft: false
           prerelease: false
-          release_name: ${{ steps.get-version.outputs.version}}
+          release_name: v${{ steps.get-version.outputs.version}}
           tag_name: v${{ steps.get-version.outputs.version}}
         env:
           GITHUB_TOKEN: ${{ github.token }}
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - run: yarn
+      - run: yarn build
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: '${{ secrets.NPM_TOKEN }}'
