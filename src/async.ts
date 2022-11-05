@@ -169,6 +169,7 @@ export const retry = async <TResponse>(
   // Logically, we should never reach this
   // code path. It makes the function meet
   // strict mode requirements.
+  /* istanbul ignore next */
   return undefined as unknown as TResponse
 }
 
