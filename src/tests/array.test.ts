@@ -227,7 +227,7 @@ describe('array module', () => {
       assert.deepEqual(result, ['hello', 'oh'])
     })
     test('does not fail on empty input list', () => {
-      const list = []
+      const list: any[] = []
       const result = _.select(
         list,
         (x: any) => x.word,

@@ -32,7 +32,7 @@ describe('async module', () => {
     })
 
     test('handles null input', async () => {
-      const result = await _.map(null, async () => '')
+      const result = await _.map(null as unknown as unknown[], async () => '')
       assert.deepEqual(result, [])
     })
 
@@ -149,7 +149,7 @@ describe('async module', () => {
         await _.defer(async () => {
           throw new Error('soooo broken')
         })
-      } catch (err) {
+      } catch (err: any) {
         error = err
       }
       assert.isNotNull(error)
@@ -166,7 +166,7 @@ describe('async module', () => {
             { rethrow: true }
           )
         })
-      } catch (err) {
+      } catch (err: any) {
         error = err
       }
       assert.isNotNull(error)
@@ -183,7 +183,7 @@ describe('async module', () => {
             { rethrow: false }
           )
         })
-      } catch (err) {
+      } catch (err: any) {
         error = err
       }
       assert.isNull(error)
@@ -196,7 +196,7 @@ describe('async module', () => {
             throw new Error('soooo broken')
           })
         })
-      } catch (err) {
+      } catch (err: any) {
         error = err
       }
       assert.isNull(error)

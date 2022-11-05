@@ -365,7 +365,7 @@ describe('typed module', () => {
       assert.isFalse(result)
     })
     test('returns false for empty array', () => {
-      const input = []
+      const input: unknown[] = []
       const result = _.isSymbol(input)
       assert.isFalse(result)
     })

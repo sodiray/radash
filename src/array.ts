@@ -281,7 +281,7 @@ export const intersects = <T, K extends string | number | symbol>(
       ...acc,
       [ident(item)]: true
     }),
-    {} as Record<string | number | symbol, true>
+    {} as Record<string | number | symbol, boolean>
   )
   return listA.some(value => dictB[ident(value)])
 }
@@ -326,7 +326,7 @@ export const merge = <T>(
     const matched = others.find(o => matcher(r) === matcher(o))
     if (matched) return [...acc, matched]
     else return [...acc, r]
-  }, [])
+  }, [] as T[])
 }
 
 /**
@@ -402,7 +402,7 @@ export const diff = <T>(
       ...acc,
       [identity(item)]: true
     }),
-    {}
+    {} as Record<string | number | symbol, boolean>
   )
   return root.filter(a => !bKeys[identity(a)])
 }

@@ -71,7 +71,7 @@ describe('random module', () => {
       assert.include('abc', result!.id)
     })
     test('returns null given empty input', () => {
-      const list = []
+      const list: unknown[] = []
       const result = _.draw(list)
       assert.isNull(result)
     })
