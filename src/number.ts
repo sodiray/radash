@@ -10,7 +10,7 @@ export const toFloat = <T extends number | null = number>(
   return isNaN(result) ? def : result
 }
 
-export const toInt = <T extends number | null>(
+export const toInt = <T extends number | null = number>(
   value: any,
   defaultValue?: T
 ): number | T => {

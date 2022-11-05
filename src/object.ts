@@ -18,7 +18,8 @@ export const shake = <RemovedKeys extends string, T>(
   filter: (value: any) => boolean = x => x === undefined
 ): Omit<T, RemovedKeys> => {
   if (!obj) return {} as T
-  return Object.keys(obj).reduce((acc, key) => {
+  const keys = Object.keys(obj) as (keyof T)[]
+  return keys.reduce((acc, key) => {
     if (filter(obj[key])) {
       return acc
     } else return { ...acc, [key]: obj[key] }
@@ -37,7 +38,8 @@ export const mapKeys = <
   obj: Record<TKey, TValue>,
   mapFunc: (key: TKey, value: TValue) => TNewKey
 ): Record<TNewKey, TValue> => {
-  return Object.keys(obj).reduce(
+  const keys = Object.keys(obj) as TKey[]
+  return keys.reduce(
     (acc, key) => ({
       ...acc,
       [mapFunc(key as TKey, obj[key])]: obj[key]
@@ -55,9 +57,10 @@ export const mapValues = <
   TNewValue
 >(
   obj: Record<TKey, TValue>,
-  mapFunc: (value: TValue, key: string) => TNewValue
+  mapFunc: (value: TValue, key: TKey) => TNewValue
 ): Record<TKey, TNewValue> => {
-  return Object.keys(obj).reduce(
+  const keys = Object.keys(obj) as TKey[]
+  return keys.reduce(
     (acc, key) => ({
       ...acc,
       [key]: mapFunc(obj[key], key)
@@ -99,7 +102,8 @@ export const invert = <
   obj: Record<TKey, TValue>
 ): Record<TValue, TKey> => {
   if (!obj) return {} as Record<TValue, TKey>
-  return Object.keys(obj).reduce(
+  const keys = Object.keys(obj) as TKey[]
+  return keys.reduce(
     (acc, key) => ({
       ...acc,
       [obj[key]]: key
@@ -124,7 +128,7 @@ export const clone = <T extends object = object>(obj: T): T => {
   return Object.getOwnPropertyNames(obj).reduce(
     (acc, name) => ({
       ...acc,
-      [name]: obj[name]
+      [name]: obj[name as keyof T]
     }),
     {} as T
   )
@@ -193,7 +197,7 @@ export const get = <T, K>(
   value: T,
   funcOrPath: ((t: T) => K) | string,
   defaultValue: K | null = null
-): K => {
+): K | null => {
   if (isFunction(funcOrPath)) {
     try {
       return (funcOrPath as Function)(value) ?? defaultValue
