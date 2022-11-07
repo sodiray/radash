@@ -10,8 +10,6 @@ const useStrict = true // Use "strict"
 const useThrowOnError = true // On error throw and exception
 const useSourceMap = true // Generate source map files
 const useEsbuild = true // `true` -> use esbuild, `false` use tsc
-                        // Currently the `esbuild` plugin has not been updated for rollup 3
-                        // But it is working. In case it does not work anymore se this flag to `false`
 
 export default [
   {
