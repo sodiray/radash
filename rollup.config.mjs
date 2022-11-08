@@ -1,5 +1,6 @@
 // rollup.config.mjs
 import typescript from '@rollup/plugin-typescript'
+import { terser } from "rollup-plugin-terser"
 import dts from 'rollup-plugin-dts'
 import esbuild from 'rollup-plugin-esbuild'
 import externals from 'rollup-plugin-node-externals'
@@ -24,7 +25,7 @@ export default [
   {
     // CJS build
     input: 'src/index.ts',
-    output: {
+    output: [{
       dir: 'dist/cjs',
       format: 'cjs',
       generatedCode: {
@@ -34,22 +35,41 @@ export default [
       strict: useStrict,
       entryFileNames: '[name].cjs',
       sourcemap: useSourceMap
-    },
+    }, {
+      format: 'cjs',
+      generatedCode: {
+        constBindings: usePreferConst
+      },
+      preserveModules: false,
+      strict: useStrict,
+      file: 'cdn/radash.js',
+      sourcemap: false
+    }, {
+      format: 'cjs',
+      generatedCode: {
+        constBindings: usePreferConst
+      },
+      preserveModules: false,
+      strict: useStrict,
+      file: 'cdn/radash.min.js',
+      sourcemap: false,
+      plugins: [terser()]
+    }],
     plugins: [
       externals(),
       useEsbuild
         ? esbuild()
         : typescript({
-            noEmitOnError: useThrowOnError,
-            outDir: 'dist/cjs',
-            removeComments: true
-          })
+          noEmitOnError: useThrowOnError,
+          outDir: 'dist/cjs',
+          removeComments: true
+        })
     ]
   },
   {
     // ESM builds
     input: 'src/index.ts',
-    output: {
+    output: [{
       dir: 'dist/esm',
       format: 'es',
       generatedCode: {
@@ -59,16 +79,25 @@ export default [
       strict: useStrict,
       entryFileNames: '[name].mjs',
       sourcemap: useSourceMap
-    },
+    }, {
+      format: 'es',
+      generatedCode: {
+        constBindings: usePreferConst
+      },
+      preserveModules: false,
+      strict: useStrict,
+      file: 'cdn/radash.esm.js',
+      sourcemap: false
+    }],
     plugins: [
       externals(),
       useEsbuild
         ? esbuild()
         : typescript({
-            noEmitOnError: useThrowOnError,
-            outDir: 'dist/esm',
-            removeComments: true
-          })
+          noEmitOnError: useThrowOnError,
+          outDir: 'dist/esm',
+          removeComments: true
+        })
     ]
   }
 ]
