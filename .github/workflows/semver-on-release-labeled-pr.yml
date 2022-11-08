@@ -56,7 +56,6 @@ jobs:
           CDN_VERSION: ${{steps.cdn-version.outputs.version}}
         with:
           script: |
-            const semver = require("semver")
             const { PR_VERSION: pr, CDN_VERSION: cdn } = process.env
             if (pr.trim() !== cdn.trim()) {
               core.setFailed(`The cdn .version (${cdn}) does not match the PR branch version (${pr}). Maybe you didn't run yarn build before pushing?`)
