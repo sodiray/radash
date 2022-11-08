@@ -39,7 +39,7 @@
     "prettier-plugin-organize-imports": "^3.0.3",
     "rollup": "^3.2.5",
     "rollup-plugin-dts": "^5.0.0",
-    "rollup-plugin-esbuild": "^4.10.1",
+    "rollup-plugin-esbuild": "^4.10.2",
     "rollup-plugin-node-externals": "^5.0.2",
     "ts-jest": "^28.0.8",
     "tslint": "^6.0.0",
