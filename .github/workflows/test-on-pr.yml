@@ -36,11 +36,11 @@ jobs:
       - run: npm install -g checksum
       - name: Calc current cdn checksums
         id: current-checksums
-        run: echo "checksums=$(checksum cdn/* | base64)" >> $GITHUB_OUTPUT
+        run: echo "checksums=$(checksum cdn/* | base64 | tr '\n' ' ')" >> $GITHUB_OUTPUT
       - run: yarn build
       - name: Calc built cdn checksums
         id: built-checksums
-        run: echo "checksums=$(checksum cdn/* | base64)" >> $GITHUB_OUTPUT
+        run: echo "checksums=$(checksum cdn/* | base64 | tr '\n' ' ')" >> $GITHUB_OUTPUT
       - uses: actions/github-script@v6
         env:
           CURRENT_CHECKSUMS: ${{steps.current-checksums.outputs.checksums}}
