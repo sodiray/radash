@@ -36,22 +36,24 @@ export default [
       entryFileNames: '[name].cjs',
       sourcemap: useSourceMap
     }, {
-      format: 'cjs',
+      format: 'iife',
       generatedCode: {
         constBindings: usePreferConst
       },
       preserveModules: false,
       strict: useStrict,
       file: 'cdn/radash.js',
+      name: 'radash',
       sourcemap: false
     }, {
-      format: 'cjs',
+      format: 'iife',
       generatedCode: {
         constBindings: usePreferConst
       },
       preserveModules: false,
       strict: useStrict,
       file: 'cdn/radash.min.js',
+      name: 'radash',
       sourcemap: false,
       plugins: [terser()]
     }],
