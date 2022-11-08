@@ -364,7 +364,9 @@ export const toggle = <T>(
   list: readonly T[],
   newItem: T,
   toValue?: null | ((a: T, idx: number) => number | string | symbol),
-  strategy?: 'prepend' | 'append'
+  options?: {
+    strategy?: 'prepend' | 'append'
+  }
 ) => {
   if (!list && !newItem) return []
   if (!list) return [newItem]
@@ -374,6 +376,7 @@ export const toggle = <T>(
     : (x: T) => x === newItem
   const existing = list.find(matcher)
   if (existing) return list.filter((x, idx) => !matcher(x, idx))
+  const strategy = options?.strategy ?? 'append'
   if (!strategy || strategy === 'append') return [...list, newItem]
   return [newItem, ...list]
 }

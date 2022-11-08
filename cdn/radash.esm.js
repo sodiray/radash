@@ -180,7 +180,7 @@ const replaceOrAppend = (list2, newItem, match) => {
   }
   return [...list2, newItem];
 };
-const toggle = (list2, newItem, toValue, strategy) => {
+const toggle = (list2, newItem, toValue, options) => {
   if (!list2 && !newItem)
     return [];
   if (!list2)
@@ -191,6 +191,7 @@ const toggle = (list2, newItem, toValue, strategy) => {
   const existing = list2.find(matcher);
   if (existing)
     return list2.filter((x, idx) => !matcher(x, idx));
+  const strategy = options?.strategy ?? "append";
   if (!strategy || strategy === "append")
     return [...list2, newItem];
   return [newItem, ...list2];

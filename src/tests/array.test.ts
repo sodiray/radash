@@ -670,7 +670,7 @@ describe('array module', () => {
       assert.deepEqual(result, [{ value: 'a' }, { value: 'b' }])
     })
     test('should prepend item when strategy is set', () => {
-      const result = _.toggle(['a'], 'b', null, 'prepend')
+      const result = _.toggle(['a'], 'b', null, { strategy: 'prepend' })
       assert.deepEqual(result, ['b', 'a'])
     })
   })
