@@ -14,10 +14,10 @@ describe('array module', () => {
         { group: 'c', word: 'ok' }
       ]
       const groups = _.group(list, x => x.group)
-      assert.equal(groups.a.length, 2)
-      assert.equal(groups.b.length, 2)
-      assert.equal(groups.c.length, 1)
-      assert.equal(groups.c[0].word, 'ok')
+      assert.equal(groups.a?.length, 2)
+      assert.equal(groups.b?.length, 2)
+      assert.equal(groups.c?.length, 1)
+      assert.equal(groups.c?.[0].word, 'ok')
     })
   })
 
