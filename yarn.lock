@@ -2171,10 +2171,10 @@ rollup-plugin-dts@^5.0.0:
   optionalDependencies:
     "@babel/code-frame" "^7.18.6"
 
-rollup-plugin-esbuild@^4.10.2:
-  version "4.10.2"
-  resolved "https://registry.yarnpkg.com/rollup-plugin-esbuild/-/rollup-plugin-esbuild-4.10.2.tgz#094a2178764af182ae08764e4dedff6b14793091"
-  integrity sha512-OPrBgdN1ZC2zQvq/rm5Zvzpb0Rez7zbbVJ+1b5Az//kLlfhwR1mqOP3wAhkg9sn5nF7p+97p55TORE0RNXzNcw==
+rollup-plugin-esbuild@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-esbuild/-/rollup-plugin-esbuild-5.0.0.tgz#6cce358f4abe164d65a0028e900b8501a15f72ef"
+  integrity sha512-1cRIOHAPh8WQgdQQyyvFdeOdxuiyk+zB5zJ5+YOwrZP4cJ0MT3Fs48pQxrZeyZHcn+klFherytILVfE4aYrneg==
   dependencies:
     "@rollup/pluginutils" "^5.0.1"
     debug "^4.3.4"
