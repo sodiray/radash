@@ -24,6 +24,7 @@ export {
   sift,
   sort,
   sum,
+  toggle,
   unique
 } from './array'
 export {

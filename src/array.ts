@@ -356,6 +356,29 @@ export const replaceOrAppend = <T>(
 }
 
 /**
+ * If the item matching the condition already exists
+ * in the list it will be removed. If it does not it
+ * will be added.
+ */
+export const toggle = <T>(
+  list: readonly T[],
+  newItem: T,
+  toValue?: null | ((a: T, idx: number) => number | string | symbol),
+  strategy?: 'prepend' | 'append'
+) => {
+  if (!list && !newItem) return []
+  if (!list) return [newItem]
+  if (!newItem) return [...list]
+  const matcher = toValue
+    ? (x: T, idx: number) => toValue(x, idx) === toValue(newItem, idx)
+    : (x: T) => x === newItem
+  const existing = list.find(matcher)
+  if (existing) return list.filter((x, idx) => !matcher(x, idx))
+  if (!strategy || strategy === 'append') return [...list, newItem]
+  return [newItem, ...list]
+}
+
+/**
  * Given a list returns a new list with
  * only truthy values
  */
