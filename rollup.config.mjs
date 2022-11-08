@@ -1,7 +1,7 @@
 // rollup.config.mjs
 import typescript from '@rollup/plugin-typescript'
 import dts from 'rollup-plugin-dts'
-import esbuild from 'rollup-plugin-esbuild'
+import esbuild, { minify } from 'rollup-plugin-esbuild'
 import externals from 'rollup-plugin-node-externals'
 
 const usePreferConst = true // Use "const" instead of "var"
@@ -40,10 +40,10 @@ export default [
       useEsbuild
         ? esbuild()
         : typescript({
-            noEmitOnError: useThrowOnError,
-            outDir: 'dist/cjs',
-            removeComments: true
-          })
+          noEmitOnError: useThrowOnError,
+          outDir: 'dist/cjs',
+          removeComments: true
+        })
     ]
   },
   {
@@ -65,10 +65,59 @@ export default [
       useEsbuild
         ? esbuild()
         : typescript({
-            noEmitOnError: useThrowOnError,
-            outDir: 'dist/esm',
-            removeComments: true
-          })
+          noEmitOnError: useThrowOnError,
+          outDir: 'dist/esm',
+          removeComments: true
+        })
+    ]
+  },
+  {
+    // CDN build
+    input: 'src/index.ts',
+    output: [
+      {
+        format: 'iife',
+        generatedCode: {
+          constBindings: usePreferConst
+        },
+        preserveModules: false,
+        strict: useStrict,
+        file: 'cdn/radash.js',
+        name: 'radash',
+        sourcemap: false
+      },
+      {
+        format: 'iife',
+        generatedCode: {
+          constBindings: usePreferConst
+        },
+        preserveModules: false,
+        strict: useStrict,
+        file: 'cdn/radash.min.js',
+        name: 'radash',
+        sourcemap: false,
+        plugins: [minify()]
+      },
+      {
+        format: 'es',
+        generatedCode: {
+          constBindings: usePreferConst
+        },
+        preserveModules: false,
+        strict: useStrict,
+        file: 'cdn/radash.esm.js',
+        sourcemap: false
+      }
+    ],
+    plugins: [
+      externals(),
+      useEsbuild
+        ? esbuild()
+        : typescript({
+          noEmitOnError: useThrowOnError,
+          outDir: 'cdn',
+          removeComments: true
+        })
     ]
   }
 ]

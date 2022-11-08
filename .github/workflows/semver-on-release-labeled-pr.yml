@@ -36,3 +36,29 @@ jobs:
             } else {
               core.setFailed(`The pr version (${pr}) is not greater than the base version (${base}). A pull request labeled with 'release' must have a valid version bump.`)
             }
+  verify-cdn-version:
+    if: contains(github.event.pull_request.labels.*.name, 'release')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Get Pull Request Version
+        id: pr-version
+        run: echo "version=$(jq -r .version package.json)" >> $GITHUB_OUTPUT
+      - name: Get CDN Build Version
+        id: cdn-version
+        run: echo "version=$(cat cdn/.version)" >> $GITHUB_OUTPUT
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - uses: actions/github-script@v6
+        env:
+          PR_VERSION: ${{steps.pr-version.outputs.version}}
+          CDN_VERSION: ${{steps.cdn-version.outputs.version}}
+        with:
+          script: |
+            const { PR_VERSION: pr, CDN_VERSION: cdn } = process.env
+            if (pr.trim() !== cdn.trim()) {
+              core.setFailed(`The cdn .version (${cdn}) does not match the PR branch version (${pr}). Maybe you didn't run yarn build before pushing?`)
+            } else {
+              core.debug(`Success, the cdn build version matches the pr version.`)
+            }
