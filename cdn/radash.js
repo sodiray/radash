@@ -1,5 +1,6 @@
 var radash = (function (exports) {
-  
+  'use strict';
+
   const group = (array, getGroupId) => {
     return array.reduce((acc, item) => {
       const groupId = getGroupId(item);
