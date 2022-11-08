@@ -24,7 +24,7 @@
     "test": "jest --coverage",
     "check": "yarn lint && yarn test && yarn build",
     "build": "yarn tsc --noEmit && yarn rollup -c && yarn build:cdn:version",
-    "build:cdn:version": "jq -r .version package.json > cdn/.version",
+    "build:cdn:version": "echo ${npm_package_version} > cdn/.version",
     "lint": "tslint -p tsconfig.json",
     "format": "prettier --write \"./**/*.ts\"",
     "format:check": "prettier --check \"**/*.ts\" --ignore-unknown"
@@ -42,7 +42,6 @@
     "rollup-plugin-dts": "^5.0.0",
     "rollup-plugin-esbuild": "^4.10.2",
     "rollup-plugin-node-externals": "^5.0.2",
-    "rollup-plugin-terser": "^7.0.2",
     "ts-jest": "^28.0.8",
     "tslint": "^6.0.0",
     "typescript": "^4.8.4"

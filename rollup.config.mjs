@@ -1,8 +1,7 @@
 // rollup.config.mjs
 import typescript from '@rollup/plugin-typescript'
-import { terser } from "rollup-plugin-terser"
 import dts from 'rollup-plugin-dts'
-import esbuild from 'rollup-plugin-esbuild'
+import esbuild, { minify } from 'rollup-plugin-esbuild'
 import externals from 'rollup-plugin-node-externals'
 
 const usePreferConst = true // Use "const" instead of "var"
@@ -25,7 +24,7 @@ export default [
   {
     // CJS build
     input: 'src/index.ts',
-    output: [{
+    output: {
       dir: 'dist/cjs',
       format: 'cjs',
       generatedCode: {
@@ -35,28 +34,7 @@ export default [
       strict: useStrict,
       entryFileNames: '[name].cjs',
       sourcemap: useSourceMap
-    }, {
-      format: 'iife',
-      generatedCode: {
-        constBindings: usePreferConst
-      },
-      preserveModules: false,
-      strict: useStrict,
-      file: 'cdn/radash.js',
-      name: 'radash',
-      sourcemap: false
-    }, {
-      format: 'iife',
-      generatedCode: {
-        constBindings: usePreferConst
-      },
-      preserveModules: false,
-      strict: useStrict,
-      file: 'cdn/radash.min.js',
-      name: 'radash',
-      sourcemap: false,
-      plugins: [terser()]
-    }],
+    },
     plugins: [
       externals(),
       useEsbuild
@@ -71,7 +49,7 @@ export default [
   {
     // ESM builds
     input: 'src/index.ts',
-    output: [{
+    output: {
       dir: 'dist/esm',
       format: 'es',
       generatedCode: {
@@ -81,16 +59,7 @@ export default [
       strict: useStrict,
       entryFileNames: '[name].mjs',
       sourcemap: useSourceMap
-    }, {
-      format: 'es',
-      generatedCode: {
-        constBindings: usePreferConst
-      },
-      preserveModules: false,
-      strict: useStrict,
-      file: 'cdn/radash.esm.js',
-      sourcemap: false
-    }],
+    },
     plugins: [
       externals(),
       useEsbuild
@@ -98,6 +67,55 @@ export default [
         : typescript({
           noEmitOnError: useThrowOnError,
           outDir: 'dist/esm',
+          removeComments: true
+        })
+    ]
+  },
+  {
+    // CDN build
+    input: 'src/index.ts',
+    output: [
+      {
+        format: 'iife',
+        generatedCode: {
+          constBindings: usePreferConst
+        },
+        preserveModules: false,
+        strict: useStrict,
+        file: 'cdn/radash.js',
+        name: 'radash',
+        sourcemap: false
+      },
+      {
+        format: 'iife',
+        generatedCode: {
+          constBindings: usePreferConst
+        },
+        preserveModules: false,
+        strict: useStrict,
+        file: 'cdn/radash.min.js',
+        name: 'radash',
+        sourcemap: false,
+        plugins: [minify()]
+      },
+      {
+        format: 'es',
+        generatedCode: {
+          constBindings: usePreferConst
+        },
+        preserveModules: false,
+        strict: useStrict,
+        file: 'cdn/radash.esm.js',
+        sourcemap: false
+      }
+    ],
+    plugins: [
+      externals(),
+      useEsbuild
+        ? esbuild()
+        : typescript({
+          noEmitOnError: useThrowOnError,
+          outDir: 'cdn',
           removeComments: true
         })
     ]
