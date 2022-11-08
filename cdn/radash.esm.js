@@ -180,6 +180,21 @@ const replaceOrAppend = (list2, newItem, match) => {
   }
   return [...list2, newItem];
 };
+const toggle = (list2, newItem, toValue, strategy) => {
+  if (!list2 && !newItem)
+    return [];
+  if (!list2)
+    return [newItem];
+  if (!newItem)
+    return [...list2];
+  const matcher = toValue ? (x, idx) => toValue(x, idx) === toValue(newItem, idx) : (x) => x === newItem;
+  const existing = list2.find(matcher);
+  if (existing)
+    return list2.filter((x, idx) => !matcher(x, idx));
+  if (!strategy || strategy === "append")
+    return [...list2, newItem];
+  return [newItem, ...list2];
+};
 const sift = (list2) => {
   return list2?.filter((x) => !!x) ?? [];
 };
@@ -738,4 +753,4 @@ const template = (str, data, regex = /\{\{(.+?)\}\}/g) => {
   }, str);
 };
 
-export { alphabetical, boil, camel as camal, camel, capitalize, chain, clone, cluster, compose, counting, dash, debounce, defer, diff, draw, first, flat, fork, get, group, intersects, invert, isArray, isDate, isEmpty, isEqual, isFloat, isFunction, isInt, isNumber, isObject, isString, isSymbol, iterate, last, list, listify, lowerize, map, mapEntries, mapKeys, mapValues, max, memo, merge, min, objectify, omit, parallel, partial, partob, pascal, pick, proxied, random, range, reduce, replace, replaceOrAppend, retry, select, series, shake, shift, shuffle, sift, sleep, snake, sort, sum, template, throttle, toFloat, toInt, tryit as try, tryit, uid, unique, upperize, zip };
+export { alphabetical, boil, camel as camal, camel, capitalize, chain, clone, cluster, compose, counting, dash, debounce, defer, diff, draw, first, flat, fork, get, group, intersects, invert, isArray, isDate, isEmpty, isEqual, isFloat, isFunction, isInt, isNumber, isObject, isString, isSymbol, iterate, last, list, listify, lowerize, map, mapEntries, mapKeys, mapValues, max, memo, merge, min, objectify, omit, parallel, partial, partob, pascal, pick, proxied, random, range, reduce, replace, replaceOrAppend, retry, select, series, shake, shift, shuffle, sift, sleep, snake, sort, sum, template, throttle, toFloat, toInt, toggle, tryit as try, tryit, uid, unique, upperize, zip };
