@@ -808,7 +808,6 @@ var radash = (function (exports) {
   exports.assign = assign;
   exports.boil = boil;
   exports.callable = callable;
-  exports.camal = camel;
   exports.camel = camel;
   exports.capitalize = capitalize;
   exports.chain = chain;
