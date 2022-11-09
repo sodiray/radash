@@ -285,34 +285,6 @@ describe('object module', () => {
       assert.equal(_.get(null, 'name'), null)
       assert.equal(_.get(undefined, 'name'), null)
     })
-    test('returns specified value or default using function', () => {
-      assert.equal(
-        _.get(jay, x => x.name),
-        'jay'
-      )
-      assert.equal(
-        _.get(jay, x => x.friends?.[0].age),
-        17
-      )
-      assert.equal(
-        _.get(
-          jay,
-          x => {
-            throw 'error'
-          },
-          17
-        ),
-        17
-      )
-      assert.equal(
-        _.get({ age: undefined }, x => x.age, 22),
-        22
-      )
-      assert.equal(
-        _.get(jay, x => x.friends?.[0].friends?.[0].friends?.[0].age, 22),
-        22
-      )
-    })
     test('returns specified value or default using path', () => {
       assert.equal(_.get({ age: undefined }, 'age', 22), 22)
       assert.equal(_.get(jay, 'friends[0].age'), 17)

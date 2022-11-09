@@ -644,13 +644,6 @@ const omit = (obj, keys) => {
   );
 };
 const get = (value, funcOrPath, defaultValue = null) => {
-  if (isFunction(funcOrPath)) {
-    try {
-      return funcOrPath(value) ?? defaultValue;
-    } catch {
-      return defaultValue;
-    }
-  }
   const segments = funcOrPath.split(/[\.\[\]]/g);
   let current = value;
   for (const key of segments) {
