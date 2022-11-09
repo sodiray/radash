@@ -3,13 +3,13 @@ import * as _ from '..'
 
 describe('series module', () => {
   type Weekday = 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday'
-  const sut = _.series<Weekday>(
+  const sut = _.series<Weekday>([
     'monday',
     'tuesday',
     'wednesday',
     'thursday',
     'friday'
-  )
+  ])
 
   describe('min function', () => {
     test('correctly returns min', () => {
@@ -52,12 +52,8 @@ describe('series module', () => {
       const result = sut.next('wednesday')
       assert.equal(result, 'thursday')
     })
-    test('returns null by default if exhausted', () => {
+    test('returns first given last exhausted', () => {
       const result = sut.next('friday')
-      assert.equal(result, null)
-    })
-    test('returns given default if exhausted', () => {
-      const result = sut.next('friday', 'monday')
       assert.equal(result, 'monday')
     })
   })
@@ -67,13 +63,28 @@ describe('series module', () => {
       const result = sut.previous('wednesday')
       assert.equal(result, 'tuesday')
     })
-    test('returns null by default if exhausted', () => {
+    test('returns last given first exhausted', () => {
       const result = sut.previous('monday')
-      assert.equal(result, null)
-    })
-    test('returns given default if exhausted', () => {
-      const result = sut.previous('monday', 'friday')
       assert.equal(result, 'friday')
+    })
+  })
+
+  describe('spin function', () => {
+    test('returns current given zero', () => {
+      const result = sut.spin('wednesday', 0)
+      assert.equal(result, 'wednesday')
+    })
+    test('returns friday given -3 starting at wednesday', () => {
+      const result = sut.spin('wednesday', -3)
+      assert.equal(result, 'friday')
+    })
+    test('returns monday given 3 starting at wednesday', () => {
+      const result = sut.spin('wednesday', 3)
+      assert.equal(result, 'monday')
+    })
+    test('returns monday given 13 starting at wednesday', () => {
+      const result = sut.spin('wednesday', 13)
+      assert.equal(result, 'monday')
     })
   })
 })
