@@ -703,12 +703,12 @@ const uid = (length, specials = "") => {
   );
 };
 
-const series = (...items) => {
-  const { itemsByValue, itemsByIndex } = items.reduce(
+const series = (items, toKey = (item) => `${item}`) => {
+  const { indexesByKey, itemsByIndex } = items.reduce(
     (acc, item, idx) => ({
-      itemsByValue: {
-        ...acc.itemsByValue,
-        [item]: idx
+      indexesByKey: {
+        ...acc.indexesByKey,
+        [toKey(item)]: idx
       },
       itemsByIndex: {
         ...acc.itemsByIndex,
@@ -716,29 +716,43 @@ const series = (...items) => {
       }
     }),
     {
-      itemsByValue: {},
+      indexesByKey: {},
       itemsByIndex: {}
     }
   );
+  const min = (a, b) => {
+    return indexesByKey[toKey(a)] < indexesByKey[toKey(b)] ? a : b;
+  };
+  const max = (a, b) => {
+    return indexesByKey[toKey(a)] > indexesByKey[toKey(b)] ? a : b;
+  };
+  const first = () => {
+    return itemsByIndex[0];
+  };
+  const last = () => {
+    return itemsByIndex[items.length - 1];
+  };
+  const next = (current) => {
+    return itemsByIndex[indexesByKey[toKey(current)] + 1] ?? first();
+  };
+  const previous = (current) => {
+    return itemsByIndex[indexesByKey[toKey(current)] - 1] ?? last();
+  };
+  const spin = (current, num) => {
+    if (num === 0)
+      return current;
+    const abs = Math.abs(num);
+    const rel = abs > items.length ? abs % items.length : abs;
+    return list(0, rel - 1).reduce(num > 0 ? next : previous, current);
+  };
   return {
-    min: (a, b) => {
-      return itemsByValue[a] < itemsByValue[b] ? a : b;
-    },
-    max: (a, b) => {
-      return itemsByValue[a] > itemsByValue[b] ? a : b;
-    },
-    first: () => {
-      return itemsByIndex[0];
-    },
-    last: () => {
-      return itemsByIndex[items.length - 1];
-    },
-    next: (current, defaultValue) => {
-      return itemsByIndex[itemsByValue[current] + 1] ?? defaultValue;
-    },
-    previous: (current, defaultValue) => {
-      return itemsByIndex[itemsByValue[current] - 1] ?? defaultValue;
-    }
+    min,
+    max,
+    first,
+    last,
+    next,
+    previous,
+    spin
   };
 };
 
