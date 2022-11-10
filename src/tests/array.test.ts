@@ -375,20 +375,36 @@ describe('array module', () => {
   })
 
   describe('list function', () => {
+    const obj = { name: 'radash' }
     test('creates correct list', () => {
-      const result = _.list(0, 4)
-      assert.deepEqual(result, [0, 1, 2, 3, 4])
-    })
-    test('creates correct list with step', () => {
-      const result = _.list(3, 12, 3)
-      assert.deepEqual(result, [3, 6, 9, 12])
+      assert.deepEqual(_.list(0, 4), [0, 1, 2, 3, 4])
+      assert.deepEqual(_.list(3), [0, 1, 2, 3])
+      assert.deepEqual(_.list(0, 3), [0, 1, 2, 3])
+      assert.deepEqual(_.list(0, 3, 'y'), ['y', 'y', 'y', 'y'])
+      assert.deepEqual(
+        _.list(0, 3, () => 'y'),
+        ['y', 'y', 'y', 'y']
+      )
+      assert.deepEqual(
+        _.list(0, 3, i => i),
+        [0, 1, 2, 3]
+      )
+      assert.deepEqual(
+        _.list(0, 3, i => `y${i}`),
+        ['y0', 'y1', 'y2', 'y3']
+      )
+      assert.deepEqual(_.list(0, 3, obj), [obj, obj, obj, obj])
+      assert.deepEqual(
+        _.list(0, 6, i => i, 2),
+        [0, 2, 4, 6]
+      )
     })
     test('omits end if step does not land on it', () => {
-      const result = _.list(0, 5, 2)
+      const result = _.list(0, 5, i => i, 2)
       assert.deepEqual(result, [0, 2, 4])
     })
     test('returns start only if step larger than end', () => {
-      const result = _.list(0, 5, 20)
+      const result = _.list(0, 5, i => i, 20)
       assert.deepEqual(result, [0])
     })
   })

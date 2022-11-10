@@ -209,8 +209,10 @@ var radash = (function (exports) {
         break;
     }
   }
-  const list = (start, end, step = 1) => {
-    return Array.from(range(start, end, step));
+  const list = (startOrLength, end, valueOrMapper = (i) => i, step = 1) => {
+    const mapper = isFunction(valueOrMapper) ? valueOrMapper : () => valueOrMapper;
+    const start = end ? startOrLength : 0;
+    return Array.from(range(start, end ?? startOrLength, step), mapper);
   };
   const flat = (lists) => {
     return lists.reduce((acc, list2) => {

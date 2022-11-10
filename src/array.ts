@@ -304,18 +304,28 @@ export function* range(
 }
 
 /**
- * Creates a list with numbers ranging from the
- * start to the end by the given step.
+ * Creates a list of given start, end, value, and
+ * step parameters.
  *
- * @example list(0, 3) // [0, 1, 2, 3]
- * @example list(2, 10, 2) // [2, 4, 6, 8 ,10]
+ * @example
+ * list(3)                  // 0, 1, 2, 3
+ * list(0, 3)               // 0, 1, 2, 3
+ * list(0, 3, 'y')          // y, y, y, y
+ * list(0, 3, () => 'y')    // y, y, y, y
+ * list(0, 3, i => i)       // 0, 1, 2, 3
+ * list(0, 3, i => `y${i}`) // y0, y1, y2, y3
+ * list(0, 3, obj)          // obj, obj, obj, obj
+ * list(0, 6, i => i, 2)    // 0, 2, 4, 6
  */
-export const list = (
-  start: number,
-  end: number,
+export const list = <T = number>(
+  startOrLength: number,
+  end?: number,
+  valueOrMapper: T | ((i: number) => T) = (i: number) => i as T,
   step: number = 1
-): number[] => {
-  return Array.from(range(start, end, step))
+): T[] => {
+  const mapper = isFunction(valueOrMapper) ? valueOrMapper : () => valueOrMapper
+  const start = end ? startOrLength : 0
+  return Array.from(range(start, end ?? startOrLength, step), mapper)
 }
 
 /**
