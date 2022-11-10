@@ -195,7 +195,7 @@ var radash = (function (exports) {
     if (existing)
       return list2.filter((x, idx) => !matcher(x, idx));
     const strategy = options?.strategy ?? "append";
-    if (!strategy || strategy === "append")
+    if (strategy === "append")
       return [...list2, newItem];
     return [newItem, ...list2];
   };

@@ -377,7 +377,7 @@ export const toggle = <T>(
   const existing = list.find(matcher)
   if (existing) return list.filter((x, idx) => !matcher(x, idx))
   const strategy = options?.strategy ?? 'append'
-  if (!strategy || strategy === 'append') return [...list, newItem]
+  if (strategy === 'append') return [...list, newItem]
   return [newItem, ...list]
 }
 
