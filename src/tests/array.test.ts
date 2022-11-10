@@ -362,15 +362,28 @@ describe('array module', () => {
   })
 
   describe('range function', () => {
-    test('creates correct list', () => {
-      let items: number[] = []
-      for (const item of _.range(0, 4)) items.push(item)
-      assert.deepEqual(items, [0, 1, 2, 3, 4])
-    })
-    test('creates correct list with step', () => {
-      let items: number[] = []
-      for (const item of _.range(0, 10, 2)) items.push(item)
-      assert.deepEqual(items, [0, 2, 4, 6, 8, 10])
+    const obj = { name: 'radash' }
+    const toList = <T>(gen: Generator<T>): T[] => {
+      let items: T[] = []
+      for (const item of gen) items.push(item)
+      return items
+    }
+
+    test('yields expected values', () => {
+      assert.deepEqual(toList(_.range(0, 4)), [0, 1, 2, 3, 4])
+      assert.deepEqual(toList(_.range(3)), [0, 1, 2, 3])
+      assert.deepEqual(toList(_.range(0, 3)), [0, 1, 2, 3])
+      assert.deepEqual(toList(_.range(0, 3, 'y')), ['y', 'y', 'y', 'y'])
+      assert.deepEqual(toList(_.range(0, 3, () => 'y')), ['y', 'y', 'y', 'y'])
+      assert.deepEqual(toList(_.range(0, 3, i => i)), [0, 1, 2, 3])
+      assert.deepEqual(toList(_.range(0, 3, i => `y${i}`)), [
+        'y0',
+        'y1',
+        'y2',
+        'y3'
+      ])
+      assert.deepEqual(toList(_.range(0, 3, obj)), [obj, obj, obj, obj])
+      assert.deepEqual(toList(_.range(0, 6, i => i, 2)), [0, 2, 4, 6])
     })
   })
 

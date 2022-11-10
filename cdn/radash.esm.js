@@ -199,17 +199,18 @@ const unique = (array, toKey) => {
   }, {});
   return Object.values(valueMap);
 };
-function* range(start, end, step = 1) {
-  for (let i = start; i <= end; i += step) {
-    yield i;
-    if (i + step > end)
+function* range(startOrLength, end, valueOrMapper = (i) => i, step = 1) {
+  const mapper = isFunction(valueOrMapper) ? valueOrMapper : () => valueOrMapper;
+  const start = end ? startOrLength : 0;
+  const final = end ?? startOrLength;
+  for (let i = start; i <= final; i += step) {
+    yield mapper(i);
+    if (i + step > final)
       break;
   }
 }
-const list = (startOrLength, end, valueOrMapper = (i) => i, step = 1) => {
-  const mapper = isFunction(valueOrMapper) ? valueOrMapper : () => valueOrMapper;
-  const start = end ? startOrLength : 0;
-  return Array.from(range(start, end ?? startOrLength, step), mapper);
+const list = (startOrLength, end, valueOrMapper, step) => {
+  return Array.from(range(startOrLength, end, valueOrMapper, step));
 };
 const flat = (lists) => {
   return lists.reduce((acc, list2) => {
