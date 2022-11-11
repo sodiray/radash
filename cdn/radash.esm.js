@@ -180,21 +180,21 @@ const replaceOrAppend = (list2, newItem, match) => {
   }
   return [...list2, newItem];
 };
-const toggle = (list2, newItem, toValue, options) => {
-  if (!list2 && !newItem)
+const toggle = (list2, item, toKey, options) => {
+  if (!list2 && !item)
     return [];
   if (!list2)
-    return [newItem];
-  if (!newItem)
+    return [item];
+  if (!item)
     return [...list2];
-  const matcher = toValue ? (x, idx) => toValue(x, idx) === toValue(newItem, idx) : (x) => x === newItem;
+  const matcher = toKey ? (x, idx) => toKey(x, idx) === toKey(item, idx) : (x) => x === item;
   const existing = list2.find(matcher);
   if (existing)
     return list2.filter((x, idx) => !matcher(x, idx));
   const strategy = options?.strategy ?? "append";
   if (strategy === "append")
-    return [...list2, newItem];
-  return [newItem, ...list2];
+    return [...list2, item];
+  return [item, ...list2];
 };
 const sift = (list2) => {
   return list2?.filter((x) => !!x) ?? [];

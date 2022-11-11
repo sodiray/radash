@@ -362,23 +362,27 @@ export const replaceOrAppend = <T>(
  */
 export const toggle = <T>(
   list: readonly T[],
-  newItem: T,
-  toValue?: null | ((a: T, idx: number) => number | string | symbol),
+  item: T,
+  /**
+   * Converts an item of type T item into a value that
+   * can be checked for equality
+   */
+  toKey?: null | ((item: T, idx: number) => number | string | symbol),
   options?: {
     strategy?: 'prepend' | 'append'
   }
 ) => {
-  if (!list && !newItem) return []
-  if (!list) return [newItem]
-  if (!newItem) return [...list]
-  const matcher = toValue
-    ? (x: T, idx: number) => toValue(x, idx) === toValue(newItem, idx)
-    : (x: T) => x === newItem
+  if (!list && !item) return []
+  if (!list) return [item]
+  if (!item) return [...list]
+  const matcher = toKey
+    ? (x: T, idx: number) => toKey(x, idx) === toKey(item, idx)
+    : (x: T) => x === item
   const existing = list.find(matcher)
   if (existing) return list.filter((x, idx) => !matcher(x, idx))
   const strategy = options?.strategy ?? 'append'
-  if (strategy === 'append') return [...list, newItem]
-  return [newItem, ...list]
+  if (strategy === 'append') return [...list, item]
+  return [item, ...list]
 }
 
 /**
