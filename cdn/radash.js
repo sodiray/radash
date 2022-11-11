@@ -183,6 +183,22 @@ var radash = (function (exports) {
     }
     return [...list2, newItem];
   };
+  const toggle = (list2, item, toKey, options) => {
+    if (!list2 && !item)
+      return [];
+    if (!list2)
+      return [item];
+    if (!item)
+      return [...list2];
+    const matcher = toKey ? (x, idx) => toKey(x, idx) === toKey(item, idx) : (x) => x === item;
+    const existing = list2.find(matcher);
+    if (existing)
+      return list2.filter((x, idx) => !matcher(x, idx));
+    const strategy = options?.strategy ?? "append";
+    if (strategy === "append")
+      return [...list2, item];
+    return [item, ...list2];
+  };
   const sift = (list2) => {
     return list2?.filter((x) => !!x) ?? [];
   };
@@ -815,6 +831,7 @@ var radash = (function (exports) {
   exports.throttle = throttle;
   exports.toFloat = toFloat;
   exports.toInt = toInt;
+  exports.toggle = toggle;
   exports.try = tryit;
   exports.tryit = tryit;
   exports.uid = uid;
