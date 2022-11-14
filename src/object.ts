@@ -145,7 +145,8 @@ export const clone = <T>(obj: T): T => {
 
   // Assign the props.
   Object.getOwnPropertyNames(obj).forEach(prop => {
-    newObj[prop] = obj[prop]
+    // Bypass type checking since the primitive cases are already checked in the beginning
+    ;(newObj as any)[prop] = (obj as any)[prop]
   })
 
   return newObj
