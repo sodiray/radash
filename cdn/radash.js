@@ -437,6 +437,9 @@ var radash = (function (exports) {
   const isObject = (value) => {
     return !!value && value.constructor === Object;
   };
+  const isPrimitive = (value) => {
+    return value === void 0 || value === null || typeof value !== "object" && typeof value !== "function";
+  };
   const isFunction = (value) => {
     return !!(value && value.constructor && value.call && value.apply);
   };
@@ -563,13 +566,17 @@ var radash = (function (exports) {
   const lowerize = (obj) => mapKeys(obj, (k) => k.toLowerCase());
   const upperize = (obj) => mapKeys(obj, (k) => k.toUpperCase());
   const clone = (obj) => {
-    return Object.getOwnPropertyNames(obj).reduce(
-      (acc, name) => ({
-        ...acc,
-        [name]: obj[name]
-      }),
-      {}
-    );
+    if (isPrimitive(obj)) {
+      return obj;
+    }
+    if (typeof obj === "function") {
+      return obj.bind({});
+    }
+    const newObj = new obj.constructor();
+    Object.getOwnPropertyNames(obj).forEach((prop) => {
+      newObj[prop] = obj[prop];
+    });
+    return newObj;
   };
   const listify = (obj, toItem) => {
     if (!obj)
@@ -788,6 +795,7 @@ var radash = (function (exports) {
   exports.isInt = isInt;
   exports.isNumber = isNumber;
   exports.isObject = isObject;
+  exports.isPrimitive = isPrimitive;
   exports.isString = isString;
   exports.isSymbol = isSymbol;
   exports.iterate = iterate;
