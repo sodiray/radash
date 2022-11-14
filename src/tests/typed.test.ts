@@ -80,19 +80,27 @@ describe('typed module', () => {
 
   describe('isPrimitive function', () => {
     test('returns true for all the primitives', () => {
-      const arr = [1.1, 'How you doin?', false, Symbol('key'), BigInt('1'), undefined, null]
+      const arr = [
+        1.1,
+        'How you doin?',
+        false,
+        Symbol('key'),
+        BigInt('1'),
+        undefined,
+        null
+      ]
 
-      for(const elm of arr){
+      for (const elm of arr) {
         assert.isTrue(_.isPrimitive(elm))
       }
     }),
-    test('returns false for non-primitives', () => {
-      const arr = [new Date(),Number, {}, Object({}), ()=>0, [1,2]]
+      test('returns false for non-primitives', () => {
+        const arr = [new Date(), Number, {}, Object({}), () => 0, [1, 2]]
 
-      for(const elm of arr){
-        assert.isFalse(_.isPrimitive(elm))
-      }
-    })
+        for (const elm of arr) {
+          assert.isFalse(_.isPrimitive(elm))
+        }
+      })
   })
 
   describe('isFunction function', () => {

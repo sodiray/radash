@@ -1,4 +1,4 @@
-import { isPrimitive, isFunction, isObject } from './typed'
+import { isFunction, isObject, isPrimitive } from './typed'
 
 type LowercasedKeys<T extends Record<string, any>> = {
   [P in keyof T & string as Lowercase<P>]: T[P]
