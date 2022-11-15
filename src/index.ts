@@ -79,7 +79,8 @@ export {
   dash,
   pascal,
   snake,
-  template
+  template,
+  title
 } from './string'
 export {
   isArray,
