@@ -143,8 +143,8 @@ describe('string module', () => {
     })
   })
 
-  describe('PascalCase function', () => {
-    test('returns non alphanumerics in PascalCase', () => {
+  describe('pascal function', () => {
+    test('returns non alphanumerics in pascal', () => {
       const result = _.pascal('Exobase Starter_flash AND-go')
       assert.equal(result, 'ExobaseStarterFlashAndGo')
     })
@@ -155,6 +155,23 @@ describe('string module', () => {
     test('returns empty string for empty input', () => {
       const result = _.pascal(null as any)
       assert.equal(result, '')
+    })
+  })
+
+  describe('title function', () => {
+    test('returns input formatted in title case', () => {
+      assert.equal(_.title('hello world'), 'Hello World')
+      assert.equal(_.title('va_va_boom'), 'Va Va Boom')
+      assert.equal(_.title('root-hook   -  ok!'), 'Root Hook Ok!')
+      assert.equal(_.title('queryItems'), 'Query Items')
+      assert.equal(
+        _.title('queryAllItems-in_Database'),
+        'Query All Items In Database'
+      )
+    })
+    test('returns empty string for bad input', () => {
+      assert.equal(_.title(null), '')
+      assert.equal(_.title(undefined), '')
     })
   })
 })

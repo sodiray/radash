@@ -755,10 +755,13 @@ const pascal = (str) => {
     return "";
   return parts.map((str2) => str2.charAt(0).toUpperCase() + str2.slice(1)).join("");
 };
+const title = (str) => {
+  return str?.split(/(?=[A-Z])|[\.\-\s_]/).filter((x) => !!x.trim()).map((x) => capitalize(x.toLowerCase().trim())).join(" ") ?? "";
+};
 const template = (str, data, regex = /\{\{(.+?)\}\}/g) => {
   return Array.from(str.matchAll(regex)).reduce((acc, match) => {
     return acc.replace(match[0], data[match[1]]);
   }, str);
 };
 
-export { alphabetical, boil, camel as camal, camel, capitalize, chain, clone, cluster, compose, counting, dash, debounce, defer, diff, draw, first, flat, fork, get, group, intersects, invert, isArray, isDate, isEmpty, isEqual, isFloat, isFunction, isInt, isNumber, isObject, isPrimitive, isString, isSymbol, iterate, last, list, listify, lowerize, map, mapEntries, mapKeys, mapValues, max, memo, merge, min, objectify, omit, parallel, partial, partob, pascal, pick, proxied, random, range, reduce, replace, replaceOrAppend, retry, select, series, shake, shift, shuffle, sift, sleep, snake, sort, sum, template, throttle, toFloat, toInt, toggle, tryit as try, tryit, uid, unique, upperize, zip };
+export { alphabetical, boil, camel as camal, camel, capitalize, chain, clone, cluster, compose, counting, dash, debounce, defer, diff, draw, first, flat, fork, get, group, intersects, invert, isArray, isDate, isEmpty, isEqual, isFloat, isFunction, isInt, isNumber, isObject, isPrimitive, isString, isSymbol, iterate, last, list, listify, lowerize, map, mapEntries, mapKeys, mapValues, max, memo, merge, min, objectify, omit, parallel, partial, partob, pascal, pick, proxied, random, range, reduce, replace, replaceOrAppend, retry, select, series, shake, shift, shuffle, sift, sleep, snake, sort, sum, template, throttle, title, toFloat, toInt, toggle, tryit as try, tryit, uid, unique, upperize, zip };

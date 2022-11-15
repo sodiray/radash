@@ -758,6 +758,9 @@ var radash = (function (exports) {
       return "";
     return parts.map((str2) => str2.charAt(0).toUpperCase() + str2.slice(1)).join("");
   };
+  const title = (str) => {
+    return str?.split(/(?=[A-Z])|[\.\-\s_]/).filter((x) => !!x.trim()).map((x) => capitalize(x.toLowerCase().trim())).join(" ") ?? "";
+  };
   const template = (str, data, regex = /\{\{(.+?)\}\}/g) => {
     return Array.from(str.matchAll(regex)).reduce((acc, match) => {
       return acc.replace(match[0], data[match[1]]);
@@ -837,6 +840,7 @@ var radash = (function (exports) {
   exports.sum = sum;
   exports.template = template;
   exports.throttle = throttle;
+  exports.title = title;
   exports.toFloat = toFloat;
   exports.toInt = toInt;
   exports.toggle = toggle;

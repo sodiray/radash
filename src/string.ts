@@ -11,7 +11,7 @@ export const capitalize = (str: string): string => {
 }
 
 /**
- * Joins all the words of the string in a camel case fashion
+ * Formats the words of the string in camel case fashion
  *
  * camel('hello world')   -> 'helloWorld'
  * camel('va va-VOOM') -> 'vaVaVoom'
@@ -31,7 +31,7 @@ export const camel = (str: string): string => {
 }
 
 /**
- * Joins all the words of the string in a snake case fashion
+ * Formats the words of the string in snake case fashion
  *
  * snake('hello world')   -> 'hello_world'
  * snake('va va-VOOM') -> 'va_va_voom'
@@ -51,7 +51,7 @@ export const snake = (str: string): string => {
 }
 
 /**
- * Joins all the words of the string in a dash case fashion
+ * Formats the words of the string in dash case fashion
  *
  * dash('hello world')   -> 'hello-world'
  * dash('va va_VOOM') -> 'va-va-voom'
@@ -71,7 +71,7 @@ export const dash = (str: string): string => {
 }
 
 /**
- * Joins all string arguments in a Pascal case fashion
+ * Formats a string in Pascal case fashion
  *
  * pascal('hello world') -> 'HelloWorld'
  * pascal('va va boom') -> 'VaVaBoom'
@@ -80,6 +80,24 @@ export const pascal = (str: string): string => {
   const parts = str?.split(/[\.\-\s_]/).map(x => x.toLowerCase()) ?? []
   if (parts.length === 0) return ''
   return parts.map(str => str.charAt(0).toUpperCase() + str.slice(1)).join('')
+}
+
+/**
+ * Formats a string in title case fashion
+ *
+ * title('hello world') -> 'Hello World'
+ * title('va_va_boom') -> 'Va Va Boom'
+ * title('root-hook') -> 'Root Hook'
+ * title('queryItems') -> 'Query Items'
+ */
+export const title = (str: string | null | undefined): string => {
+  return (
+    str
+      ?.split(/(?=[A-Z])|[\.\-\s_]/)
+      .filter(x => !!x.trim())
+      .map(x => capitalize(x.toLowerCase().trim()))
+      .join(' ') ?? ''
+  )
 }
 
 /**
