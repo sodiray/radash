@@ -91,13 +91,13 @@ export const pascal = (str: string): string => {
  * title('queryItems') -> 'Query Items'
  */
 export const title = (str: string | null | undefined): string => {
-  return (
-    str
-      ?.split(/(?=[A-Z])|[\.\-\s_]/)
-      .filter(x => !!x.trim())
-      .map(x => capitalize(x.toLowerCase().trim()))
-      .join(' ') ?? ''
-  )
+  if (!str) return ''
+  return str
+    .split(/(?=[A-Z])|[\.\-\s_]/)
+    .map(s => s.trim())
+    .filter(s => !!s)
+    .map(s => capitalize(s.toLowerCase()))
+    .join(' ')
 }
 
 /**

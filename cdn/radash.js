@@ -759,7 +759,9 @@ var radash = (function (exports) {
     return parts.map((str2) => str2.charAt(0).toUpperCase() + str2.slice(1)).join("");
   };
   const title = (str) => {
-    return str?.split(/(?=[A-Z])|[\.\-\s_]/).filter((x) => !!x.trim()).map((x) => capitalize(x.toLowerCase().trim())).join(" ") ?? "";
+    if (!str)
+      return "";
+    return str.split(/(?=[A-Z])|[\.\-\s_]/).map((s) => s.trim()).filter((s) => !!s).map((s) => capitalize(s.toLowerCase())).join(" ");
   };
   const template = (str, data, regex = /\{\{(.+?)\}\}/g) => {
     return Array.from(str.matchAll(regex)).reduce((acc, match) => {
