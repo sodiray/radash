@@ -11,7 +11,7 @@ export const capitalize = (str: string): string => {
 }
 
 /**
- * Formats the words of the string in camel case fashion
+ * Formats the given string in camel case fashion
  *
  * camel('hello world')   -> 'helloWorld'
  * camel('va va-VOOM') -> 'vaVaVoom'
@@ -31,7 +31,7 @@ export const camel = (str: string): string => {
 }
 
 /**
- * Formats the words of the string in snake case fashion
+ * Formats the given string in snake case fashion
  *
  * snake('hello world')   -> 'hello_world'
  * snake('va va-VOOM') -> 'va_va_voom'
@@ -51,7 +51,7 @@ export const snake = (str: string): string => {
 }
 
 /**
- * Formats the words of the string in dash case fashion
+ * Formats the given string in dash case fashion
  *
  * dash('hello world')   -> 'hello-world'
  * dash('va va_VOOM') -> 'va-va-voom'
@@ -71,7 +71,7 @@ export const dash = (str: string): string => {
 }
 
 /**
- * Formats a string in Pascal case fashion
+ * Formats the given string in pascal case fashion
  *
  * pascal('hello world') -> 'HelloWorld'
  * pascal('va va boom') -> 'VaVaBoom'
@@ -83,7 +83,7 @@ export const pascal = (str: string): string => {
 }
 
 /**
- * Formats a string in title case fashion
+ * Formats the given string in title case fashion
  *
  * title('hello world') -> 'Hello World'
  * title('va_va_boom') -> 'Va Va Boom'
