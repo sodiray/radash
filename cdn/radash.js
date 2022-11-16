@@ -8,6 +8,19 @@ var radash = (function (exports) {
       return { ...acc, [groupId]: [...groupList, item] };
     }, {});
   };
+  function zip(...arrays) {
+    if (!arrays || !arrays.length)
+      return [];
+    return new Array(Math.max(...arrays.map(({ length }) => length))).fill([]).map((_, idx) => arrays.map((array) => array[idx]));
+  }
+  function zipToObject(keys, values) {
+    if (!keys || !keys.length || !values || values.length)
+      return {};
+    return keys.reduce(
+      (acc, key, idx) => ({ ...acc, [key]: values[idx] }),
+      {}
+    );
+  }
   const boil = (array, compareFunc) => {
     if (!array || (array.length ?? 0) === 0)
       return null;
@@ -633,7 +646,7 @@ var radash = (function (exports) {
       return defaultValue;
     return current;
   };
-  const zip = (a, b) => {
+  const assign = (a, b) => {
     if (!a && !b)
       return {};
     if (!a)
@@ -645,7 +658,7 @@ var radash = (function (exports) {
         ...acc,
         [key]: (() => {
           if (isObject(value))
-            return zip(value, b[key]);
+            return assign(value, b[key]);
           return b[key];
         })()
       };
@@ -770,6 +783,7 @@ var radash = (function (exports) {
   };
 
   exports.alphabetical = alphabetical;
+  exports.assign = assign;
   exports.boil = boil;
   exports.camal = camel;
   exports.camel = camel;
@@ -852,6 +866,7 @@ var radash = (function (exports) {
   exports.unique = unique;
   exports.upperize = upperize;
   exports.zip = zip;
+  exports.zipToObject = zipToObject;
 
   return exports;
 

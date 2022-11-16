@@ -5,6 +5,19 @@ const group = (array, getGroupId) => {
     return { ...acc, [groupId]: [...groupList, item] };
   }, {});
 };
+function zip(...arrays) {
+  if (!arrays || !arrays.length)
+    return [];
+  return new Array(Math.max(...arrays.map(({ length }) => length))).fill([]).map((_, idx) => arrays.map((array) => array[idx]));
+}
+function zipToObject(keys, values) {
+  if (!keys || !keys.length || !values || values.length)
+    return {};
+  return keys.reduce(
+    (acc, key, idx) => ({ ...acc, [key]: values[idx] }),
+    {}
+  );
+}
 const boil = (array, compareFunc) => {
   if (!array || (array.length ?? 0) === 0)
     return null;
@@ -630,7 +643,7 @@ const get = (value, funcOrPath, defaultValue = null) => {
     return defaultValue;
   return current;
 };
-const zip = (a, b) => {
+const assign = (a, b) => {
   if (!a && !b)
     return {};
   if (!a)
@@ -642,7 +655,7 @@ const zip = (a, b) => {
       ...acc,
       [key]: (() => {
         if (isObject(value))
-          return zip(value, b[key]);
+          return assign(value, b[key]);
         return b[key];
       })()
     };
@@ -766,4 +779,4 @@ const template = (str, data, regex = /\{\{(.+?)\}\}/g) => {
   }, str);
 };
 
-export { alphabetical, boil, camel as camal, camel, capitalize, chain, clone, cluster, compose, counting, dash, debounce, defer, diff, draw, first, flat, fork, get, group, intersects, invert, isArray, isDate, isEmpty, isEqual, isFloat, isFunction, isInt, isNumber, isObject, isPrimitive, isString, isSymbol, iterate, last, list, listify, lowerize, map, mapEntries, mapKeys, mapValues, max, memo, merge, min, objectify, omit, parallel, partial, partob, pascal, pick, proxied, random, range, reduce, replace, replaceOrAppend, retry, select, series, shake, shift, shuffle, sift, sleep, snake, sort, sum, template, throttle, title, toFloat, toInt, toggle, tryit as try, tryit, uid, unique, upperize, zip };
+export { alphabetical, assign, boil, camel as camal, camel, capitalize, chain, clone, cluster, compose, counting, dash, debounce, defer, diff, draw, first, flat, fork, get, group, intersects, invert, isArray, isDate, isEmpty, isEqual, isFloat, isFunction, isInt, isNumber, isObject, isPrimitive, isString, isSymbol, iterate, last, list, listify, lowerize, map, mapEntries, mapKeys, mapValues, max, memo, merge, min, objectify, omit, parallel, partial, partob, pascal, pick, proxied, random, range, reduce, replace, replaceOrAppend, retry, select, series, shake, shift, shuffle, sift, sleep, snake, sort, sum, template, throttle, title, toFloat, toInt, toggle, tryit as try, tryit, uid, unique, upperize, zip, zipToObject };
