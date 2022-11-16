@@ -1,4 +1,4 @@
-import { isFunction } from './typed'
+import { isArray, isFunction } from './typed'
 
 /**
  * Sorts an array of items into groups. The return value is a map where the keys are
@@ -56,13 +56,17 @@ export function zip<T>(...arrays: T[][]): T[][] {
  */
 export function zipToObject<K extends string | number | symbol, V>(
   keys: K[],
-  values: ((key: K, idx: number) => V) | V[]
+  values: V | ((key: K, idx: number) => V) | V[]
 ): Record<K, V> {
   if (!keys || !keys.length) {
     return {} as Record<K, V>
   }
 
-  const getValue = isFunction(values) ? values : (_k: K, i: number) => values[i]
+  const getValue = isFunction(values)
+    ? values
+    : isArray(values)
+    ? (_k: K, i: number) => values[i]
+    : (_k: K, _i: number) => values
 
   return keys.reduce(
     (acc, key, idx) => ({ ...acc, [key]: getValue(key, idx) }),
