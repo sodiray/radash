@@ -406,7 +406,7 @@ describe('object module', () => {
       const result = _.assign(NULL, { a: 'y' })
       assert.deepEqual(result, { a: 'y' })
     })
-    test('correctly zips a with values from b', () => {
+    test('correctly assign a with values from b', () => {
       const result = _.assign(a, b)
       assert.deepEqual(result, b)
     })
