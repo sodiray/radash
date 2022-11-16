@@ -14,7 +14,7 @@ var radash = (function (exports) {
     return new Array(Math.max(...arrays.map(({ length }) => length))).fill([]).map((_, idx) => arrays.map((array) => array[idx]));
   }
   function zipToObject(keys, values) {
-    if (!keys || !keys.length || !values || values.length)
+    if (!keys || !keys.length || !values || !values.length)
       return {};
     return keys.reduce(
       (acc, key, idx) => ({ ...acc, [key]: values[idx] }),
