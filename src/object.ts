@@ -236,11 +236,11 @@ export const get = <T, K>(
 }
 
 /**
- * Zip two objects together recursivly into a new
+ * Merges two objects together recursivly into a new
  * object applying values from right to left.
  * Recursion only applies to child object properties.
  */
-export const zip = <X extends Record<string | symbol | number, any>>(
+export const assign = <X extends Record<string | symbol | number, any>>(
   a: X,
   b: X
 ): X => {

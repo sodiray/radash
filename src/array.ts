@@ -14,6 +14,24 @@ export const group = <T, Key extends string | number | symbol>(
   }, {} as Record<Key, T[]>)
 }
 
+export const unzip = <T>(...arrays: readonly T[][]): T[][] => {
+  if (arrays == null || arrays.length === 0) {
+    return []
+  }
+
+  const result = new Array(Math.max(...arrays.map(({ length }) => length)))
+
+  for (let index = 0; index < result.length; index++) {
+    result[index] = arrays.map(array => array[index])
+  }
+
+  return result
+}
+
+export const zip = <T>(...arrays: readonly T[][]): T[][] => {
+  return unzip(...arrays)
+}
+
 /**
  * Go through a list of items, starting with the first item,
  * and comparing with the second. Keep the one you want then

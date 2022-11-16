@@ -48,6 +48,21 @@ describe('array module', () => {
     })
   })
 
+  describe('zip function', () => {
+    test('zips an array correctly', () => {
+      const list = [
+        ['a', 'b'],
+        [1, 2],
+        [true, false]
+      ]
+      const result = _.zip(...list)
+      assert.equal(result, [
+        ['a', 1, true],
+        ['b', 2, false]
+      ])
+    })
+  })
+
   describe('sum function', () => {
     test('adds list of number correctly', () => {
       const list = [5, 5, 10, 2]
