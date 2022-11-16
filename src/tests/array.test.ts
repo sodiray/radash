@@ -69,6 +69,12 @@ describe('array module', () => {
       const result = _.zipToObject(['a', 'b'], [1, 2])
       assert.deepEqual(result, { a: 1, b: 2 })
     })
+
+    test('returns an empty object if bad parameters are passed', () => {
+      // @ts-ignore
+      const result = _.zipToObject()
+      assert.deepEqual(result, {})
+    })
   })
 
   describe('sum function', () => {
