@@ -54,12 +54,17 @@ export function zip<T>(...arrays: T[][]): T[][] {
  */
 export function zipToObject<K extends string | number | symbol, V>(
   keys: K[],
-  values: V[]
+  values: V | ((key: K, idx: number) => V) | V[]
 ): Record<K, V> {
-  if (!keys || !keys.length || !values || !values.length)
+  if (!keys || !keys.length)
     return {} as Record<K, V>
+  const getValue = isFunction(values) 
+    ? values 
+    : isArray(values) 
+      ? (k, i) => values[i] 
+      : () => values
   return keys.reduce(
-    (acc, key, idx) => ({ ...acc, [key]: values[idx] }),
+    (acc, key, idx) => ({ ...acc, [key]: getValue(key, idx) }),
     {} as Record<K, V>
   )
 }
