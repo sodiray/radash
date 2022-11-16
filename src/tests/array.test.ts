@@ -70,6 +70,11 @@ describe('array module', () => {
       assert.deepEqual(result, { a: 1, b: 2 })
     })
 
+    test('zips to an object with custom map function', () => {
+      const result = _.zipToObject(['a', 'b'], (k, i) => k + i)
+      assert.deepEqual(result, { a: 'a0', b: 'b1' })
+    })
+
     test('returns an empty object if bad parameters are passed', () => {
       // @ts-ignore
       const result = _.zipToObject()

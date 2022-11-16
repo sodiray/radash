@@ -1,3 +1,5 @@
+import { isArray, isFunction } from './typed'
+
 /**
  * Sorts an array of items into groups. The return value is a map where the keys are
  * the group ids the given getGroupId function produced and the value is an array of
@@ -56,13 +58,20 @@ export function zipToObject<K extends string | number | symbol, V>(
   keys: K[],
   values: V | ((key: K, idx: number) => V) | V[]
 ): Record<K, V> {
-  if (!keys || !keys.length)
+  if (!keys || !keys.length) {
     return {} as Record<K, V>
-  const getValue = isFunction(values) 
-    ? values 
-    : isArray(values) 
-      ? (k, i) => values[i] 
-      : () => values
+  }
+
+  let getValue: (key: K, idx: number) => V
+
+  if (isFunction(values)) {
+    getValue = values
+  }
+
+  if (isArray(values)) {
+    getValue = (_: K, i: number) => values[i]
+  }
+
   return keys.reduce(
     (acc, key, idx) => ({ ...acc, [key]: getValue(key, idx) }),
     {} as Record<K, V>
