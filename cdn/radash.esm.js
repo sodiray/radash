@@ -95,7 +95,7 @@ function zipToObject(keys, values) {
   if (!keys || !keys.length) {
     return {};
   }
-  const getValue = isFunction(values) ? values : (_k, i) => values[i];
+  const getValue = isFunction(values) ? values : isArray(values) ? (_k, i) => values[i] : (_k, _i) => values;
   return keys.reduce(
     (acc, key, idx) => ({ ...acc, [key]: getValue(key, idx) }),
     {}
