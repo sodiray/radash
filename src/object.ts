@@ -251,7 +251,7 @@ export const assign = <X extends Record<string | symbol | number, any>>(
     return {
       ...acc,
       [key]: (() => {
-        if (isObject(value)) return zip(value, b[key])
+        if (isObject(value)) return assign(value, b[key])
         return b[key]
       })()
     }

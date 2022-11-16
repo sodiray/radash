@@ -50,16 +50,24 @@ describe('array module', () => {
 
   describe('zip function', () => {
     test('zips an array correctly', () => {
-      const list = [
-        ['a', 'b'],
-        [1, 2],
-        [true, false]
-      ]
-      const result = _.zip(...list)
-      assert.equal(result, [
+      const result = _.zip(['a', 'b'], [1, 2], [true, false])
+      assert.deepEqual(result, [
         ['a', 1, true],
         ['b', 2, false]
       ])
+    })
+
+    test('returns an empty array if nothing is passed', () => {
+      // @ts-ignore
+      const result = _.zip()
+      assert.deepEqual(result, [])
+    })
+  })
+
+  describe('zipToObject function', () => {
+    test('zips to an object correctly', () => {
+      const result = _.zipToObject(['a', 'b'], [1, 2])
+      assert.deepEqual(result, { a: 1, b: 2 })
     })
   })
 

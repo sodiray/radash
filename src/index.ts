@@ -26,7 +26,8 @@ export {
   sum,
   toggle,
   unique,
-  zip
+  zip,
+  zipToObject
 } from './array'
 export {
   defer,
