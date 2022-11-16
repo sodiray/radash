@@ -56,7 +56,7 @@ export function zipToObject<K extends string | number | symbol, V>(
   keys: K[],
   values: V[]
 ): Record<K, V> {
-  if (!keys || !keys.length || !values || values.length)
+  if (!keys || !keys.length || !values || !values.length)
     return {} as Record<K, V>
   return keys.reduce(
     (acc, key, idx) => ({ ...acc, [key]: values[idx] }),
