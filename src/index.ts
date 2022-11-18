@@ -39,6 +39,7 @@ export {
 } from './async'
 export type { AggregateError } from './async'
 export {
+  callable,
   chain,
   compose,
   debounce,
@@ -46,8 +47,7 @@ export {
   partial,
   partob,
   proxied,
-  throttle,
-  callable
+  throttle
 } from './curry'
 export { toFloat, toInt } from './number'
 export {
