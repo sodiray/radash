@@ -154,15 +154,14 @@ export const callable = <
   obj: TObj,
   fn: (self: TObj) => TFunc
 ): TObj & TFunc => {
-  return new Proxy(
-    Object.assign(() => {}, obj),
-    {
-      get: (target, key: string) => target[key],
-      set: (target, key: string, value: any) => {
-        ;(target as any)[key] = value
-        return true
-      },
-      apply: (target, self, args) => fn(Object.assign({}, target))(...args)
-    }
-  ) as unknown as TObj & TFunc
+  /* istanbul ignore next */
+  const FUNC = () => {}
+  return new Proxy(Object.assign(FUNC, obj), {
+    get: (target, key: string) => target[key],
+    set: (target, key: string, value: any) => {
+      ;(target as any)[key] = value
+      return true
+    },
+    apply: (target, self, args) => fn(Object.assign({}, target))(...args)
+  }) as unknown as TObj & TFunc
 }
