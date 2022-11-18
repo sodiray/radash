@@ -46,7 +46,8 @@ export {
   partial,
   partob,
   proxied,
-  throttle
+  throttle,
+  callable
 } from './curry'
 export { toFloat, toInt } from './number'
 export {
