@@ -786,11 +786,20 @@ var radash = (function (exports) {
       return acc.replace(match[0], data[match[1]]);
     }, str);
   };
+<<<<<<< HEAD
   const trim = (str, charsToTrim = " ") => {
     if (!str)
       return "";
     const regex = new RegExp(`^[${charsToTrim}]+|[${charsToTrim}]+$`, "g");
     return str.replace(regex, "");
+  };
+  const removeDiacritics = (str) => {
+=======
+  const cleanAccented = (str) => {
+>>>>>>> eea954b (Renamed the new function)
+    if (!str)
+      return "";
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   };
 
   exports.alphabetical = alphabetical;
@@ -800,6 +809,7 @@ var radash = (function (exports) {
   exports.camel = camel;
   exports.capitalize = capitalize;
   exports.chain = chain;
+  exports.cleanAccented = cleanAccented;
   exports.clone = clone;
   exports.cluster = cluster;
   exports.compose = compose;

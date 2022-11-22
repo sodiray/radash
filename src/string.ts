@@ -136,3 +136,17 @@ export const trim = (
   const regex = new RegExp(`^[${charsToTrim}]+|[${charsToTrim}]+$`, 'g')
   return str.replace(regex, '')
 }
+
+/**
+ * Replace international characters with their normalized equivalent by removing accents (diacritics).
+ *
+ * Ex. cleanAccented('áéíóú') -> 'aeiou'
+ * Ex. cleanAccented('àèìòù') -> 'aeiou'
+ * Ex. cleanAccented('âêîôû') -> 'aeiou'
+ * Ex. cleanAccented('ãẽĩõũ') -> 'aeiou'
+ * Ex. cleanAccented('äëïöü') -> 'aeiou'
+ */
+export const cleanAccented = (str: string | null | undefined): string => {
+  if (!str) return ''
+  return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+}

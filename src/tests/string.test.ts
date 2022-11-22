@@ -189,4 +189,24 @@ describe('string module', () => {
       assert.equal(_.trim('/repos/:owner/:repo/', '/'), 'repos/:owner/:repo')
     })
   })
+
+  describe('cleanAccented function', () => {
+    test('returns input with diacritics removed', () => {
+      assert.equal(_.cleanAccented('áéíóú'), 'aeiou')
+      assert.equal(_.cleanAccented('ÁÉÍÓÚ'), 'AEIOU')
+      assert.equal(
+        _.cleanAccented('non international characters should be kept'),
+        'non international characters should be kept'
+      )
+      assert.equal(
+        _.cleanAccented('Special characters like !@#$%^&*()_+ should be kept'),
+        'Special characters like !@#$%^&*()_+ should be kept'
+      )
+      assert.equal(_.cleanAccented(''), '')
+    })
+    test('returns empty string for bad input', () => {
+      assert.equal(_.cleanAccented(null), '')
+      assert.equal(_.cleanAccented(undefined), '')
+    })
+  })
 })

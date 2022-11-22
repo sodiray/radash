@@ -77,6 +77,7 @@ export {
   camel as camal,
   camel,
   capitalize,
+  cleanAccented,
   dash,
   pascal,
   snake,
