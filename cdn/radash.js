@@ -768,6 +768,11 @@ var radash = (function (exports) {
       return acc.replace(match[0], data[match[1]]);
     }, str);
   };
+  const removeDiacritics = (str) => {
+    if (!str)
+      return "";
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  };
 
   exports.alphabetical = alphabetical;
   exports.boil = boil;
@@ -827,6 +832,7 @@ var radash = (function (exports) {
   exports.random = random;
   exports.range = range;
   exports.reduce = reduce;
+  exports.removeDiacritics = removeDiacritics;
   exports.replace = replace;
   exports.replaceOrAppend = replaceOrAppend;
   exports.retry = retry;

@@ -78,6 +78,7 @@ export {
   capitalize,
   dash,
   pascal,
+  removeDiacritics,
   snake,
   template,
   title

@@ -116,3 +116,17 @@ export const template = (
     return acc.replace(match[0], data[match[1]])
   }, str)
 }
+
+/**
+ * Replace international characters with their normalized equivalent by removing diacritics.
+ *
+ * Ex. removeDiacritics('áéíóú') -> 'aeiou'
+ * Ex. removeDiacritics('àèìòù') -> 'aeiou'
+ * Ex. removeDiacritics('âêîôû') -> 'aeiou'
+ * Ex. removeDiacritics('ãẽĩõũ') -> 'aeiou'
+ * Ex. removeDiacritics('äëïöü') -> 'aeiou'
+ */
+export const removeDiacritics = (str: string | null | undefined): string => {
+  if (!str) return ''
+  return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+}

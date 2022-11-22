@@ -174,4 +174,26 @@ describe('string module', () => {
       assert.equal(_.title(undefined), '')
     })
   })
+
+  describe('removeDiacritics function', () => {
+    test('returns input with diacritics removed', () => {
+      assert.equal(_.removeDiacritics('áéíóú'), 'aeiou')
+      assert.equal(_.removeDiacritics('ÁÉÍÓÚ'), 'AEIOU')
+      assert.equal(
+        _.removeDiacritics('non international characters should be kept'),
+        'non international characters should be kept'
+      )
+      assert.equal(
+        _.removeDiacritics(
+          'Special characters like !@#$%^&*()_+ should be kept'
+        ),
+        'Special characters like !@#$%^&*()_+ should be kept'
+      )
+      assert.equal(_.removeDiacritics(''), '')
+    })
+    test('returns empty string for bad input', () => {
+      assert.equal(_.removeDiacritics(null), '')
+      assert.equal(_.removeDiacritics(undefined), '')
+    })
+  })
 })
