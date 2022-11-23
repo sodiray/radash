@@ -271,8 +271,12 @@ const defer = async (func) => {
   return response;
 };
 class AggregateError extends Error {
-  constructor(errors) {
+  constructor(errors = []) {
     super();
+    const name = errors.find((e) => e.name)?.name ?? "";
+    this.name = `AggregateError(${name}...)`;
+    this.message = `AggregateError with ${errors.length} errors`;
+    this.stack = errors.find((e) => e.stack)?.stack ?? this.stack;
     this.errors = errors;
   }
 }
