@@ -784,7 +784,7 @@ var radash = (function (exports) {
       return acc.replace(match[0], data[match[1]]);
     }, str);
   };
-  const removeDiacritics = (str) => {
+  const cleanAccented = (str) => {
     if (!str)
       return "";
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -797,6 +797,7 @@ var radash = (function (exports) {
   exports.camel = camel;
   exports.capitalize = capitalize;
   exports.chain = chain;
+  exports.cleanAccented = cleanAccented;
   exports.clone = clone;
   exports.cluster = cluster;
   exports.compose = compose;
@@ -849,7 +850,6 @@ var radash = (function (exports) {
   exports.random = random;
   exports.range = range;
   exports.reduce = reduce;
-  exports.removeDiacritics = removeDiacritics;
   exports.replace = replace;
   exports.replaceOrAppend = replaceOrAppend;
   exports.retry = retry;
