@@ -41,6 +41,8 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
   publish:
     runs-on: ubuntu-latest
+    needs: check
+    if: needs.check.outputs.exists == 'false'
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
