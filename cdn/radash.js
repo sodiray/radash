@@ -4,8 +4,10 @@ var radash = (function (exports) {
   const group = (array, getGroupId) => {
     return array.reduce((acc, item) => {
       const groupId = getGroupId(item);
-      const groupList = acc[groupId] ?? [];
-      return { ...acc, [groupId]: [...groupList, item] };
+      if (!acc[groupId])
+        acc[groupId] = [];
+      acc[groupId].push(item);
+      return acc;
     }, {});
   };
   const boil = (array, compareFunc) => {

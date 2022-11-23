@@ -9,8 +9,9 @@ export const group = <T, Key extends string | number | symbol>(
 ) => {
   return array.reduce((acc, item) => {
     const groupId = getGroupId(item)
-    const groupList = acc[groupId] ?? []
-    return { ...acc, [groupId]: [...groupList, item] }
+    if (!acc[groupId]) acc[groupId] = []
+    acc[groupId].push(item)
+    return acc
   }, {} as Record<Key, T[]>)
 }
 
