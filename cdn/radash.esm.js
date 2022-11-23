@@ -407,6 +407,18 @@ const throttle = ({ interval }, func) => {
   };
   return throttled;
 };
+const callable = (obj, fn) => {
+  const FUNC = () => {
+  };
+  return new Proxy(Object.assign(FUNC, obj), {
+    get: (target, key) => target[key],
+    set: (target, key, value) => {
+      target[key] = value;
+      return true;
+    },
+    apply: (target, self, args) => fn(Object.assign({}, target))(...args)
+  });
+};
 
 const toFloat = (value, defaultValue) => {
   const def = defaultValue === void 0 ? 0 : defaultValue;
@@ -766,4 +778,4 @@ const template = (str, data, regex = /\{\{(.+?)\}\}/g) => {
   }, str);
 };
 
-export { alphabetical, boil, camel as camal, camel, capitalize, chain, clone, cluster, compose, counting, dash, debounce, defer, diff, draw, first, flat, fork, get, group, intersects, invert, isArray, isDate, isEmpty, isEqual, isFloat, isFunction, isInt, isNumber, isObject, isPrimitive, isString, isSymbol, iterate, last, list, listify, lowerize, map, mapEntries, mapKeys, mapValues, max, memo, merge, min, objectify, omit, parallel, partial, partob, pascal, pick, proxied, random, range, reduce, replace, replaceOrAppend, retry, select, series, shake, shift, shuffle, sift, sleep, snake, sort, sum, template, throttle, title, toFloat, toInt, toggle, tryit as try, tryit, uid, unique, upperize, zip };
+export { alphabetical, boil, callable, camel as camal, camel, capitalize, chain, clone, cluster, compose, counting, dash, debounce, defer, diff, draw, first, flat, fork, get, group, intersects, invert, isArray, isDate, isEmpty, isEqual, isFloat, isFunction, isInt, isNumber, isObject, isPrimitive, isString, isSymbol, iterate, last, list, listify, lowerize, map, mapEntries, mapKeys, mapValues, max, memo, merge, min, objectify, omit, parallel, partial, partob, pascal, pick, proxied, random, range, reduce, replace, replaceOrAppend, retry, select, series, shake, shift, shuffle, sift, sleep, snake, sort, sum, template, throttle, title, toFloat, toInt, toggle, tryit as try, tryit, uid, unique, upperize, zip };
