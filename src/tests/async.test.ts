@@ -1,5 +1,6 @@
 import { assert } from 'chai'
 import * as _ from '..'
+import { AggregateError } from '../async'
 
 describe('async module', () => {
   beforeEach(() => jest.useFakeTimers({ advanceTimers: true }))
@@ -241,6 +242,50 @@ describe('async module', () => {
     })
   })
 
+  describe('AggregateError error', () => {
+    const fakeWork = (name?: string) => {
+      const fakeJob = () => {
+        const fakeTask = () => {
+          const fakeMicrotask = () => {
+            const err = new Error()
+            err.name = name ?? 'MicrotaskError'
+            throw err
+          }
+          return fakeMicrotask()
+        }
+        return fakeTask()
+      }
+      return fakeJob()
+    }
+    test('uses stack from the first given error', () => {
+      const errors: Error[] = []
+      try {
+        fakeWork()
+      } catch (e) {
+        errors.push(e as Error)
+      }
+      const aggregate = new AggregateError(errors)
+      assert.include(aggregate.stack, 'at fakeMicrotask')
+      assert.include(aggregate.message, 'with 1')
+    })
+    test('uses stack from first error with a stack', () => {
+      const errors: Error[] = [{} as Error]
+      try {
+        fakeWork()
+      } catch (e) {
+        errors.push(e as Error)
+      }
+      const aggregate = new AggregateError(errors)
+      assert.equal(aggregate.name, 'AggregateError(MicrotaskError...)')
+      assert.include(aggregate.stack, 'at fakeMicrotask')
+      assert.include(aggregate.message, 'with 2')
+    })
+    test('does not fail if no errors given', () => {
+      new AggregateError([])
+      new AggregateError(undefined as unknown as Error[])
+    })
+  })
+
   describe('_.parallel function', () => {
     test('returns all results from all functions', async () => {
       const [errors, results] = await _.try(async () => {
@@ -260,7 +305,7 @@ describe('async module', () => {
           return `hi_${num}`
         })
       })()
-      const err = error as _.AggregateError
+      const err = error as AggregateError
       assert.isNull(results)
       assert.equal(err.errors.length, 1)
       assert.equal(err.errors[0].message, 'number is 2')

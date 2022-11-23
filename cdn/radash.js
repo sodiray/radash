@@ -274,8 +274,12 @@ var radash = (function (exports) {
     return response;
   };
   class AggregateError extends Error {
-    constructor(errors) {
+    constructor(errors = []) {
       super();
+      const name = errors.find((e) => e.name)?.name ?? "";
+      this.name = `AggregateError(${name}...)`;
+      this.message = `AggregateError with ${errors.length} errors`;
+      this.stack = errors.find((e) => e.stack)?.stack ?? this.stack;
       this.errors = errors;
     }
   }
@@ -409,6 +413,18 @@ var radash = (function (exports) {
       }, interval);
     };
     return throttled;
+  };
+  const callable = (obj, fn) => {
+    const FUNC = () => {
+    };
+    return new Proxy(Object.assign(FUNC, obj), {
+      get: (target, key) => target[key],
+      set: (target, key, value) => {
+        target[key] = value;
+        return true;
+      },
+      apply: (target, self, args) => fn(Object.assign({}, target))(...args)
+    });
   };
 
   const toFloat = (value, defaultValue) => {
@@ -776,6 +792,7 @@ var radash = (function (exports) {
 
   exports.alphabetical = alphabetical;
   exports.boil = boil;
+  exports.callable = callable;
   exports.camal = camel;
   exports.camel = camel;
   exports.capitalize = capitalize;
