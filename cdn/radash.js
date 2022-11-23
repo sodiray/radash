@@ -275,8 +275,11 @@ var radash = (function (exports) {
   };
   class AggregateError extends Error {
     constructor(errors) {
+      const first = errors[0] ?? {};
       super();
+      this.name = `AggregateError with ${errors.length} errors: ${first.message ?? first.name ?? first}`;
       this.errors = errors;
+      this.stack = first.stack ?? errors.find((e) => e.stack)?.stack ?? this.stack;
     }
   }
   const parallel = async (limit, array, func) => {
@@ -781,6 +784,7 @@ var radash = (function (exports) {
     }, str);
   };
 
+  exports.AggregateError = AggregateError;
   exports.alphabetical = alphabetical;
   exports.boil = boil;
   exports.callable = callable;

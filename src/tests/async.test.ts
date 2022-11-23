@@ -241,6 +241,46 @@ describe('async module', () => {
     })
   })
 
+  describe('AggregateError error', () => {
+    const fakeWork = () => {
+      const fakeJob = () => {
+        const fakeTask = () => {
+          const fakeMicrotask = () => {
+            throw new Error('Can not be done')
+          }
+          return fakeMicrotask()
+        }
+        return fakeTask()
+      }
+      return fakeJob()
+    }
+    test('uses stack from the first given error', () => {
+      const errors: Error[] = []
+      try {
+        fakeWork()
+      } catch (e) {
+        errors.push(e as Error)
+      }
+      const aggregate = new _.AggregateError(errors)
+      assert.include(aggregate.stack, 'at fakeMicrotask')
+      assert.include(aggregate.name, 'with 1')
+    })
+    test('uses stack from first error with a stack', () => {
+      const errors: Error[] = [{} as Error]
+      try {
+        fakeWork()
+      } catch (e) {
+        errors.push(e as Error)
+      }
+      const aggregate = new _.AggregateError(errors)
+      assert.include(aggregate.stack, 'at fakeMicrotask')
+      assert.include(aggregate.name, 'with 2')
+    })
+    test('does not fail if no errors given', () => {
+      new _.AggregateError([])
+    })
+  })
+
   describe('_.parallel function', () => {
     test('returns all results from all functions', async () => {
       const [errors, results] = await _.try(async () => {
