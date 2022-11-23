@@ -92,14 +92,13 @@ type WorkItemResult<K> = {
  */
 export class AggregateError extends Error {
   errors: Error[]
-  constructor(errors: Error[]) {
-    const first = errors[0] ?? {}
+  constructor(errors: Error[] = []) {
     super()
-    this.name = `AggregateError with ${errors.length} errors: ${
-      first.message ?? first.name ?? first
-    }`
+    const name = errors.find(e => e.name)?.name ?? ''
+    this.name = `AggregateError(${name}...)`
+    this.message = `AggregateError with ${errors.length} errors`
+    this.stack = errors.find(e => e.stack)?.stack ?? this.stack
     this.errors = errors
-    this.stack = first.stack ?? errors.find(e => e.stack)?.stack ?? this.stack
   }
 }
 

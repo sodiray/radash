@@ -28,7 +28,6 @@ export {
   unique
 } from './array'
 export {
-  AggregateError,
   defer,
   map,
   parallel,
@@ -38,6 +37,7 @@ export {
   tryit as try,
   tryit
 } from './async'
+export type { AggregateError } from './async'
 export {
   callable,
   chain,

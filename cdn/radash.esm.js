@@ -271,12 +271,13 @@ const defer = async (func) => {
   return response;
 };
 class AggregateError extends Error {
-  constructor(errors) {
-    const first = errors[0] ?? {};
+  constructor(errors = []) {
     super();
-    this.name = `AggregateError with ${errors.length} errors: ${first.message ?? first.name ?? first}`;
+    const name = errors.find((e) => e.name)?.name ?? "";
+    this.name = `AggregateError(${name}...)`;
+    this.message = `AggregateError with ${errors.length} errors`;
+    this.stack = errors.find((e) => e.stack)?.stack ?? this.stack;
     this.errors = errors;
-    this.stack = first.stack ?? errors.find((e) => e.stack)?.stack ?? this.stack;
   }
 }
 const parallel = async (limit, array, func) => {
@@ -781,4 +782,4 @@ const template = (str, data, regex = /\{\{(.+?)\}\}/g) => {
   }, str);
 };
 
-export { AggregateError, alphabetical, boil, callable, camel as camal, camel, capitalize, chain, clone, cluster, compose, counting, dash, debounce, defer, diff, draw, first, flat, fork, get, group, intersects, invert, isArray, isDate, isEmpty, isEqual, isFloat, isFunction, isInt, isNumber, isObject, isPrimitive, isString, isSymbol, iterate, last, list, listify, lowerize, map, mapEntries, mapKeys, mapValues, max, memo, merge, min, objectify, omit, parallel, partial, partob, pascal, pick, proxied, random, range, reduce, replace, replaceOrAppend, retry, select, series, shake, shift, shuffle, sift, sleep, snake, sort, sum, template, throttle, title, toFloat, toInt, toggle, tryit as try, tryit, uid, unique, upperize, zip };
+export { alphabetical, boil, callable, camel as camal, camel, capitalize, chain, clone, cluster, compose, counting, dash, debounce, defer, diff, draw, first, flat, fork, get, group, intersects, invert, isArray, isDate, isEmpty, isEqual, isFloat, isFunction, isInt, isNumber, isObject, isPrimitive, isString, isSymbol, iterate, last, list, listify, lowerize, map, mapEntries, mapKeys, mapValues, max, memo, merge, min, objectify, omit, parallel, partial, partob, pascal, pick, proxied, random, range, reduce, replace, replaceOrAppend, retry, select, series, shake, shift, shuffle, sift, sleep, snake, sort, sum, template, throttle, title, toFloat, toInt, toggle, tryit as try, tryit, uid, unique, upperize, zip };
