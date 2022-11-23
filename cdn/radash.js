@@ -410,6 +410,18 @@ var radash = (function (exports) {
     };
     return throttled;
   };
+  const callable = (obj, fn) => {
+    const FUNC = () => {
+    };
+    return new Proxy(Object.assign(FUNC, obj), {
+      get: (target, key) => target[key],
+      set: (target, key, value) => {
+        target[key] = value;
+        return true;
+      },
+      apply: (target, self, args) => fn(Object.assign({}, target))(...args)
+    });
+  };
 
   const toFloat = (value, defaultValue) => {
     const def = defaultValue === void 0 ? 0 : defaultValue;
@@ -771,6 +783,7 @@ var radash = (function (exports) {
 
   exports.alphabetical = alphabetical;
   exports.boil = boil;
+  exports.callable = callable;
   exports.camal = camel;
   exports.camel = camel;
   exports.capitalize = capitalize;
