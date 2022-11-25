@@ -180,9 +180,10 @@ describe('string module', () => {
       assert.equal(_.trim(null), '')
       assert.equal(_.trim(undefined), '')
     })
-    test('returns functions correctly trimmed', () => {
+    test('returns input string correctly trimmed', () => {
       assert.equal(_.trim('hello', 'x'), 'hello')
       assert.equal(_.trim(' hello  '), 'hello')
+      assert.equal(_.trim(' __hello__  ', '_'), ' __hello__  ')
       assert.equal(_.trim('__hello__', '_'), 'hello')
       assert.equal(_.trim('//repos////', '/'), 'repos')
       assert.equal(_.trim('/repos/:owner/:repo/', '/'), 'repos/:owner/:repo')
