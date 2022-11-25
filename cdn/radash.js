@@ -786,6 +786,12 @@ var radash = (function (exports) {
       return acc.replace(match[0], data[match[1]]);
     }, str);
   };
+  const trim = (str, charsToTrim = " ") => {
+    if (!str)
+      return "";
+    const regex = new RegExp(`^[${charsToTrim}]+|[${charsToTrim}]+$`, "g");
+    return str.replace(regex, "");
+  };
 
   exports.alphabetical = alphabetical;
   exports.boil = boil;
@@ -865,6 +871,7 @@ var radash = (function (exports) {
   exports.toFloat = toFloat;
   exports.toInt = toInt;
   exports.toggle = toggle;
+  exports.trim = trim;
   exports.try = tryit;
   exports.tryit = tryit;
   exports.uid = uid;
