@@ -81,7 +81,8 @@ export {
   pascal,
   snake,
   template,
-  title
+  title,
+  trim
 } from './string'
 export {
   isArray,
