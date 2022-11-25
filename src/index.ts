@@ -41,6 +41,7 @@ export {
 } from './async'
 export type { AggregateError } from './async'
 export {
+  callable,
   chain,
   compose,
   debounce,
@@ -82,7 +83,8 @@ export {
   pascal,
   snake,
   template,
-  title
+  title,
+  trim
 } from './string'
 export {
   isArray,

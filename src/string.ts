@@ -116,3 +116,23 @@ export const template = (
     return acc.replace(match[0], data[match[1]])
   }, str)
 }
+
+/**
+ * Trims all prefix and suffix characters from the given
+ * string. Like the builtin trim function but accepts
+ * other characters you would like to trim.
+ *
+ * ```typescript
+ * trim('  hello ') // => 'hello'
+ * trim('__hello__', '_') // => 'hello'
+ * trim('/repos/:owner/:repo/', '/') // => 'repos/:owner/:repo'
+ * ```
+ */
+export const trim = (
+  str: string | null | undefined,
+  charsToTrim: string = ' '
+) => {
+  if (!str) return ''
+  const regex = new RegExp(`^[${charsToTrim}]+|[${charsToTrim}]+$`, 'g')
+  return str.replace(regex, '')
+}

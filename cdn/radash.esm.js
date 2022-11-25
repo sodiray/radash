@@ -82,8 +82,10 @@ const isEqual = (x, y) => {
 const group = (array, getGroupId) => {
   return array.reduce((acc, item) => {
     const groupId = getGroupId(item);
-    const groupList = acc[groupId] ?? [];
-    return { ...acc, [groupId]: [...groupList, item] };
+    if (!acc[groupId])
+      acc[groupId] = [];
+    acc[groupId].push(item);
+    return acc;
   }, {});
 };
 function zip(...arrays) {
@@ -367,8 +369,12 @@ const defer = async (func) => {
   return response;
 };
 class AggregateError extends Error {
-  constructor(errors) {
+  constructor(errors = []) {
     super();
+    const name = errors.find((e) => e.name)?.name ?? "";
+    this.name = `AggregateError(${name}...)`;
+    this.message = `AggregateError with ${errors.length} errors`;
+    this.stack = errors.find((e) => e.stack)?.stack ?? this.stack;
     this.errors = errors;
   }
 }
@@ -502,6 +508,18 @@ const throttle = ({ interval }, func) => {
     }, interval);
   };
   return throttled;
+};
+const callable = (obj, fn) => {
+  const FUNC = () => {
+  };
+  return new Proxy(Object.assign(FUNC, obj), {
+    get: (target, key) => target[key],
+    set: (target, key, value) => {
+      target[key] = value;
+      return true;
+    },
+    apply: (target, self, args) => fn(Object.assign({}, target))(...args)
+  });
 };
 
 const toFloat = (value, defaultValue) => {
@@ -780,5 +798,11 @@ const template = (str, data, regex = /\{\{(.+?)\}\}/g) => {
     return acc.replace(match[0], data[match[1]]);
   }, str);
 };
+const trim = (str, charsToTrim = " ") => {
+  if (!str)
+    return "";
+  const regex = new RegExp(`^[${charsToTrim}]+|[${charsToTrim}]+$`, "g");
+  return str.replace(regex, "");
+};
 
-export { alphabetical, assign, boil, camel as camal, camel, capitalize, chain, clone, cluster, compose, counting, dash, debounce, defer, diff, draw, first, flat, fork, get, group, intersects, invert, isArray, isDate, isEmpty, isEqual, isFloat, isFunction, isInt, isNumber, isObject, isPrimitive, isString, isSymbol, iterate, last, list, listify, lowerize, map, mapEntries, mapKeys, mapValues, max, memo, merge, min, objectify, omit, parallel, partial, partob, pascal, pick, proxied, random, range, reduce, replace, replaceOrAppend, retry, select, series, shake, shift, shuffle, sift, sleep, snake, sort, sum, template, throttle, title, toFloat, toInt, toggle, tryit as try, tryit, uid, unique, upperize, zip, zipToObject };
+export { alphabetical, assign, boil, callable, camel as camal, camel, capitalize, chain, clone, cluster, compose, counting, dash, debounce, defer, diff, draw, first, flat, fork, get, group, intersects, invert, isArray, isDate, isEmpty, isEqual, isFloat, isFunction, isInt, isNumber, isObject, isPrimitive, isString, isSymbol, iterate, last, list, listify, lowerize, map, mapEntries, mapKeys, mapValues, max, memo, merge, min, objectify, omit, parallel, partial, partob, pascal, pick, proxied, random, range, reduce, replace, replaceOrAppend, retry, select, series, shake, shift, shuffle, sift, sleep, snake, sort, sum, template, throttle, title, toFloat, toInt, toggle, trim, tryit as try, tryit, uid, unique, upperize, zip, zipToObject };
