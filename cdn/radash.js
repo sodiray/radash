@@ -792,12 +792,25 @@ var radash = (function (exports) {
     const regex = new RegExp(`^[${charsToTrim}]+|[${charsToTrim}]+$`, "g");
     return str.replace(regex, "");
   };
-  const cleanAccented = (str) => {
+  var CleanOperations = /* @__PURE__ */ ((CleanOperations2) => {
+    CleanOperations2[CleanOperations2["None"] = 0] = "None";
+    CleanOperations2[CleanOperations2["Accents"] = 1] = "Accents";
+    CleanOperations2[CleanOperations2["LineBreaks"] = 2] = "LineBreaks";
+    return CleanOperations2;
+  })(CleanOperations || {});
+  const clean = (str, op) => {
     if (!str)
       return "";
-    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    if (op & 1 /* Accents */) {
+      str = str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    }
+    if (op & 2 /* LineBreaks */) {
+      str = str.replace(/[\r|\n]+/gm, " ");
+    }
+    return str;
   };
 
+  exports.CleanOperations = CleanOperations;
   exports.alphabetical = alphabetical;
   exports.boil = boil;
   exports.callable = callable;
@@ -805,7 +818,7 @@ var radash = (function (exports) {
   exports.camel = camel;
   exports.capitalize = capitalize;
   exports.chain = chain;
-  exports.cleanAccented = cleanAccented;
+  exports.clean = clean;
   exports.clone = clone;
   exports.cluster = cluster;
   exports.compose = compose;

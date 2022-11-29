@@ -789,10 +789,22 @@ const trim = (str, charsToTrim = " ") => {
   const regex = new RegExp(`^[${charsToTrim}]+|[${charsToTrim}]+$`, "g");
   return str.replace(regex, "");
 };
-const cleanAccented = (str) => {
+var CleanOperations = /* @__PURE__ */ ((CleanOperations2) => {
+  CleanOperations2[CleanOperations2["None"] = 0] = "None";
+  CleanOperations2[CleanOperations2["Accents"] = 1] = "Accents";
+  CleanOperations2[CleanOperations2["LineBreaks"] = 2] = "LineBreaks";
+  return CleanOperations2;
+})(CleanOperations || {});
+const clean = (str, op) => {
   if (!str)
     return "";
-  return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  if (op & 1 /* Accents */) {
+    str = str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  }
+  if (op & 2 /* LineBreaks */) {
+    str = str.replace(/[\r|\n]+/gm, " ");
+  }
+  return str;
 };
 
-export { alphabetical, boil, callable, camel as camal, camel, capitalize, chain, cleanAccented, clone, cluster, compose, counting, dash, debounce, defer, diff, draw, first, flat, fork, get, group, intersects, invert, isArray, isDate, isEmpty, isEqual, isFloat, isFunction, isInt, isNumber, isObject, isPrimitive, isString, isSymbol, iterate, last, list, listify, lowerize, map, mapEntries, mapKeys, mapValues, max, memo, merge, min, objectify, omit, parallel, partial, partob, pascal, pick, proxied, random, range, reduce, replace, replaceOrAppend, retry, select, series, shake, shift, shuffle, sift, sleep, snake, sort, sum, template, throttle, title, toFloat, toInt, toggle, trim, tryit as try, tryit, uid, unique, upperize, zip };
+export { CleanOperations, alphabetical, boil, callable, camel as camal, camel, capitalize, chain, clean, clone, cluster, compose, counting, dash, debounce, defer, diff, draw, first, flat, fork, get, group, intersects, invert, isArray, isDate, isEmpty, isEqual, isFloat, isFunction, isInt, isNumber, isObject, isPrimitive, isString, isSymbol, iterate, last, list, listify, lowerize, map, mapEntries, mapKeys, mapValues, max, memo, merge, min, objectify, omit, parallel, partial, partob, pascal, pick, proxied, random, range, reduce, replace, replaceOrAppend, retry, select, series, shake, shift, shuffle, sift, sleep, snake, sort, sum, template, throttle, title, toFloat, toInt, toggle, trim, tryit as try, tryit, uid, unique, upperize, zip };

@@ -137,16 +137,35 @@ export const trim = (
   return str.replace(regex, '')
 }
 
+export enum CleanOperations {
+  /** No clean operation */
+  None = 0,
+  /** Clean accents from international characters to get the */
+  Accents = 1 << 0,
+  /** Clean line breaks (chr 10 and chr 13) */
+  LineBreaks = 1 << 1
+
+  /** 'All' enum member not implemented, because adding new tests would change the
+   * behavior of existing consumer code. */
+}
 /**
- * Replace international characters with their normalized equivalent by removing accents (diacritics).
+ * Clean a string using specified operation(s).
  *
- * Ex. cleanAccented('áéíóú') -> 'aeiou'
- * Ex. cleanAccented('àèìòù') -> 'aeiou'
- * Ex. cleanAccented('âêîôû') -> 'aeiou'
- * Ex. cleanAccented('ãẽĩõũ') -> 'aeiou'
- * Ex. cleanAccented('äëïöü') -> 'aeiou'
+ * Ex. clean('Hello\nEyjafjöll', CleanOperations.Accents | CleanOperations.LineBreaks) -> 'Hello Eyjafjoll'
+ * Ex. clean('Hello\nEyjafjöll', CleanOperations.LineBreaks) -> 'Hello Eyjafjöll'
+ * Ex. clean('Hello\nEyjafjöll', CleanOperations.Accents) -> 'Hello\nEyjafjoll'
+ * Ex. clean('Hello\nEyjafjöll', CleanOperations.None) -> 'Hello\nEyjafjöll'
  */
-export const cleanAccented = (str: string | null | undefined): string => {
+export const clean = (
+  str: string | null | undefined,
+  op: CleanOperations
+): string => {
   if (!str) return ''
-  return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+  if (op & CleanOperations.Accents) {
+    str = str.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+  }
+  if (op & CleanOperations.LineBreaks) {
+    str = str.replace(/[\r|\n]+/gm, ' ')
+  }
+  return str
 }

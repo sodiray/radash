@@ -1,5 +1,6 @@
 import { assert } from 'chai'
 import * as _ from '..'
+import { CleanOperations } from '..'
 
 describe('string module', () => {
   describe('camel function', () => {
@@ -190,23 +191,73 @@ describe('string module', () => {
     })
   })
 
-  describe('cleanAccented function', () => {
+  describe('clean function', () => {
     test('returns input with diacritics removed', () => {
-      assert.equal(_.cleanAccented('áéíóú'), 'aeiou')
-      assert.equal(_.cleanAccented('ÁÉÍÓÚ'), 'AEIOU')
+      assert.equal(_.clean('áéíóú', CleanOperations.Accents), 'aeiou')
+      assert.equal(_.clean('ÁÉÍÓÚ', CleanOperations.Accents), 'AEIOU')
       assert.equal(
-        _.cleanAccented('non international characters should be kept'),
+        _.clean(
+          'non international characters should be kept',
+          CleanOperations.Accents
+        ),
         'non international characters should be kept'
       )
       assert.equal(
-        _.cleanAccented('Special characters like !@#$%^&*()_+ should be kept'),
+        _.clean(
+          'Special characters like !@#$%^&*()_+ should be kept',
+          CleanOperations.Accents
+        ),
         'Special characters like !@#$%^&*()_+ should be kept'
       )
-      assert.equal(_.cleanAccented(''), '')
+    })
+    test('return input with line breaks removed', () => {
+      assert.equal(
+        _.clean('Unix\nline\nbreak', CleanOperations.LineBreaks),
+        'Unix line break'
+      )
+      assert.equal(
+        _.clean('Windows\r\nline\r\nbreaks', CleanOperations.LineBreaks),
+        'Windows line breaks'
+      )
+      assert.equal(
+        _.clean(
+          'A\n\n\nlot\r\rof\n\r\n\rline\r\n\r\nbreaks',
+          CleanOperations.LineBreaks
+        ),
+        'A lot of line breaks'
+      )
+    })
+    test('combine clean operations', () => {
+      assert.equal(
+        _.clean(
+          'Hello\nEyjafjöll',
+          CleanOperations.Accents | CleanOperations.LineBreaks
+        ),
+        'Hello Eyjafjoll'
+      )
+    })
+    test('No operations', () => {
+      assert.equal(
+        _.clean('Hello\nEyjafjöll', CleanOperations.None),
+        'Hello\nEyjafjöll'
+      )
     })
     test('returns empty string for bad input', () => {
-      assert.equal(_.cleanAccented(null), '')
-      assert.equal(_.cleanAccented(undefined), '')
+      assert.equal(_.clean(null, CleanOperations.Accents), '')
+      assert.equal(_.clean(undefined, CleanOperations.Accents), '')
+      assert.equal(_.clean(null, CleanOperations.LineBreaks), '')
+      assert.equal(_.clean(undefined, CleanOperations.LineBreaks), '')
+      assert.equal(
+        _.clean(null, CleanOperations.Accents | CleanOperations.LineBreaks),
+        ''
+      )
+      assert.equal(
+        _.clean(
+          undefined,
+          CleanOperations.Accents | CleanOperations.LineBreaks
+        ),
+        ''
+      )
     })
   })
 })
