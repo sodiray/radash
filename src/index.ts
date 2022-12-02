@@ -52,6 +52,7 @@ export {
 export { toFloat, toInt } from './number'
 export {
   clone,
+  find,
   get,
   invert,
   listify,

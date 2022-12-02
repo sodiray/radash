@@ -411,4 +411,37 @@ describe('object module', () => {
       assert.deepEqual(result, b)
     })
   })
+
+  describe('[Find]', () => {
+    const simple = {
+      a: 1,
+      b: 2,
+    }
+    const complex = {
+      name: 'charles',
+      cards: ['4c', '2c'],
+      test: simple,
+    }
+    test('[Find] not found', () => {
+      const result = _.find(simple, (k,v) => v>2)
+      assert.equal(result, null)
+    })
+    test('[Find] Simple case', () => {
+      const result = _.find(simple, (k,v)=>v>1)
+      assert.deepEqual(result, 2)
+    })
+    test('[Find] Complex case per key', () => {
+      const result = _.find(complex, (k,v)=>k==='test')
+      assert.deepEqual(result, simple)
+    }) 
+    test('[Find] Complex case per value', () => {
+      const result = _.find(complex, (k,v)=>Array.isArray(v) && v.includes('4c'))
+      assert.deepEqual(result, ['4c', '2c'])
+    })
+    test('[Find] Complex case both key and value', () => {
+      const result = _.find(complex, (k,v)=>k==='test' && v===simple)
+      assert.deepEqual(result, simple)
+    })
+
+  })
 })

@@ -69,6 +69,16 @@ export const mapValues = <
   )
 }
 
+export const find = <
+  RemovedKeys extends string,
+  T extends Record<string | number | symbol, any>
+>(
+  obj: T,
+  fn: (k: string | number | symbol, v: any) => boolean
+): Omit<T, RemovedKeys>[Exclude<keyof T, RemovedKeys>] =>
+  Object.values(
+    Object.fromEntries(Object.entries(obj).filter(([k, v]) => fn(k, v)))
+  )[0]
 /**
  * Map over all the keys to create a new object
  */
