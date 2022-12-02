@@ -69,6 +69,10 @@ export const mapValues = <
   )
 }
 
+/**
+ * Finds an object value depending on a (key, value) function. 
+ * Returns the value directly, without the key
+ */
 export const find = <
   RemovedKeys extends string,
   T extends Record<string | number | symbol, any>
@@ -79,6 +83,7 @@ export const find = <
   Object.values(
     Object.fromEntries(Object.entries(obj).filter(([k, v]) => fn(k, v)))
   )[0]
+
 /**
  * Map over all the keys to create a new object
  */
