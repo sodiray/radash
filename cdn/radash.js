@@ -558,6 +558,9 @@ var radash = (function (exports) {
       {}
     );
   };
+  const find = (obj, fn) => Object.values(
+    Object.fromEntries(Object.entries(obj).filter(([k, v]) => fn(k, v)))
+  )[0];
   const mapEntries = (obj, toEntry) => {
     if (!obj)
       return {};
@@ -809,6 +812,7 @@ var radash = (function (exports) {
   exports.defer = defer;
   exports.diff = diff;
   exports.draw = draw;
+  exports.find = find;
   exports.first = first;
   exports.flat = flat;
   exports.fork = fork;
