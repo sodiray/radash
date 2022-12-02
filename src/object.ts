@@ -70,7 +70,7 @@ export const mapValues = <
 }
 
 /**
- * Finds an object value depending on a (key, value) function. 
+ * Finds an object value depending on a (key, value) function.
  * Returns the value directly, without the key
  */
 export const find = <
