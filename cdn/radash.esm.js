@@ -393,11 +393,22 @@ const memo = (func, {
   return memoize({}, func, key, ttl);
 };
 const debounce = ({ delay }, func) => {
-  let timer = null;
+  let timer = void 0;
+  let active = true;
   const debounced = (...args) => {
-    clearTimeout(timer);
-    timer = setTimeout(() => func(...args), delay);
+    if (active) {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        active && func(...args);
+      }, delay);
+    } else {
+      func(...args);
+    }
   };
+  debounced.cancel = () => {
+    active = false;
+  };
+  debounced.flush = (...args) => func(...args);
   return debounced;
 };
 const throttle = ({ interval }, func) => {
