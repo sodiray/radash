@@ -116,7 +116,7 @@ export const debounce = <TArgs extends any[]>(
   { delay }: { delay: number },
   func: (...args: TArgs) => any
 ) => {
-  let timer: NodeJS.Timeout = null
+  let timer: NodeJS.Timeout | undefined = undefined
   let active = true
 
   const debounced: DebounceFunction<TArgs> = (...args: TArgs) => {
