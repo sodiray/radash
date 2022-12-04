@@ -158,13 +158,12 @@ describe('curry module', () => {
 
     beforeEach(() => {
       func = _.debounce({ delay: 600 }, mockFunc)
-
     })
-    
+
     afterEach(() => {
       jest.clearAllMocks()
     })
-    
+
     test('only executes once when called rapidly', async () => {
       runFunc3Times()
       expect(mockFunc).toHaveBeenCalledTimes(0)
@@ -172,7 +171,7 @@ describe('curry module', () => {
       expect(mockFunc).toHaveBeenCalledTimes(1)
     })
 
-    test("does not debounce after cancel is called", () => { 
+    test('does not debounce after cancel is called', () => {
       runFunc3Times()
       expect(mockFunc).toHaveBeenCalledTimes(0)
       func.cancel()
@@ -182,12 +181,12 @@ describe('curry module', () => {
       expect(mockFunc).toHaveBeenCalledTimes(6)
     })
 
-    test("when we call the flush method it should execute the function immediately", () => {
+    test('when we call the flush method it should execute the function immediately', () => {
       func.flush()
       expect(mockFunc).toHaveBeenCalledTimes(1)
     })
 
-    test("continues to debounce after flush is called", async () => {
+    test('continues to debounce after flush is called', async () => {
       runFunc3Times()
       expect(mockFunc).toHaveBeenCalledTimes(0)
       func.flush()
@@ -200,7 +199,7 @@ describe('curry module', () => {
       expect(mockFunc).toHaveBeenCalledTimes(3)
     })
 
-    test("cancels all pending invocations when cancel is called", async () => { 
+    test('cancels all pending invocations when cancel is called', async () => {
       func()
       func.cancel()
       await _.sleep(610)
@@ -223,7 +222,6 @@ describe('curry module', () => {
       assert.equal(calls, 2)
     })
   })
-
 })
 
 describe('callable function', () => {
