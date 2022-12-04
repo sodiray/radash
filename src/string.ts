@@ -11,7 +11,7 @@ export const capitalize = (str: string): string => {
 }
 
 /**
- * Joins all the words of the string in a camel case fashion
+ * Formats the given string in camel case fashion
  *
  * camel('hello world')   -> 'helloWorld'
  * camel('va va-VOOM') -> 'vaVaVoom'
@@ -31,7 +31,7 @@ export const camel = (str: string): string => {
 }
 
 /**
- * Joins all the words of the string in a snake case fashion
+ * Formats the given string in snake case fashion
  *
  * snake('hello world')   -> 'hello_world'
  * snake('va va-VOOM') -> 'va_va_voom'
@@ -51,7 +51,7 @@ export const snake = (str: string): string => {
 }
 
 /**
- * Joins all the words of the string in a dash case fashion
+ * Formats the given string in dash case fashion
  *
  * dash('hello world')   -> 'hello-world'
  * dash('va va_VOOM') -> 'va-va-voom'
@@ -71,7 +71,7 @@ export const dash = (str: string): string => {
 }
 
 /**
- * Joins all string arguments in a Pascal case fashion
+ * Formats the given string in pascal case fashion
  *
  * pascal('hello world') -> 'HelloWorld'
  * pascal('va va boom') -> 'VaVaBoom'
@@ -80,6 +80,24 @@ export const pascal = (str: string): string => {
   const parts = str?.split(/[\.\-\s_]/).map(x => x.toLowerCase()) ?? []
   if (parts.length === 0) return ''
   return parts.map(str => str.charAt(0).toUpperCase() + str.slice(1)).join('')
+}
+
+/**
+ * Formats the given string in title case fashion
+ *
+ * title('hello world') -> 'Hello World'
+ * title('va_va_boom') -> 'Va Va Boom'
+ * title('root-hook') -> 'Root Hook'
+ * title('queryItems') -> 'Query Items'
+ */
+export const title = (str: string | null | undefined): string => {
+  if (!str) return ''
+  return str
+    .split(/(?=[A-Z])|[\.\-\s_]/)
+    .map(s => s.trim())
+    .filter(s => !!s)
+    .map(s => capitalize(s.toLowerCase()))
+    .join(' ')
 }
 
 /**
@@ -97,4 +115,24 @@ export const template = (
   return Array.from(str.matchAll(regex)).reduce((acc, match) => {
     return acc.replace(match[0], data[match[1]])
   }, str)
+}
+
+/**
+ * Trims all prefix and suffix characters from the given
+ * string. Like the builtin trim function but accepts
+ * other characters you would like to trim.
+ *
+ * ```typescript
+ * trim('  hello ') // => 'hello'
+ * trim('__hello__', '_') // => 'hello'
+ * trim('/repos/:owner/:repo/', '/') // => 'repos/:owner/:repo'
+ * ```
+ */
+export const trim = (
+  str: string | null | undefined,
+  charsToTrim: string = ' '
+) => {
+  if (!str) return ''
+  const regex = new RegExp(`^[${charsToTrim}]+|[${charsToTrim}]+$`, 'g')
+  return str.replace(regex, '')
 }

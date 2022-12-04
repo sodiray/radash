@@ -227,7 +227,7 @@ describe('array module', () => {
       assert.deepEqual(result, ['hello', 'oh'])
     })
     test('does not fail on empty input list', () => {
-      const list = []
+      const list: any[] = []
       const result = _.select(
         list,
         (x: any) => x.word,
@@ -633,6 +633,45 @@ describe('array module', () => {
     test('should return empty array', () => {
       const results = _.shift([], 10)
       assert.deepEqual(results, [])
+    })
+  })
+
+  describe('toggle function', () => {
+    test('should handle null input list', () => {
+      const result = _.toggle(null as unknown as any[], 'a')
+      assert.deepEqual(result, ['a'])
+    })
+    test('should handle null input list and null item', () => {
+      const result = _.toggle(null as unknown as any[], null)
+      assert.deepEqual(result, [])
+    })
+    test('should handle null item', () => {
+      const result = _.toggle(['a'], null)
+      assert.deepEqual(result, ['a'])
+    })
+    test('should add item when it does not exist using default matcher', () => {
+      const result = _.toggle(['a'], 'b')
+      assert.deepEqual(result, ['a', 'b'])
+    })
+    test('should remove item when it does exist using default matcher', () => {
+      const result = _.toggle(['a', 'b'], 'b')
+      assert.deepEqual(result, ['a'])
+    })
+    test('should remove item when it does exist using custom matcher', () => {
+      const result = _.toggle(
+        [{ value: 'a' }, { value: 'b' }],
+        { value: 'b' },
+        v => v.value
+      )
+      assert.deepEqual(result, [{ value: 'a' }])
+    })
+    test('should add item when it does not exist using custom matcher', () => {
+      const result = _.toggle([{ value: 'a' }], { value: 'b' }, v => v.value)
+      assert.deepEqual(result, [{ value: 'a' }, { value: 'b' }])
+    })
+    test('should prepend item when strategy is set', () => {
+      const result = _.toggle(['a'], 'b', null, { strategy: 'prepend' })
+      assert.deepEqual(result, ['b', 'a'])
     })
   })
 })

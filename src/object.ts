@@ -1,4 +1,4 @@
-import { isFunction, isObject } from './typed'
+import { isFunction, isObject, isPrimitive } from './typed'
 
 type LowercasedKeys<T extends Record<string, any>> = {
   [P in keyof T & string as Lowercase<P>]: T[P]
@@ -18,7 +18,8 @@ export const shake = <RemovedKeys extends string, T>(
   filter: (value: any) => boolean = x => x === undefined
 ): Omit<T, RemovedKeys> => {
   if (!obj) return {} as T
-  return Object.keys(obj).reduce((acc, key) => {
+  const keys = Object.keys(obj) as (keyof T)[]
+  return keys.reduce((acc, key) => {
     if (filter(obj[key])) {
       return acc
     } else return { ...acc, [key]: obj[key] }
@@ -37,7 +38,8 @@ export const mapKeys = <
   obj: Record<TKey, TValue>,
   mapFunc: (key: TKey, value: TValue) => TNewKey
 ): Record<TNewKey, TValue> => {
-  return Object.keys(obj).reduce(
+  const keys = Object.keys(obj) as TKey[]
+  return keys.reduce(
     (acc, key) => ({
       ...acc,
       [mapFunc(key as TKey, obj[key])]: obj[key]
@@ -55,9 +57,10 @@ export const mapValues = <
   TNewValue
 >(
   obj: Record<TKey, TValue>,
-  mapFunc: (value: TValue, key: string) => TNewValue
+  mapFunc: (value: TValue, key: TKey) => TNewValue
 ): Record<TKey, TNewValue> => {
-  return Object.keys(obj).reduce(
+  const keys = Object.keys(obj) as TKey[]
+  return keys.reduce(
     (acc, key) => ({
       ...acc,
       [key]: mapFunc(obj[key], key)
@@ -99,7 +102,8 @@ export const invert = <
   obj: Record<TKey, TValue>
 ): Record<TValue, TKey> => {
   if (!obj) return {} as Record<TValue, TKey>
-  return Object.keys(obj).reduce(
+  const keys = Object.keys(obj) as TKey[]
+  return keys.reduce(
     (acc, key) => ({
       ...acc,
       [obj[key]]: key
@@ -120,14 +124,32 @@ export const lowerize = <T extends Record<string, any>>(obj: T) =>
 export const upperize = <T extends Record<string, any>>(obj: T) =>
   mapKeys(obj, k => k.toUpperCase()) as UppercasedKeys<T>
 
-export const clone = <T extends object = object>(obj: T): T => {
-  return Object.getOwnPropertyNames(obj).reduce(
-    (acc, name) => ({
-      ...acc,
-      [name]: obj[name]
-    }),
-    {} as T
-  )
+/**
+ * Creates a shallow copy of the given obejct/value.
+ * @param {*} obj value to clone
+ * @returns {*} shallow clone of the given value
+ */
+export const clone = <T>(obj: T): T => {
+  // Primitive values do not need cloning.
+  if (isPrimitive(obj)) {
+    return obj
+  }
+
+  // Binding a function to an empty object creates a copy function.
+  if (typeof obj === 'function') {
+    return obj.bind({})
+  }
+
+  // Access the constructor and create a new object. This method can create an array as well.
+  const newObj = new ((obj as Object).constructor as { new (): T })()
+
+  // Assign the props.
+  Object.getOwnPropertyNames(obj).forEach(prop => {
+    // Bypass type checking since the primitive cases are already checked in the beginning
+    ;(newObj as any)[prop] = (obj as any)[prop]
+  })
+
+  return newObj
 }
 
 /**
@@ -193,7 +215,7 @@ export const get = <T, K>(
   value: T,
   funcOrPath: ((t: T) => K) | string,
   defaultValue: K | null = null
-): K => {
+): K | null => {
   if (isFunction(funcOrPath)) {
     try {
       return (funcOrPath as Function)(value) ?? defaultValue

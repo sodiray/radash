@@ -1,9 +1,10 @@
 import { assert } from 'chai'
 import * as _ from '..'
-
-jest.useRealTimers()
+import { AggregateError } from '../async'
 
 describe('async module', () => {
+  beforeEach(() => jest.useFakeTimers({ advanceTimers: true }))
+
   describe('asyncReduce function', () => {
     test('returns result of reducer', async () => {
       const numbers = [
@@ -32,7 +33,7 @@ describe('async module', () => {
     })
 
     test('handles null input', async () => {
-      const result = await _.map(null, async () => '')
+      const result = await _.map(null as unknown as unknown[], async () => '')
       assert.deepEqual(result, [])
     })
 
@@ -149,7 +150,7 @@ describe('async module', () => {
         await _.defer(async () => {
           throw new Error('soooo broken')
         })
-      } catch (err) {
+      } catch (err: any) {
         error = err
       }
       assert.isNotNull(error)
@@ -166,7 +167,7 @@ describe('async module', () => {
             { rethrow: true }
           )
         })
-      } catch (err) {
+      } catch (err: any) {
         error = err
       }
       assert.isNotNull(error)
@@ -183,7 +184,7 @@ describe('async module', () => {
             { rethrow: false }
           )
         })
-      } catch (err) {
+      } catch (err: any) {
         error = err
       }
       assert.isNull(error)
@@ -196,7 +197,7 @@ describe('async module', () => {
             throw new Error('soooo broken')
           })
         })
-      } catch (err) {
+      } catch (err: any) {
         error = err
       }
       assert.isNull(error)
@@ -232,11 +233,56 @@ describe('async module', () => {
   })
 
   describe('_.sleep function', () => {
-    test('returns error when error is thrown', async () => {
+    test('suspends a thread for a specified number of milliseconds', async () => {
+      const ONE_SECOND = 1000
       const before = Date.now()
-      await _.sleep(1000)
+      await _.sleep(ONE_SECOND)
       const after = Date.now()
-      assert.isAtLeast(after, before + 1000)
+      assert.isAtLeast(after, before + ONE_SECOND)
+    })
+  })
+
+  describe('AggregateError error', () => {
+    const fakeWork = (name?: string) => {
+      const fakeJob = () => {
+        const fakeTask = () => {
+          const fakeMicrotask = () => {
+            const err = new Error()
+            err.name = name ?? 'MicrotaskError'
+            throw err
+          }
+          return fakeMicrotask()
+        }
+        return fakeTask()
+      }
+      return fakeJob()
+    }
+    test('uses stack from the first given error', () => {
+      const errors: Error[] = []
+      try {
+        fakeWork()
+      } catch (e) {
+        errors.push(e as Error)
+      }
+      const aggregate = new AggregateError(errors)
+      assert.include(aggregate.stack, 'at fakeMicrotask')
+      assert.include(aggregate.message, 'with 1')
+    })
+    test('uses stack from first error with a stack', () => {
+      const errors: Error[] = [{} as Error]
+      try {
+        fakeWork()
+      } catch (e) {
+        errors.push(e as Error)
+      }
+      const aggregate = new AggregateError(errors)
+      assert.equal(aggregate.name, 'AggregateError(MicrotaskError...)')
+      assert.include(aggregate.stack, 'at fakeMicrotask')
+      assert.include(aggregate.message, 'with 2')
+    })
+    test('does not fail if no errors given', () => {
+      new AggregateError([])
+      new AggregateError(undefined as unknown as Error[])
     })
   })
 
@@ -259,7 +305,7 @@ describe('async module', () => {
           return `hi_${num}`
         })
       })()
-      const err = error as _.AggregateError
+      const err = error as AggregateError
       assert.isNull(results)
       assert.equal(err.errors.length, 1)
       assert.equal(err.errors[0].message, 'number is 2')
@@ -273,7 +319,7 @@ describe('async module', () => {
         await _.sleep(300)
         numInProgress--
       })
-      assert.deepEqual(tracking, [1, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3])
+      assert.deepEqual(Math.max(...tracking), 3)
     })
   })
 

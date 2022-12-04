@@ -10,6 +10,22 @@ export const isObject = (value: any): value is object => {
   return !!value && value.constructor === Object
 }
 
+/**
+ * Checks if the given value is primitive.
+ *
+ * Primitive Types: number , string , boolean , symbol, bigint, undefined, null
+ *
+ * @param {*} value value to check
+ * @returns {boolean} result
+ */
+export const isPrimitive = (value: any): boolean => {
+  return (
+    value === undefined ||
+    value === null ||
+    (typeof value !== 'object' && typeof value !== 'function')
+  )
+}
+
 export const isFunction = (value: any): value is Function => {
   return !!(value && value.constructor && value.call && value.apply)
 }
@@ -69,7 +85,7 @@ export const isEqual = <TType>(x: TType, y: TType): boolean => {
   ) {
     return false
   }
-  const keysX = Reflect.ownKeys(x as unknown as object)
+  const keysX = Reflect.ownKeys(x as unknown as object) as (keyof typeof x)[]
   const keysY = Reflect.ownKeys(y as unknown as object)
   if (keysX.length !== keysY.length) return false
   for (let i = 0; i < keysX.length; i++) {

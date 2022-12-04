@@ -1,4 +1,4 @@
-import { fork, list, sort } from './array'
+import { fork, list, range, sort } from './array'
 
 /**
  * An async reduce function. Works like the
@@ -86,14 +86,18 @@ type WorkItemResult<K> = {
 
 /**
  * Support for the built-in AggregateError
- * is still new. Node <= 14 doesn't have it
+ * is still new. Node < 15 doesn't have it
  * so patching here.
  * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/AggregateError#browser_compatibility
  */
 export class AggregateError extends Error {
   errors: Error[]
-  constructor(errors: Error[]) {
+  constructor(errors: Error[] = []) {
     super()
+    const name = errors.find(e => e.name)?.name ?? ''
+    this.name = `AggregateError(${name}...)`
+    this.message = `AggregateError with ${errors.length} errors`
+    this.stack = errors.find(e => e.stack)?.stack ?? this.stack
     this.errors = errors
   }
 }
@@ -122,7 +126,7 @@ export const parallel = async <T, K>(
       const [error, result] = await tryit(func)(next.item)
       results.push({
         error,
-        result,
+        result: result as K,
         index: next.index
       })
     }
@@ -156,7 +160,7 @@ export const retry = async <TResponse>(
   const times = options?.times ?? 3
   const delay = options?.delay
   const backoff = options?.backoff ?? null
-  for (const i of list(1, times)) {
+  for (const i of range(1, times)) {
     const [err, result] = (await tryit(func)((err: any) => {
       throw { _exited: err }
     })) as [any, TResponse]
@@ -166,6 +170,11 @@ export const retry = async <TResponse>(
     if (delay) await sleep(delay)
     if (backoff) await sleep(backoff(i))
   }
+  // Logically, we should never reach this
+  // code path. It makes the function meet
+  // strict mode requirements.
+  /* istanbul ignore next */
+  return undefined as unknown as TResponse
 }
 
 /**

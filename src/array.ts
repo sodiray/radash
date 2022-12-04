@@ -9,8 +9,9 @@ export const group = <T, Key extends string | number | symbol>(
 ) => {
   return array.reduce((acc, item) => {
     const groupId = getGroupId(item)
-    const groupList = acc[groupId] ?? []
-    return { ...acc, [groupId]: [...groupList, item] }
+    if (!acc[groupId]) acc[groupId] = []
+    acc[groupId].push(item)
+    return acc
   }, {} as Record<Key, T[]>)
 }
 
@@ -281,7 +282,7 @@ export const intersects = <T, K extends string | number | symbol>(
       ...acc,
       [ident(item)]: true
     }),
-    {} as Record<string | number | symbol, true>
+    {} as Record<string | number | symbol, boolean>
   )
   return listA.some(value => dictB[ident(value)])
 }
@@ -326,7 +327,7 @@ export const merge = <T>(
     const matched = others.find(o => matcher(r) === matcher(o))
     if (matched) return [...acc, matched]
     else return [...acc, r]
-  }, [])
+  }, [] as T[])
 }
 
 /**
@@ -353,6 +354,36 @@ export const replaceOrAppend = <T>(
     }
   }
   return [...list, newItem]
+}
+
+/**
+ * If the item matching the condition already exists
+ * in the list it will be removed. If it does not it
+ * will be added.
+ */
+export const toggle = <T>(
+  list: readonly T[],
+  item: T,
+  /**
+   * Converts an item of type T item into a value that
+   * can be checked for equality
+   */
+  toKey?: null | ((item: T, idx: number) => number | string | symbol),
+  options?: {
+    strategy?: 'prepend' | 'append'
+  }
+) => {
+  if (!list && !item) return []
+  if (!list) return [item]
+  if (!item) return [...list]
+  const matcher = toKey
+    ? (x: T, idx: number) => toKey(x, idx) === toKey(item, idx)
+    : (x: T) => x === item
+  const existing = list.find(matcher)
+  if (existing) return list.filter((x, idx) => !matcher(x, idx))
+  const strategy = options?.strategy ?? 'append'
+  if (strategy === 'append') return [...list, item]
+  return [item, ...list]
 }
 
 /**
@@ -402,7 +433,7 @@ export const diff = <T>(
       ...acc,
       [identity(item)]: true
     }),
-    {}
+    {} as Record<string | number | symbol, boolean>
   )
   return root.filter(a => !bKeys[identity(a)])
 }

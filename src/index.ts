@@ -24,6 +24,7 @@ export {
   sift,
   sort,
   sum,
+  toggle,
   unique
 } from './array'
 export {
@@ -38,6 +39,7 @@ export {
 } from './async'
 export type { AggregateError } from './async'
 export {
+  callable,
   chain,
   compose,
   debounce,
@@ -78,7 +80,9 @@ export {
   dash,
   pascal,
   snake,
-  template
+  template,
+  title,
+  trim
 } from './string'
 export {
   isArray,
@@ -90,6 +94,7 @@ export {
   isInt,
   isNumber,
   isObject,
+  isPrimitive,
   isString,
   isSymbol
 } from './typed'

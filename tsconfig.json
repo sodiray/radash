@@ -2,12 +2,13 @@
   "compilerOptions": {
     "outDir": "dist",
     "moduleResolution": "node",
-    "target": "es2019",
-    "lib": ["es2019"],
+    "target": "es2020",
+    "lib": ["es2020"],
     "esModuleInterop": true,
+    "strict": true
   },
   "include": [
     "src/**/*.ts"
   ],
-  "exclude": ["node_modules", "dist", "src/tests"]
+  "exclude": ["node_modules", "dist"]
 }
