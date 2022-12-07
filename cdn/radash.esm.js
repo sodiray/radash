@@ -339,9 +339,9 @@ const sleep = (milliseconds) => {
 const tryit = (func) => {
   return async (...args) => {
     try {
-      return [null, await func(...args)];
+      return [void 0, await func(...args)];
     } catch (err) {
-      return [err, null];
+      return [err, void 0];
     }
   };
 };
