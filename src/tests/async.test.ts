@@ -215,7 +215,7 @@ describe('async module', () => {
       const [err, result] = await _.try(async () => {
         throw new Error('not good enough')
       })()
-      assert.isNull(result)
+      assert.isUndefined(result)
       assert.isNotNull(err)
       assert.equal(err!.message, 'not good enough')
     })
@@ -223,7 +223,7 @@ describe('async module', () => {
       const [err, result] = await _.try(async () => {
         return 'hello'
       })()
-      assert.isNull(err)
+      assert.isUndefined(err)
       assert.isNotNull(result)
       assert.equal(result, 'hello')
     })
@@ -294,7 +294,7 @@ describe('async module', () => {
           return `hi_${num}`
         })
       })()
-      assert.isNull(errors)
+      assert.isUndefined(errors)
       assert.deepEqual(results, ['hi_1', 'hi_2', 'hi_3'])
     })
     test('throws erros as array of all errors', async () => {
@@ -306,7 +306,7 @@ describe('async module', () => {
         })
       })()
       const err = error as AggregateError
-      assert.isNull(results)
+      assert.isUndefined(results)
       assert.equal(err.errors.length, 1)
       assert.equal(err.errors[0].message, 'number is 2')
     })
