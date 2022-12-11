@@ -1,3 +1,5 @@
+import { isArray, isFunction } from './typed'
+
 /**
  * Sorts an array of items into groups. The return value is a map where the keys are
  * the group ids the given getGroupId function produced and the value is an array of
@@ -13,6 +15,66 @@ export const group = <T, Key extends string | number | symbol>(
     acc[groupId].push(item)
     return acc
   }, {} as Record<Key, T[]>)
+}
+
+/**
+ * Creates an array of grouped elements, the first of which contains the
+ * first elements of the given arrays, the second of which contains the
+ * second elements of the given arrays, and so on.
+ *
+ * Ex. const zipped = zip(['a', 'b'], [1, 2], [true, false]) // [['a', 1, true], ['b', 2, false]]
+ */
+export function zip<T1, T2, T3, T4, T5>(
+  array1: T1[],
+  array2: T2[],
+  array3: T3[],
+  array4: T4[],
+  array5: T5[]
+): [T1, T2, T3, T4, T5][]
+export function zip<T1, T2, T3, T4>(
+  array1: T1[],
+  array2: T2[],
+  array3: T3[],
+  array4: T4[]
+): [T1, T2, T3, T4][]
+export function zip<T1, T2, T3>(
+  array1: T1[],
+  array2: T2[],
+  array3: T3[]
+): [T1, T2, T3][]
+export function zip<T1, T2>(array1: T1[], array2: T2[]): [T1, T2][]
+export function zip<T>(...arrays: T[][]): T[][] {
+  if (!arrays || !arrays.length) return []
+  return new Array(Math.max(...arrays.map(({ length }) => length)))
+    .fill([])
+    .map((_, idx) => arrays.map(array => array[idx]))
+}
+
+/**
+ * Creates an object mapping the specified keys to their corresponding values
+ *
+ * Ex. const zipped = zipToObject(['a', 'b'], [1, 2]) // { a: 1, b: 2 }
+ * Ex. const zipped = zipToObject(['a', 'b'], (k, i) => k + i) // { a: 'a0', b: 'b1' }
+ * Ex. const zipped = zipToObject(['a', 'b'], 1) // { a: 1, b: 1 }
+ */
+export function zipToObject<K extends string | number | symbol, V>(
+  keys: K[],
+  values: V | ((key: K, idx: number) => V) | V[]
+): Record<K, V> {
+  if (!keys || !keys.length) {
+    return {} as Record<K, V>
+  }
+
+  const getValue = isFunction(values)
+    ? values
+    : isArray(values)
+    ? (_k: K, i: number) => values[i]
+    : (_k: K, _i: number) => values
+
+  return keys.reduce(
+    (acc, key, idx) => ({ ...acc, [key]: getValue(key, idx) }),
+    {} as Record<K, V>
+  )
 }
 
 /**
@@ -228,32 +290,52 @@ export const unique = <T, K extends string | number | symbol>(
  * Creates a generator that will produce an iteration through
  * the range of number as requested.
  *
- * @example for (const i of _.range(3, 3*3, 3)) { console.log(i) }
+ * @example
+ * range(3)                  // yields 0, 1, 2, 3
+ * range(0, 3)               // yields 0, 1, 2, 3
+ * range(0, 3, 'y')          // yields y, y, y, y
+ * range(0, 3, () => 'y')    // yields y, y, y, y
+ * range(0, 3, i => i)       // yields 0, 1, 2, 3
+ * range(0, 3, i => `y${i}`) // yields y0, y1, y2, y3
+ * range(0, 3, obj)          // yields obj, obj, obj, obj
+ * range(0, 6, i => i, 2)    // yields 0, 2, 4, 6
  */
-export function* range(
-  start: number,
-  end: number,
+export function* range<T = number>(
+  startOrLength: number,
+  end?: number,
+  valueOrMapper: T | ((i: number) => T) = i => i as T,
   step: number = 1
-): Generator<number> {
-  for (let i = start; i <= end; i += step) {
-    yield i
-    if (i + step > end) break
+): Generator<T> {
+  const mapper = isFunction(valueOrMapper) ? valueOrMapper : () => valueOrMapper
+  const start = end ? startOrLength : 0
+  const final = end ?? startOrLength
+  for (let i = start; i <= final; i += step) {
+    yield mapper(i)
+    if (i + step > final) break
   }
 }
 
 /**
- * Creates a list with numbers ranging from the
- * start to the end by the given step.
+ * Creates a list of given start, end, value, and
+ * step parameters.
  *
- * @example list(0, 3) // [0, 1, 2, 3]
- * @example list(2, 10, 2) // [2, 4, 6, 8 ,10]
+ * @example
+ * list(3)                  // 0, 1, 2, 3
+ * list(0, 3)               // 0, 1, 2, 3
+ * list(0, 3, 'y')          // y, y, y, y
+ * list(0, 3, () => 'y')    // y, y, y, y
+ * list(0, 3, i => i)       // 0, 1, 2, 3
+ * list(0, 3, i => `y${i}`) // y0, y1, y2, y3
+ * list(0, 3, obj)          // obj, obj, obj, obj
+ * list(0, 6, i => i, 2)    // 0, 2, 4, 6
  */
-export const list = (
-  start: number,
-  end: number,
-  step: number = 1
-): number[] => {
-  return Array.from(range(start, end, step))
+export const list = <T = number>(
+  startOrLength: number,
+  end?: number,
+  valueOrMapper?: T | ((i: number) => T),
+  step?: number
+): T[] => {
+  return Array.from(range(startOrLength, end, valueOrMapper, step))
 }
 
 /**

@@ -1,4 +1,4 @@
-import { isFunction, isObject, isPrimitive } from './typed'
+import { isObject, isPrimitive } from './typed'
 
 type LowercasedKeys<T extends Record<string, any>> = {
   [P in keyof T & string as Lowercase<P>]: T[P]
@@ -208,21 +208,16 @@ export const omit = <T, TKeys extends keyof T>(
 }
 
 /**
- * Warning: Passing a function has been @deprecated
- * and will be removed in the next major version.
+ * Dynamically get a nested value from an array or
+ * object with a string.
+ *
+ * @example get(person, 'friends[0].name')
  */
 export const get = <T, K>(
   value: T,
-  funcOrPath: ((t: T) => K) | string,
+  funcOrPath: string,
   defaultValue: K | null = null
 ): K | null => {
-  if (isFunction(funcOrPath)) {
-    try {
-      return (funcOrPath as Function)(value) ?? defaultValue
-    } catch {
-      return defaultValue
-    }
-  }
   const segments = (funcOrPath as string).split(/[\.\[\]]/g)
   let current: any = value
   for (const key of segments) {
@@ -236,11 +231,11 @@ export const get = <T, K>(
 }
 
 /**
- * Zip two objects together recursivly into a new
+ * Merges two objects together recursivly into a new
  * object applying values from right to left.
  * Recursion only applies to child object properties.
  */
-export const zip = <X extends Record<string | symbol | number, any>>(
+export const assign = <X extends Record<string | symbol | number, any>>(
   a: X,
   b: X
 ): X => {
@@ -251,7 +246,7 @@ export const zip = <X extends Record<string | symbol | number, any>>(
     return {
       ...acc,
       [key]: (() => {
-        if (isObject(value)) return zip(value, b[key])
+        if (isObject(value)) return assign(value, b[key])
         return b[key]
       })()
     }
