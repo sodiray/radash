@@ -1,3 +1,84 @@
+const isSymbol = (value) => {
+  return !!value && value.constructor === Symbol;
+};
+const isArray = (value) => {
+  return !!value && value.constructor === Array;
+};
+const isObject = (value) => {
+  return !!value && value.constructor === Object;
+};
+const isPrimitive = (value) => {
+  return value === void 0 || value === null || typeof value !== "object" && typeof value !== "function";
+};
+const isFunction = (value) => {
+  return !!(value && value.constructor && value.call && value.apply);
+};
+const isString = (value) => {
+  return typeof value === "string" || value instanceof String;
+};
+const isInt = (value) => {
+  return isNumber(value) && value % 1 === 0;
+};
+const isFloat = (value) => {
+  return isNumber(value) && value % 1 !== 0;
+};
+const isNumber = (value) => {
+  try {
+    return Number(value) === value;
+  } catch {
+    return false;
+  }
+};
+const isDate = (value) => {
+  return Object.prototype.toString.call(value) === "[object Date]";
+};
+const isEmpty = (value) => {
+  if (value === true || value === false)
+    return true;
+  if (value === null || value === void 0)
+    return true;
+  if (isNumber(value))
+    return value === 0;
+  if (isDate(value))
+    return isNaN(value.getTime());
+  if (isFunction(value))
+    return false;
+  if (isSymbol(value))
+    return false;
+  const length = value.length;
+  if (isNumber(length))
+    return length === 0;
+  const size = value.size;
+  if (isNumber(size))
+    return size === 0;
+  const keys = Object.keys(value).length;
+  return keys === 0;
+};
+const isEqual = (x, y) => {
+  if (Object.is(x, y))
+    return true;
+  if (x instanceof Date && y instanceof Date) {
+    return x.getTime() === y.getTime();
+  }
+  if (x instanceof RegExp && y instanceof RegExp) {
+    return x.toString() === y.toString();
+  }
+  if (typeof x !== "object" || x === null || typeof y !== "object" || y === null) {
+    return false;
+  }
+  const keysX = Reflect.ownKeys(x);
+  const keysY = Reflect.ownKeys(y);
+  if (keysX.length !== keysY.length)
+    return false;
+  for (let i = 0; i < keysX.length; i++) {
+    if (!Reflect.has(y, keysX[i]))
+      return false;
+    if (!isEqual(x[keysX[i]], y[keysX[i]]))
+      return false;
+  }
+  return true;
+};
+
 const group = (array, getGroupId) => {
   return array.reduce((acc, item) => {
     const groupId = getGroupId(item);
@@ -7,6 +88,21 @@ const group = (array, getGroupId) => {
     return acc;
   }, {});
 };
+function zip(...arrays) {
+  if (!arrays || !arrays.length)
+    return [];
+  return new Array(Math.max(...arrays.map(({ length }) => length))).fill([]).map((_, idx) => arrays.map((array) => array[idx]));
+}
+function zipToObject(keys, values) {
+  if (!keys || !keys.length) {
+    return {};
+  }
+  const getValue = isFunction(values) ? values : isArray(values) ? (_k, i) => values[i] : (_k, _i) => values;
+  return keys.reduce(
+    (acc, key, idx) => ({ ...acc, [key]: getValue(key, idx) }),
+    {}
+  );
+}
 const boil = (array, compareFunc) => {
   if (!array || (array.length ?? 0) === 0)
     return null;
@@ -443,87 +539,6 @@ const toInt = (value, defaultValue) => {
   return isNaN(result) ? def : result;
 };
 
-const isSymbol = (value) => {
-  return !!value && value.constructor === Symbol;
-};
-const isArray = (value) => {
-  return !!value && value.constructor === Array;
-};
-const isObject = (value) => {
-  return !!value && value.constructor === Object;
-};
-const isPrimitive = (value) => {
-  return value === void 0 || value === null || typeof value !== "object" && typeof value !== "function";
-};
-const isFunction = (value) => {
-  return !!(value && value.constructor && value.call && value.apply);
-};
-const isString = (value) => {
-  return typeof value === "string" || value instanceof String;
-};
-const isInt = (value) => {
-  return isNumber(value) && value % 1 === 0;
-};
-const isFloat = (value) => {
-  return isNumber(value) && value % 1 !== 0;
-};
-const isNumber = (value) => {
-  try {
-    return Number(value) === value;
-  } catch {
-    return false;
-  }
-};
-const isDate = (value) => {
-  return Object.prototype.toString.call(value) === "[object Date]";
-};
-const isEmpty = (value) => {
-  if (value === true || value === false)
-    return true;
-  if (value === null || value === void 0)
-    return true;
-  if (isNumber(value))
-    return value === 0;
-  if (isDate(value))
-    return isNaN(value.getTime());
-  if (isFunction(value))
-    return false;
-  if (isSymbol(value))
-    return false;
-  const length = value.length;
-  if (isNumber(length))
-    return length === 0;
-  const size = value.size;
-  if (isNumber(size))
-    return size === 0;
-  const keys = Object.keys(value).length;
-  return keys === 0;
-};
-const isEqual = (x, y) => {
-  if (Object.is(x, y))
-    return true;
-  if (x instanceof Date && y instanceof Date) {
-    return x.getTime() === y.getTime();
-  }
-  if (x instanceof RegExp && y instanceof RegExp) {
-    return x.toString() === y.toString();
-  }
-  if (typeof x !== "object" || x === null || typeof y !== "object" || y === null) {
-    return false;
-  }
-  const keysX = Reflect.ownKeys(x);
-  const keysY = Reflect.ownKeys(y);
-  if (keysX.length !== keysY.length)
-    return false;
-  for (let i = 0; i < keysX.length; i++) {
-    if (!Reflect.has(y, keysX[i]))
-      return false;
-    if (!isEqual(x[keysX[i]], y[keysX[i]]))
-      return false;
-  }
-  return true;
-};
-
 const shake = (obj, filter = (x) => x === void 0) => {
   if (!obj)
     return {};
@@ -648,7 +663,7 @@ const get = (value, funcOrPath, defaultValue = null) => {
     return defaultValue;
   return current;
 };
-const zip = (a, b) => {
+const assign = (a, b) => {
   if (!a && !b)
     return {};
   if (!a)
@@ -660,7 +675,7 @@ const zip = (a, b) => {
       ...acc,
       [key]: (() => {
         if (isObject(value))
-          return zip(value, b[key]);
+          return assign(value, b[key]);
         return b[key];
       })()
     };
@@ -790,4 +805,4 @@ const trim = (str, charsToTrim = " ") => {
   return str.replace(regex, "");
 };
 
-export { alphabetical, boil, callable, camel as camal, camel, capitalize, chain, clone, cluster, compose, counting, dash, debounce, defer, diff, draw, first, flat, fork, get, group, intersects, invert, isArray, isDate, isEmpty, isEqual, isFloat, isFunction, isInt, isNumber, isObject, isPrimitive, isString, isSymbol, iterate, last, list, listify, lowerize, map, mapEntries, mapKeys, mapValues, max, memo, merge, min, objectify, omit, parallel, partial, partob, pascal, pick, proxied, random, range, reduce, replace, replaceOrAppend, retry, select, series, shake, shift, shuffle, sift, sleep, snake, sort, sum, template, throttle, title, toFloat, toInt, toggle, trim, tryit as try, tryit, uid, unique, upperize, zip };
+export { alphabetical, assign, boil, callable, camel as camal, camel, capitalize, chain, clone, cluster, compose, counting, dash, debounce, defer, diff, draw, first, flat, fork, get, group, intersects, invert, isArray, isDate, isEmpty, isEqual, isFloat, isFunction, isInt, isNumber, isObject, isPrimitive, isString, isSymbol, iterate, last, list, listify, lowerize, map, mapEntries, mapKeys, mapValues, max, memo, merge, min, objectify, omit, parallel, partial, partob, pascal, pick, proxied, random, range, reduce, replace, replaceOrAppend, retry, select, series, shake, shift, shuffle, sift, sleep, snake, sort, sum, template, throttle, title, toFloat, toInt, toggle, trim, tryit as try, tryit, uid, unique, upperize, zip, zipToObject };

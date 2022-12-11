@@ -25,7 +25,9 @@ export {
   sort,
   sum,
   toggle,
-  unique
+  unique,
+  zip,
+  zipToObject
 } from './array'
 export {
   defer,
@@ -51,6 +53,7 @@ export {
 } from './curry'
 export { toFloat, toInt } from './number'
 export {
+  assign,
   clone,
   get,
   invert,
@@ -62,8 +65,7 @@ export {
   omit,
   pick,
   shake,
-  upperize,
-  zip
+  upperize
 } from './object'
 export { draw, random, shuffle, uid } from './random'
 export { series } from './series'

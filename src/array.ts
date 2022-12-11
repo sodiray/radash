@@ -1,3 +1,5 @@
+import { isArray, isFunction } from './typed'
+
 /**
  * Sorts an array of items into groups. The return value is a map where the keys are
  * the group ids the given getGroupId function produced and the value is an array of
@@ -13,6 +15,66 @@ export const group = <T, Key extends string | number | symbol>(
     acc[groupId].push(item)
     return acc
   }, {} as Record<Key, T[]>)
+}
+
+/**
+ * Creates an array of grouped elements, the first of which contains the
+ * first elements of the given arrays, the second of which contains the
+ * second elements of the given arrays, and so on.
+ *
+ * Ex. const zipped = zip(['a', 'b'], [1, 2], [true, false]) // [['a', 1, true], ['b', 2, false]]
+ */
+export function zip<T1, T2, T3, T4, T5>(
+  array1: T1[],
+  array2: T2[],
+  array3: T3[],
+  array4: T4[],
+  array5: T5[]
+): [T1, T2, T3, T4, T5][]
+export function zip<T1, T2, T3, T4>(
+  array1: T1[],
+  array2: T2[],
+  array3: T3[],
+  array4: T4[]
+): [T1, T2, T3, T4][]
+export function zip<T1, T2, T3>(
+  array1: T1[],
+  array2: T2[],
+  array3: T3[]
+): [T1, T2, T3][]
+export function zip<T1, T2>(array1: T1[], array2: T2[]): [T1, T2][]
+export function zip<T>(...arrays: T[][]): T[][] {
+  if (!arrays || !arrays.length) return []
+  return new Array(Math.max(...arrays.map(({ length }) => length)))
+    .fill([])
+    .map((_, idx) => arrays.map(array => array[idx]))
+}
+
+/**
+ * Creates an object mapping the specified keys to their corresponding values
+ *
+ * Ex. const zipped = zipToObject(['a', 'b'], [1, 2]) // { a: 1, b: 2 }
+ * Ex. const zipped = zipToObject(['a', 'b'], (k, i) => k + i) // { a: 'a0', b: 'b1' }
+ * Ex. const zipped = zipToObject(['a', 'b'], 1) // { a: 1, b: 1 }
+ */
+export function zipToObject<K extends string | number | symbol, V>(
+  keys: K[],
+  values: V | ((key: K, idx: number) => V) | V[]
+): Record<K, V> {
+  if (!keys || !keys.length) {
+    return {} as Record<K, V>
+  }
+
+  const getValue = isFunction(values)
+    ? values
+    : isArray(values)
+    ? (_k: K, i: number) => values[i]
+    : (_k: K, _i: number) => values
+
+  return keys.reduce(
+    (acc, key, idx) => ({ ...acc, [key]: getValue(key, idx) }),
+    {} as Record<K, V>
+  )
 }
 
 /**

@@ -371,7 +371,7 @@ describe('object module', () => {
     })
   })
 
-  describe('zip function', () => {
+  describe('assign function', () => {
     const a = {
       name: 'jay',
       cards: ['ac'],
@@ -395,19 +395,19 @@ describe('object module', () => {
       }
     }
     test('handles both null input', () => {
-      const result = _.zip(NULL, NULL)
+      const result = _.assign(NULL, NULL)
       assert.deepEqual(result, {})
     })
     test('handles null first input', () => {
-      const result = _.zip({ a: 'y' }, NULL)
+      const result = _.assign({ a: 'y' }, NULL)
       assert.deepEqual(result, { a: 'y' })
     })
     test('handles null last input', () => {
-      const result = _.zip(NULL, { a: 'y' })
+      const result = _.assign(NULL, { a: 'y' })
       assert.deepEqual(result, { a: 'y' })
     })
-    test('correctly zips a with values from b', () => {
-      const result = _.zip(a, b)
+    test('correctly assign a with values from b', () => {
+      const result = _.assign(a, b)
       assert.deepEqual(result, b)
     })
   })
