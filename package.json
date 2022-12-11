@@ -29,7 +29,7 @@
     "format:check": "prettier --check \"**/*.ts\" --ignore-unknown"
   },
   "devDependencies": {
-    "@rollup/plugin-typescript": "^9.0.2",
+    "@rollup/plugin-typescript": "^10.0.1",
     "@types/chai": "^4.3.3",
     "@types/jest": "^28.1.1",
     "chai": "^4.3.6",
