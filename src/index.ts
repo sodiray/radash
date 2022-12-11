@@ -70,13 +70,6 @@ export {
 export { draw, random, shuffle, uid } from './random'
 export { series } from './series'
 export {
-  /**
-   * Warning: This is exported for compatability
-   * but is @deprecated and will be removed in
-   * the next major version. Someone spelled
-   * camel wrong when it was implemented...
-   */
-  camel as camal,
   camel,
   capitalize,
   dash,
