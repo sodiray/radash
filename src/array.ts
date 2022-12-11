@@ -290,32 +290,52 @@ export const unique = <T, K extends string | number | symbol>(
  * Creates a generator that will produce an iteration through
  * the range of number as requested.
  *
- * @example for (const i of _.range(3, 3*3, 3)) { console.log(i) }
+ * @example
+ * range(3)                  // yields 0, 1, 2, 3
+ * range(0, 3)               // yields 0, 1, 2, 3
+ * range(0, 3, 'y')          // yields y, y, y, y
+ * range(0, 3, () => 'y')    // yields y, y, y, y
+ * range(0, 3, i => i)       // yields 0, 1, 2, 3
+ * range(0, 3, i => `y${i}`) // yields y0, y1, y2, y3
+ * range(0, 3, obj)          // yields obj, obj, obj, obj
+ * range(0, 6, i => i, 2)    // yields 0, 2, 4, 6
  */
-export function* range(
-  start: number,
-  end: number,
+export function* range<T = number>(
+  startOrLength: number,
+  end?: number,
+  valueOrMapper: T | ((i: number) => T) = i => i as T,
   step: number = 1
-): Generator<number> {
-  for (let i = start; i <= end; i += step) {
-    yield i
-    if (i + step > end) break
+): Generator<T> {
+  const mapper = isFunction(valueOrMapper) ? valueOrMapper : () => valueOrMapper
+  const start = end ? startOrLength : 0
+  const final = end ?? startOrLength
+  for (let i = start; i <= final; i += step) {
+    yield mapper(i)
+    if (i + step > final) break
   }
 }
 
 /**
- * Creates a list with numbers ranging from the
- * start to the end by the given step.
+ * Creates a list of given start, end, value, and
+ * step parameters.
  *
- * @example list(0, 3) // [0, 1, 2, 3]
- * @example list(2, 10, 2) // [2, 4, 6, 8 ,10]
+ * @example
+ * list(3)                  // 0, 1, 2, 3
+ * list(0, 3)               // 0, 1, 2, 3
+ * list(0, 3, 'y')          // y, y, y, y
+ * list(0, 3, () => 'y')    // y, y, y, y
+ * list(0, 3, i => i)       // 0, 1, 2, 3
+ * list(0, 3, i => `y${i}`) // y0, y1, y2, y3
+ * list(0, 3, obj)          // obj, obj, obj, obj
+ * list(0, 6, i => i, 2)    // 0, 2, 4, 6
  */
-export const list = (
-  start: number,
-  end: number,
-  step: number = 1
-): number[] => {
-  return Array.from(range(start, end, step))
+export const list = <T = number>(
+  startOrLength: number,
+  end?: number,
+  valueOrMapper?: T | ((i: number) => T),
+  step?: number
+): T[] => {
+  return Array.from(range(startOrLength, end, valueOrMapper, step))
 }
 
 /**

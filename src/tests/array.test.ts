@@ -362,33 +362,62 @@ describe('array module', () => {
   })
 
   describe('range function', () => {
-    test('creates correct list', () => {
-      let items: number[] = []
-      for (const item of _.range(0, 4)) items.push(item)
-      assert.deepEqual(items, [0, 1, 2, 3, 4])
-    })
-    test('creates correct list with step', () => {
-      let items: number[] = []
-      for (const item of _.range(0, 10, 2)) items.push(item)
-      assert.deepEqual(items, [0, 2, 4, 6, 8, 10])
+    const obj = { name: 'radash' }
+    const toList = <T>(gen: Generator<T>): T[] => {
+      let items: T[] = []
+      for (const item of gen) items.push(item)
+      return items
+    }
+
+    test('yields expected values', () => {
+      assert.deepEqual(toList(_.range(0, 4)), [0, 1, 2, 3, 4])
+      assert.deepEqual(toList(_.range(3)), [0, 1, 2, 3])
+      assert.deepEqual(toList(_.range(0, 3)), [0, 1, 2, 3])
+      assert.deepEqual(toList(_.range(0, 3, 'y')), ['y', 'y', 'y', 'y'])
+      assert.deepEqual(toList(_.range(0, 3, () => 'y')), ['y', 'y', 'y', 'y'])
+      assert.deepEqual(toList(_.range(0, 3, i => i)), [0, 1, 2, 3])
+      assert.deepEqual(toList(_.range(0, 3, i => `y${i}`)), [
+        'y0',
+        'y1',
+        'y2',
+        'y3'
+      ])
+      assert.deepEqual(toList(_.range(0, 3, obj)), [obj, obj, obj, obj])
+      assert.deepEqual(toList(_.range(0, 6, i => i, 2)), [0, 2, 4, 6])
     })
   })
 
   describe('list function', () => {
+    const obj = { name: 'radash' }
     test('creates correct list', () => {
-      const result = _.list(0, 4)
-      assert.deepEqual(result, [0, 1, 2, 3, 4])
-    })
-    test('creates correct list with step', () => {
-      const result = _.list(3, 12, 3)
-      assert.deepEqual(result, [3, 6, 9, 12])
+      assert.deepEqual(_.list(0, 4), [0, 1, 2, 3, 4])
+      assert.deepEqual(_.list(3), [0, 1, 2, 3])
+      assert.deepEqual(_.list(0, 3), [0, 1, 2, 3])
+      assert.deepEqual(_.list(0, 3, 'y'), ['y', 'y', 'y', 'y'])
+      assert.deepEqual(
+        _.list(0, 3, () => 'y'),
+        ['y', 'y', 'y', 'y']
+      )
+      assert.deepEqual(
+        _.list(0, 3, i => i),
+        [0, 1, 2, 3]
+      )
+      assert.deepEqual(
+        _.list(0, 3, i => `y${i}`),
+        ['y0', 'y1', 'y2', 'y3']
+      )
+      assert.deepEqual(_.list(0, 3, obj), [obj, obj, obj, obj])
+      assert.deepEqual(
+        _.list(0, 6, i => i, 2),
+        [0, 2, 4, 6]
+      )
     })
     test('omits end if step does not land on it', () => {
-      const result = _.list(0, 5, 2)
+      const result = _.list(0, 5, i => i, 2)
       assert.deepEqual(result, [0, 2, 4])
     })
     test('returns start only if step larger than end', () => {
-      const result = _.list(0, 5, 20)
+      const result = _.list(0, 5, i => i, 20)
       assert.deepEqual(result, [0])
     })
   })
