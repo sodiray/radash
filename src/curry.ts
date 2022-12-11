@@ -91,21 +91,50 @@ export const memo = <TFunc extends Function>(
   return memoize({}, func as any, key, ttl) as any as TFunc
 }
 
+export type DebounceFunction<TArgs extends any[]> = {
+  (...args: TArgs): void
+  /**
+   * Cancels the debounced function
+   */
+  cancel(): void
+  /**
+   * Runs the debounced function immediately
+   */
+  flush(...args: TArgs): void
+}
+
 /**
  * Given a delay and a function returns a new function
  * that will only call the source function after delay
- * milliseconds have passed without any invocations
+ * milliseconds have passed without any invocations.
+ *
+ * The debounce function comes with a `cancel` method
+ * to cancel delayed `func` invocations and a `flush`
+ * method to invoke them immediately
  */
 export const debounce = <TArgs extends any[]>(
   { delay }: { delay: number },
   func: (...args: TArgs) => any
-): ((...args: TArgs) => void) => {
-  let timer: any = null
-  const debounced = (...args: TArgs) => {
-    clearTimeout(timer)
-    timer = setTimeout(() => func(...args), delay)
+) => {
+  let timer: NodeJS.Timeout | undefined = undefined
+  let active = true
+
+  const debounced: DebounceFunction<TArgs> = (...args: TArgs) => {
+    if (active) {
+      clearTimeout(timer)
+      timer = setTimeout(() => {
+        active && func(...args)
+      }, delay)
+    } else {
+      func(...args)
+    }
   }
-  return debounced as unknown as (...args: TArgs) => void
+  debounced.cancel = () => {
+    active = false
+  }
+  debounced.flush = (...args: TArgs) => func(...args)
+
+  return debounced
 }
 
 /**

@@ -1,5 +1,6 @@
 import { assert } from 'chai'
 import * as _ from '..'
+import { DebounceFunction } from '../curry'
 
 describe('curry module', () => {
   describe('compose function', () => {
@@ -147,15 +148,62 @@ describe('curry module', () => {
   })
 
   describe('debounce function', () => {
+    let func: DebounceFunction<any>
+    const mockFunc = jest.fn()
+    const runFunc3Times = () => {
+      func()
+      func()
+      func()
+    }
+
+    beforeEach(() => {
+      func = _.debounce({ delay: 600 }, mockFunc)
+    })
+
+    afterEach(() => {
+      jest.clearAllMocks()
+    })
+
     test('only executes once when called rapidly', async () => {
-      let calls = 0
-      const func = _.debounce({ delay: 600 }, () => calls++)
-      func()
-      func()
-      func()
-      assert.equal(calls, 0)
+      runFunc3Times()
+      expect(mockFunc).toHaveBeenCalledTimes(0)
       await _.sleep(610)
-      assert.equal(calls, 1)
+      expect(mockFunc).toHaveBeenCalledTimes(1)
+    })
+
+    test('does not debounce after cancel is called', () => {
+      runFunc3Times()
+      expect(mockFunc).toHaveBeenCalledTimes(0)
+      func.cancel()
+      runFunc3Times()
+      expect(mockFunc).toHaveBeenCalledTimes(3)
+      runFunc3Times()
+      expect(mockFunc).toHaveBeenCalledTimes(6)
+    })
+
+    test('when we call the flush method it should execute the function immediately', () => {
+      func.flush()
+      expect(mockFunc).toHaveBeenCalledTimes(1)
+    })
+
+    test('continues to debounce after flush is called', async () => {
+      runFunc3Times()
+      expect(mockFunc).toHaveBeenCalledTimes(0)
+      func.flush()
+      expect(mockFunc).toHaveBeenCalledTimes(1)
+      func()
+      expect(mockFunc).toHaveBeenCalledTimes(1)
+      await _.sleep(610)
+      expect(mockFunc).toHaveBeenCalledTimes(2)
+      func.flush()
+      expect(mockFunc).toHaveBeenCalledTimes(3)
+    })
+
+    test('cancels all pending invocations when cancel is called', async () => {
+      func()
+      func.cancel()
+      await _.sleep(610)
+      expect(mockFunc).toHaveBeenCalledTimes(0)
     })
   })
 
