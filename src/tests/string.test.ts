@@ -3,10 +3,6 @@ import * as _ from '..'
 
 describe('string module', () => {
   describe('camel function', () => {
-    test('camal alias is available', () => {
-      // NOTE: Remove in next major version
-      assert.isFunction(_.camal)
-    })
     test('returns correctly cased string', () => {
       const result = _.camel('hello world')
       assert.equal(result, 'helloWorld')

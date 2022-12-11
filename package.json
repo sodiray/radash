@@ -1,6 +1,6 @@
 {
   "name": "radash",
-  "version": "9.6.0",
+  "version": "10.1.0",
   "description": "Functional utility library - modern, simple, typed, powerful",
   "main": "dist/cjs/index.cjs",
   "module": "dist/esm/index.mjs",
@@ -29,11 +29,11 @@
     "format:check": "prettier --check \"**/*.ts\" --ignore-unknown"
   },
   "devDependencies": {
-    "@rollup/plugin-typescript": "^9.0.2",
+    "@rollup/plugin-typescript": "^10.0.1",
     "@types/chai": "^4.3.3",
     "@types/jest": "^28.1.1",
     "chai": "^4.3.6",
-    "esbuild": "^0.15.12",
+    "esbuild": "^0.16.3",
     "jest": "^28.1.3",
     "prettier": "^2.7.1",
     "prettier-plugin-organize-imports": "^3.0.3",

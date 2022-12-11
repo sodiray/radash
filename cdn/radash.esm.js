@@ -1,3 +1,84 @@
+const isSymbol = (value) => {
+  return !!value && value.constructor === Symbol;
+};
+const isArray = (value) => {
+  return !!value && value.constructor === Array;
+};
+const isObject = (value) => {
+  return !!value && value.constructor === Object;
+};
+const isPrimitive = (value) => {
+  return value === void 0 || value === null || typeof value !== "object" && typeof value !== "function";
+};
+const isFunction = (value) => {
+  return !!(value && value.constructor && value.call && value.apply);
+};
+const isString = (value) => {
+  return typeof value === "string" || value instanceof String;
+};
+const isInt = (value) => {
+  return isNumber(value) && value % 1 === 0;
+};
+const isFloat = (value) => {
+  return isNumber(value) && value % 1 !== 0;
+};
+const isNumber = (value) => {
+  try {
+    return Number(value) === value;
+  } catch {
+    return false;
+  }
+};
+const isDate = (value) => {
+  return Object.prototype.toString.call(value) === "[object Date]";
+};
+const isEmpty = (value) => {
+  if (value === true || value === false)
+    return true;
+  if (value === null || value === void 0)
+    return true;
+  if (isNumber(value))
+    return value === 0;
+  if (isDate(value))
+    return isNaN(value.getTime());
+  if (isFunction(value))
+    return false;
+  if (isSymbol(value))
+    return false;
+  const length = value.length;
+  if (isNumber(length))
+    return length === 0;
+  const size = value.size;
+  if (isNumber(size))
+    return size === 0;
+  const keys = Object.keys(value).length;
+  return keys === 0;
+};
+const isEqual = (x, y) => {
+  if (Object.is(x, y))
+    return true;
+  if (x instanceof Date && y instanceof Date) {
+    return x.getTime() === y.getTime();
+  }
+  if (x instanceof RegExp && y instanceof RegExp) {
+    return x.toString() === y.toString();
+  }
+  if (typeof x !== "object" || x === null || typeof y !== "object" || y === null) {
+    return false;
+  }
+  const keysX = Reflect.ownKeys(x);
+  const keysY = Reflect.ownKeys(y);
+  if (keysX.length !== keysY.length)
+    return false;
+  for (let i = 0; i < keysX.length; i++) {
+    if (!Reflect.has(y, keysX[i]))
+      return false;
+    if (!isEqual(x[keysX[i]], y[keysX[i]]))
+      return false;
+  }
+  return true;
+};
+
 const group = (array, getGroupId) => {
   return array.reduce((acc, item) => {
     const groupId = getGroupId(item);
@@ -7,6 +88,21 @@ const group = (array, getGroupId) => {
     return acc;
   }, {});
 };
+function zip(...arrays) {
+  if (!arrays || !arrays.length)
+    return [];
+  return new Array(Math.max(...arrays.map(({ length }) => length))).fill([]).map((_, idx) => arrays.map((array) => array[idx]));
+}
+function zipToObject(keys, values) {
+  if (!keys || !keys.length) {
+    return {};
+  }
+  const getValue = isFunction(values) ? values : isArray(values) ? (_k, i) => values[i] : (_k, _i) => values;
+  return keys.reduce(
+    (acc, key, idx) => ({ ...acc, [key]: getValue(key, idx) }),
+    {}
+  );
+}
 const boil = (array, compareFunc) => {
   if (!array || (array.length ?? 0) === 0)
     return null;
@@ -103,15 +199,18 @@ const unique = (array, toKey) => {
   }, {});
   return Object.values(valueMap);
 };
-function* range(start, end, step = 1) {
-  for (let i = start; i <= end; i += step) {
-    yield i;
-    if (i + step > end)
+function* range(startOrLength, end, valueOrMapper = (i) => i, step = 1) {
+  const mapper = isFunction(valueOrMapper) ? valueOrMapper : () => valueOrMapper;
+  const start = end ? startOrLength : 0;
+  const final = end ?? startOrLength;
+  for (let i = start; i <= final; i += step) {
+    yield mapper(i);
+    if (i + step > final)
       break;
   }
 }
-const list = (start, end, step = 1) => {
-  return Array.from(range(start, end, step));
+const list = (startOrLength, end, valueOrMapper, step) => {
+  return Array.from(range(startOrLength, end, valueOrMapper, step));
 };
 const flat = (lists) => {
   return lists.reduce((acc, list2) => {
@@ -339,9 +438,9 @@ const sleep = (milliseconds) => {
 const tryit = (func) => {
   return async (...args) => {
     try {
-      return [null, await func(...args)];
+      return [void 0, await func(...args)];
     } catch (err) {
-      return [err, null];
+      return [err, void 0];
     }
   };
 };
@@ -454,87 +553,6 @@ const toInt = (value, defaultValue) => {
   return isNaN(result) ? def : result;
 };
 
-const isSymbol = (value) => {
-  return !!value && value.constructor === Symbol;
-};
-const isArray = (value) => {
-  return !!value && value.constructor === Array;
-};
-const isObject = (value) => {
-  return !!value && value.constructor === Object;
-};
-const isPrimitive = (value) => {
-  return value === void 0 || value === null || typeof value !== "object" && typeof value !== "function";
-};
-const isFunction = (value) => {
-  return !!(value && value.constructor && value.call && value.apply);
-};
-const isString = (value) => {
-  return typeof value === "string" || value instanceof String;
-};
-const isInt = (value) => {
-  return isNumber(value) && value % 1 === 0;
-};
-const isFloat = (value) => {
-  return isNumber(value) && value % 1 !== 0;
-};
-const isNumber = (value) => {
-  try {
-    return Number(value) === value;
-  } catch {
-    return false;
-  }
-};
-const isDate = (value) => {
-  return Object.prototype.toString.call(value) === "[object Date]";
-};
-const isEmpty = (value) => {
-  if (value === true || value === false)
-    return true;
-  if (value === null || value === void 0)
-    return true;
-  if (isNumber(value))
-    return value === 0;
-  if (isDate(value))
-    return isNaN(value.getTime());
-  if (isFunction(value))
-    return false;
-  if (isSymbol(value))
-    return false;
-  const length = value.length;
-  if (isNumber(length))
-    return length === 0;
-  const size = value.size;
-  if (isNumber(size))
-    return size === 0;
-  const keys = Object.keys(value).length;
-  return keys === 0;
-};
-const isEqual = (x, y) => {
-  if (Object.is(x, y))
-    return true;
-  if (x instanceof Date && y instanceof Date) {
-    return x.getTime() === y.getTime();
-  }
-  if (x instanceof RegExp && y instanceof RegExp) {
-    return x.toString() === y.toString();
-  }
-  if (typeof x !== "object" || x === null || typeof y !== "object" || y === null) {
-    return false;
-  }
-  const keysX = Reflect.ownKeys(x);
-  const keysY = Reflect.ownKeys(y);
-  if (keysX.length !== keysY.length)
-    return false;
-  for (let i = 0; i < keysX.length; i++) {
-    if (!Reflect.has(y, keysX[i]))
-      return false;
-    if (!isEqual(x[keysX[i]], y[keysX[i]]))
-      return false;
-  }
-  return true;
-};
-
 const shake = (obj, filter = (x) => x === void 0) => {
   if (!obj)
     return {};
@@ -637,13 +655,6 @@ const omit = (obj, keys) => {
   );
 };
 const get = (value, funcOrPath, defaultValue = null) => {
-  if (isFunction(funcOrPath)) {
-    try {
-      return funcOrPath(value) ?? defaultValue;
-    } catch {
-      return defaultValue;
-    }
-  }
   const segments = funcOrPath.split(/[\.\[\]]/g);
   let current = value;
   for (const key of segments) {
@@ -659,7 +670,7 @@ const get = (value, funcOrPath, defaultValue = null) => {
     return defaultValue;
   return current;
 };
-const zip = (a, b) => {
+const assign = (a, b) => {
   if (!a && !b)
     return {};
   if (!a)
@@ -671,7 +682,7 @@ const zip = (a, b) => {
       ...acc,
       [key]: (() => {
         if (isObject(value))
-          return zip(value, b[key]);
+          return assign(value, b[key]);
         return b[key];
       })()
     };
@@ -703,12 +714,12 @@ const uid = (length, specials = "") => {
   );
 };
 
-const series = (...items) => {
-  const { itemsByValue, itemsByIndex } = items.reduce(
+const series = (items, toKey = (item) => `${item}`) => {
+  const { indexesByKey, itemsByIndex } = items.reduce(
     (acc, item, idx) => ({
-      itemsByValue: {
-        ...acc.itemsByValue,
-        [item]: idx
+      indexesByKey: {
+        ...acc.indexesByKey,
+        [toKey(item)]: idx
       },
       itemsByIndex: {
         ...acc.itemsByIndex,
@@ -716,29 +727,43 @@ const series = (...items) => {
       }
     }),
     {
-      itemsByValue: {},
+      indexesByKey: {},
       itemsByIndex: {}
     }
   );
+  const min = (a, b) => {
+    return indexesByKey[toKey(a)] < indexesByKey[toKey(b)] ? a : b;
+  };
+  const max = (a, b) => {
+    return indexesByKey[toKey(a)] > indexesByKey[toKey(b)] ? a : b;
+  };
+  const first = () => {
+    return itemsByIndex[0];
+  };
+  const last = () => {
+    return itemsByIndex[items.length - 1];
+  };
+  const next = (current) => {
+    return itemsByIndex[indexesByKey[toKey(current)] + 1] ?? first();
+  };
+  const previous = (current) => {
+    return itemsByIndex[indexesByKey[toKey(current)] - 1] ?? last();
+  };
+  const spin = (current, num) => {
+    if (num === 0)
+      return current;
+    const abs = Math.abs(num);
+    const rel = abs > items.length ? abs % items.length : abs;
+    return list(0, rel - 1).reduce(num > 0 ? next : previous, current);
+  };
   return {
-    min: (a, b) => {
-      return itemsByValue[a] < itemsByValue[b] ? a : b;
-    },
-    max: (a, b) => {
-      return itemsByValue[a] > itemsByValue[b] ? a : b;
-    },
-    first: () => {
-      return itemsByIndex[0];
-    },
-    last: () => {
-      return itemsByIndex[items.length - 1];
-    },
-    next: (current, defaultValue) => {
-      return itemsByIndex[itemsByValue[current] + 1] ?? defaultValue;
-    },
-    previous: (current, defaultValue) => {
-      return itemsByIndex[itemsByValue[current] - 1] ?? defaultValue;
-    }
+    min,
+    max,
+    first,
+    last,
+    next,
+    previous,
+    spin
   };
 };
 
@@ -801,4 +826,4 @@ const trim = (str, charsToTrim = " ") => {
   return str.replace(regex, "");
 };
 
-export { alphabetical, boil, callable, camel as camal, camel, capitalize, chain, clone, cluster, compose, counting, dash, debounce, defer, diff, draw, first, flat, fork, get, group, intersects, invert, isArray, isDate, isEmpty, isEqual, isFloat, isFunction, isInt, isNumber, isObject, isPrimitive, isString, isSymbol, iterate, last, list, listify, lowerize, map, mapEntries, mapKeys, mapValues, max, memo, merge, min, objectify, omit, parallel, partial, partob, pascal, pick, proxied, random, range, reduce, replace, replaceOrAppend, retry, select, series, shake, shift, shuffle, sift, sleep, snake, sort, sum, template, throttle, title, toFloat, toInt, toggle, trim, tryit as try, tryit, uid, unique, upperize, zip };
+export { alphabetical, assign, boil, callable, camel, capitalize, chain, clone, cluster, compose, counting, dash, debounce, defer, diff, draw, first, flat, fork, get, group, intersects, invert, isArray, isDate, isEmpty, isEqual, isFloat, isFunction, isInt, isNumber, isObject, isPrimitive, isString, isSymbol, iterate, last, list, listify, lowerize, map, mapEntries, mapKeys, mapValues, max, memo, merge, min, objectify, omit, parallel, partial, partob, pascal, pick, proxied, random, range, reduce, replace, replaceOrAppend, retry, select, series, shake, shift, shuffle, sift, sleep, snake, sort, sum, template, throttle, title, toFloat, toInt, toggle, trim, tryit as try, tryit, uid, unique, upperize, zip, zipToObject };
