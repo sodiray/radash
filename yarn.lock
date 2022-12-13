@@ -2188,9 +2188,9 @@ rollup-plugin-node-externals@^5.0.2:
   integrity sha512-UGAPdPjD0PPk4hNcHLnqwqsfNc/u0vaAjWnjkyS6j2jIMB4LLi1pW3TE01eaytJKZactNik2t8AQC33esS9GKw==
 
 rollup@^3.2.5:
-  version "3.7.0"
-  resolved "https://registry.yarnpkg.com/rollup/-/rollup-3.7.0.tgz#7c4310378cf28764abb6b7611c9ccec081ff6d97"
-  integrity sha512-FIJe0msW9P7L9BTfvaJyvn1U1BVCNTL3w8O+PKIrCyiMLg+rIUGb4MbcgVZ10Lnm1uWXOTOWRNARjfXC1+M12Q==
+  version "3.7.3"
+  resolved "https://registry.yarnpkg.com/rollup/-/rollup-3.7.3.tgz#d440adff5f89099fd1f552e4e4333045e3bc71d4"
+  integrity sha512-7e68MQbAWCX6mI4/0lG1WHd+NdNAlVamg0Zkd+8LZ/oXojligdGnCNyHlzXqXCZObyjs5FRc3AH0b17iJESGIQ==
   optionalDependencies:
     fsevents "~2.3.2"
 
