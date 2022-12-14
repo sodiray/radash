@@ -68,8 +68,8 @@ export function zipToObject<K extends string | number | symbol, V>(
   const getValue = isFunction(values)
     ? values
     : isArray(values)
-    ? (_k: K, i: number) => values[i]
-    : (_k: K, _i: number) => values
+      ? (_k: K, i: number) => values[i]
+      : (_k: K, _i: number) => values
 
   return keys.reduce(
     (acc, key, idx) => ({ ...acc, [key]: getValue(key, idx) }),
