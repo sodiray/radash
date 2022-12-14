@@ -176,14 +176,14 @@ const select = (array, mapper, condition) => {
     return [...acc, mapper(item)];
   }, []);
 };
-const max = (array, getter) => {
+function max(array, getter) {
   const get = getter ? getter : (v) => v;
   return boil(array, (a, b) => get(a) > get(b) ? a : b);
-};
-const min = (array, getter) => {
+}
+function min(array, getter) {
   const get = getter ? getter : (v) => v;
   return boil(array, (a, b) => get(a) < get(b) ? a : b);
-};
+}
 const cluster = (list2, size = 2) => {
   const clusterCount = Math.ceil(list2.length / size);
   return new Array(clusterCount).fill(null).map((_c, i) => {
