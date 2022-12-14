@@ -68,8 +68,8 @@ export function zipToObject<K extends string | number | symbol, V>(
   const getValue = isFunction(values)
     ? values
     : isArray(values)
-    ? (_k: K, i: number) => values[i]
-    : (_k: K, _i: number) => values
+      ? (_k: K, i: number) => values[i]
+      : (_k: K, _i: number) => values
 
   return keys.reduce(
     (acc, key, idx) => ({ ...acc, [key]: getValue(key, idx) }),
@@ -243,16 +243,21 @@ export const max = <T extends number | object>(
   return boil(array, (a, b) => (get(a) > get(b) ? a : b))
 }
 
+type GetterFunc<T extends number | object> = (item: T) => number
+
 /**
  * Min gets the smallest value from a list
- *
- * Ex. max([{ num: 1 }, { num: 2 }], x => x.num) == 1
+ * @example 
+ * max([ 2, 3, 5]) == 2
+ * max([{ num: 1 }, { num: 2 }], x => x.num) == 1
  */
-export const min = <T extends number | object>(
-  array: readonly T[],
-  getter?: (item: T) => number
-) => {
-  const get = getter ? getter : (v: any) => v
+export function min<T extends number>(array: readonly T[], getter?: undefined): T | null
+export function min<T extends object>(array: readonly T[], getter: (item: T) => number): T | null
+export function min<
+  T extends number | object,
+  Func extends T extends object ? GetterFunc<T> : undefined
+>(array: readonly T[], getter?: Func): T | null {
+  const get = getter ? getter as GetterFunc<T> : (v: any) => v
   return boil(array, (a, b) => (get(a) < get(b) ? a : b))
 }
 
