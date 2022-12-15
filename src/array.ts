@@ -241,7 +241,7 @@ type GetterFunc<T extends number | object> = (item: T) => number
  */
 export function max<T extends number>(
   array: readonly T[],
-  getter?: undefined
+  getter?: (item: T) => number
 ): T | null
 export function max<T extends object>(
   array: readonly T[],
