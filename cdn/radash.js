@@ -180,7 +180,7 @@ var radash = (function (exports) {
     }, []);
   };
   function max(array, getter) {
-    const get = getter ? getter : (v) => v;
+    const get = getter ?? ((v) => v);
     return boil(array, (a, b) => get(a) > get(b) ? a : b);
   }
   function min(array, getter) {
