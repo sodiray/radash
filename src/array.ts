@@ -237,7 +237,7 @@ type GetterFunc<T extends number | object> = (item: T) => number
  *
  * @example
  * max([ 2, 3, 5]) == 5
- * max([{ num: 1 }, { num: 2 }], x => x.num) == 2
+ * max([{ num: 1 }, { num: 2 }], x => x.num) == { num: 2 }
  */
 export function max<T extends number>(
   array: readonly T[],
