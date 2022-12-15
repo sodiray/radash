@@ -243,7 +243,7 @@ export function max<T extends number>(
   array: readonly T[],
   getter?: (item: T) => number
 ): T | null
-export function max<T extends object>(
+export function max<T>(
   array: readonly T[],
   getter: (item: T) => number
 ): T | null
