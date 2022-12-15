@@ -247,10 +247,7 @@ export function max<T>(
   array: readonly T[],
   getter: (item: T) => number
 ): T | null
-export function max<
-  T extends number | object,
-  Func extends T extends object ? GetterFunc<T> : undefined
->(array: readonly T[], getter?: Func): T | null {
+export function max<T>(array: readonly T[], getter?: (item: T) => number): T | null {
   const get = getter ? (getter as GetterFunc<T>) : (v: any) => v
   return boil(array, (a, b) => (get(a) > get(b) ? a : b))
 }
