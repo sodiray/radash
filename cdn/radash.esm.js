@@ -170,10 +170,13 @@ const objectify = (array, getKey, getValue = (item) => item) => {
   );
 };
 const select = (array, mapper, condition) => {
-  return array.reduce((acc, item) => {
-    if (!condition(item))
+  if (!array)
+    return [];
+  return array.reduce((acc, item, index) => {
+    if (!condition(item, index))
       return acc;
-    return [...acc, mapper(item)];
+    acc.push(mapper(item, index));
+    return acc;
   }, []);
 };
 const max = (array, getter) => {
