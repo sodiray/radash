@@ -250,6 +250,24 @@ describe('array module', () => {
   })
 
   describe('select function', () => {
+    test('does not fail on bad input', () => {
+      assert.deepEqual(
+        _.select(
+          null as unknown as any[],
+          x => x,
+          x => x
+        ),
+        []
+      )
+      assert.deepEqual(
+        _.select(
+          undefined as unknown as any[],
+          x => x,
+          x => x
+        ),
+        []
+      )
+    })
     test('returns mapped and filtered values', () => {
       const list = [
         { group: 'a', word: 'hello' },
@@ -273,6 +291,15 @@ describe('array module', () => {
         x => x.group === 'a'
       )
       assert.deepEqual(result, [])
+    })
+    test('works with index', () => {
+      const letters = ['a', 'b', 'c', 'd']
+      const result = _.select(
+        letters,
+        (l, idx) => `${l}${idx}`,
+        (l, idx) => idx > 1
+      )
+      assert.deepEqual(result, ['c2', 'd3'])
     })
   })
 
