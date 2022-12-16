@@ -145,6 +145,15 @@ describe('curry module', () => {
       const resultB = func()
       assert.notEqual(resultA, resultB)
     })
+    test('does not call function again when first value has not expired', async () => {
+      const func = _.memo(() => new Date().getTime(), {
+        ttl: 1000
+      })
+      const resultA = func()
+      await new Promise(res => setTimeout(res, 100))
+      const resultB = func()
+      assert.equal(resultA, resultB)
+    })
   })
 
   describe('debounce function', () => {

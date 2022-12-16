@@ -476,23 +476,27 @@ var radash = (function (exports) {
       const key = keyFunc ? keyFunc(...args) : JSON.stringify({ args });
       const existing = cache[key];
       if (existing !== void 0) {
+        if (!existing.exp)
+          return existing.value;
         if (existing.exp > new Date().getTime()) {
           return existing.value;
         }
       }
       const result = func(...args);
       cache[key] = {
-        exp: new Date().getTime() + ttl,
+        exp: ttl ? new Date().getTime() + ttl : null,
         value: result
       };
       return result;
     };
   };
-  const memo = (func, {
-    key = null,
-    ttl = 300
-  } = {}) => {
-    return memoize({}, func, key, ttl);
+  const memo = (func, options = {}) => {
+    return memoize(
+      {},
+      func,
+      options.key ?? null,
+      options.ttl ?? null
+    );
   };
   const debounce = ({ delay }, func) => {
     let timer = void 0;

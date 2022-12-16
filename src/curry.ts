@@ -47,25 +47,26 @@ export const proxied = <T, K>(
   )
 }
 
-type Cache<T> = Record<string, { exp: number; value: T }>
+type Cache<T> = Record<string, { exp: number | null; value: T }>
 
 const memoize = <T>(
   cache: Cache<T>,
   func: Func<any, T>,
   keyFunc: Func<string> | null,
-  ttl: number
+  ttl: number | null
 ) => {
   return function callWithMemo(...args: any): T {
     const key = keyFunc ? keyFunc(...args) : JSON.stringify({ args })
     const existing = cache[key]
     if (existing !== undefined) {
+      if (!existing.exp) return existing.value
       if (existing.exp > new Date().getTime()) {
         return existing.value
       }
     }
     const result = func(...args)
     cache[key] = {
-      exp: new Date().getTime() + ttl,
+      exp: ttl ? new Date().getTime() + ttl : null,
       value: result
     }
     return result
@@ -73,22 +74,25 @@ const memoize = <T>(
 }
 
 /**
- * Creates a memoized function using the key and ttl
- * options. The returned function will only execute
- * the source function when no value has previously
- * been computed or the previous value has expired
+ * Creates a memoized function. The returned function
+ * will only execute the source function when no value
+ * has previously been computed. If a ttl (milliseconds)
+ * is given previously computed values will be checked
+ * for expiration before being returned.
  */
 export const memo = <TFunc extends Function>(
   func: TFunc,
-  {
-    key = null,
-    ttl = 300
-  }: {
-    key?: Func<any, string> | null
+  options: {
+    key?: Func<any, string>
     ttl?: number
   } = {}
 ) => {
-  return memoize({}, func as any, key, ttl) as any as TFunc
+  return memoize(
+    {},
+    func as any,
+    options.key ?? null,
+    options.ttl ?? null
+  ) as any as TFunc
 }
 
 export type DebounceFunction<TArgs extends any[]> = {
