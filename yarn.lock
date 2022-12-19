@@ -2183,9 +2183,9 @@ rollup-plugin-esbuild@^5.0.0:
     jsonc-parser "^3.2.0"
 
 rollup-plugin-node-externals@^5.0.2:
-  version "5.0.2"
-  resolved "https://registry.npmjs.org/rollup-plugin-node-externals/-/rollup-plugin-node-externals-5.0.2.tgz"
-  integrity sha512-UGAPdPjD0PPk4hNcHLnqwqsfNc/u0vaAjWnjkyS6j2jIMB4LLi1pW3TE01eaytJKZactNik2t8AQC33esS9GKw==
+  version "5.0.3"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-node-externals/-/rollup-plugin-node-externals-5.0.3.tgz#77522654ddbae6f28f6ae15a849d54427d5a637d"
+  integrity sha512-2hehUFt243Lra6tf1cJyRMz5OlTf+kn8zYyl8wR4MLkUiX+X96YVhfer7qsn2X30mnuGVvpY/oyFlJ86i9DF3Q==
 
 rollup@^3.2.5:
   version "3.7.4"
