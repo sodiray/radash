@@ -135,12 +135,12 @@ const alphabetical = (array, getter, dir = "asc") => {
   return array.slice().sort(dir === "desc" ? dsc : asc);
 };
 const counting = (list2, identity) => {
+  if (!list2)
+    return {};
   return list2.reduce((acc, item) => {
     const id = identity(item);
-    return {
-      ...acc,
-      [id]: (acc[id] ?? 0) + 1
-    };
+    acc[id] = (acc[id] ?? 0) + 1;
+    return acc;
   }, {});
 };
 const replace = (list2, newItem, match) => {
