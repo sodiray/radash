@@ -693,6 +693,10 @@ describe('array module', () => {
         Y: 2
       })
     })
+    test('does not error on bad input', () => {
+      _.counting(null as unknown as number[], x => x)
+      _.counting(undefined as unknown as number[], x => x)
+    })
   })
 
   describe('shift function', () => {
