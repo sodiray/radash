@@ -71,10 +71,10 @@ export function zipToObject<K extends string | number | symbol, V>(
     ? (_k: K, i: number) => values[i]
     : (_k: K, _i: number) => values
 
-  return keys.reduce(
-    (acc, key, idx) => ({ ...acc, [key]: getValue(key, idx) }),
-    {} as Record<K, V>
-  )
+  return keys.reduce((acc, key, idx) => {
+    acc[key] = getValue(key, idx)
+    return acc
+  }, {} as Record<K, V>)
 }
 
 /**
@@ -203,13 +203,10 @@ export const objectify = <T, Key extends string | number | symbol, Value = T>(
   getKey: (item: T) => Key,
   getValue: (item: T) => Value = item => item as unknown as Value
 ): Record<Key, Value> => {
-  return array.reduce(
-    (acc, item) => ({
-      ...acc,
-      [getKey(item)]: getValue(item)
-    }),
-    {} as Record<Key, Value>
-  )
+  return array.reduce((acc, item) => {
+    acc[getKey(item)] = getValue(item)
+    return acc
+  }, {} as Record<Key, Value>)
 }
 
 /**
@@ -283,7 +280,8 @@ export const unique = <T, K extends string | number | symbol>(
   const valueMap = array.reduce((acc, item) => {
     const key = toKey ? toKey(item) : (item as any as string | number | symbol)
     if (acc[key]) return acc
-    return { ...acc, [key]: item }
+    acc[key] = item
+    return acc
   }, {} as Record<string | number | symbol, T>)
   return Object.values(valueMap)
 }
@@ -346,7 +344,8 @@ export const list = <T = number>(
  */
 export const flat = <T>(lists: readonly T[][]): T[] => {
   return lists.reduce((acc, list) => {
-    return [...acc, ...list]
+    acc.push(...list)
+    return acc
   }, [])
 }
 
@@ -361,13 +360,10 @@ export const intersects = <T, K extends string | number | symbol>(
 ): boolean => {
   if (!listA || !listB) return false
   const ident = identity ?? ((x: T) => x as unknown as K)
-  const dictB = listB.reduce(
-    (acc, item) => ({
-      ...acc,
-      [ident(item)]: true
-    }),
-    {} as Record<string | number | symbol, boolean>
-  )
+  const dictB = listB.reduce((acc, item) => {
+    acc[ident(item)] = true
+    return acc
+  }, {} as Record<string | number | symbol, boolean>)
   return listA.some(value => dictB[ident(value)])
 }
 
@@ -409,8 +405,9 @@ export const merge = <T>(
   if (!matcher) return root
   return root.reduce((acc, r) => {
     const matched = others.find(o => matcher(r) === matcher(o))
-    if (matched) return [...acc, matched]
-    else return [...acc, r]
+    if (matched) acc.push(matched)
+    else acc.push(r)
+    return acc
   }, [] as T[])
 }
 
@@ -512,13 +509,10 @@ export const diff = <T>(
   if (!root?.length && !other?.length) return []
   if (root?.length === undefined) return [...other]
   if (!other?.length) return [...root]
-  const bKeys = other.reduce(
-    (acc, item) => ({
-      ...acc,
-      [identity(item)]: true
-    }),
-    {} as Record<string | number | symbol, boolean>
-  )
+  const bKeys = other.reduce((acc, item) => {
+    acc[identity(item)] = true
+    return acc
+  }, {} as Record<string | number | symbol, boolean>)
   return root.filter(a => !bKeys[identity(a)])
 }
 

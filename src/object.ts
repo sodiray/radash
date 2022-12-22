@@ -22,7 +22,10 @@ export const shake = <RemovedKeys extends string, T>(
   return keys.reduce((acc, key) => {
     if (filter(obj[key])) {
       return acc
-    } else return { ...acc, [key]: obj[key] }
+    } else {
+      acc[key] = obj[key]
+      return acc
+    }
   }, {} as T)
 }
 
@@ -39,13 +42,10 @@ export const mapKeys = <
   mapFunc: (key: TKey, value: TValue) => TNewKey
 ): Record<TNewKey, TValue> => {
   const keys = Object.keys(obj) as TKey[]
-  return keys.reduce(
-    (acc, key) => ({
-      ...acc,
-      [mapFunc(key as TKey, obj[key])]: obj[key]
-    }),
-    {} as Record<TNewKey, TValue>
-  )
+  return keys.reduce((acc, key) => {
+    acc[mapFunc(key as TKey, obj[key])] = obj[key]
+    return acc
+  }, {} as Record<TNewKey, TValue>)
 }
 
 /**
@@ -60,13 +60,10 @@ export const mapValues = <
   mapFunc: (value: TValue, key: TKey) => TNewValue
 ): Record<TKey, TNewValue> => {
   const keys = Object.keys(obj) as TKey[]
-  return keys.reduce(
-    (acc, key) => ({
-      ...acc,
-      [key]: mapFunc(obj[key], key)
-    }),
-    {} as Record<TKey, TNewValue>
-  )
+  return keys.reduce((acc, key) => {
+    acc[key] = mapFunc(obj[key], key)
+    return acc
+  }, {} as Record<TKey, TNewValue>)
 }
 
 /**
@@ -84,10 +81,8 @@ export const mapEntries = <
   if (!obj) return {} as Record<TNewKey, TNewValue>
   return Object.entries(obj).reduce((acc, [key, value]) => {
     const [newKey, newValue] = toEntry(key as TKey, value as TValue)
-    return {
-      ...acc,
-      [newKey]: newValue
-    }
+    acc[newKey] = newValue
+    return acc
   }, {} as Record<TNewKey, TNewValue>)
 }
 
@@ -103,13 +98,10 @@ export const invert = <
 ): Record<TValue, TKey> => {
   if (!obj) return {} as Record<TValue, TKey>
   const keys = Object.keys(obj) as TKey[]
-  return keys.reduce(
-    (acc, key) => ({
-      ...acc,
-      [obj[key]]: key
-    }),
-    {} as Record<TValue, TKey>
-  )
+  return keys.reduce((acc, key) => {
+    acc[obj[key]] = key
+    return acc
+  }, {} as Record<TValue, TKey>)
 }
 
 /**
@@ -164,7 +156,8 @@ export const listify = <TValue, TKey extends string | number | symbol, KResult>(
   const entries = Object.entries(obj)
   if (entries.length === 0) return []
   return entries.reduce((acc, entry) => {
-    return [...acc, toItem(entry[0] as TKey, entry[1] as TValue)]
+    acc.push(toItem(entry[0] as TKey, entry[1] as TValue))
+    return acc
   }, [] as KResult[])
 }
 
