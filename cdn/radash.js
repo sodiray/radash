@@ -101,10 +101,10 @@ var radash = (function (exports) {
       return {};
     }
     const getValue = isFunction(values) ? values : isArray(values) ? (_k, i) => values[i] : (_k, _i) => values;
-    return keys.reduce(
-      (acc, key, idx) => ({ ...acc, [key]: getValue(key, idx) }),
-      {}
-    );
+    return keys.reduce((acc, key, idx) => {
+      acc[key] = getValue(key, idx);
+      return acc;
+    }, {});
   }
   const boil = (array, compareFunc) => {
     if (!array || (array.length ?? 0) === 0)
@@ -164,13 +164,10 @@ var radash = (function (exports) {
     return [...list2];
   };
   const objectify = (array, getKey, getValue = (item) => item) => {
-    return array.reduce(
-      (acc, item) => ({
-        ...acc,
-        [getKey(item)]: getValue(item)
-      }),
-      {}
-    );
+    return array.reduce((acc, item) => {
+      acc[getKey(item)] = getValue(item);
+      return acc;
+    }, {});
   };
   const select = (array, mapper, condition) => {
     if (!array)
@@ -201,7 +198,8 @@ var radash = (function (exports) {
       const key = toKey ? toKey(item) : item;
       if (acc[key])
         return acc;
-      return { ...acc, [key]: item };
+      acc[key] = item;
+      return acc;
     }, {});
     return Object.values(valueMap);
   };
@@ -220,20 +218,18 @@ var radash = (function (exports) {
   };
   const flat = (lists) => {
     return lists.reduce((acc, list2) => {
-      return [...acc, ...list2];
+      acc.push(...list2);
+      return acc;
     }, []);
   };
   const intersects = (listA, listB, identity) => {
     if (!listA || !listB)
       return false;
     const ident = identity ?? ((x) => x);
-    const dictB = listB.reduce(
-      (acc, item) => ({
-        ...acc,
-        [ident(item)]: true
-      }),
-      {}
-    );
+    const dictB = listB.reduce((acc, item) => {
+      acc[ident(item)] = true;
+      return acc;
+    }, {});
     return listA.some((value) => dictB[ident(value)]);
   };
   const fork = (list2, condition) => {
@@ -263,9 +259,10 @@ var radash = (function (exports) {
     return root.reduce((acc, r) => {
       const matched = others.find((o) => matcher(r) === matcher(o));
       if (matched)
-        return [...acc, matched];
+        acc.push(matched);
       else
-        return [...acc, r];
+        acc.push(r);
+      return acc;
     }, []);
   };
   const replaceOrAppend = (list2, newItem, match) => {
@@ -320,13 +317,10 @@ var radash = (function (exports) {
       return [...other];
     if (!other?.length)
       return [...root];
-    const bKeys = other.reduce(
-      (acc, item) => ({
-        ...acc,
-        [identity(item)]: true
-      }),
-      {}
-    );
+    const bKeys = other.reduce((acc, item) => {
+      acc[identity(item)] = true;
+      return acc;
+    }, {});
     return root.filter((a) => !bKeys[identity(a)]);
   };
   function shift(arr, n) {
@@ -570,52 +564,43 @@ var radash = (function (exports) {
     return keys.reduce((acc, key) => {
       if (filter(obj[key])) {
         return acc;
-      } else
-        return { ...acc, [key]: obj[key] };
+      } else {
+        acc[key] = obj[key];
+        return acc;
+      }
     }, {});
   };
   const mapKeys = (obj, mapFunc) => {
     const keys = Object.keys(obj);
-    return keys.reduce(
-      (acc, key) => ({
-        ...acc,
-        [mapFunc(key, obj[key])]: obj[key]
-      }),
-      {}
-    );
+    return keys.reduce((acc, key) => {
+      acc[mapFunc(key, obj[key])] = obj[key];
+      return acc;
+    }, {});
   };
   const mapValues = (obj, mapFunc) => {
     const keys = Object.keys(obj);
-    return keys.reduce(
-      (acc, key) => ({
-        ...acc,
-        [key]: mapFunc(obj[key], key)
-      }),
-      {}
-    );
+    return keys.reduce((acc, key) => {
+      acc[key] = mapFunc(obj[key], key);
+      return acc;
+    }, {});
   };
   const mapEntries = (obj, toEntry) => {
     if (!obj)
       return {};
     return Object.entries(obj).reduce((acc, [key, value]) => {
       const [newKey, newValue] = toEntry(key, value);
-      return {
-        ...acc,
-        [newKey]: newValue
-      };
+      acc[newKey] = newValue;
+      return acc;
     }, {});
   };
   const invert = (obj) => {
     if (!obj)
       return {};
     const keys = Object.keys(obj);
-    return keys.reduce(
-      (acc, key) => ({
-        ...acc,
-        [obj[key]]: key
-      }),
-      {}
-    );
+    return keys.reduce((acc, key) => {
+      acc[obj[key]] = key;
+      return acc;
+    }, {});
   };
   const lowerize = (obj) => mapKeys(obj, (k) => k.toLowerCase());
   const upperize = (obj) => mapKeys(obj, (k) => k.toUpperCase());
@@ -639,7 +624,8 @@ var radash = (function (exports) {
     if (entries.length === 0)
       return [];
     return entries.reduce((acc, entry) => {
-      return [...acc, toItem(entry[0], entry[1])];
+      acc.push(toItem(entry[0], entry[1]));
+      return acc;
     }, []);
   };
   const pick = (obj, keys) => {
