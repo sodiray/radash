@@ -1021,10 +1021,10 @@ check-error@^1.0.2:
   resolved "https://registry.npmjs.org/check-error/-/check-error-1.0.2.tgz"
   integrity sha512-BrgHpW9NURQgzoNyjfq0Wu6VFO6D7IZEmJNdtgNqpzGG8RuNFHt2jQxWlAs4HMe119chBnv+34syEZtc6IhLtA==
 
-chiller@^1.0.0-rc.8:
-  version "1.0.0-rc.8"
-  resolved "https://registry.yarnpkg.com/chiller/-/chiller-1.0.0-rc.8.tgz#127bc6fe7d7a42cfcdbee246ecd3945c45e94ce3"
-  integrity sha512-gtrYoOQYyWtp4grBtzBjTrhte4Scdl68MauPxymds43mdDvWueuni0uajuetDvQ0hIpA8NBniMJyOc9jCr6LKw==
+chiller@^1.0.0-rc.9:
+  version "1.0.0-rc.9"
+  resolved "https://registry.yarnpkg.com/chiller/-/chiller-1.0.0-rc.9.tgz#b3bf5c5c8a6ca09af58f83b65fa0459a27ccab11"
+  integrity sha512-c0RvwN+w2iZbyar92Nwt0i8JI2q0oMNPLLib00+uBz7eGZZtrqYDVvdXawCuMV5ykeVAy5a+uKxeW10mJ+2Ybw==
   dependencies:
     chalk "4.1.2"
     cmdish "^1.1.0"
