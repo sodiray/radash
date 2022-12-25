@@ -25,7 +25,7 @@
     "check": "yarn lint && yarn test && yarn build",
     "build": "yarn tsc --noEmit && yarn rollup -c",
     "docs:install": "yarn && yarn add --dev next@12.3.4",
-    "docs:build": "chiller install -f && chiller sync && chiller build && ls-al ./.chiller/app/.next && pwd && ls -al ./.next",
+    "docs:build": "chiller install -f && chiller sync && chiller build && ls -al ./.chiller/app/.next && pwd && ls -al ./.next",
     "lint": "tslint -p tsconfig.json",
     "format": "prettier --write \"./**/*.ts\"",
     "format:check": "prettier --check \"**/*.ts\" --ignore-unknown"
