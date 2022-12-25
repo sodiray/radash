@@ -24,6 +24,7 @@
     "test": "jest --coverage",
     "check": "yarn lint && yarn test && yarn build",
     "build": "yarn tsc --noEmit && yarn rollup -c",
+    "docs:install": "yarn && yarn add --dev next@12.3.4",
     "docs:build": "chiller install -f && chiller sync && chiller build --ci",
     "lint": "tslint -p tsconfig.json",
     "format": "prettier --write \"./**/*.ts\"",
