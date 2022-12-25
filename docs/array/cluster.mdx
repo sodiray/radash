@@ -1,0 +1,35 @@
+---
+title: cluster
+group: 'Array'
+description: Split a list into many lists of the given size
+---
+
+
+
+
+## Basic usage
+
+Given an array of items and a desired cluster size (`n`), returns an array 
+of arrays. Each child array containing `n` (cluster size) items
+split as evenly as possible.
+
+```ts
+import { cluster } from 'radash'
+
+const gods = [
+  'Ra', 
+  'Zeus', 
+  'Loki', 
+  'Vishnu', 
+  'Icarus', 
+  'Osiris',
+  'Thor'
+]
+
+cluster(gods, 3)
+// => [
+//   [ 'Ra', 'Zeus', 'Loki' ],
+//   [ 'Vishnu', 'Icarus', 'Osiris' ],
+//   [ 'Thor' ]
+// ]
+```

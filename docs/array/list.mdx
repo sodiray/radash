@@ -1,0 +1,33 @@
+---
+title: list
+group: 'Array'
+description: Create a list with specific items
+---
+
+
+
+
+## Basic usage
+
+Given a start, end, and optional step size, returns a list that contains numbers from
+start to end by step size (which defaults to one). A hat tip to Python's `range`
+functionality. Uses `_.range` under the hood.
+
+```ts
+import { list } from 'radash'
+
+for (const i of list(0, 200, 10)) {
+  console.log(i) // => 0, 10, 20, 30 ... 190, 200
+}
+
+for (const i of list(0, 5)) {
+  console.log(i) // => 0, 1, 2, 3, 4, 5
+}
+```
+
+
+
+
+
+
+

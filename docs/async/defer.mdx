@@ -1,0 +1,52 @@
+---
+title: defer
+group: 'Async'
+description: Run an async function with deferred functions
+---
+
+
+
+
+## Basic usage
+
+The `_.defer` functions lets you run an async function, registering functions as you go 
+that should be deferred until the async function completes, and then executed. This is 
+really useful in scripts where failure up to or after a specific point will require some 
+cleanup. It's a bit like a `finally` block. 
+
+A hat tip to Swift's `defer` for the inspiration.  
+
+The function passed to `_.defer` is called with a single `register` function argument that 
+can be used to register the work you want to be called when the function completes. If your function throws an error and then a registered cleanup function throws
+and error it is ignored by default. The register
+function supports an optional second `options` argument that lets you configure a rethrow
+strategy so that error in the cleanup function is rethrown.
+
+```ts
+import { defer } from 'radash'
+
+await defer(async (cleanup) => {
+  const buildDir = await createBuildDir()
+
+  cleanup(() => fs.unlink(buildDir))
+
+  await build()
+})
+
+await defer(async (register) => {
+  const org = await api.org.create()
+  register(async () => api.org.delete(org.id), { rethrow: true })
+
+  const user = await api.user.create()
+  register(async () => api.users.delete(user.id), { rethrow: true })
+
+  await executeTest(org, user)
+})
+```
+
+
+
+
+
+
+

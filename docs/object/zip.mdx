@@ -1,0 +1,50 @@
+---
+title: zip
+description: zip two objects of the same shape together
+---
+
+
+
+
+## Basic usage
+
+Given two object, returns a new objects with all properties that exist on the second object applied to the first. 
+Works recursively but only for child objects. This is not a merge function. It will not merge child arrays. 
+
+```ts
+import { zip } from 'radash'
+
+const ra = {
+  name: 'Ra',
+  power: 100,
+  culture: {
+    region: 'egypt',
+    era: '1500 BC'
+  }
+}
+
+const loki = {
+  name: 'Loki',
+  power: undefined,
+  culture: {
+    era: '1500 BC'
+  }
+}
+
+const hybrid = zip(ra, loki)
+// {
+//   name: 'Loki',
+//   power: 100,
+//   culture: {
+//     region: 'egypt',
+//     era: '1500 BC'
+//   }
+// }
+```
+
+
+
+
+
+
+
