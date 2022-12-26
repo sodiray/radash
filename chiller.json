@@ -6,6 +6,7 @@
   "logo": "docs/logo.png",
   "index": "docs/getting-started",
   "pages": "./docs/**/*.mdx",
+  "theme": "red-400",
   "sidebar": {
     "links": [
       {
