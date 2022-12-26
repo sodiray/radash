@@ -3,7 +3,10 @@
   "favicon": "docs/favicon.ico",
   "domain": "https://radash-docs.vercel.app",
   "description": "A functional utility library - modern, simple, typed, powerful",
-  "logo": "docs/logo.png",
+  "logo": {
+    "light": "docs/logo-light.png",
+    "dark": "docs/logo-dark.png"
+  },
   "index": "docs/getting-started",
   "pages": "./docs/**/*.mdx",
   "theme": "red-400",
