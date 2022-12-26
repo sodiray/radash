@@ -1,10 +1,8 @@
 ---
 title: series
 description: Create an ordered series object
+group: Random
 ---
-
-
-
 
 ## Basic usage
 
@@ -13,7 +11,7 @@ Sometimes you have an enum or union type, possibly a status, that has inherint o
 ```ts
 import { series } from 'radash'
 
-type Weekday = 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday';
+type Weekday = 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday'
 
 const weekdays = series<Weekday>(
   'monday',
@@ -32,10 +30,3 @@ weekdays.last() // => 'friday'
 weekdays.next('friday') // => null
 weekdays.next('friday', weekdays.first()) // => 'monday'
 ```
-
-
-
-
-
-
-

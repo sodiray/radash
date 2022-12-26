@@ -1,14 +1,12 @@
 ---
 title: mapValues
 description: Map over the keys of an object
+group: Object
 ---
-
-
-
 
 ## Basic usage
 
-Given an object and a `toValue` callback function, returns a new object with all the values 
+Given an object and a `toValue` callback function, returns a new object with all the values
 mapped through the `toValue` function. The callback is given both the value and key for each entry.
 
 ```ts
@@ -22,10 +20,3 @@ const ra = {
 mapValues(ra, value => value.toUpperCase()) // => { mode: 'GOD', power: 'SUN' }
 mapValues(ra, (value, key) => key) // => { mode: 'mode', power: 'power' }
 ```
-
-
-
-
-
-
-

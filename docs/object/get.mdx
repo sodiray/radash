@@ -1,10 +1,8 @@
 ---
 title: get
 description: Get any attribute or child attribute using a deep path
+group: Object
 ---
-
-
-
 
 ## Basic usage
 
@@ -16,19 +14,14 @@ import { get } from 'radash'
 const fish = {
   name: 'Bass',
   weight: 8,
-  sizes: [{
-    maturity: 'adult',
-    range: [7, 18],
-    unit: 'inches'
-  }]
+  sizes: [
+    {
+      maturity: 'adult',
+      range: [7, 18],
+      unit: 'inches'
+    }
+  ]
 }
 
 const maxAdultSize = get(fish, f => f.sizes[0].range[1])
 ```
-
-
-
-
-
-
-

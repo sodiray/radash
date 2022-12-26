@@ -1,15 +1,13 @@
 ---
 title: zip
 description: zip two objects of the same shape together
+group: Object
 ---
-
-
-
 
 ## Basic usage
 
-Given two object, returns a new objects with all properties that exist on the second object applied to the first. 
-Works recursively but only for child objects. This is not a merge function. It will not merge child arrays. 
+Given two object, returns a new objects with all properties that exist on the second object applied to the first.
+Works recursively but only for child objects. This is not a merge function. It will not merge child arrays.
 
 ```ts
 import { zip } from 'radash'
@@ -41,10 +39,3 @@ const hybrid = zip(ra, loki)
 //   }
 // }
 ```
-
-
-
-
-
-
-
