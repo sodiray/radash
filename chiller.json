@@ -23,6 +23,18 @@
         "icon": "chat",
         "label": "Community"
       }
+    ],
+    "order": [
+      "Getting Started",
+      "Array",
+      "Async",
+      "Curry",
+      "Number",
+      "Object",
+      "Random",
+      "Series",
+      "String",
+      "Typed"
     ]
   }
 }
