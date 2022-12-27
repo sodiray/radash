@@ -1,0 +1,22 @@
+---
+title: upperize
+description: Convert all object keys to upper case
+group: Object
+---
+
+## Basic usage
+
+Convert all keys in an object to upper case.
+
+```ts
+import { upperize } from 'radash'
+
+const ra = {
+  Mode: 'god',
+  Power: 'sun'
+}
+
+upperize(ra) // => { MODE, POWER }
+```
+
+The `_.upperize` function is a shortcut for `_.mapKeys(obj, k => k.toUpperCase())`

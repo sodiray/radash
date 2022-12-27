@@ -1,0 +1,29 @@
+---
+title: partob
+group: 'Curry'
+description: Create a partob a function
+---
+
+
+
+
+## Basic usage
+
+Modern javascript destructuring means a lot of developers, libraries, and frameworks are all opting for unary functions that take a single object that contains the arguments. The `_.partob` function let's you partob these unary functions.
+
+```ts
+import { partob } from 'radash'
+
+const add = (props: { a: number; b: number }) => props.a + props.b
+
+const addFive = partob(add, { a: 5 })
+
+addFive({ b: 2 }) // => 7
+```
+
+
+
+
+
+
+

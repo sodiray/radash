@@ -1,0 +1,34 @@
+---
+title: retry
+group: 'Async'
+description: Run an async function retrying if it fails
+---
+
+
+
+
+## Basic usage
+
+The `_.retry` function allows you to run an async function and automagically retry it if it fails. Given the async func to run, an optional max number of retries (`r`), and an optional milliseconds to delay between retries (`d`), the given async function will be called, retrying `r` many times, and waiting `d` milliseconds between retries.  
+
+The `times` option defaults to `3`. The `delay` option (defaults to null) can specify milliseconds to sleep between attempts.  
+
+The `backoff` option is like delay but uses a function to sleep -- makes for easy exponential backoff.
+
+```ts
+import { retry } from 'radash'
+
+await retry({}, api.users.list)
+await retry({ times: 10 }, api.users.list)
+await retry({ times: 2, delay: 1000 }, api.users.list)
+
+// exponential backoff
+await retry({ backoff: i => 10**i }, api.users.list)
+```
+
+
+
+
+
+
+

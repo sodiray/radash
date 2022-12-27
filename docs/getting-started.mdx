@@ -1,0 +1,106 @@
+---
+title: "Getting Started"
+group: "Getting Started"
+description: "Welcome to Radash"
+---
+
+## Getting Started
+
+### Welcome to 2020s
+
+Radash is the next library you can't live without. First and foremost, it's powerful. With those 
+powerful functions, you get strong types and zero dependencies. If you can step out in a bit of 
+faith and try the functions out, I have no doubt you'll find yourself falling in love.
+
+### Featured Functions
+
+Come, dip your toe in the water. Here are a few functions we can't live without anymore.
+Hopefully, you'll find them useful as well.
+
+#### try
+The `_.try` function abstracts the logical fork of a try/catch and provides an _error
+first callback_ reminiscent response.
+
+```ts
+const [err, response] = await _.try(api.gods.create)({ name: 'Ra' })
+if (err) {
+  throw new Error('Your god is weak and could not be created')
+}
+```
+
+#### range
+The `_.range` function returns a generator that can be used for iterating. This means you'll
+never have to write a `for (let i)` loop again -- and you shouldn't.
+
+```ts
+for (const i of _.range(0, 4)) {
+  console.log(i) // 0, 1, 2, 3, 4
+}
+
+for (const i of _.range(10, 20, 2)) {
+  console.log(i) // 10, 12, 14, 16, 18, 20
+}
+```
+
+#### select
+The `_.select` function takes a mapper and filter function and runs them together for you in
+a single iteration. No more writing a reduce because you need to map and filter, and you don't
+want to implement them separately for performance's sake.
+
+```ts
+const superPoweredGodsFromEgypt = _.select(
+  gods, 
+  g => ({ ...g, power: g.power * g.power }), 
+  g => g.culture === 'egypt'
+)
+```
+
+#### defer
+The `_.defer` function lets you register functions to run as cleanup while running an async function. It's 
+like a try/finally, but you can register the finally block at specific times.
+
+```ts
+await _.defer(async (defer) => {
+  await api.builds.updateStatus('in-progress')
+  defer((err) => {
+    api.builds.updateStatus(err ? 'failed' : 'success')
+  })
+
+  fs.mkdir('build')
+  defer(() => {
+    fs.unlink('build')
+  })
+
+  await build()
+})
+```
+
+#### objectify
+The `_.objectify` function helps you convert a list to an object in one step. Typically, we either do this
+in two steps or write a reduce.
+
+```ts
+const godsByCulture = _.objectify(gods, g => g.name, g => g.culture)
+```
+
+## Love and Hate
+
+### Lodash
+
+Lodash was incredible. When JavaScript was still maturing, it provided the power to things you couldn't
+easily do in the vanilla. That was last decade. In this decade, the needs are different. The goal with Radash
+is to provide the powerful functions you need, not the ones the runtimes now provide, and to do it with great types
+and source code that's easy to read and understand.
+
+#### Saying No
+
+Radash does not provide `_.map` or `_.filter` functions. They were helpful before optional chaining and nullish coalescing.
+Now, there really isn't a need.  
+
+In the last ten years, the JavaScript community as a whole, and the Typescript community specifically, has moved
+closer to some key values: **deterministic is good, polymorphic is bad, strong types are everything**. A part of Lodash's
+charm was that it let you pass different types to a function and get other behavior based on the type. An example 
+is the `_.map` function, which can take a collection or an object and map over either. Radash doesn't provide that
+kind of polymorphic behavior.  
+
+Sorry, not sorry.

@@ -1,0 +1,17 @@
+---
+title: toFloat
+description: Convert a value to a float if possible
+group: Number
+---
+
+## Basic usage
+
+The `_.toFloat` function will do its best to convert the given value to a float.
+
+```ts
+import { toFloat } from 'radash'
+
+toFloat(0) // => 0.0
+toFloat(null) // => 0.0
+toFloat(null, 3.33) // => 3.33
+```

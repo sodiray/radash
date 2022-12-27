@@ -1,0 +1,27 @@
+---
+title: get
+description: Get any attribute or child attribute using a deep path
+group: Object
+---
+
+## Basic usage
+
+Given any value and a select function to get the desired attribute, returns the desired value or a default value if the desired value couldn't be found.
+
+```ts
+import { get } from 'radash'
+
+const fish = {
+  name: 'Bass',
+  weight: 8,
+  sizes: [
+    {
+      maturity: 'adult',
+      range: [7, 18],
+      unit: 'inches'
+    }
+  ]
+}
+
+const maxAdultSize = get(fish, f => f.sizes[0].range[1])
+```

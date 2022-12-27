@@ -1,0 +1,40 @@
+---
+title: proxied
+group: 'Curry'
+description: Create a dynamic proxied a object
+---
+
+
+
+
+## Basic usage
+
+Javascript's `Proxy` object is powerful but a bit awkward to use. The `_.proxied` function creates the `Proxy` for you and handles calling back to your handler when functions on the `Proxy` are called or properties are accessed.
+
+```ts
+import { proxied } from 'radash'
+
+type Property = 'name' | 'size' | 'getLocation'
+
+const person = proxied((prop: Property) => {
+  switch (prop) {
+    case 'name':
+      return 'Joe'
+    case 'size':
+      return 20
+    case 'getLocation'
+      return () => 'here'
+  }
+})
+
+person.name // => Joe
+person.size // => 20
+person.getLocation() // => here
+```
+
+
+
+
+
+
+

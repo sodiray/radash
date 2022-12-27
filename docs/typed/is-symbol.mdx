@@ -1,0 +1,16 @@
+---
+title: isSymbol
+description: 'Determine if a value is a Symbol'
+group: Typed
+---
+
+## Basic usage
+
+Pass in a value and get a boolean telling you if the value is a Symbol.
+
+```ts
+import { isSymbol } from 'radash'
+
+isSymbol('hello') // => false
+isSymbol(Symbol('hello')) // => true
+```
