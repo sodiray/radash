@@ -1022,9 +1022,9 @@ check-error@^1.0.2:
   integrity sha512-BrgHpW9NURQgzoNyjfq0Wu6VFO6D7IZEmJNdtgNqpzGG8RuNFHt2jQxWlAs4HMe119chBnv+34syEZtc6IhLtA==
 
 chiller@^1.0.0-rc.24:
-  version "1.0.0-rc.24"
-  resolved "https://registry.yarnpkg.com/chiller/-/chiller-1.0.0-rc.24.tgz#f67389ef672f2678d8b149b7082cfb8586f8fdf3"
-  integrity sha512-OdFMwIuz642ShnG6R98Q3DjmV/tbRdpiVBI3u89RbXNL1j8x2R1Ab+plCKPm2MZ+VI7tdWbzJY8ix1j6bqT9cQ==
+  version "1.0.0-rc.26"
+  resolved "https://registry.yarnpkg.com/chiller/-/chiller-1.0.0-rc.26.tgz#27dfcff4354f69513de8f2374b981d9855b26797"
+  integrity sha512-t0+0oa6Jw1qctBhDDhJ2RowbkEvU/EBTyjS8LE6WE0+u7kS1iStgV0ahIIS87eyimLrGiXqmBWASHQdwZtdn3g==
   dependencies:
     chalk "4.1.2"
     cmdish "^1.1.0"
