@@ -789,6 +789,16 @@ var radash = (function (exports) {
       return `${acc}_${part.toLowerCase()}`;
     });
   };
+  const kebab = (str) => {
+    const parts = str?.replace(/([A-Z])+/g, capitalize).split(/(?=[A-Z])|[\.\-\s_]/).map((x) => x.toLowerCase()) ?? [];
+    if (parts.length === 0)
+      return "";
+    if (parts.length === 1)
+      return parts[0];
+    return parts.reduce((acc, part) => {
+      return `${acc}-${part.toLowerCase()}`;
+    });
+  };
   const dash = (str) => {
     const parts = str?.replace(/([A-Z])+/g, capitalize)?.split(/(?=[A-Z])|[\.\-\s_]/).map((x) => x.toLowerCase()) ?? [];
     if (parts.length === 0)
@@ -858,6 +868,7 @@ var radash = (function (exports) {
   exports.isString = isString;
   exports.isSymbol = isSymbol;
   exports.iterate = iterate;
+  exports.kebab = kebab;
   exports.last = last;
   exports.list = list;
   exports.listify = listify;
