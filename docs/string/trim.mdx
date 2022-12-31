@@ -1,0 +1,17 @@
+---
+title: trim
+description: Trim values from a string
+group: String
+---
+
+## Basic usage
+
+Trims all prefix and suffix characters from the given string. Like the builtin trim function but accepts other characters you would like to trim.
+
+```ts
+import { trim } from 'radash'
+
+trim('  hello ') // => 'hello'
+trim('__hello__', '_') // => 'hello'
+trim('/repos/:owner/:repo/', '/') // => 'repos/:owner/:repo'
+```

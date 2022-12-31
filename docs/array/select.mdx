@@ -4,9 +4,6 @@ group: 'Array'
 description: Filter and map an array
 ---
 
-
-
-
 ## Basic usage
 
 Applies a filter and a map operation at once and in one pass.
@@ -14,26 +11,27 @@ Applies a filter and a map operation at once and in one pass.
 ```ts
 import { select } from 'radash'
 
-const fish = [{
-  name: 'Marlin',
-  weight: 105,
-  source: 'ocean'
-}, {
-  name: 'Bass',
-  weight: 8,
-  source: 'lake'
-}, {
-  name: 'Trout',
-  weight: 13,
-  source: 'lake'
-}]
+const fish = [
+  {
+    name: 'Marlin',
+    weight: 105,
+    source: 'ocean'
+  },
+  {
+    name: 'Bass',
+    weight: 8,
+    source: 'lake'
+  },
+  {
+    name: 'Trout',
+    weight: 13,
+    source: 'lake'
+  }
+]
 
-select(fish, f => f.weight, f => f.source === 'lake') // => [8, 13]
+select(
+  fish,
+  f => f.weight,
+  f => f.source === 'lake'
+) // => [8, 13]
 ```
-
-
-
-
-
-
-

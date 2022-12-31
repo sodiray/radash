@@ -4,16 +4,12 @@ group: 'Curry'
 description: Create a debounced callback function
 ---
 
-
-
-
 ## Basic usage
 
 Debounce accepts an options object with a `delay` and a source function to call
 when invoked. When the returned function is invoked it will only call the source
 function after the `delay` milliseconds of time has passed. Calls that don't result
 in invoking the source reset the delay, pushing off the next invocation.
-
 
 ```ts
 import { debounce } from 'radash'
@@ -37,9 +33,27 @@ debounce Invocations: x x x x - - - - - - - - x x x x x x x x x x - - - - - - - 
   Source Invocations: - - - - - - - - - - x - - - - - - - - - - - - - - - - - x - - - - -
 ```
 
+### Cancel
 
+The function returned by `debounce` has a `cancel` property, a function that when called will permanently stop the source function from being debounced.
 
+```ts
+const debounced = debounce({ delay: 100 }, api.feed.refresh)
 
+// ... sometime later
 
+debounced.cancel()
+```
 
+### Flush
+
+The function returned by `debounce` has a `flush` property, a function that when called will directly invoke the source function.
+
+```ts
+const debounced = debounce({ delay: 100 }, api.feed.refresh)
+
+// ... sometime later
+
+debounced.flush(event)
+```
 

@@ -1,11 +1,8 @@
 ---
 title: group
 group: 'Array'
-description: "Sort an array of items into groups"
+description: 'Sort an array of items into groups'
 ---
-
-
-
 
 ## Basic usage
 
@@ -14,23 +11,20 @@ Given an array of items, `group` will build up an object where each key is an ar
 ```ts
 import { group } from 'radash'
 
-const fish = [{
-  name: 'Marlin',
-  source: 'ocean'
-}, {
-  name: 'Bass',
-  source: 'lake'
-}, {
-  name: 'Trout',
-  source: 'lake'
-}]
+const fish = [
+  {
+    name: 'Marlin',
+    source: 'ocean'
+  },
+  {
+    name: 'Bass',
+    source: 'lake'
+  },
+  {
+    name: 'Trout',
+    source: 'lake'
+  }
+]
 
 const fishBySource = group(fish, f => f.source) // => { ocean: [marlin], lake: [bass, trout] }
 ```
-
-
-
-
-
-
-

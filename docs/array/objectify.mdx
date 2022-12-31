@@ -4,9 +4,6 @@ group: 'Array'
 description: Convert a list to a dictionary object
 ---
 
-
-
-
 ## Basic usage
 
 Given an array of items, create a dictionary with keys and values mapped by given functions.
@@ -16,25 +13,25 @@ for each item. The third argument is optional and determines the value for each 
 ```ts
 import { objectify } from 'radash'
 
-const fish = [{
-  name: 'Marlin',
-  weight: 105
-}, {
-  name: 'Bass',
-  weight: 8
-}, {
-  name: 'Trout',
-  weight: 13
-}]
+const fish = [
+  {
+    name: 'Marlin',
+    weight: 105
+  },
+  {
+    name: 'Bass',
+    weight: 8
+  },
+  {
+    name: 'Trout',
+    weight: 13
+  }
+]
 
 objectify(fish, f => f.name) // => { Marlin: [marlin object], Bass: [bass object], ... }
-objectify(fish, f => f.name, f => f.weight) // => { Marlin: 105, Bass: 8, Trout: 13 }
+objectify(
+  fish,
+  f => f.name,
+  f => f.weight
+) // => { Marlin: 105, Bass: 8, Trout: 13 }
 ```
-
-
-
-
-
-
-
-

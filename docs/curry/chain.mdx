@@ -4,9 +4,6 @@ group: 'Curry'
 description: Create a chain of function to run in order
 ---
 
-
-
-
 ## Basic usage
 
 Chaining functions will cause them to execute one after another, passing the output from each function as the input to the next, returning the final output at the end of the chain.
@@ -18,19 +15,7 @@ const genesis = () => 0
 const addFive = (num: number) => num + 5
 const twoX = (num: number) => num * 2
 
-const chained = chain(
-  genesis,
-  addFive,
-  twoX
-)
+const chained = chain(genesis, addFive, twoX)
 
 chained() // => 10
 ```
-
-
-
-
-
-
-
-
