@@ -51,6 +51,26 @@ export const snake = (str: string): string => {
 }
 
 /**
+ * Formats the given string in kebab case fashion
+ *
+ * snake('hello world')   -> 'hello-world'
+ * snake('va va-VOOM') -> 'va-va-voom'
+ * snake('helloWord') -> 'hello-world'
+ */
+export const kebab = (str: string): string => {
+  const parts =
+    str
+      ?.replace(/([A-Z])+/g, capitalize)
+      .split(/(?=[A-Z])|[\.\-\s_]/)
+      .map(x => x.toLowerCase()) ?? []
+  if (parts.length === 0) return ''
+  if (parts.length === 1) return parts[0]
+  return parts.reduce((acc, part) => {
+    return `${acc}-${part.toLowerCase()}`
+  })
+}
+
+/**
  * Formats the given string in dash case fashion
  *
  * dash('hello world')   -> 'hello-world'

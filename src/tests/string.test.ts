@@ -58,6 +58,36 @@ describe('string module', () => {
     })
   })
 
+  describe('kebab function', () => {
+    test('returns correctly cased string', () => {
+      const result = _.kebab('hello world')
+      assert.equal(result, 'hello-world')
+    })
+    test('must handle strings that are camelCase', () => {
+      const result = _.kebab('helloWorld')
+      assert.equal(result, 'hello-world')
+    })
+    test('must handle strings that are dash', () => {
+      const result = _.kebab('hello-world')
+      assert.equal(result, 'hello-world')
+    })
+    test('returns single word', () => {
+      const result = _.kebab('hello')
+      assert.equal(result, 'hello')
+    })
+    test('returns empty string for empty input', () => {
+      const result = _.kebab(null as any)
+      assert.equal(result, '')
+    })
+  })
+
+  describe('kebabCase function', () => {
+    test('returns non alphanumerics with -', () => {
+      const result = _.kebab('Exobase Starter-flash AND-go')
+      assert.equal(result, 'exobase-starter-flash-and-go')
+    })
+  })
+
   describe('dash function', () => {
     test('returns correctly cased string', () => {
       const result = _.dash('hello world')

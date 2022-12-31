@@ -73,6 +73,7 @@ export {
   camel,
   capitalize,
   dash,
+  kebab,
   pascal,
   snake,
   template,
