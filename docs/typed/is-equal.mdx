@@ -1,0 +1,19 @@
+---
+title: isEqual
+description: Determine if two values are equal
+group: Typed
+---
+
+## Basic usage
+
+Given two values, returns true if they are equal.
+
+```ts
+import { isEqual } from 'radash'
+
+isEqual(null, null) // => true
+isEqual([], [])     // => true
+
+isEqual('hello', 'world') // => false
+isEqual(22, 'abc')        // => false
+```

@@ -1,0 +1,48 @@
+---
+title: toggle
+description: Toggles an items existance in an array
+group: 'Array'
+---
+
+## Basic usage
+
+If the item matching the condition already exists in the list it will be removed. If it does not it will be added.
+
+```ts
+import { toggle } from 'radash'
+
+const gods = ['ra', 'zeus', 'loki']
+
+toggle(gods, 'ra')     // => [zeus, loki]
+toggle(gods, 'vishnu') // => [ra, zeus, loki, vishnu]
+```
+
+### toggle(list, item, identity)
+
+You can pass an optional `toKey` function to determine the identity of non-primitive values. Helpful when working with more complex data types.
+
+```ts
+import { toggle } from 'radash'
+
+const ra = { name: 'Ra' }
+const zeus = { name: 'Zeus' }
+const loki = { name: 'Loki' }
+const vishnu = { name: 'Vishnu' }
+
+const gods = [ra, zeus, loki]
+
+toggle(gods, ra, g => g.name)     // => [zeus, loki]
+toggle(gods, vishnu, g => g.name) // => [ra, zeus, loki, vishnu]
+```
+
+### toggle(list, item, identity, options)
+
+By default, toggle will append the item if it does not exist. If you need to prepend the item instead you can override the `strategy` in the options argument.
+
+```ts
+import { toggle } from 'radash'
+
+const gods = ['ra', 'zeus', 'loki']
+
+toggle(gods, 'vishnu', g => g, { strategy: 'prepend' }) // => [vishnu, ra, zeus, loki]
+```

@@ -11,6 +11,9 @@ Pass in a value and get a boolean telling you if the value is empty.
 ```ts
 import { isEmpty } from 'radash'
 
-isEmpty('hello') // => false
+isEmpty([]) // => true
+isEmpty('') // => true
+
+isEmpty('hello')   // => false
 isEmpty(['hello']) // => false
 ```
