@@ -560,8 +560,8 @@ var radash = (function (exports) {
   const shake = (obj, filter = (x) => x === void 0) => {
     if (!obj)
       return {};
-    const keys = Object.keys(obj);
-    return keys.reduce((acc, key) => {
+    const keys2 = Object.keys(obj);
+    return keys2.reduce((acc, key) => {
       if (filter(obj[key])) {
         return acc;
       } else {
@@ -571,15 +571,15 @@ var radash = (function (exports) {
     }, {});
   };
   const mapKeys = (obj, mapFunc) => {
-    const keys = Object.keys(obj);
-    return keys.reduce((acc, key) => {
+    const keys2 = Object.keys(obj);
+    return keys2.reduce((acc, key) => {
       acc[mapFunc(key, obj[key])] = obj[key];
       return acc;
     }, {});
   };
   const mapValues = (obj, mapFunc) => {
-    const keys = Object.keys(obj);
-    return keys.reduce((acc, key) => {
+    const keys2 = Object.keys(obj);
+    return keys2.reduce((acc, key) => {
       acc[key] = mapFunc(obj[key], key);
       return acc;
     }, {});
@@ -596,8 +596,8 @@ var radash = (function (exports) {
   const invert = (obj) => {
     if (!obj)
       return {};
-    const keys = Object.keys(obj);
-    return keys.reduce((acc, key) => {
+    const keys2 = Object.keys(obj);
+    return keys2.reduce((acc, key) => {
       acc[obj[key]] = key;
       return acc;
     }, {});
@@ -628,21 +628,21 @@ var radash = (function (exports) {
       return acc;
     }, []);
   };
-  const pick = (obj, keys) => {
+  const pick = (obj, keys2) => {
     if (!obj)
       return {};
-    return keys.reduce((acc, key) => {
+    return keys2.reduce((acc, key) => {
       if (obj.hasOwnProperty(key))
         acc[key] = obj[key];
       return acc;
     }, {});
   };
-  const omit = (obj, keys) => {
+  const omit = (obj, keys2) => {
     if (!obj)
       return {};
-    if (!keys || keys.length === 0)
+    if (!keys2 || keys2.length === 0)
       return obj;
-    return keys.reduce(
+    return keys2.reduce(
       (acc, key) => {
         delete acc[key];
         return acc;
@@ -683,6 +683,22 @@ var radash = (function (exports) {
         })()
       };
     }, {});
+  };
+  const keys = (value) => {
+    if (!value)
+      return [];
+    const getKeys = (nested, paths) => {
+      if (isObject(nested)) {
+        return Object.entries(nested).flatMap(
+          ([k, v]) => getKeys(v, [...paths, k])
+        );
+      }
+      if (isArray(nested)) {
+        return nested.flatMap((item, i) => getKeys(item, [...paths, `${i}`]));
+      }
+      return [paths.join(".")];
+    };
+    return getKeys(value, []);
   };
 
   const random = (min, max) => {
@@ -858,6 +874,7 @@ var radash = (function (exports) {
   exports.isString = isString;
   exports.isSymbol = isSymbol;
   exports.iterate = iterate;
+  exports.keys = keys;
   exports.last = last;
   exports.list = list;
   exports.listify = listify;
