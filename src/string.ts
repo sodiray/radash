@@ -120,12 +120,14 @@ export const template = (
 /**
  * Trims all prefix and suffix characters from the given
  * string. Like the builtin trim function but accepts
- * other characters you would like to trim.
+ * other characters you would like to trim and trims
+ * multiple characters.
  *
  * ```typescript
  * trim('  hello ') // => 'hello'
  * trim('__hello__', '_') // => 'hello'
  * trim('/repos/:owner/:repo/', '/') // => 'repos/:owner/:repo'
+ * trim('222222__hello__1111111', '12_') // => 'hello'
  * ```
  */
 export const trim = (
