@@ -44,8 +44,8 @@ import { keys, get, objectify } from 'radash'
 
 objectify(
   keys(ra),
-  k => k,
-  k => get(ra, k)
+  key => key,
+  key => get(ra, key)
 )
 // => {
 //   'name': 'ra'
