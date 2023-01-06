@@ -383,4 +383,36 @@ describe('object module', () => {
       assert.deepEqual(result, b)
     })
   })
+
+  describe('keys function', () => {
+    test('handles bad input', () => {
+      assert.deepEqual(_.keys({}), [])
+      assert.deepEqual(_.keys(null as any), [])
+      assert.deepEqual(_.keys(undefined as any), [])
+    })
+    test('returns correct list of keys', () => {
+      const ra = {
+        name: 'ra',
+        power: 100,
+        friend: {
+          name: 'loki',
+          power: 80
+        },
+        enemies: [
+          {
+            name: 'hathor',
+            power: 12
+          }
+        ]
+      }
+      assert.deepEqual(_.keys(ra), [
+        'name',
+        'power',
+        'friend.name',
+        'friend.power',
+        'enemies.0.name',
+        'enemies.0.power'
+      ])
+    })
+  })
 })

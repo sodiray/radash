@@ -57,6 +57,7 @@ export {
   clone,
   get,
   invert,
+  keys,
   listify,
   lowerize,
   mapEntries,
