@@ -6,9 +6,9 @@
   "module": "dist/esm/index.mjs",
   "types": "dist/index.d.ts",
   "exports": {
+    "types": "./dist/index.d.ts",
     "import": "./dist/esm/index.mjs",
-    "require": "./dist/cjs/index.cjs",
-    "types": "./dist/index.d.ts"
+    "require": "./dist/cjs/index.cjs"
   },
   "sideEffects": false,
   "files": [
