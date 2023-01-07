@@ -1,3 +1,4 @@
+import { objectify } from './array'
 import { isArray, isObject, isPrimitive } from './typed'
 
 type LowercasedKeys<T extends Record<string, any>> = {
@@ -268,4 +269,21 @@ export const keys = <TValue extends object>(value: TValue): string[] => {
     return [paths.join('.')]
   }
   return getKeys(value, [])
+}
+
+/**
+ * Flattens a deep object to a single demension, converting
+ * the keys to dot notation.
+ *
+ * @example
+ * crush({ name: 'ra', children: [{ name: 'hathor' }] })
+ * // { name: 'ra', 'children.0.name': 'hathor' }
+ */
+export const crush = <TValue extends object>(value: TValue): object => {
+  if (!value) return {}
+  return objectify(
+    keys(value),
+    k => k,
+    k => get(value, k)
+  )
 }

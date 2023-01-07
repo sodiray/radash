@@ -415,4 +415,36 @@ describe('object module', () => {
       ])
     })
   })
+
+  describe('crush function', () => {
+    test('handles bad input', () => {
+      assert.deepEqual(_.crush({}), {})
+      assert.deepEqual(_.crush(null as any), {})
+      assert.deepEqual(_.crush(undefined as any), {})
+    })
+    test('returns correctly crushed object', () => {
+      const ra = {
+        name: 'ra',
+        power: 100,
+        friend: {
+          name: 'loki',
+          power: 80
+        },
+        enemies: [
+          {
+            name: 'hathor',
+            power: 12
+          }
+        ]
+      }
+      assert.deepEqual(_.crush(ra), {
+        name: 'ra',
+        power: 100,
+        'friend.name': 'loki',
+        'friend.power': 80,
+        'enemies.0.name': 'hathor',
+        'enemies.0.power': 12
+      })
+    })
+  })
 })

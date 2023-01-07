@@ -700,6 +700,15 @@ var radash = (function (exports) {
     };
     return getKeys(value, []);
   };
+  const crush = (value) => {
+    if (!value)
+      return {};
+    return objectify(
+      keys(value),
+      (k) => k,
+      (k) => get(value, k)
+    );
+  };
 
   const random = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1) + min);
@@ -849,6 +858,7 @@ var radash = (function (exports) {
   exports.cluster = cluster;
   exports.compose = compose;
   exports.counting = counting;
+  exports.crush = crush;
   exports.dash = dash;
   exports.debounce = debounce;
   exports.defer = defer;
