@@ -1,0 +1,17 @@
+---
+title: isDate
+description: 'Determine if a value is a Date'
+group: Typed
+---
+
+## Basic usage
+
+Determine if a value is a Date. Does not check that the input date is valid, only that it is a Javascript Date type.
+
+```ts
+import { isDate } from 'radash'
+
+isDate(new Date()) // => true
+isDate(12)         // => false
+isDate('hello')    // => false
+```

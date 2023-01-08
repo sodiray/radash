@@ -1,0 +1,31 @@
+---
+title: sort
+group: 'Array'
+description: Sort a list of items by a property
+---
+
+## Basic usage
+
+Given an array of items return a new array sorted by the property specified in the get function. A third, and optional, argument allows you to get the sort in descending order.
+
+```ts
+import { sort } from 'radash'
+
+const fish = [
+  {
+    name: 'Marlin',
+    weight: 105
+  },
+  {
+    name: 'Bass',
+    weight: 8
+  },
+  {
+    name: 'Trout',
+    weight: 13
+  }
+]
+
+sort(fish, f => f.weight) // => [bass, trout, marlin]
+sort(fish, f => f.weight, true) // => [marlin, trout, bass]
+```

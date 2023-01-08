@@ -1,0 +1,37 @@
+---
+title: alphabetical
+group: 'Array'
+description: Sorts an array of objects alphabetically by a property
+---
+
+## Basic usage
+
+Given an array of objects and a callback function used to determine
+the property to use for sorting returns a new array with the objects
+sorted alphabetically.
+
+```ts
+import { alphabetical } from 'radash'
+
+const gods = [
+  {
+    name: 'Ra',
+    power: 100
+  },
+  {
+    name: 'Zeus',
+    power: 98
+  },
+  {
+    name: 'Loki',
+    power: 72
+  },
+  {
+    name: 'Vishnu',
+    power: 100
+  }
+]
+
+alphabetical(gods, g => g.name) // => [Loki, Ra, Vishnu, Zeus]
+alphabetical(gods, g => g.name, 'desc') // => [Zeus, Vishnu, Ra, Loki]
+```

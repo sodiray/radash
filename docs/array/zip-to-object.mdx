@@ -1,0 +1,25 @@
+---
+title: zipToObject
+group: 'Array'
+description: Combine multiple arrays in sets
+---
+
+## Basic usage
+
+Creates an object mapping the keys in the first array to their corresponding values in the second array.
+
+```ts
+import { zipToObject } from 'radash'
+
+const names = ['ra', 'zeus', 'loki']
+const cultures = ['egypt', 'greek', 'norse']
+
+zipToObject(names, cultures)
+// => { ra: egypt, zeus: greek, loki: norse }
+
+zipToObject(names, (k, i) => k + i)
+// => { ra: ra0, zeus: zeus1, loki: loki2 }
+
+zipToObject(names, null)
+// => { ra: null, zeus: null, loki: null }
+```

@@ -1,0 +1,16 @@
+---
+title: template
+description: Template a string with values from a data object using a search expression
+group: String
+---
+
+## Basic usage
+
+Given a string, an object of data, and a format expression to search for, returns a string with all elements that matched the search replaced with their matching value from the data object.
+
+```ts
+import { template } from 'radash'
+
+template('It is {{color}}', { color: 'blue' }) // => It is blue
+template('It is <color>', { color: 'blue' }, /<(.+?)>/g) // => It is blue
+```

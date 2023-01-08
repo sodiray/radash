@@ -1,0 +1,59 @@
+---
+title: series
+description: Create an ordered series object
+group: Random
+---
+
+## Basic usage
+
+Sometimes you have an enum or union type, possibly a status, that has inherint order and you need to work with values as though they're ordered. The `series` function takes many values and returns an object that let's you do ordered logic on those values.
+
+```ts
+import { series } from 'radash'
+
+type Weekday = 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday'
+
+const weekdays = series<Weekday>([
+  'monday',
+  'tuesday',
+  'wednesday',
+  'thursday',
+  'friday'
+])
+
+weekdays.min('tuesday', 'thursday') // => 'tuesday'
+weekdays.max('wednesday', 'monday') // => 'wednesday'
+weekdays.next('wednesday') // => 'thursday'
+weekdays.previous('tuesday') // => 'monday'
+weekdays.first() // => 'monday'
+weekdays.last() // => 'friday'
+weekdays.next('friday') // => null
+weekdays.next('friday', weekdays.first()) // => 'monday'
+weekdays.spin('monday', 3) // => 'thursday'
+```
+
+## Complex Data Types
+
+When working with objects you'll want to provide a second argument to `series`, a function that converts non-primitive values into an identity that can be checked for equality.
+
+```ts
+import { series } from 'radash'
+
+type Weekday = {
+  day: 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday'
+}
+
+const weekdays = series<Weekday>(
+  [
+    { day: 'monday' },
+    { day: 'tuesday' },
+    { day: 'wednesday' },
+    { day: 'thursday' },
+    { day: 'friday' }
+  ],
+  w => w.day
+)
+
+weekdays.next({ day: 'wednesday' }) // => { day: 'thursday' }
+weekdays.previous({ day: 'tuesday' }) // => { day: 'monday' }
+```

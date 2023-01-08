@@ -1,0 +1,33 @@
+---
+title: counting
+group: 'Array'
+description: Creates an object with counts of occurrences of items
+---
+
+## Basic usage
+
+Given an array of objects and an identity callback function to determine
+how each object should be identified. Returns an object where the keys
+are the id values the callback returned and each value is an integer
+telling how many times that id occurred.
+
+```ts
+import { counting } from 'radash'
+
+const gods = [
+  {
+    name: 'Ra',
+    culture: 'egypt'
+  },
+  {
+    name: 'Zeus',
+    culture: 'greek'
+  },
+  {
+    name: 'Loki',
+    culture: 'greek'
+  }
+]
+
+counting(gods, g => g.culture) // => { egypt: 1, greek: 2 }
+```

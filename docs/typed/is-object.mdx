@@ -1,0 +1,18 @@
+---
+title: isObject
+description: 'Determine if a value is an Object'
+group: Typed
+---
+
+## Basic usage
+
+Pass in a value and get a boolean telling you if the value is an Object.
+
+```ts
+import { isObject } from 'radash'
+
+isObject('hello') // => false
+isObject(['hello']) // => false
+isObject(null) // => false
+isObject({ say: 'hello' }) // => true
+```

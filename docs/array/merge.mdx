@@ -1,0 +1,34 @@
+---
+title: merge
+group: 'Array'
+description: Combine two lists overriding items in the first
+---
+
+## Basic usage
+
+Given two arrays of items and an identity function, returns the first
+list with all items from the second list where there was a match.
+
+```ts
+import { merge } from 'radash'
+
+const gods = [
+  {
+    name: 'Zeus',
+    power: 92
+  },
+  {
+    name: 'Ra',
+    power: 97
+  }
+]
+
+const newGods = [
+  {
+    name: 'Zeus',
+    power: 100
+  }
+]
+
+merge(gods, newGods, f => f.name) // => [{name: "Zeus" power: 100}, {name: "Ra", power: 97}]
+```

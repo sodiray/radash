@@ -1,0 +1,34 @@
+---
+title: fork
+group: 'Array'
+description: Split an array into two arrays by a condition
+---
+
+## Basic usage
+
+Given an array of items and a condition, returns two arrays where the first contains all items that passed the condition and the second contains all items that failed the condition.
+
+```ts
+import { fork } from 'radash'
+
+const gods = [
+  {
+    name: 'Ra',
+    power: 100
+  },
+  {
+    name: 'Zeus',
+    power: 98
+  },
+  {
+    name: 'Loki',
+    power: 72
+  },
+  {
+    name: 'Vishnu',
+    power: 100
+  }
+]
+
+const [finalGods, lesserGods] = fork(gods, f => f.power > 90) // [[ra, vishnu, zues], [loki]]
+```

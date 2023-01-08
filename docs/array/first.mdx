@@ -1,0 +1,18 @@
+---
+title: first
+group: 'Array'
+description: Get the first item from a list
+---
+
+## Basic usage
+
+Given an array of items return the first item or a default value if no items exists.
+
+```ts
+import { first } from 'radash'
+
+const gods = ['ra', 'loki', 'zeus']
+
+first(gods) // => 'ra'
+first([], 'vishnu') // => 'vishnu'
+```

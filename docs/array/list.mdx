@@ -1,0 +1,65 @@
+---
+title: list
+group: 'Array'
+description: Create a list with specific items
+---
+
+## Basic usage
+
+Given a start, end, value, and step size returns a list with values from start to end by step size.
+
+The interface is identical to `range`.
+
+_A hat tip to Python's `range` functionality_
+
+```ts
+import { list } from 'radash'
+
+list(3)                  // [0, 1, 2, 3]
+list(0, 3)               // [0, 1, 2, 3]
+list(0, 3, 'y')          // [y, y, y, y]
+list(0, 3, () => 'y')    // [y, y, y, y]
+list(0, 3, i => i)       // [0, 1, 2, 3]
+list(0, 3, i => `y${i}`) // [y0, y1, y2, y3]
+list(0, 3, obj)          // [obj, obj, obj, obj]
+list(0, 6, i => i, 2)    // [0, 2, 4, 6]
+```
+
+## Signatures
+
+The list function can do a lot with different arguments.
+
+### list(size)
+
+When givin a single argument, it's treated as the `size`. Returns a list with values from 0 to `size`.
+
+```ts
+list(3) // [0, 1, 2, 3]
+```
+
+### list(start, end)
+
+When given two arguments, they're treated as the `start` and `end`. Returns a list with values from `start` to `end`
+
+```ts
+list(2, 6) // [2, 3, 4, 5, 6]
+```
+
+### list(start, end, value)
+
+When given a third argument it's treated as the `value` to be used in the list. If the `value` is a function it will be called, with an index argument, to create every value.
+
+```ts
+list(2, 4, {})       // [{}, {}, {}]
+list(2, 4, null)     // [null, null, null]
+list(2, 4, (i) => i) // [2, 3, 4]
+```
+
+### list(start, end, value, step)
+
+When given a fourth argument it's treated as the `step` size to skip when generating values from `start` to `end`.
+
+```ts
+list(2, 4, i => i, 2)      // [2, 4]
+list(25, 100, i => i, 25)  // [25, 50, 75, 100]
+```

@@ -1,0 +1,47 @@
+{
+  "name": "Radash",
+  "favicon": "docs/favicon.ico",
+  "domain": "https://radash-docs.vercel.app",
+  "description": "A functional utility library - modern, simple, typed, powerful",
+  "logo": {
+    "light": "docs/logo-light.png",
+    "dark": "docs/logo-dark.png"
+  },
+  "version": "v10.x.x",
+  "index": "docs/getting-started",
+  "pages": "./docs/**/*.mdx",
+  "theme": "red-400",
+  "repo": "https://github.com/rayepps/radash",
+  "branch": "master",
+  "sidebar": {
+    "links": [
+      {
+        "url": "/docs/getting-started",
+        "icon": "book",
+        "label": "Documentation"
+      },
+      {
+        "url": "https://npm.runkit.com/radash",
+        "icon": "code",
+        "label": "Playground"
+      },
+      {
+        "url": "https://github.com/rayepps/radash/discussions",
+        "icon": "chat",
+        "label": "Community"
+      }
+    ],
+    "order": [
+      "Getting Started",
+      "Array",
+      "Async",
+      "Curry",
+      "Number",
+      "Object",
+      "Random",
+      "Series",
+      "String",
+      "Typed"
+    ]
+  }
+}

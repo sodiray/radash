@@ -177,6 +177,7 @@ describe('string module', () => {
       assert.equal(_.trim(undefined), '')
     })
     test('returns input string correctly trimmed', () => {
+      assert.equal(_.trim('\n\n\t\nhello\n\t  \n', '\n\t '), 'hello')
       assert.equal(_.trim('hello', 'x'), 'hello')
       assert.equal(_.trim(' hello  '), 'hello')
       assert.equal(_.trim(' __hello__  ', '_'), ' __hello__  ')

@@ -1,0 +1,18 @@
+---
+title: last
+group: 'Array'
+description: Get the last item from a list
+---
+
+## Basic usage
+
+Given an array of items return the last item or a default value if no items exists.
+
+```ts
+import { last } from 'radash'
+
+const fish = ['marlin', 'bass', 'trout']
+
+const lastFish = last(fish) // => 'trout'
+const lastItem = last([], 'bass') // => 'bass'
+```

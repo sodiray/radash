@@ -1,0 +1,29 @@
+---
+title: tryit
+group: 'Async'
+description: Convert a function to an error-first async function
+---
+
+## Basic usage
+
+Error-first callbacks were cool. Using mutable variables to hoist state when doing try/catch was not cool.
+
+The `_.try` function let's you wrap a function to convert it to an error-first async function.
+
+```ts
+import { tryit } from 'radash'
+
+const [err, user] = await tryit(api.users.find)(userId)
+```
+
+### Currying
+
+You can curry `try` if you like.
+
+```ts
+import { tryit } from 'radash'
+
+const findUser = tryit(api.users.find)
+
+const [err, user] = await findUser(userId)
+```

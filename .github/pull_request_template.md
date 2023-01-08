@@ -8,6 +8,7 @@ Please provide a detailed description of the changes and the intent behind them 
 - [ ] Tests have 100% coverage
 - [ ] If code changes were made, the version in `package.json` has been bumped (matching semver)
 - [ ] If code changes were made, the `yarn build` command has been run and to update the `cdn` directory
+- [ ] If code changes were made, the documentation (in the `/docs` directory) has been updated
 
 ## Resolves
 

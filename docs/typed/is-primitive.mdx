@@ -1,0 +1,19 @@
+---
+title: isPrimitive
+description: Checks if the given value is primitive
+group: Typed
+---
+
+## Basic usage
+
+Checks if the given value is primitive.
+
+Primitive Types: number , string , boolean , symbol, bigint, undefined, null
+
+```ts
+import { isPrimitive } from 'radash'
+
+isPrimitive(22) // => true
+isPrimitive('hello') // => true
+isPrimitive(['hello']) // => false
+```

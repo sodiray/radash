@@ -1,0 +1,31 @@
+---
+title: boil
+group: 'Array'
+description: 'Reduce a list of items down to one item'
+---
+
+## Basic usage
+
+Given an array of items return the final item that wins the comparison condition. Useful for more complicated min/max.
+
+```ts
+import { boil } from 'radash'
+
+const gods = [
+  {
+    name: 'Ra',
+    power: 100
+  },
+  {
+    name: 'Zeus',
+    power: 98
+  },
+  {
+    name: 'Loki',
+    power: 72
+  }
+]
+
+boil(gods, (a, b) => (a.power > b.power ? a : b)) 
+// => { name: 'Ra', power: 100 }
+```

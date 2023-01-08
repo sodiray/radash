@@ -1,0 +1,17 @@
+---
+title: toInt
+description: Convert a value to an int if possible
+group: Number
+---
+
+## Basic usage
+
+The `_.toInt` function will do its best to convert the given value to an int.
+
+```ts
+import { toInt } from 'radash'
+
+toInt(0) // => 0
+toInt(null) // => 0
+toInt(null, 3) // => 3
+```

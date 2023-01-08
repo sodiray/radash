@@ -1,0 +1,33 @@
+---
+title: min
+group: 'Array'
+description: Get the smallest item from an array
+---
+
+## Basic usage
+
+Given an array of items and a function to get the value of each item, returns the item with the smallest value. Uses `_.boil` under the hood.
+
+```ts
+import { min } from 'radash'
+
+const fish = [
+  {
+    name: 'Marlin',
+    weight: 105,
+    source: 'ocean'
+  },
+  {
+    name: 'Bass',
+    weight: 8,
+    source: 'lake'
+  },
+  {
+    name: 'Trout',
+    weight: 13,
+    source: 'lake'
+  }
+]
+
+min(fish, f => f.weight) // => {name: "Bass", weight: 8, source: "lake"}
+```

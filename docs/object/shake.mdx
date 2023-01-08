@@ -1,0 +1,22 @@
+---
+title: shake
+description: Remove unwanted values from an object
+group: Object
+---
+
+## Basic usage
+
+A bit like `_.sift` but for objects. By default, it will return a new object with all the undefined attributes removed. You can pass a second function argument to remove any attributes by a custom condition.
+
+```ts
+import { shake } from 'radash'
+
+const ra = {
+  mode: 'god',
+  greek: false,
+  limit: undefined
+}
+
+shake(ra) // => { mode, greek }
+shake(ra, a => !a) // => { mode }
+```

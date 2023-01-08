@@ -1,0 +1,72 @@
+---
+title: memo
+group: 'Curry'
+description: Memoize a function
+---
+
+
+
+
+## Basic usage
+
+Wrap a function with memo to get a function back that automagically returns values that have already been calculated.
+
+```ts
+import { memo } from 'radash'
+
+const timestamp = memo(() => Date.now())
+
+const now = timestamp()
+const later = timestamp()
+
+now === later // => true
+```
+
+## Expiration
+
+You can optionally pass a `ttl` (time to live) that will expire memoized results.
+
+```ts
+import { memo, sleep } from 'radash'
+
+const timestamp = memo(() => Date.now(), {
+  ttl: 1000 // milliseconds
+})
+
+const now = timestamp()
+const later = timestamp()
+
+await sleep(2000)
+
+const muchLater = timestamp()
+
+now === later // => true
+now === muchLater // => false
+```
+
+## Key Function
+
+You can optionally customize how values are stored when memoized.
+
+```ts
+const timestamp = memo(({ group }: { group: string }) => {
+  const ts = Date.now()
+  return `${ts}::${group}`
+}, {
+  key: ({ group }: { group: string }) => group
+})
+
+const now = timestamp({ group: 'alpha' })
+const later = timestamp({ group: 'alpha' })
+const beta = timestamp({ group: 'beta' })
+
+now === later // => true
+beta === now // => false
+```
+
+
+
+
+
+
+

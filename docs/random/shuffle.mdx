@@ -1,0 +1,35 @@
+---
+title: shuffle
+description: Randomly shuffle an array
+group: Random
+---
+
+## Basic usage
+
+Given an array of items, return a new array with the items in a random order.
+
+```ts
+import { shuffle } from 'radash'
+
+const fish = [
+  {
+    name: 'Marlin',
+    weight: 105,
+    source: 'ocean'
+  },
+  {
+    name: 'Salmon',
+    weight: 22,
+    source: 'river'
+  },
+  {
+    name: 'Salmon',
+    weight: 22,
+    source: 'river'
+  }
+]
+
+shuffle(fish)
+```
+
+Note, this is not a cutting edge performance optimized function. This function is optimized for simplicity and best used as a utility. If performance is a priority for you, use a randomness and/or shuffle library.

@@ -1,0 +1,17 @@
+---
+title: isFloat
+description: 'Determine if a value is a float'
+group: Typed
+---
+
+## Basic usage
+
+Pass in a value and get a boolean telling you if the value is a float.
+
+```ts
+import { isFloat } from 'radash'
+
+isFloat(12.233)  // => true
+isFloat(12)      // => false
+isFloat('hello') // => false
+```

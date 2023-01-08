@@ -1,0 +1,17 @@
+---
+title: isInt
+description: 'Determine if a value is an int'
+group: Typed
+---
+
+## Basic usage
+
+Pass in a value and get a boolean telling you if the value is an int.
+
+```ts
+import { isInt } from 'radash'
+
+isInt(12) // => true
+isInt(12.233) // => false
+isInt('hello') // => false
+```

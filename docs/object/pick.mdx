@@ -1,0 +1,22 @@
+---
+title: pick
+description: Pick only the desired attributes from an object
+group: Object
+---
+
+## Basic usage
+
+Given an object and a list of keys in the object, returns a new object with only the given keys.
+
+```ts
+import { pick } from 'radash'
+
+const fish = {
+  name: 'Bass',
+  weight: 8,
+  source: 'lake',
+  barckish: false
+}
+
+pick(fish, ['name', 'source']) // => { name, source }
+```

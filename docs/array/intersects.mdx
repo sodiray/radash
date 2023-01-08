@@ -1,0 +1,22 @@
+---
+title: intersects
+group: 'Array'
+description: Determine if two arrays have a common item
+---
+
+## Basic usage
+
+Given two arrays of items, returns true if any item exists in both arrays.
+
+```ts
+import { intersects } from 'radash'
+
+const oceanFish = ['tuna', 'tarpon']
+const lakeFish = ['bass', 'trout']
+
+intersects(oceanFish, lakeFish) // => false
+
+const brackishFish = ['tarpon', 'snook']
+
+intersects(oceanFish, brackishFish) // => true
+```

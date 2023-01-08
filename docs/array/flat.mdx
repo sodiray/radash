@@ -1,0 +1,19 @@
+---
+title: flat
+group: 'Array'
+description: Flatten an array of arrays into a single dimension
+---
+
+## Basic usage
+
+Given an array that contains many arrays, return a new array where all items from the children are present at the top level.
+
+```ts
+import { flat } from 'radash'
+
+const gods = [['ra', 'loki'], ['zeus']]
+
+flat(gods) // => [ra, loki, zeus]
+```
+
+Note, `_.flat` is not recursive and will not flatten children of children of children ... of children. It will only flatten `T[][]` an array of arrays.

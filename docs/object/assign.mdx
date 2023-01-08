@@ -1,0 +1,21 @@
+---
+title: assign
+description: Merges two objects together recursivly
+group: Object
+---
+
+## Basic usage
+
+Merges two objects together recursivly into a new object applying values from right to left. Recursion only applies to child object properties.
+
+```ts
+import { assign } from 'radash'
+
+const ra = {
+  name: 'Ra',
+  power: 100
+}
+
+assign(ra, { name: 'Loki' })
+// => { name: Loki, power: 100 }
+```

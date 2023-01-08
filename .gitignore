@@ -4,3 +4,5 @@ dist
 coverage
 archive.zip
 archive.tar.gz
+.chiller/
+.next/
