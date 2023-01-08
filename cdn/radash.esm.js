@@ -88,6 +88,22 @@ const group = (array, getGroupId) => {
     return acc;
   }, {});
 };
+const chunk = (array, size = 1) => {
+  size = Math.max(size, 0);
+  const length = array.length;
+  if (!length || size <= 0) {
+    return [];
+  }
+  const chunks = Array.from(
+    { length: Math.ceil(array.length / size) },
+    () => []
+  );
+  for (let i = 0; i < array.length; i++) {
+    const chunkIndex = Math.floor(i / size);
+    chunks[chunkIndex].push(array[i]);
+  }
+  return chunks;
+};
 function zip(...arrays) {
   if (!arrays || !arrays.length)
     return [];
@@ -833,4 +849,4 @@ const trim = (str, charsToTrim = " ") => {
   return str.replace(regex, "");
 };
 
-export { alphabetical, assign, boil, callable, camel, capitalize, chain, clone, cluster, compose, counting, dash, debounce, defer, diff, draw, first, flat, fork, get, group, intersects, invert, isArray, isDate, isEmpty, isEqual, isFloat, isFunction, isInt, isNumber, isObject, isPrimitive, isString, isSymbol, iterate, last, list, listify, lowerize, map, mapEntries, mapKeys, mapValues, max, memo, merge, min, objectify, omit, parallel, partial, partob, pascal, pick, proxied, random, range, reduce, replace, replaceOrAppend, retry, select, series, shake, shift, shuffle, sift, sleep, snake, sort, sum, template, throttle, title, toFloat, toInt, toggle, trim, tryit as try, tryit, uid, unique, upperize, zip, zipToObject };
+export { alphabetical, assign, boil, callable, camel, capitalize, chain, chunk, clone, cluster, compose, counting, dash, debounce, defer, diff, draw, first, flat, fork, get, group, intersects, invert, isArray, isDate, isEmpty, isEqual, isFloat, isFunction, isInt, isNumber, isObject, isPrimitive, isString, isSymbol, iterate, last, list, listify, lowerize, map, mapEntries, mapKeys, mapValues, max, memo, merge, min, objectify, omit, parallel, partial, partob, pascal, pick, proxied, random, range, reduce, replace, replaceOrAppend, retry, select, series, shake, shift, shuffle, sift, sleep, snake, sort, sum, template, throttle, title, toFloat, toInt, toggle, trim, tryit as try, tryit, uid, unique, upperize, zip, zipToObject };

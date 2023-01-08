@@ -4,6 +4,25 @@ import * as _ from '..'
 const NULL = null as unknown as unknown[]
 
 describe('array module', () => {
+  describe('chunk function', () => {
+    test('Creates an array of elements split into groups the length of size', () => {
+      const list = ['a', 'b', 'c', 'd']
+      const chunk1 = _.chunk(list, 2)
+      const chunk2 = _.chunk([], 0)
+      const chunk3 = _.chunk(list, -1)
+      const chunk4 = _.chunk([], 1)
+      const chunk5 = _.chunk(list)
+
+      assert.deepEqual(chunk1, [
+        ['a', 'b'],
+        ['c', 'd']
+      ])
+      assert.deepEqual(chunk2, [])
+      assert.deepEqual(chunk3, [])
+      assert.deepEqual(chunk4, [])
+      assert.deepEqual(chunk5, [['a'], ['b'], ['c'], ['d']])
+    })
+  })
   describe('group function', () => {
     test('groups by provided attribute', () => {
       const list = [

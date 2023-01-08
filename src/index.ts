@@ -1,6 +1,7 @@
 export {
   alphabetical,
   boil,
+  chunk,
   cluster,
   counting,
   diff,
