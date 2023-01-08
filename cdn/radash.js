@@ -91,6 +91,22 @@ var radash = (function (exports) {
       return acc;
     }, {});
   };
+  const chunk = (array, size = 1) => {
+    size = Math.max(size, 0);
+    const length = array == null ? 0 : array.length;
+    if (!length || size < 1) {
+      return [];
+    }
+    const chunks = Array.from(
+      { length: Math.ceil(array.length / size) },
+      () => []
+    );
+    for (let i = 0; i < array.length; i++) {
+      const chunkIndex = Math.floor(i / size);
+      chunks[chunkIndex].push(array[i]);
+    }
+    return chunks;
+  };
   function zip(...arrays) {
     if (!arrays || !arrays.length)
       return [];
@@ -843,6 +859,7 @@ var radash = (function (exports) {
   exports.camel = camel;
   exports.capitalize = capitalize;
   exports.chain = chain;
+  exports.chunk = chunk;
   exports.clone = clone;
   exports.cluster = cluster;
   exports.compose = compose;

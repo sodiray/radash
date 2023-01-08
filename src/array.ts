@@ -18,6 +18,36 @@ export const group = <T, Key extends string | number | symbol>(
 }
 
 /**
+ * Creates an array of elements split into groups the length of `size`.
+ * If `array` can't be split evenly, the final chunk will be the remaining
+ * elements.
+ * chunk(['a', 'b', 'c', 'd'], 2)
+ * // => [['a', 'b'], ['c', 'd']]
+ *
+ * chunk(['a', 'b', 'c', 'd'], 3)
+ * // => [['a', 'b', 'c'], ['d']]
+ */
+export const chunk = <T, S extends number>(
+  array: readonly T[],
+  size: S = 1 as S
+) => {
+  size = Math.max(size, 0) as S
+  const length = array == null ? 0 : array.length
+  if (!length || size < 1) {
+    return []
+  }
+  const chunks: Array<Array<T>> = Array.from(
+    { length: Math.ceil(array.length / size) },
+    () => []
+  )
+  for (let i = 0; i < array.length; i++) {
+    const chunkIndex = Math.floor(i / size)
+    chunks[chunkIndex].push(array[i])
+  }
+  return chunks
+}
+
+/**
  * Creates an array of grouped elements, the first of which contains the
  * first elements of the given arrays, the second of which contains the
  * second elements of the given arrays, and so on.
@@ -305,7 +335,7 @@ export const unique = <T, K extends string | number | symbol>(
 export function* range<T = number>(
   startOrLength: number,
   end?: number,
-  valueOrMapper: T | ((i: number) => T) = i => i as T,
+  valueOrMapper: T | ((i: number) => T) = i => i as unknown as T,
   step: number = 1
 ): Generator<T> {
   const mapper = isFunction(valueOrMapper) ? valueOrMapper : () => valueOrMapper
