@@ -55,16 +55,20 @@ export const series = <T>(
    * in the series or default if the given value is
    * the last item in the series
    */
-  const next = (current: T): T => {
-    return itemsByIndex[indexesByKey[toKey(current)] + 1] ?? first()
+  const next = (current: T, defaultValue?: T): T => {
+    return (
+      itemsByIndex[indexesByKey[toKey(current)] + 1] ?? defaultValue ?? first()
+    )
   }
   /**
    * Given an item in the series returns the previous item
    * in the series or default if the given value is
    * the first item in the series
    */
-  const previous = (current: T): T => {
-    return itemsByIndex[indexesByKey[toKey(current)] - 1] ?? last()
+  const previous = (current: T, defaultValue?: T): T => {
+    return (
+      itemsByIndex[indexesByKey[toKey(current)] - 1] ?? defaultValue ?? last()
+    )
   }
   /**
    * A more dynamic method than next and previous that
@@ -76,7 +80,10 @@ export const series = <T>(
     if (num === 0) return current
     const abs = Math.abs(num)
     const rel = abs > items.length ? abs % items.length : abs
-    return list(0, rel - 1).reduce(num > 0 ? next : previous, current)
+    return list(0, rel - 1).reduce(
+      acc => (num > 0 ? next(acc) : previous(acc)),
+      current
+    )
   }
   return {
     min,

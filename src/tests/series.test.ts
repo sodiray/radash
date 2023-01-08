@@ -56,6 +56,10 @@ describe('series module', () => {
       const result = sut.next('friday')
       assert.equal(result, 'monday')
     })
+    test('returns the given default when the last is exhausted', () => {
+      const result = sut.next('friday', 'wednesday')
+      assert.equal(result, 'wednesday')
+    })
   })
 
   describe('previous function', () => {
@@ -66,6 +70,10 @@ describe('series module', () => {
     test('returns last given first exhausted', () => {
       const result = sut.previous('monday')
       assert.equal(result, 'friday')
+    })
+    test('returns the given default when the first is exhausted', () => {
+      const result = sut.previous('monday', 'wednesday')
+      assert.equal(result, 'wednesday')
     })
   })
 
