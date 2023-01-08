@@ -24,7 +24,7 @@
   <a href="https://www.npmjs.com/package/radash">
     <img src="https://img.shields.io/npm/v/radash.svg" alt="npm version" height="18">
   </a>
-  <a href="https://github.com/gvergnaud/radash">
+  <a href="https://github.com/rayepps/radash">
     <img src="https://img.shields.io/npm/l/radash.svg" alt="MIT license" height="18">
   </a>
 </p>
