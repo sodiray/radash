@@ -19,7 +19,7 @@
   },
   "author": "rayepps",
   "private": false,
-  "license": "BSD-3-Clause",
+  "license": "MIT",
   "scripts": {
     "test": "jest --coverage",
     "check": "yarn lint && yarn test && yarn build",
