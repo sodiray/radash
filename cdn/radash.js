@@ -764,18 +764,21 @@ var radash = (function (exports) {
     const last = () => {
       return itemsByIndex[items.length - 1];
     };
-    const next = (current) => {
-      return itemsByIndex[indexesByKey[toKey(current)] + 1] ?? first();
+    const next = (current, defaultValue) => {
+      return itemsByIndex[indexesByKey[toKey(current)] + 1] ?? defaultValue ?? first();
     };
-    const previous = (current) => {
-      return itemsByIndex[indexesByKey[toKey(current)] - 1] ?? last();
+    const previous = (current, defaultValue) => {
+      return itemsByIndex[indexesByKey[toKey(current)] - 1] ?? defaultValue ?? last();
     };
     const spin = (current, num) => {
       if (num === 0)
         return current;
       const abs = Math.abs(num);
       const rel = abs > items.length ? abs % items.length : abs;
-      return list(0, rel - 1).reduce(num > 0 ? next : previous, current);
+      return list(0, rel - 1).reduce(
+        (acc) => num > 0 ? next(acc) : previous(acc),
+        current
+      );
     };
     return {
       min,
