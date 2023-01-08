@@ -11,6 +11,8 @@
   "index": "docs/getting-started",
   "pages": "./docs/**/*.mdx",
   "theme": "red-400",
+  "repo": "https://github.com/rayepps/radash",
+  "branch": "master",
   "sidebar": {
     "links": [
       {
