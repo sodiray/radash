@@ -1,0 +1,25 @@
+---
+title: mapEntries
+description: Map the keys and values of an object
+group: Object
+---
+
+## Basic usage
+
+Iterates the entries of an object, calling the given `toEntry` callback function
+to generate new entries. It's a `_.mapValues` and `_.mapKeys`
+in one. The `toEntry` callback function should return an array with
+two items `[key, value]` (a.k.a the new entry).
+
+```ts
+import { mapEntries } from 'radash'
+
+const ra = {
+  name: 'Ra',
+  power: 'sun',
+  rank: 100,
+  culture: 'egypt'
+}
+
+mapEntries(ra, (key, value) => [key.toUpperCase(), `${value}`]) // => { NAME: 'Ra', POWER: 'sun', RANK: '100', CULTURE: 'egypt' }
+```

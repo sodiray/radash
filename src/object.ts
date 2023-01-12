@@ -1,4 +1,5 @@
-import { isObject, isPrimitive } from './typed'
+import { objectify } from './array'
+import { isArray, isObject, isPrimitive } from './typed'
 
 type LowercasedKeys<T extends Record<string, any>> = {
   [P in keyof T & string as Lowercase<P>]: T[P]
@@ -22,7 +23,10 @@ export const shake = <RemovedKeys extends string, T>(
   return keys.reduce((acc, key) => {
     if (filter(obj[key])) {
       return acc
-    } else return { ...acc, [key]: obj[key] }
+    } else {
+      acc[key] = obj[key]
+      return acc
+    }
   }, {} as T)
 }
 
@@ -39,13 +43,10 @@ export const mapKeys = <
   mapFunc: (key: TKey, value: TValue) => TNewKey
 ): Record<TNewKey, TValue> => {
   const keys = Object.keys(obj) as TKey[]
-  return keys.reduce(
-    (acc, key) => ({
-      ...acc,
-      [mapFunc(key as TKey, obj[key])]: obj[key]
-    }),
-    {} as Record<TNewKey, TValue>
-  )
+  return keys.reduce((acc, key) => {
+    acc[mapFunc(key as TKey, obj[key])] = obj[key]
+    return acc
+  }, {} as Record<TNewKey, TValue>)
 }
 
 /**
@@ -60,13 +61,10 @@ export const mapValues = <
   mapFunc: (value: TValue, key: TKey) => TNewValue
 ): Record<TKey, TNewValue> => {
   const keys = Object.keys(obj) as TKey[]
-  return keys.reduce(
-    (acc, key) => ({
-      ...acc,
-      [key]: mapFunc(obj[key], key)
-    }),
-    {} as Record<TKey, TNewValue>
-  )
+  return keys.reduce((acc, key) => {
+    acc[key] = mapFunc(obj[key], key)
+    return acc
+  }, {} as Record<TKey, TNewValue>)
 }
 
 /**
@@ -84,10 +82,8 @@ export const mapEntries = <
   if (!obj) return {} as Record<TNewKey, TNewValue>
   return Object.entries(obj).reduce((acc, [key, value]) => {
     const [newKey, newValue] = toEntry(key as TKey, value as TValue)
-    return {
-      ...acc,
-      [newKey]: newValue
-    }
+    acc[newKey] = newValue
+    return acc
   }, {} as Record<TNewKey, TNewValue>)
 }
 
@@ -103,13 +99,10 @@ export const invert = <
 ): Record<TValue, TKey> => {
   if (!obj) return {} as Record<TValue, TKey>
   const keys = Object.keys(obj) as TKey[]
-  return keys.reduce(
-    (acc, key) => ({
-      ...acc,
-      [obj[key]]: key
-    }),
-    {} as Record<TValue, TKey>
-  )
+  return keys.reduce((acc, key) => {
+    acc[obj[key]] = key
+    return acc
+  }, {} as Record<TValue, TKey>)
 }
 
 /**
@@ -164,7 +157,8 @@ export const listify = <TValue, TKey extends string | number | symbol, KResult>(
   const entries = Object.entries(obj)
   if (entries.length === 0) return []
   return entries.reduce((acc, entry) => {
-    return [...acc, toItem(entry[0] as TKey, entry[1] as TValue)]
+    acc.push(toItem(entry[0] as TKey, entry[1] as TValue))
+    return acc
   }, [] as KResult[])
 }
 
@@ -251,4 +245,45 @@ export const assign = <X extends Record<string | symbol | number, any>>(
       })()
     }
   }, {} as X)
+}
+
+/**
+ * Get a string list of all key names that exist in
+ * an object (deep).
+ *
+ * @example
+ * keys({ name: 'ra' }) // ['name']
+ * keys({ name: 'ra', children: [{ name: 'hathor' }] }) // ['name', 'children.0.name']
+ */
+export const keys = <TValue extends object>(value: TValue): string[] => {
+  if (!value) return []
+  const getKeys = (nested: any, paths: string[]): string[] => {
+    if (isObject(nested)) {
+      return Object.entries(nested).flatMap(([k, v]) =>
+        getKeys(v, [...paths, k])
+      )
+    }
+    if (isArray(nested)) {
+      return nested.flatMap((item, i) => getKeys(item, [...paths, `${i}`]))
+    }
+    return [paths.join('.')]
+  }
+  return getKeys(value, [])
+}
+
+/**
+ * Flattens a deep object to a single demension, converting
+ * the keys to dot notation.
+ *
+ * @example
+ * crush({ name: 'ra', children: [{ name: 'hathor' }] })
+ * // { name: 'ra', 'children.0.name': 'hathor' }
+ */
+export const crush = <TValue extends object>(value: TValue): object => {
+  if (!value) return {}
+  return objectify(
+    keys(value),
+    k => k,
+    k => get(value, k)
+  )
 }

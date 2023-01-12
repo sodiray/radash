@@ -1,0 +1,41 @@
+---
+title: replaceOrAppend
+group: 'Array'
+description: Replace item in array or append if no match
+---
+
+## Basic usage
+
+Given an array of items, an item and an identity function, returns a new array with the item either replaced at the index of the existing item -- if it exists, else it is appended at the end.
+
+```ts
+import { replaceOrAppend } from 'radash'
+
+const fish = [
+  {
+    name: 'Marlin',
+    weight: 105
+  },
+  {
+    name: 'Salmon',
+    weight: 19
+  },
+  {
+    name: 'Trout',
+    weight: 13
+  }
+]
+
+const salmon = {
+  name: 'Salmon',
+  weight: 22
+}
+
+const sockeye = {
+  name: 'Sockeye',
+  weight: 8
+}
+
+replaceOrAppend(fish, salmon, f => f.name === 'Salmon') // => [marlin, salmon (weight:22), trout]
+replaceOrAppend(fish, sockeye, f => f.name === 'Sockeye') // => [marlin, salmon, trout, sockeye]
+```

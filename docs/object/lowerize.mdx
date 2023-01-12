@@ -1,0 +1,32 @@
+---
+title: lowerize
+description: Convert all object keys to lower case
+group: Object
+---
+
+
+
+
+## Basic usage
+
+Convert all keys in an object to lower case. Useful to standardize attribute key casing. For example, headers.
+
+```ts
+import { lowerize } from 'radash'
+
+const ra = {
+  Mode: 'god',
+  Power: 'sun'
+}
+
+lowerize(ra) // => { mode, power }
+```
+
+The `_.lowerize` function is a shortcut for `_.mapKeys(obj, k => k.toLowerCase())`
+
+
+
+
+
+
+

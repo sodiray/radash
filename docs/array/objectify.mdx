@@ -1,0 +1,37 @@
+---
+title: objectify
+group: 'Array'
+description: Convert a list to a dictionary object
+---
+
+## Basic usage
+
+Given an array of items, create a dictionary with keys and values mapped by given functions.
+First argument is the array to map. The second argument is the function to determine the key
+for each item. The third argument is optional and determines the value for each item.
+
+```ts
+import { objectify } from 'radash'
+
+const fish = [
+  {
+    name: 'Marlin',
+    weight: 105
+  },
+  {
+    name: 'Bass',
+    weight: 8
+  },
+  {
+    name: 'Trout',
+    weight: 13
+  }
+]
+
+objectify(fish, f => f.name) // => { Marlin: [marlin object], Bass: [bass object], ... }
+objectify(
+  fish,
+  f => f.name,
+  f => f.weight
+) // => { Marlin: 105, Bass: 8, Trout: 13 }
+```

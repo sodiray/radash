@@ -1,0 +1,60 @@
+---
+title: keys
+description: Get all keys from an object deeply
+group: Object
+---
+
+## Basic usage
+
+Given an object, return all of it's keys and children's keys deeply as a flat string list.
+
+```ts
+import { keys } from 'radash'
+
+const ra = {
+  name: 'ra',
+  power: 100,
+  friend: {
+    name: 'loki',
+    power: 80
+  },
+  enemies: [
+    {
+      name: 'hathor',
+      power: 12
+    }
+  ]
+}
+
+keys(ra)
+// => [
+//   'name',
+//   'power',
+//   'friend.name',
+//   'friend.power',
+//   'enemies.0.name',
+//   'enemies.0.power'
+// ]
+```
+
+This is a function you might like to use with `get`, which dynamically looks up values in an object given a string path. Using the two together you could do something like flatten a deep object.
+
+```ts
+import { keys, get, objectify } from 'radash'
+
+objectify(
+  keys(ra),
+  key => key,
+  key => get(ra, key)
+)
+// => {
+//   'name': 'ra'
+//   'power': 100
+//   'friend.name': 'loki'
+//   'friend.power': 80
+//   'enemies.0.name': 'hathor'
+//   'enemies.0.power': 12
+// }
+```
+
+_As of v10.5.0+ you can get this behavior via the crush function_

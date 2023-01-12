@@ -1,0 +1,36 @@
+---
+title: replace
+group: 'Array'
+description: Replace an item in an array
+---
+
+## Basic usage
+
+Given an array of items, replace the one that matches the given condition function. Only replaces the first match. Always returns a copy of the original array.
+
+```ts
+import { replace } from 'radash'
+
+const fish = [
+  {
+    name: 'Marlin',
+    weight: 105
+  },
+  {
+    name: 'Bass',
+    weight: 8
+  },
+  {
+    name: 'Trout',
+    weight: 13
+  }
+]
+
+const salmon = {
+  name: 'Salmon',
+  weight: 22
+}
+
+// read: replace fish with salmon where the name is Bass
+replace(fish, salmon, f => f.name === 'Bass') // => [marlin, salmon, trout]
+```

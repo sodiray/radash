@@ -1,0 +1,25 @@
+---
+title: iterate
+group: 'Array'
+description: Iterate over a callback n times
+---
+
+## Basic usage
+
+A bit like `forEach` meets `reduce`. Useful for running a function `n` number of times to generate a value. The `_.iterate` function takes a count (the number of times to run the callback), a callback function, and an initial value. The callback is run _count_ many times as a reducer and the accumulated value is then returned.
+
+```ts
+import { iterate } from 'radash'
+
+const value = iterate(
+  4,
+  (acc, idx) => {
+    return acc + idx
+  },
+  0
+) // => 10
+```
+
+Note, this is **NOT** zero indexed. If you pass a `count` of 5
+you will get an index of 1, 2, 3, 4, 5 in the callback
+function.

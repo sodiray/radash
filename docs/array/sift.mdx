@@ -1,0 +1,17 @@
+---
+title: sift
+group: 'Array'
+description: Remove all falsy items from list
+---
+
+## Basic usage
+
+Given a list of items, return a new list with all items that are not falsy.
+
+```ts
+import { sift } from 'radash'
+
+const fish = ['salmon', null, false, NaN, 'sockeye', 'bass']
+
+sift(fish) // => ['salmon', 'sockeye', 'bass']
+```

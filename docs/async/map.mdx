@@ -1,0 +1,29 @@
+---
+title: map
+group: 'Async'
+description: Map an array with an async function
+---
+
+
+
+
+## Basic usage
+
+A map that handles callback functions that return a promise.
+
+```ts
+import { map } from 'radash'
+
+const userIds = [1, 2, 3, 4]
+
+const users = await map(userIds, async (userId) => {
+  return await api.users.find(userId)
+})
+```
+
+
+
+
+
+
+

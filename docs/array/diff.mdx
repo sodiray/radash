@@ -1,0 +1,19 @@
+---
+title: diff
+group: 'Array'
+description: Create an array of differences between two arrays
+---
+
+## Basic usage
+
+Given two arrays, returns an array of all items that exist in the first array
+but do not exist in the second array.
+
+```ts
+import { diff } from 'radash'
+
+const oldWorldGods = ['ra', 'zeus']
+const newWorldGods = ['vishnu', 'zeus']
+
+diff(oldWorldGods, newWorldGods) // => ['ra']
+```

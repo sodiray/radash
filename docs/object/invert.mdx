@@ -1,0 +1,21 @@
+---
+title: invert
+description: Invert the keys and values of an object
+group: Object
+---
+
+## Basic usage
+
+Given an object returns a new object with the keys and values reversed.
+
+```ts
+import { invert } from 'radash'
+
+const powersByGod = {
+  ra: 'sun',
+  loki: 'tricks',
+  zeus: 'lighning'
+}
+
+invert(gods) // => { sun: ra, tricks: loki, lightning: zeus }
+```

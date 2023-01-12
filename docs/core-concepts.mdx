@@ -1,0 +1,32 @@
+---
+title: "Core Concepts"
+group: "Getting Started"
+description: "Why is Radash so dashing?"
+---
+
+## Keep it Simple
+
+### Readable
+
+The Radash source is easy to read and understand. We don't make you navigate through internal library modules and classes, reading a hundred lines of code, to understand what a function does or how it works.  
+
+As an example, here's a look at [the source](https://github.com/rayepps/radash/blob/master/src/curry.ts#L11-L13) for the `_.compose` function.
+
+```ts
+export const compose = (...funcs: Func[]) => {
+  return funcs.reverse().reduce((acc, fn) => fn(acc))
+}
+```
+
+Thats it... thats the function.
+
+### Semi-Functional
+
+Functional programming has incredible design patterns that we often pull from. However, we're not dire hard functional engineers. You don't have to understand monads to use Radash. Most Radash functions are deterministic and/or pure.
+
+## Safe
+
+### Types
+
+Radash is written in TypeScript and provides full typing out of the box.
+

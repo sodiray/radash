@@ -114,10 +114,10 @@ function zipToObject(keys, values) {
     return {};
   }
   const getValue = isFunction(values) ? values : isArray(values) ? (_k, i) => values[i] : (_k, _i) => values;
-  return keys.reduce(
-    (acc, key, idx) => ({ ...acc, [key]: getValue(key, idx) }),
-    {}
-  );
+  return keys.reduce((acc, key, idx) => {
+    acc[key] = getValue(key, idx);
+    return acc;
+  }, {});
 }
 const boil = (array, compareFunc) => {
   if (!array || (array.length ?? 0) === 0)
@@ -177,13 +177,10 @@ const replace = (list2, newItem, match) => {
   return [...list2];
 };
 const objectify = (array, getKey, getValue = (item) => item) => {
-  return array.reduce(
-    (acc, item) => ({
-      ...acc,
-      [getKey(item)]: getValue(item)
-    }),
-    {}
-  );
+  return array.reduce((acc, item) => {
+    acc[getKey(item)] = getValue(item);
+    return acc;
+  }, {});
 };
 const select = (array, mapper, condition) => {
   if (!array)
@@ -214,7 +211,8 @@ const unique = (array, toKey) => {
     const key = toKey ? toKey(item) : item;
     if (acc[key])
       return acc;
-    return { ...acc, [key]: item };
+    acc[key] = item;
+    return acc;
   }, {});
   return Object.values(valueMap);
 };
@@ -233,20 +231,18 @@ const list = (startOrLength, end, valueOrMapper, step) => {
 };
 const flat = (lists) => {
   return lists.reduce((acc, list2) => {
-    return [...acc, ...list2];
+    acc.push(...list2);
+    return acc;
   }, []);
 };
 const intersects = (listA, listB, identity) => {
   if (!listA || !listB)
     return false;
   const ident = identity ?? ((x) => x);
-  const dictB = listB.reduce(
-    (acc, item) => ({
-      ...acc,
-      [ident(item)]: true
-    }),
-    {}
-  );
+  const dictB = listB.reduce((acc, item) => {
+    acc[ident(item)] = true;
+    return acc;
+  }, {});
   return listA.some((value) => dictB[ident(value)]);
 };
 const fork = (list2, condition) => {
@@ -276,9 +272,10 @@ const merge = (root, others, matcher) => {
   return root.reduce((acc, r) => {
     const matched = others.find((o) => matcher(r) === matcher(o));
     if (matched)
-      return [...acc, matched];
+      acc.push(matched);
     else
-      return [...acc, r];
+      acc.push(r);
+    return acc;
   }, []);
 };
 const replaceOrAppend = (list2, newItem, match) => {
@@ -333,13 +330,10 @@ const diff = (root, other, identity = (t) => t) => {
     return [...other];
   if (!other?.length)
     return [...root];
-  const bKeys = other.reduce(
-    (acc, item) => ({
-      ...acc,
-      [identity(item)]: true
-    }),
-    {}
-  );
+  const bKeys = other.reduce((acc, item) => {
+    acc[identity(item)] = true;
+    return acc;
+  }, {});
   return root.filter((a) => !bKeys[identity(a)]);
 };
 function shift(arr, n) {
@@ -579,56 +573,47 @@ const toInt = (value, defaultValue) => {
 const shake = (obj, filter = (x) => x === void 0) => {
   if (!obj)
     return {};
-  const keys = Object.keys(obj);
-  return keys.reduce((acc, key) => {
+  const keys2 = Object.keys(obj);
+  return keys2.reduce((acc, key) => {
     if (filter(obj[key])) {
       return acc;
-    } else
-      return { ...acc, [key]: obj[key] };
+    } else {
+      acc[key] = obj[key];
+      return acc;
+    }
   }, {});
 };
 const mapKeys = (obj, mapFunc) => {
-  const keys = Object.keys(obj);
-  return keys.reduce(
-    (acc, key) => ({
-      ...acc,
-      [mapFunc(key, obj[key])]: obj[key]
-    }),
-    {}
-  );
+  const keys2 = Object.keys(obj);
+  return keys2.reduce((acc, key) => {
+    acc[mapFunc(key, obj[key])] = obj[key];
+    return acc;
+  }, {});
 };
 const mapValues = (obj, mapFunc) => {
-  const keys = Object.keys(obj);
-  return keys.reduce(
-    (acc, key) => ({
-      ...acc,
-      [key]: mapFunc(obj[key], key)
-    }),
-    {}
-  );
+  const keys2 = Object.keys(obj);
+  return keys2.reduce((acc, key) => {
+    acc[key] = mapFunc(obj[key], key);
+    return acc;
+  }, {});
 };
 const mapEntries = (obj, toEntry) => {
   if (!obj)
     return {};
   return Object.entries(obj).reduce((acc, [key, value]) => {
     const [newKey, newValue] = toEntry(key, value);
-    return {
-      ...acc,
-      [newKey]: newValue
-    };
+    acc[newKey] = newValue;
+    return acc;
   }, {});
 };
 const invert = (obj) => {
   if (!obj)
     return {};
-  const keys = Object.keys(obj);
-  return keys.reduce(
-    (acc, key) => ({
-      ...acc,
-      [obj[key]]: key
-    }),
-    {}
-  );
+  const keys2 = Object.keys(obj);
+  return keys2.reduce((acc, key) => {
+    acc[obj[key]] = key;
+    return acc;
+  }, {});
 };
 const lowerize = (obj) => mapKeys(obj, (k) => k.toLowerCase());
 const upperize = (obj) => mapKeys(obj, (k) => k.toUpperCase());
@@ -652,24 +637,25 @@ const listify = (obj, toItem) => {
   if (entries.length === 0)
     return [];
   return entries.reduce((acc, entry) => {
-    return [...acc, toItem(entry[0], entry[1])];
+    acc.push(toItem(entry[0], entry[1]));
+    return acc;
   }, []);
 };
-const pick = (obj, keys) => {
+const pick = (obj, keys2) => {
   if (!obj)
     return {};
-  return keys.reduce((acc, key) => {
+  return keys2.reduce((acc, key) => {
     if (obj.hasOwnProperty(key))
       acc[key] = obj[key];
     return acc;
   }, {});
 };
-const omit = (obj, keys) => {
+const omit = (obj, keys2) => {
   if (!obj)
     return {};
-  if (!keys || keys.length === 0)
+  if (!keys2 || keys2.length === 0)
     return obj;
-  return keys.reduce(
+  return keys2.reduce(
     (acc, key) => {
       delete acc[key];
       return acc;
@@ -710,6 +696,31 @@ const assign = (a, b) => {
       })()
     };
   }, {});
+};
+const keys = (value) => {
+  if (!value)
+    return [];
+  const getKeys = (nested, paths) => {
+    if (isObject(nested)) {
+      return Object.entries(nested).flatMap(
+        ([k, v]) => getKeys(v, [...paths, k])
+      );
+    }
+    if (isArray(nested)) {
+      return nested.flatMap((item, i) => getKeys(item, [...paths, `${i}`]));
+    }
+    return [paths.join(".")];
+  };
+  return getKeys(value, []);
+};
+const crush = (value) => {
+  if (!value)
+    return {};
+  return objectify(
+    keys(value),
+    (k) => k,
+    (k) => get(value, k)
+  );
 };
 
 const random = (min, max) => {
@@ -766,18 +777,21 @@ const series = (items, toKey = (item) => `${item}`) => {
   const last = () => {
     return itemsByIndex[items.length - 1];
   };
-  const next = (current) => {
-    return itemsByIndex[indexesByKey[toKey(current)] + 1] ?? first();
+  const next = (current, defaultValue) => {
+    return itemsByIndex[indexesByKey[toKey(current)] + 1] ?? defaultValue ?? first();
   };
-  const previous = (current) => {
-    return itemsByIndex[indexesByKey[toKey(current)] - 1] ?? last();
+  const previous = (current, defaultValue) => {
+    return itemsByIndex[indexesByKey[toKey(current)] - 1] ?? defaultValue ?? last();
   };
   const spin = (current, num) => {
     if (num === 0)
       return current;
     const abs = Math.abs(num);
     const rel = abs > items.length ? abs % items.length : abs;
-    return list(0, rel - 1).reduce(num > 0 ? next : previous, current);
+    return list(0, rel - 1).reduce(
+      (acc) => num > 0 ? next(acc) : previous(acc),
+      current
+    );
   };
   return {
     min,
@@ -848,5 +862,4 @@ const trim = (str, charsToTrim = " ") => {
   const regex = new RegExp(`^[${charsToTrim}]+|[${charsToTrim}]+$`, "g");
   return str.replace(regex, "");
 };
-
 export { alphabetical, assign, boil, callable, camel, capitalize, chain, chunk, clone, cluster, compose, counting, dash, debounce, defer, diff, draw, first, flat, fork, get, group, intersects, invert, isArray, isDate, isEmpty, isEqual, isFloat, isFunction, isInt, isNumber, isObject, isPrimitive, isString, isSymbol, iterate, last, list, listify, lowerize, map, mapEntries, mapKeys, mapValues, max, memo, merge, min, objectify, omit, parallel, partial, partob, pascal, pick, proxied, random, range, reduce, replace, replaceOrAppend, retry, select, series, shake, shift, shuffle, sift, sleep, snake, sort, sum, template, throttle, title, toFloat, toInt, toggle, trim, tryit as try, tryit, uid, unique, upperize, zip, zipToObject };

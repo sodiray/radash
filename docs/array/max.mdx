@@ -1,0 +1,33 @@
+---
+title: max
+group: 'Array'
+description: Get the largest item from an array
+---
+
+## Basic usage
+
+Given an array of items and a function to get the value of each item, returns the item with the largest value. Uses `_.boil` under the hood.
+
+```ts
+import { max } from 'radash'
+
+const fish = [
+  {
+    name: 'Marlin',
+    weight: 105,
+    source: 'ocean'
+  },
+  {
+    name: 'Bass',
+    weight: 8,
+    source: 'lake'
+  },
+  {
+    name: 'Trout',
+    weight: 13,
+    source: 'lake'
+  }
+]
+
+max(fish, f => f.weight) // => {name: "Marlin", weight: 105, source: "ocean"}
+```

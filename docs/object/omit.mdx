@@ -1,0 +1,22 @@
+---
+title: omit
+description: Omit unwanted attributes from an object
+group: Object
+---
+
+## Basic usage
+
+Given an object and a list of keys in the object, returns a new object without any of the given keys.
+
+```ts
+import { omit } from 'radash'
+
+const fish = {
+  name: 'Bass',
+  weight: 8,
+  source: 'lake',
+  brackish: false
+}
+
+omit(fish, ['name', 'source']) // => { weight, brackish }
+```

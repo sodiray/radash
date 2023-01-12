@@ -1,0 +1,23 @@
+---
+title: clone
+description: Creates a shallow copy of the given obejct/value.
+group: Object
+---
+
+## Basic usage
+
+Creates a shallow copy of the given obejct/value.
+
+```ts
+import { clone } from 'radash'
+
+const ra = {
+  name: 'Ra',
+  power: 100
+}
+
+const gods = [ra]
+
+clone(ra) // => copy of ra
+clone(gods) // => copy of gods
+```

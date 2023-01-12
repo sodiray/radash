@@ -1,0 +1,30 @@
+---
+title: sum
+group: 'Array'
+description: Add up all items of an array
+---
+
+## Basic usage
+
+Given an array of items, and an optional function to map each item to a number, add up all the items.
+
+```ts
+import { sum } from 'radash'
+
+const fish = [
+  {
+    name: 'Marlin',
+    weight: 100
+  },
+  {
+    name: 'Bass',
+    weight: 10
+  },
+  {
+    name: 'Trout',
+    weight: 15
+  }
+]
+
+sum(fish, f => f.weight) // => 125
+```

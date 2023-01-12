@@ -1,0 +1,73 @@
+---
+title: range
+group: 'Array'
+description: Create a range used for iterating
+---
+
+## Basic usage
+
+Given a start, end, value, and step size returns a generator that will yield values from start to end by step size. Useful for replacing `for (let i = 0)` with `for of`. Range will return a generator that `for of` will call one at a time, so it's safe to create large ranges.
+
+The interface is identical to `list`.
+
+_A hat tip to Python's `range` functionality_
+
+```ts
+import { range } from 'radash'
+
+range(3)                  // yields 0, 1, 2, 3
+range(0, 3)               // yields 0, 1, 2, 3
+range(0, 3, 'y')          // yields y, y, y, y
+range(0, 3, () => 'y')    // yields y, y, y, y
+range(0, 3, i => i)       // yields 0, 1, 2, 3
+range(0, 3, i => `y${i}`) // yields y0, y1, y2, y3
+range(0, 3, obj)          // yields obj, obj, obj, obj
+range(0, 6, i => i, 2)    // yields 0, 2, 4, 6
+
+for (const i of range(0, 200, 10)) {
+  console.log(i) // => 0, 10, 20, 30 ... 190, 200
+}
+
+for (const i of range(0, 5)) {
+  console.log(i) // => 0, 1, 2, 3, 4, 5
+}
+```
+
+## Signatures
+
+The range function can do a lot with different arguments.
+
+### range(size)
+
+When givin a single argument, it's treated as the `size`. Returns a generator that yields values from 0 to `size`.
+
+```ts
+range(3) // yields 0, 1, 2, 3
+```
+
+### range(start, end)
+
+When given two arguments, they're treated as the `start` and `end`. Returns a generator that yields values from `start` to `end`
+
+```ts
+range(2, 6) // yields 2, 3, 4, 5, 6
+```
+
+### range(start, end, value)
+
+When given a third argument it's treated as the `value` to be yielded in the generator. If the `value` is a function it will be called, with an index argument, to create every value.
+
+```ts
+range(2, 4, {})       // yields {}, {}, {}
+range(2, 4, null)     // yields null, null, null
+range(2, 4, (i) => i) // yields 2, 3, 4
+```
+
+### range(start, end, value, step)
+
+When given a fourth argument it's treated as the `step` size to skip when yielding values from `start` to `end`.
+
+```ts
+range(2, 4, i => i, 2)      // yields 2, 4
+range(25, 100, i => i, 25)  // yields 25, 50, 75, 100
+```

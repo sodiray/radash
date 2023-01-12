@@ -1,0 +1,38 @@
+---
+title: crush
+description: Flattens a deep object to a single dimension
+group: Object
+---
+
+## Basic usage
+
+Flattens a deep object to a single dimension. The deep keys will be converted to a dot notation in the new object.
+
+```ts
+import { crush } from 'radash'
+
+const ra = {
+  name: 'ra',
+  power: 100,
+  friend: {
+    name: 'loki',
+    power: 80
+  },
+  enemies: [
+    {
+      name: 'hathor',
+      power: 12
+    }
+  ]
+}
+
+crush(ra)
+// {
+//   name: 'ra',
+//   power: 100,
+//   'friend.name': 'loki',
+//   'friend.power': 80,
+//   'enemies.0.name': 'hathor',
+//   'enemies.0.power': 12
+// }
+```

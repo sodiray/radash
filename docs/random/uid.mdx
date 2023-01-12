@@ -1,0 +1,18 @@
+---
+title: uid
+description: Generate a unique identifier
+group: Random
+---
+
+## Basic usage
+
+Generates a unique string with optional special characters.
+
+```ts
+import { uid } from 'radash'
+
+uid(7) // => UaOKdlW
+uid(20, '*') // => dyJdbC*NsEgcnGjTHS
+```
+
+Note, this function is optimized for simplicity and usability -- not performance or security. If you need to create universally unique or cryptographically random strings use a package specifically for that purpose.
