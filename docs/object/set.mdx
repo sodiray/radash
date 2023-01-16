@@ -1,0 +1,19 @@
+---
+title: set
+description: Set a value on an object using a path key
+group: Object
+---
+
+## Basic usage
+
+Opposite of get, dynamically set a nested value into an object using a key path. Does not modify the given initial object.
+
+```ts
+import { set } from 'radash'
+
+set({}, 'name', 'ra')
+// => { name: 'ra' }
+
+set({}, 'cards[0].value', 2)
+// => { cards: [{ value: 2 }] }
+```
