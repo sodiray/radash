@@ -55,6 +55,7 @@ export { toFloat, toInt } from './number'
 export {
   assign,
   clone,
+  construct,
   crush,
   get,
   invert,
@@ -66,7 +67,6 @@ export {
   mapValues,
   omit,
   pick,
-  construct,
   set,
   shake,
   upperize
