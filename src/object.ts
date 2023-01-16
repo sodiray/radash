@@ -1,4 +1,5 @@
 import { objectify } from './array'
+import { toInt } from './number'
 import { isArray, isObject, isPrimitive } from './typed'
 
 type LowercasedKeys<T extends Record<string, any>> = {
@@ -128,17 +129,20 @@ export const clone = <T>(obj: T): T => {
     return obj
   }
 
-  // Binding a function to an empty object creates a copy function.
+  // Binding a function to an empty object creates a
+  // copy function.
   if (typeof obj === 'function') {
     return obj.bind({})
   }
 
-  // Access the constructor and create a new object. This method can create an array as well.
+  // Access the constructor and create a new object.
+  // This method can create an array as well.
   const newObj = new ((obj as Object).constructor as { new (): T })()
 
   // Assign the props.
   Object.getOwnPropertyNames(obj).forEach(prop => {
-    // Bypass type checking since the primitive cases are already checked in the beginning
+    // Bypass type checking since the primitive cases
+    // are already checked in the beginning
     ;(newObj as any)[prop] = (obj as any)[prop]
   })
 
@@ -209,10 +213,10 @@ export const omit = <T, TKeys extends keyof T>(
  */
 export const get = <T, K>(
   value: T,
-  funcOrPath: string,
+  path: string,
   defaultValue: K | null = null
 ): K | null => {
-  const segments = (funcOrPath as string).split(/[\.\[\]]/g)
+  const segments = path.split(/[\.\[\]]/g)
   let current: any = value
   for (const key of segments) {
     if (current === null) return defaultValue
@@ -225,23 +229,59 @@ export const get = <T, K>(
 }
 
 /**
+ * Opposite of get, dynamically set a nested value into
+ * an object using a key path. Does not modify the given
+ * initial object.
+ *
+ * @example
+ * set({}, 'name', 'ra') // => { name: 'ra' }
+ * set({}, 'cards[0].value', 2) // => { cards: [{ value: 2 }] }
+ */
+export const set = <T extends object, K>(
+  initial: T,
+  path: string,
+  value: K
+): T => {
+  if (!initial) return {} as T
+  if (!path || !value) return initial
+  const segments = path.split(/[\.\[\]]/g).filter(x => !!x.trim())
+  const _set = (node: any) => {
+    if (segments.length > 1) {
+      const key = segments.shift() as string
+      const nextIsNum = toInt(segments[0], null) === null ? false : true
+      node[key] = node[key] === undefined ? (nextIsNum ? [] : {}) : node[key]
+      _set(node[key])
+    } else {
+      node[segments[0]] = value
+    }
+  }
+  // NOTE: One day, when structuredClone has more
+  // compatability use it to clone the value
+  // https://developer.mozilla.org/en-US/docs/Web/API/structuredClone
+  const cloned = clone(initial)
+  _set(cloned)
+  return cloned
+}
+
+/**
  * Merges two objects together recursivly into a new
  * object applying values from right to left.
  * Recursion only applies to child object properties.
  */
 export const assign = <X extends Record<string | symbol | number, any>>(
-  a: X,
-  b: X
+  initial: X,
+  override: X
 ): X => {
-  if (!a && !b) return {} as X
-  if (!a) return b as X
-  if (!b) return a as X
-  return Object.entries(a).reduce((acc, [key, value]) => {
+  if (!initial && !override) return {} as X
+  if (!initial) return override as X
+  if (!override) return initial as X
+  return Object.entries(initial).reduce((acc, [key, value]) => {
     return {
       ...acc,
       [key]: (() => {
-        if (isObject(value)) return assign(value, b[key])
-        return b[key]
+        if (isObject(value)) return assign(value, override[key])
+        // if (isArray(value)) return value.map(x => assign)
+        return override[key]
       })()
     }
   }, {} as X)
@@ -286,4 +326,20 @@ export const crush = <TValue extends object>(value: TValue): object => {
     k => k,
     k => get(value, k)
   )
+}
+
+/**
+ * The opposite of crush, given an object that was
+ * crushed into key paths and values will return
+ * the original object reconstructed.
+ *
+ * @example
+ * construct({ name: 'ra', 'children.0.name': 'hathor' })
+ * // { name: 'ra', children: [{ name: 'hathor' }] }
+ */
+export const construct = <TObject extends object>(obj: TObject): object => {
+  if (!obj) return {}
+  return Object.keys(obj).reduce((acc, path) => {
+    return set(acc, path, (obj as any)[path])
+  }, {})
 }

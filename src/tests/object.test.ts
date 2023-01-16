@@ -360,7 +360,7 @@ describe('object module', () => {
   })
 
   describe('assign function', () => {
-    const a = {
+    const initial = {
       name: 'jay',
       cards: ['ac'],
       location: {
@@ -371,7 +371,7 @@ describe('object module', () => {
         }
       }
     }
-    const b = {
+    const override = {
       name: 'charles',
       cards: ['4c'],
       location: {
@@ -395,8 +395,8 @@ describe('object module', () => {
       assert.deepEqual(result, { a: 'y' })
     })
     test('correctly assign a with values from b', () => {
-      const result = _.assign(a, b)
-      assert.deepEqual(result, b)
+      const result = _.assign(initial, override)
+      assert.deepEqual(result, override)
     })
   })
 
@@ -432,6 +432,33 @@ describe('object module', () => {
     })
   })
 
+  describe('set function', () => {
+    test('handles bad input', () => {
+      assert.deepEqual(_.set({}, '', {}), {})
+      assert.deepEqual(_.set({}, null as any, {}), {})
+      assert.deepEqual(_.set({}, '', null as any), {})
+      assert.deepEqual(_.set(null as any, '', {}), {})
+      assert.deepEqual(_.set(null as any, null as any, null as any), {})
+    })
+    test('sets deep values correctly', () => {
+      assert.deepEqual(_.set({}, 'cards.value', 2), {
+        cards: { value: 2 }
+      })
+      assert.deepEqual(_.set({}, 'cards.0.value', 2), {
+        cards: [{ value: 2 }]
+      })
+      assert.deepEqual(_.set({}, 'cards.0.0.value', 2), {
+        cards: [[{ value: 2 }]]
+      })
+      assert.deepEqual(_.set({}, 'cards.[0].[0].value', 2), {
+        cards: [[{ value: 2 }]]
+      })
+      assert.deepEqual(_.set({}, 'cards.[1].[1].value', 2), {
+        cards: [, [, { value: 2 }]]
+      })
+    })
+  })
+
   describe('crush function', () => {
     test('handles bad input', () => {
       assert.deepEqual(_.crush({}), {})
@@ -439,6 +466,7 @@ describe('object module', () => {
       assert.deepEqual(_.crush(undefined as any), {})
     })
     test('returns correctly crushed object', () => {
+      const now = new Date()
       const ra = {
         name: 'ra',
         power: 100,
@@ -451,7 +479,8 @@ describe('object module', () => {
             name: 'hathor',
             power: 12
           }
-        ]
+        ],
+        timestamp: now
       }
       assert.deepEqual(_.crush(ra), {
         name: 'ra',
@@ -459,8 +488,53 @@ describe('object module', () => {
         'friend.name': 'loki',
         'friend.power': 80,
         'enemies.0.name': 'hathor',
-        'enemies.0.power': 12
+        'enemies.0.power': 12,
+        timestamp: now
       })
+    })
+  })
+
+  describe('construct function', () => {
+    test('handles bad input', () => {
+      assert.deepEqual(_.construct({}), {})
+      assert.deepEqual(_.construct(null as any), {})
+      assert.deepEqual(_.construct(undefined as any), {})
+    })
+    test('returns correctly constructed object', () => {
+      const now = new Date()
+      const ra = {
+        name: 'ra',
+        power: 100,
+        friend: {
+          name: 'loki',
+          power: 80
+        },
+        enemies: [
+          {
+            name: 'hathor',
+            power: 12
+          },
+          {
+            name: 'vishnu',
+            power: 58
+          }
+        ],
+        timestamp: now
+      }
+      assert.deepEqual(
+        _.construct({
+          name: 'ra',
+          power: 100,
+          'friend.name': 'loki',
+          'friend.power': 80,
+          'enemies.0.name': 'hathor',
+          'enemies.0.power': 12,
+          'enemies.1.name': 'vishnu',
+          'enemies.1.power': 58,
+          timestamp: now
+        }),
+        ra
+      )
     })
   })
 })

@@ -66,6 +66,8 @@ export {
   mapValues,
   omit,
   pick,
+  construct,
+  set,
   shake,
   upperize
 } from './object'
