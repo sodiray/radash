@@ -166,7 +166,7 @@ export const listify = <TValue, TKey extends string | number | symbol, KResult>(
  * Pick a list of properties from an object
  * into a new object
  */
-export const pick = <T extends Record<string, unknown>, TKeys extends keyof T>(
+export const pick = <T extends object, TKeys extends keyof T>(
   obj: T,
   keys: TKeys[]
 ): Pick<T, TKeys> => {

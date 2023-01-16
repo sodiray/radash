@@ -213,11 +213,11 @@ describe('object module', () => {
       assert.deepEqual(result, {})
     })
     test('handle key not in object', () => {
-      const result = _.pick({ a: 2, b: 3 } as any, ['c'])
+      const result = _.pick({ a: 2, b: 3 }, ['c'] as any)
       assert.deepEqual(result, {} as any)
     })
     test('handle one key not in object', () => {
-      const result = _.pick({ a: 2, b: 3 } as any, ['a', 'c'])
+      const result = _.pick({ a: 2, b: 3 }, ['a', 'c'] as any)
       assert.deepEqual(result, { a: 2 } as any)
     })
     test('does not ignore undefined values', () => {
@@ -228,6 +228,22 @@ describe('object module', () => {
       const result = _.pick({ a: 2, b: 4 }, ['a'])
       assert.deepEqual(result, {
         a: 2
+      })
+    })
+    test('type: accepts an interface', () => {
+      interface SomeDeclaredType {
+        a: string
+        b: Error
+        c: number[]
+      }
+      const x: SomeDeclaredType = {
+        a: 'alpha',
+        b: new Error('beta'),
+        c: [3]
+      }
+      const result = _.pick(x, ['a'])
+      assert.deepEqual(result, {
+        a: 'alpha'
       })
     })
   })
