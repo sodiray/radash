@@ -650,8 +650,8 @@ var radash = (function (exports) {
       { ...obj }
     );
   };
-  const get = (value, funcOrPath, defaultValue = null) => {
-    const segments = funcOrPath.split(/[\.\[\]]/g);
+  const get = (value, path, defaultValue = null) => {
+    const segments = path.split(/[\.\[\]]/g);
     let current = value;
     for (const key of segments) {
       if (current === null)
@@ -666,20 +666,40 @@ var radash = (function (exports) {
       return defaultValue;
     return current;
   };
-  const assign = (a, b) => {
-    if (!a && !b)
+  const set = (initial, path, value) => {
+    if (!initial)
       return {};
-    if (!a)
-      return b;
-    if (!b)
-      return a;
-    return Object.entries(a).reduce((acc, [key, value]) => {
+    if (!path || !value)
+      return initial;
+    const segments = path.split(/[\.\[\]]/g).filter((x) => !!x.trim());
+    const _set = (node) => {
+      if (segments.length > 1) {
+        const key = segments.shift();
+        const nextIsNum = toInt(segments[0], null) === null ? false : true;
+        node[key] = node[key] === void 0 ? nextIsNum ? [] : {} : node[key];
+        _set(node[key]);
+      } else {
+        node[segments[0]] = value;
+      }
+    };
+    const cloned = clone(initial);
+    _set(cloned);
+    return cloned;
+  };
+  const assign = (initial, override) => {
+    if (!initial && !override)
+      return {};
+    if (!initial)
+      return override;
+    if (!override)
+      return initial;
+    return Object.entries(initial).reduce((acc, [key, value]) => {
       return {
         ...acc,
         [key]: (() => {
           if (isObject(value))
-            return assign(value, b[key]);
-          return b[key];
+            return assign(value, override[key]);
+          return override[key];
         })()
       };
     }, {});
@@ -708,6 +728,13 @@ var radash = (function (exports) {
       (k) => k,
       (k) => get(value, k)
     );
+  };
+  const construct = (obj) => {
+    if (!obj)
+      return {};
+    return Object.keys(obj).reduce((acc, path) => {
+      return set(acc, path, obj[path]);
+    }, {});
   };
 
   const random = (min, max) => {
@@ -860,6 +887,7 @@ var radash = (function (exports) {
   exports.clone = clone;
   exports.cluster = cluster;
   exports.compose = compose;
+  exports.construct = construct;
   exports.counting = counting;
   exports.crush = crush;
   exports.dash = dash;
@@ -916,6 +944,7 @@ var radash = (function (exports) {
   exports.retry = retry;
   exports.select = select;
   exports.series = series;
+  exports.set = set;
   exports.shake = shake;
   exports.shift = shift;
   exports.shuffle = shuffle;

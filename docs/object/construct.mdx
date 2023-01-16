@@ -1,0 +1,38 @@
+---
+title: construct
+description: Builds an object from key paths and values
+group: Object
+---
+
+## Basic usage
+
+The opposite of crush, given an object that was crushed into key paths and values will return the original object reconstructed.
+
+```ts
+import { construct } from 'radash'
+
+const flat = {
+  name: 'ra',
+  power: 100,
+  'friend.name': 'loki',
+  'friend.power': 80,
+  'enemies.0.name': 'hathor',
+  'enemies.0.power': 12
+}
+
+construct(flat)
+// {
+//   name: 'ra',
+//   power: 100,
+//   friend: {
+//     name: 'loki',
+//     power: 80
+//   },
+//   enemies: [
+//     {
+//       name: 'hathor',
+//       power: 12
+//     }
+//   ]
+// }
+```
