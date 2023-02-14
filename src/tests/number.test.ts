@@ -7,15 +7,17 @@ describe('number module', () => {
       assert.strictEqual(_.inRange(0, 1, null as any), false)
       assert.strictEqual(_.inRange(0, null as any, 1), false)
       assert.strictEqual(_.inRange(null as any, 0, 1), false)
-      assert.strictEqual(_.inRange(0, 1, undefined as any), false)
       assert.strictEqual(_.inRange(0, undefined as any, 1), false)
       assert.strictEqual(_.inRange(undefined as any, 0, 1), false)
+
+      assert.strictEqual(_.inRange(0, 1, undefined as any), true)
     })
     test('handles bad input', () => {
       const result = _.inRange(0, 1, {} as any)
       assert.strictEqual(result, false)
     })
     test('computes correctly', () => {
+      assert.strictEqual(_.inRange(10, 0, 5), false)
       assert.strictEqual(_.inRange(10, 0, 20), true)
       assert.strictEqual(_.inRange(9.99, 0, 10), true)
       assert.strictEqual(_.inRange(Math.PI, 0, 3.15), true)
@@ -24,6 +26,14 @@ describe('number module', () => {
       assert.strictEqual(_.inRange(0, -1, 1), true)
       assert.strictEqual(_.inRange(Number(0), -1, 1), true)
       assert.strictEqual(_.inRange(+'0', -1, 1), true)
+    })
+    test('handles the undefined end', () => {
+      assert.strictEqual(_.inRange(1, 2), true)
+      assert.strictEqual(_.inRange(1.2, 2), true)
+      assert.strictEqual(_.inRange(2, 1), false)
+      assert.strictEqual(_.inRange(2, 2), false)
+      assert.strictEqual(_.inRange(3.2, 2), false)
+      assert.strictEqual(_.inRange(-1, 1), false)
     })
     test('handles the exclusive end of the range', () => {
       assert.strictEqual(_.inRange(1, 0, 1), false)

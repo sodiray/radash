@@ -1,5 +1,10 @@
 /**
- * Checks if the given number is between two numbers. Starting number is inclusive, ending number is exclusive. The start and the end of the range can be ascending OR descending order.
+ * Checks if the given number is between two numbers.
+ *
+ * * Starting number is inclusive.
+ * * Ending number is exclusive.
+ * * The start and the end of the range can be ascending OR descending order.
+ * * If end is not specified, it's set to start value. And start is set to 0.
  *
  * @param {number} number The number to check.
  * @param {number} start The start of the range. Inclusive.
@@ -9,15 +14,20 @@
 export const inRange = (
   number: number,
   start: number,
-  end: number
+  end?: number
 ): boolean => {
-  const typeSafety =
+  const isTypeSafe =
     typeof number === 'number' &&
     typeof start === 'number' &&
-    typeof end === 'number'
+    (typeof end === 'undefined' || typeof end === 'number')
 
-  if (!typeSafety) {
+  if (!isTypeSafe) {
     return false
+  }
+
+  if (typeof end === 'undefined') {
+    end = start
+    start = 0
   }
 
   return number >= Math.min(start, end) && number < Math.max(start, end)
