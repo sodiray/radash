@@ -1,3 +1,28 @@
+/**
+ * Checks if the given number is between two numbers. Starting number is inclusive, ending number is exclusive. The start and the end of the range can be ascending OR descending order.
+ *
+ * @param {number} number The number to check.
+ * @param {number} start The start of the range. Inclusive.
+ * @param {number} end The end of the range. Exclusive.
+ * @returns {boolean} Returns `true` if `number` is in the range, else `false`.
+ */
+export const inRange = (
+  number: number,
+  start: number,
+  end: number
+): boolean => {
+  const typeSafety =
+    typeof number === 'number' &&
+    typeof start === 'number' &&
+    typeof end === 'number'
+
+  if (!typeSafety) {
+    return false
+  }
+
+  return number >= Math.min(start, end) && number < Math.max(start, end)
+}
+
 export const toFloat = <T extends number | null = number>(
   value: any,
   defaultValue?: T
