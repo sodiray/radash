@@ -669,7 +669,7 @@ var radash = (function (exports) {
   const set = (initial, path, value) => {
     if (!initial)
       return {};
-    if (!path || !value)
+    if (!path || value === void 0)
       return initial;
     const segments = path.split(/[\.\[\]]/g).filter((x) => !!x.trim());
     const _set = (node) => {
