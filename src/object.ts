@@ -1,6 +1,6 @@
 import { objectify } from './array'
 import { toInt } from './number'
-import { isArray, isObject, isPrimitive } from './typed'
+import { isArray, isEmpty, isObject, isPrimitive } from './typed'
 
 type LowercasedKeys<T extends Record<string, any>> = {
   [P in keyof T & string as Lowercase<P>]: T[P]
@@ -10,25 +10,40 @@ type UppercasedKeys<T extends Record<string, any>> = {
   [P in keyof T & string as Uppercase<P>]: T[P]
 }
 
+type DeepPartial<T> = T extends Record<string, any>
+  ? {
+      [P in keyof T]?: DeepPartial<T[P]>
+    }
+  : T
+
 /**
- * Removes (shakes out) undefined entries from an
+ * Removes (shakes out) undefined entries from a (nested)
  * object. Optional second argument shakes out values
  * by custom evaluation.
  */
-export const shake = <RemovedKeys extends string, T>(
+export const shake = <T extends Record<string, any> | undefined | null>(
   obj: T,
-  filter: (value: any) => boolean = x => x === undefined
-): Omit<T, RemovedKeys> => {
-  if (!obj) return {} as T
-  const keys = Object.keys(obj) as (keyof T)[]
-  return keys.reduce((acc, key) => {
-    if (filter(obj[key])) {
-      return acc
+  filter?: (value: any) => boolean
+): DeepPartial<T> => {
+  const result: Record<string, any> = {}
+
+  for (const [key, value] of Object.entries(obj || {})) {
+    if (typeof value === 'object' && value !== null) {
+      const shaken = shake(value, filter)
+
+      if (!isEmpty(shaken)) {
+        result[key] = shaken
+      }
     } else {
-      acc[key] = obj[key]
-      return acc
+      if (value === undefined || filter?.(value)) {
+        continue
+      }
+
+      result[key] = value
     }
-  }, {} as T)
+  }
+
+  return result as DeepPartial<T>
 }
 
 /**

@@ -5,34 +5,53 @@ const NULL = null as unknown as {}
 
 describe('object module', () => {
   describe('shake function', () => {
-    test('removes all undefined values', () => {
-      const result = _.shake({
+    test('returns empty object', () => {
+      const result = _.shake({})
+      assert.deepEqual(result, {})
+    })
+    test('removes all undefined values and empty objects', () => {
+      const shaken = {
         x: 2,
         y: null,
-        z: undefined,
         o: false,
         r: 'x'
+      }
+      const unshaken = {
+        ...shaken,
+        z: undefined,
+        a: { b: undefined }
+      }
+      const result = _.shake({
+        ...unshaken,
+        a: { ...unshaken, b: { ...unshaken } }
       })
       assert.deepEqual(result, {
-        x: 2,
-        y: null,
-        o: false,
-        r: 'x'
+        ...shaken,
+        a: { ...shaken, b: { ...shaken } }
       })
     })
     test('removes values based on filter function input', () => {
+      const shaken = {
+        r: 'x'
+      }
+      const unshaken = {
+        ...shaken,
+        x: 2,
+        y: null,
+        o: false,
+        z: undefined,
+        a: { b: undefined }
+      }
       const result = _.shake(
         {
-          x: 2,
-          y: null,
-          z: undefined,
-          o: false,
-          r: 'x'
+          ...unshaken,
+          a: { ...unshaken, b: { ...unshaken } }
         },
         val => val !== 'x'
       )
       assert.deepEqual(result, {
-        r: 'x'
+        ...shaken,
+        a: { ...shaken, b: { ...shaken } }
       })
     })
     test('handles undefined input', () => {

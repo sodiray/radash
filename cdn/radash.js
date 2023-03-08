@@ -557,18 +557,22 @@ var radash = (function (exports) {
     return isNaN(result) ? def : result;
   };
 
-  const shake = (obj, filter = (x) => x === void 0) => {
-    if (!obj)
-      return {};
-    const keys2 = Object.keys(obj);
-    return keys2.reduce((acc, key) => {
-      if (filter(obj[key])) {
-        return acc;
+  const shake = (obj, filter) => {
+    const result = {};
+    for (const [key, value] of Object.entries(obj || {})) {
+      if (typeof value === "object" && value !== null) {
+        const shaken = shake(value, filter);
+        if (!isEmpty(shaken)) {
+          result[key] = shaken;
+        }
       } else {
-        acc[key] = obj[key];
-        return acc;
+        if (value === void 0 || filter?.(value)) {
+          continue;
+        }
+        result[key] = value;
       }
-    }, {});
+    }
+    return result;
   };
   const mapKeys = (obj, mapFunc) => {
     const keys2 = Object.keys(obj);
