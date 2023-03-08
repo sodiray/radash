@@ -364,7 +364,7 @@ var radash = (function (exports) {
     const [err, response] = await tryit(func)(register);
     for (const { fn, rethrow } of callbacks) {
       const [rethrown] = await tryit(fn)(err);
-      if (rethrow)
+      if (rethrown && rethrow)
         throw rethrown;
     }
     if (err)
