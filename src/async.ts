@@ -72,7 +72,7 @@ export const defer = async <TResponse>(
   const [err, response] = await tryit(func)(register)
   for (const { fn, rethrow } of callbacks) {
     const [rethrown] = await tryit(fn)(err)
-    if (rethrow) throw rethrown
+    if (rethrown && rethrow) throw rethrown
   }
   if (err) throw err
   return response
