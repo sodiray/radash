@@ -31,14 +31,14 @@ export {
 } from './array'
 export {
   defer,
+  guard,
   map,
   parallel,
   reduce,
   retry,
   sleep,
   tryit as try,
-  tryit,
-  guard
+  tryit
 } from './async'
 export type { AggregateError } from './async'
 export {
