@@ -1,6 +1,6 @@
 import { assert } from 'chai'
 import * as _ from '..'
-import { AggregateError, tryit } from '../async';
+import { AggregateError } from '../async'
 
 describe('async module', () => {
   beforeEach(() => jest.useFakeTimers({ advanceTimers: true }))
@@ -432,25 +432,57 @@ describe('async module', () => {
   })
 
   describe('_.guard', () => {
-    it('returns result of given function', async () => {
+    it('returns result of given async function', async () => {
       const result = await _.guard(async () => {
         return 'hello'
-      })()
+      })
       assert.equal(result, 'hello')
     })
-    it('returns error if given function throws', async () => {
-      const result = await _.guard(async () => {
-        throw new Error('error')
-      })() ?? 'good-bye'
+    it('returns result of given sync function', async () => {
+      const result = _.guard(() => {
+        return 'hello'
+      })
+      assert.equal(result, 'hello')
+    })
+    it('returns error if given async function throws', async () => {
+      const result =
+        (await _.guard(async () => {
+          throw new Error('error')
+        })) ?? 'good-bye'
       assert.equal(result, 'good-bye')
     })
-    it('returns error if given function rejects', async () => {
-      const getResult = _.guard(async () => {
-            throw new Error('error')
-          }, () => false)
-      const [error, result] = await tryit(getResult)()
-      assert.isUndefined(result)
-      assert.isDefined(error)
+    it('returns error if given sync function throws', async () => {
+      const alwaysThrow = () => {
+        if (1 > 0) throw new Error('error')
+        return undefined
+      }
+      const result = _.guard(alwaysThrow) ?? 'good-bye'
+      assert.equal(result, 'good-bye')
+    })
+    it('throws error if shouldGuard returns false', async () => {
+      const makeFetchUser = (id: number) => {
+        return async () => {
+          if (id === 1) return 'user1'
+          if (id === 2) throw new Error('user not found')
+          throw new Error('unknown error')
+        }
+      }
+      const isUserNotFoundErr = (err: any) => err.message === 'user not found'
+      const fetchUser = async (id: number) =>
+        (await _.guard(makeFetchUser(id), isUserNotFoundErr)) ?? 'default-user'
+
+      const user1 = await fetchUser(1)
+      assert.equal(user1, 'user1')
+
+      const user2 = await fetchUser(2)
+      assert.equal(user2, 'default-user')
+
+      try {
+        await fetchUser(3)
+        assert.fail()
+      } catch (err: any) {
+        assert.equal(err.message, 'unknown error')
+      }
     })
   })
 })
