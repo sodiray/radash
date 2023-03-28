@@ -1,6 +1,6 @@
 import { assert } from 'chai'
 import * as _ from '..'
-import { AggregateError } from '../async'
+import { AggregateError, tryit } from '../async';
 
 describe('async module', () => {
   beforeEach(() => jest.useFakeTimers({ advanceTimers: true }))
@@ -428,6 +428,29 @@ describe('async module', () => {
       // The performance typically comes in 1
       // or 2 milliseconds after.
       assert.isAtLeast(diff, backoffs)
+    })
+  })
+
+  describe('_.guard', () => {
+    it('returns result of given function', async () => {
+      const result = await _.guard(async () => {
+        return 'hello'
+      })()
+      assert.equal(result, 'hello')
+    })
+    it('returns error if given function throws', async () => {
+      const result = await _.guard(async () => {
+        throw new Error('error')
+      })() ?? 'good-bye'
+      assert.equal(result, 'good-bye')
+    })
+    it('returns error if given function rejects', async () => {
+      const getResult = _.guard(async () => {
+            throw new Error('error')
+          }, () => false)
+      const [error, result] = await tryit(getResult)()
+      assert.isUndefined(result)
+      assert.isDefined(error)
     })
   })
 })
