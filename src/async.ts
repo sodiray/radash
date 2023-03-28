@@ -207,3 +207,29 @@ export const tryit = <TFunction extends (...args: any) => any>(
     }
   }
 }
+
+/**
+ * A helper to try an async function that returns undefined
+ * if it fails.
+ *
+ * e.g. const result = await guard(fetchUsers)() ?? [];
+ */
+export const guard = <TFunction extends () => any>(
+  func: TFunction,
+  shouldGuard?: (err: any) => boolean
+): ReturnType<TFunction> extends Promise<any>
+  ? Promise<UnwrapPromisify<ReturnType<TFunction>> | undefined>
+  : ReturnType<TFunction> | undefined => {
+  const _guard = (err: any) => {
+    if (shouldGuard && !shouldGuard(err)) throw err
+    return undefined as any
+  }
+  const isPromise = (result: any): result is ReturnType<TFunction> =>
+    result instanceof Promise
+  try {
+    const result = func()
+    return isPromise(result) ? result.catch(_guard) : result
+  } catch (err) {
+    return _guard(err)
+  }
+}

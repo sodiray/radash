@@ -444,6 +444,20 @@ var radash = (function (exports) {
       }
     };
   };
+  const guard = (func, shouldGuard) => {
+    const _guard = (err) => {
+      if (shouldGuard && !shouldGuard(err))
+        throw err;
+      return void 0;
+    };
+    const isPromise = (result) => result instanceof Promise;
+    try {
+      const result = func();
+      return isPromise(result) ? result.catch(_guard) : result;
+    } catch (err) {
+      return _guard(err);
+    }
+  };
 
   const chain = (...funcs) => (...args) => {
     return funcs.slice(1).reduce((acc, fn) => fn(acc), funcs[0](...args));
@@ -900,6 +914,7 @@ var radash = (function (exports) {
   exports.fork = fork;
   exports.get = get;
   exports.group = group;
+  exports.guard = guard;
   exports.intersects = intersects;
   exports.invert = invert;
   exports.isArray = isArray;

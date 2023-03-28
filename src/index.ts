@@ -31,6 +31,7 @@ export {
 } from './array'
 export {
   defer,
+  guard,
   map,
   parallel,
   reduce,
