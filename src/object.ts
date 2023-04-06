@@ -38,16 +38,34 @@ export const shake = <RemovedKeys extends string, T>(
 export const mapKeys = <
   TValue,
   TKey extends string | number | symbol,
-  TNewKey extends string | number | symbol
+  TNewKey extends string | number | symbol,
+  TNewValue extends TValue | Record<TNewKey, TNewValue> | TNewValue[]
 >(
   obj: Record<TKey, TValue>,
-  mapFunc: (key: TKey, value: TValue) => TNewKey
-): Record<TNewKey, TValue> => {
+  mapFunc: (key: TKey, value: TValue) => TNewKey,
+  { deep = false } = {}
+) => {
   const keys = Object.keys(obj) as TKey[]
   return keys.reduce((acc, key) => {
-    acc[mapFunc(key as TKey, obj[key])] = obj[key]
+    if (deep && isObject(obj[key])) {
+      const v = obj[key] as Record<TKey, TValue>
+      acc[mapFunc(key, v as TValue)] = mapKeys(v, mapFunc, {
+        deep
+      }) as TNewValue
+      return acc
+    }
+
+    if (deep && isArray(obj[key])) {
+      const v = obj[key] as Record<TKey, TValue>[]
+      acc[mapFunc(key, v as TValue)] = v.map(v =>
+        isObject(v) ? mapKeys(v, mapFunc, { deep }) : v
+      ) as TNewValue
+      return acc
+    }
+
+    acc[mapFunc(key, obj[key])] = obj[key]
     return acc
-  }, {} as Record<TNewKey, TValue>)
+  }, {} as Record<TNewKey, TValue | TNewValue>)
 }
 
 /**

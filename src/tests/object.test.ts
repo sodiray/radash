@@ -56,6 +56,39 @@ describe('object module', () => {
         xy: 8
       })
     })
+
+    test('run all keys deeply against mapper function', () => {
+      const uppercase = (key: string) => key.toUpperCase() as Uppercase<string>
+      const obj = {
+        probe_id: 'toto',
+        my_container: 1,
+        test_a: { test_b_c: 18 },
+        array: [
+          'string',
+          {
+            a_b: 2,
+            camel_keys: new Map([['test_under', 'toto']]),
+            camel_keys_deep: [{ test_under: 'toto' }, 18, 'string']
+          },
+          42
+        ]
+      }
+      const result = _.mapKeys(obj, uppercase, { deep: true })
+      assert.deepEqual(result, {
+        PROBE_ID: 'toto',
+        MY_CONTAINER: 1,
+        TEST_A: { TEST_B_C: 18 },
+        ARRAY: [
+          'string',
+          {
+            A_B: 2,
+            CAMEL_KEYS: new Map([['test_under', 'toto']]),
+            CAMEL_KEYS_DEEP: [{ TEST_UNDER: 'toto' }, 18, 'string']
+          },
+          42
+        ]
+      })
+    })
   })
 
   describe('mapValues function', () => {

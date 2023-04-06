@@ -20,3 +20,47 @@ const ra = {
 mapKeys(ra, key => key.toUpperCase()) // => { MODE, POWER }
 mapKeys(ra, (key, value) => value) // => { god: 'god', power: 'power' }
 ```
+
+## Working with deep objects
+
+You can use the deep options in order to work with your multi dimensional object.
+
+```ts
+import { mapKeys } from 'radash'
+
+const myObject = {
+  probe_id: 'toto',
+  my_container: 1,
+  test_a: { test_b_c: 18 },
+  array: [
+    'string',
+    {
+      a_b: 2,
+      camel_keys: new Map([['test_under', 'toto']]),
+      camel_keys_deep: [{ test_under: 'toto' }, 18, 'string']
+    },
+    42
+  ]
+}
+
+mapKeys(ra, key => camel(key), { deep: true })
+```
+
+will returns
+
+```ts
+{
+  probeId: 'toto',
+  myContainer: 1,
+  testA: { testBC: 18 },
+  array: [
+    'string',
+    {
+      aB: 2,
+      camelKeys: new Map([['test_under', 'toto']]),
+      camelKeysDeep: [{ testUnder: 'toto' }, 18, 'string']
+    },
+    42
+  ]
+}
+```

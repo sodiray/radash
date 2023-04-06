@@ -581,9 +581,23 @@ const shake = (obj, filter = (x) => x === void 0) => {
     }
   }, {});
 };
-const mapKeys = (obj, mapFunc) => {
+const mapKeys = (obj, mapFunc, { deep = false } = {}) => {
   const keys2 = Object.keys(obj);
   return keys2.reduce((acc, key) => {
+    if (deep && isObject(obj[key])) {
+      const v = obj[key];
+      acc[mapFunc(key, v)] = mapKeys(v, mapFunc, {
+        deep
+      });
+      return acc;
+    }
+    if (deep && isArray(obj[key])) {
+      const v = obj[key];
+      acc[mapFunc(key, v)] = v.map(
+        (v2) => isObject(v2) ? mapKeys(v2, mapFunc, { deep }) : v2
+      );
+      return acc;
+    }
     acc[mapFunc(key, obj[key])] = obj[key];
     return acc;
   }, {});
