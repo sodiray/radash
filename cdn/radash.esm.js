@@ -383,13 +383,13 @@ const parallel = async (limit, array, func) => {
     index,
     item
   }));
-  const processor = async (res) => {
+  const processor = (queueIndex) => async (res) => {
     const results2 = [];
     while (true) {
       const next = work.pop();
       if (!next)
         return res(results2);
-      const [error, result] = await tryit(func)(next.item);
+      const [error, result] = await tryit(func)(next.item, queueIndex);
       results2.push({
         error,
         result,
@@ -397,7 +397,9 @@ const parallel = async (limit, array, func) => {
       });
     }
   };
-  const queues = list(1, limit).map(() => new Promise(processor));
+  const queues = list(1, limit).map(
+    (queueIndex) => new Promise(processor(queueIndex - 1))
+  );
   const itemResults = await Promise.all(queues);
   const [errors, results] = fork(
     sort(itemResults.flat(), (r) => r.index),
