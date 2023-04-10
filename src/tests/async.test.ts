@@ -20,6 +20,21 @@ describe('async module', () => {
       const result = await _.reduce<number, number>(numbers, asyncSum, 0)
       assert.equal(result, 10)
     })
+    test('passes correct indexes', async () => {
+      const array = ['a', 'b', 'c', 'd', 'e']
+      const asyncSumIndex = async (
+        a: number[],
+        b: string,
+        i: number
+      ): Promise<number[]> => {
+        return new Promise(res => {
+          a.push(i)
+          res(a)
+        })
+      }
+      const result = await _.reduce<string, number[]>(array, asyncSumIndex, [])
+      assert.deepEqual(result, [0, 1, 2, 3, 4])
+    })
   })
 
   describe('asyncMap function', () => {
