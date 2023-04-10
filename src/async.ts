@@ -111,28 +111,32 @@ export class AggregateError extends Error {
 export const parallel = async <T, K>(
   limit: number,
   array: readonly T[],
-  func: (item: T) => Promise<K>
+  func: (item: T, index: number) => Promise<K>
 ): Promise<K[]> => {
   const work = array.map((item, index) => ({
     index,
     item
   }))
   // Process array items
-  const processor = async (res: (value: WorkItemResult<K>[]) => void) => {
-    const results: WorkItemResult<K>[] = []
-    while (true) {
-      const next = work.pop()
-      if (!next) return res(results)
-      const [error, result] = await tryit(func)(next.item)
-      results.push({
-        error,
-        result: result as K,
-        index: next.index
-      })
+  const processor =
+    (queueIndex: number) =>
+    async (res: (value: WorkItemResult<K>[]) => void) => {
+      const results: WorkItemResult<K>[] = []
+      while (true) {
+        const next = work.pop()
+        if (!next) return res(results)
+        const [error, result] = await tryit(func)(next.item, queueIndex)
+        results.push({
+          error,
+          result: result as K,
+          index: next.index
+        })
+      }
     }
-  }
   // Create queues
-  const queues = list(1, limit).map(() => new Promise(processor))
+  const queues = list(1, limit).map(
+    queueIndex => new Promise(processor(queueIndex - 1))
+  )
   // Wait for all queues to complete
   const itemResults = (await Promise.all(queues)) as WorkItemResult<K>[][]
   const [errors, results] = fork(
