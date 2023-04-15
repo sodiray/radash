@@ -517,10 +517,14 @@ var radash = (function (exports) {
         clearTimeout(timer);
         timer = setTimeout(() => {
           active && func(...args);
+          timer = void 0;
         }, delay);
       } else {
         func(...args);
       }
+    };
+    debounced.isPending = () => {
+      return timer !== void 0;
     };
     debounced.cancel = () => {
       active = false;
