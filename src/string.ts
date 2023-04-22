@@ -130,10 +130,7 @@ export const template = (
  * trim('222222__hello__1111111', '12_') // => 'hello'
  * ```
  */
-export const trim = (
-  str: string | null | undefined,
-  charsToTrim = ' '
-) => {
+export const trim = (str: string | null | undefined, charsToTrim = ' ') => {
   if (!str) return ''
   const regex = new RegExp(`^[${charsToTrim}]+|[${charsToTrim}]+$`, 'g')
   return str.replace(regex, '')
