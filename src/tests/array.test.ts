@@ -31,8 +31,9 @@ describe('array module', () => {
         { game: 'e', score: 500 }
       ]
       const result = _.boil(list, (a, b) => (a.score > b.score ? a : b))
-      assert.equal(result!.game, 'e')
-      assert.equal(result!.score, 500)
+      assert(!!result)
+      assert.equal(result.game, 'e')
+      assert.equal(result.score, 500)
     })
     test('does not fail when provided array is empty', () => {
       const result = _.boil([], () => true)
@@ -58,7 +59,7 @@ describe('array module', () => {
     })
 
     test('returns an empty array if nothing is passed', () => {
-      // @ts-ignore
+      // @ts-expect-error testing
       const result = _.zip()
       assert.deepEqual(result, [])
     })
@@ -81,7 +82,7 @@ describe('array module', () => {
     })
 
     test('returns an empty object if bad parameters are passed', () => {
-      // @ts-ignore
+      // @ts-expect-error testing
       const result = _.zipToObject()
       assert.deepEqual(result, {})
     })
@@ -111,8 +112,9 @@ describe('array module', () => {
         { game: 'b', score: 200 }
       ]
       const result = _.first(list)
-      assert.equal(result!.game, 'a')
-      assert.equal(result!.score, 100)
+      assert(!!result)
+      assert.equal(result.game, 'a')
+      assert.equal(result.score, 100)
     })
     test('returns default value without error when list is empty', () => {
       const list = [] as string[]
@@ -132,8 +134,9 @@ describe('array module', () => {
         { game: 'b', score: 200 }
       ]
       const result = _.last(list)
-      assert.equal(result!.game, 'b')
-      assert.equal(result!.score, 200)
+      assert(!!result)
+      assert.equal(result.game, 'b')
+      assert.equal(result.score, 200)
     })
     test('returns default value without error when list is empty', () => {
       const list = [] as string[]
@@ -318,8 +321,9 @@ describe('array module', () => {
         { game: 'e', score: 500 }
       ]
       const result = _.max(list, x => x.score)
-      assert.equal(result!.game, 'e')
-      assert.equal(result!.score, 500)
+      assert(!!result)
+      assert.equal(result.game, 'e')
+      assert.equal(result.score, 500)
     })
   })
 
@@ -338,8 +342,9 @@ describe('array module', () => {
         { game: 'e', score: 500 }
       ]
       const result = _.min(list, x => x.score)
-      assert.equal(result!.game, 'a')
-      assert.equal(result!.score, 100)
+      assert(!!result)
+      assert.equal(result.game, 'a')
+      assert.equal(result.score, 100)
     })
   })
 
@@ -391,7 +396,7 @@ describe('array module', () => {
   describe('range function', () => {
     const obj = { name: 'radash' }
     const toList = <T>(gen: Generator<T>): T[] => {
-      let items: T[] = []
+      const items: T[] = []
       for (const item of gen) items.push(item)
       return items
     }
@@ -516,19 +521,19 @@ describe('array module', () => {
 
   describe('merge function', () => {
     test('returns empty array for two null inputs', () => {
-      const result = _.merge(NULL, NULL, x => '')
+      const result = _.merge(NULL, NULL, () => '')
       assert.deepEqual(result, [])
     })
     test('returns an empty array for two empty array inputs', () => {
-      const result = _.merge([], [], x => '')
+      const result = _.merge([], [], () => '')
       assert.deepEqual(result, [])
     })
     test('returns root for a null other input', () => {
-      const result = _.merge([], NULL, x => '')
+      const result = _.merge([], NULL, () => '')
       assert.deepEqual(result, [])
     })
     test('returns empty array for a null root input', () => {
-      const result = _.merge(NULL, [], x => '')
+      const result = _.merge(NULL, [], () => '')
       assert.deepEqual(result, [])
     })
     test('returns root for a null matcher input', () => {
@@ -565,15 +570,15 @@ describe('array module', () => {
     const lettersXE = ['a', 'b', 'c', 'd', 'XE']
     const lettersXX = ['a', 'b', 'c', 'd', 'e', 'XX']
     test('returns empty array for two null inputs', () => {
-      const result = _.replaceOrAppend(NULL, null, x => false)
+      const result = _.replaceOrAppend(NULL, null, () => false)
       assert.deepEqual(result, [])
     })
     test('returns array with new item for null list input', () => {
-      const result = _.replaceOrAppend(NULL, 'a', x => false)
+      const result = _.replaceOrAppend(NULL, 'a', () => false)
       assert.deepEqual(result, ['a'])
     })
     test('returns list for null new item input', () => {
-      const result = _.replaceOrAppend(['a'], null, x => false)
+      const result = _.replaceOrAppend(['a'], null, () => false)
       assert.deepEqual(result, ['a'])
     })
     test('returns list with item replacing match by index', () => {

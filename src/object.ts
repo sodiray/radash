@@ -137,7 +137,7 @@ export const clone = <T>(obj: T): T => {
 
   // Access the constructor and create a new object.
   // This method can create an array as well.
-  const newObj = new ((obj as Object).constructor as { new (): T })()
+  const newObj = new ((obj as object).constructor as { new (): T })()
 
   // Assign the props.
   Object.getOwnPropertyNames(obj).forEach(prop => {
@@ -176,6 +176,7 @@ export const pick = <T extends object, TKeys extends keyof T>(
 ): Pick<T, TKeys> => {
   if (!obj) return {} as Pick<T, TKeys>
   return keys.reduce((acc, key) => {
+    // eslint-disable-next-line no-prototype-builtins
     if (obj.hasOwnProperty(key)) acc[key] = obj[key]
     return acc
   }, {} as Pick<T, TKeys>)
@@ -216,7 +217,7 @@ export const get = <T, K>(
   path: string,
   defaultValue: K | null = null
 ): K | null => {
-  const segments = path.split(/[\.\[\]]/g)
+  const segments = path.split(/[.[\]]/g)
   let current: any = value
   for (const key of segments) {
     if (current === null) return defaultValue
@@ -244,7 +245,7 @@ export const set = <T extends object, K>(
 ): T => {
   if (!initial) return {} as T
   if (!path || !value) return initial
-  const segments = path.split(/[\.\[\]]/g).filter(x => !!x.trim())
+  const segments = path.split(/[.[\]]/g).filter(x => !!x.trim())
   const _set = (node: any) => {
     if (segments.length > 1) {
       const key = segments.shift() as string

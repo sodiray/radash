@@ -136,10 +136,13 @@ describe('async module', () => {
           defer(async () => {
             three = 3
           })
+          // eslint-disable-next-line no-constant-condition
           if (!!true) throw new Error('soooo broken')
           return 'x'
         })
-      } catch {}
+      } catch {
+        // do nothing
+      }
       assert.equal(one, 1)
       assert.equal(two, 2)
       assert.equal(three, 3)
@@ -217,7 +220,7 @@ describe('async module', () => {
       })()
       assert.isUndefined(result)
       assert.isNotNull(err)
-      assert.equal(err!.message, 'not good enough')
+      assert.equal((err as Error).message, 'not good enough')
     })
     test('returns result when no error is thrown', async () => {
       const [err, result] = await _.try(async () => {
@@ -333,7 +336,7 @@ describe('async module', () => {
     const NULL = null as unknown as Options
 
     test('returns result of given function', async () => {
-      const result = await _.retry(NULL, async bail => {
+      const result = await _.retry(NULL, async () => {
         return 'hello'
       })
       assert.equal(result, 'hello')
@@ -346,7 +349,7 @@ describe('async module', () => {
     })
     test('retries on failure', async () => {
       let failedOnce = false
-      const result = await _.retry(NULL, async bail => {
+      const result = await _.retry(NULL, async () => {
         if (!failedOnce) {
           failedOnce = true
           throw 'Failing for test'
@@ -403,7 +406,7 @@ describe('async module', () => {
     })
     test('uses backoff between retries', async () => {
       let count = 0
-      let backoffs: number = 0
+      let backoffs = 0
       const start = Date.now()
       await _.retry(
         {
@@ -453,6 +456,7 @@ describe('async module', () => {
     })
     it('returns error if given sync function throws', async () => {
       const alwaysThrow = () => {
+        // eslint-disable-next-line no-constant-condition
         if (1 > 0) throw new Error('error')
         return undefined
       }

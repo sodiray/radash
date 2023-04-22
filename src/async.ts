@@ -32,7 +32,7 @@ export const map = async <T, K>(
   asyncMapFunc: (item: T, index: number) => Promise<K>
 ): Promise<K[]> => {
   if (!array) return []
-  let result = []
+  const result = []
   let index = 0
   for (const value of array) {
     const newValue = await asyncMapFunc(value, index++)
@@ -184,24 +184,19 @@ export const sleep = (milliseconds: number) => {
   return new Promise(res => setTimeout(res, milliseconds))
 }
 
-type ArgumentsType<T> = T extends (...args: infer U) => any ? U : never
-type UnwrapPromisify<T> = T extends Promise<infer U> ? U : T
-
 /**
  * A helper to try an async function without forking
  * the control flow. Returns an error first callback _like_
  * array response as [Error, result]
  */
-export const tryit = <TFunction extends (...args: any) => any>(
-  func: TFunction
+export const tryit = <Args extends any[], Return>(
+  func: (...args: Args) => Return
 ) => {
   return async (
-    ...args: ArgumentsType<TFunction>
-  ): Promise<
-    [Error, undefined] | [undefined, UnwrapPromisify<ReturnType<TFunction>>]
-  > => {
+    ...args: Args
+  ): Promise<[Error, undefined] | [undefined, Awaited<Return>]> => {
     try {
-      return [undefined, await func(...(args as any))]
+      return [undefined, await func(...args)]
     } catch (err) {
       return [err as any, undefined]
     }
@@ -218,13 +213,13 @@ export const guard = <TFunction extends () => any>(
   func: TFunction,
   shouldGuard?: (err: any) => boolean
 ): ReturnType<TFunction> extends Promise<any>
-  ? Promise<UnwrapPromisify<ReturnType<TFunction>> | undefined>
+  ? Promise<Awaited<ReturnType<TFunction>> | undefined>
   : ReturnType<TFunction> | undefined => {
   const _guard = (err: any) => {
     if (shouldGuard && !shouldGuard(err)) throw err
     return undefined as any
   }
-  const isPromise = (result: any): result is ReturnType<TFunction> =>
+  const isPromise = (result: any): result is Promise<any> =>
     result instanceof Promise
   try {
     const result = func()

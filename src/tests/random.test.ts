@@ -59,7 +59,8 @@ describe('random module', () => {
     test('returns a string from the list', () => {
       const letters = 'abcde'
       const result = _.draw(letters.split(''))
-      assert.include(letters, result!)
+      assert(!!result)
+      assert.include(letters, result)
     })
     test('returns a item from the list', () => {
       const list = [
@@ -68,7 +69,8 @@ describe('random module', () => {
         { id: 'c', word: 'yolo' }
       ]
       const result = _.draw(list)
-      assert.include('abc', result!.id)
+      assert(!!result)
+      assert.include('abc', result.id)
     })
     test('returns null given empty input', () => {
       const list: unknown[] = []
