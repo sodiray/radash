@@ -40,5 +40,31 @@ module.exports = {
       files: ['*.mdx'],
       extends: 'plugin:mdx/recommended'
     }
+  ],
+  ignorePatterns: [
+    // dependencies
+    'node_modules',
+    '.pnp',
+    '.pnp.js',
+    'package.json',
+    'yarn.lock',
+    // testing
+    'coverage',
+    // compiled
+    'cdn/',
+    'dist/',
+    // misc
+    '.DS_Store',
+    '*.pem',
+    // debug
+    'npm-debug.log*',
+    'yarn-debug.log*',
+    'yarn-error.log*',
+    // env files
+    '.env*',
+    // typescript
+    '*.tsbuildinfo',
+    // chiller
+    '.chiller'
   ]
 }
