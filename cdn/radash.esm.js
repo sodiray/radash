@@ -408,6 +408,28 @@ const parallel = async (limit, array, func) => {
   }
   return results.map((r) => r.result);
 };
+async function all(promises) {
+  const entries = isArray(promises) ? promises.map((p) => [null, p]) : Object.entries(promises);
+  const results = await Promise.all(
+    entries.map(
+      ([key, value]) => value.then((result) => ({ result, exc: null, key })).catch((exc) => ({ result: null, exc, key }))
+    )
+  );
+  const exceptions = results.filter((r) => r.exc);
+  if (exceptions.length > 0) {
+    throw new AggregateError(exceptions.map((e) => e.exc));
+  }
+  if (isArray(promises)) {
+    return results.map((r) => r.result);
+  }
+  return results.reduce(
+    (acc, item) => ({
+      ...acc,
+      [item.key]: item.result
+    }),
+    {}
+  );
+}
 const retry = async (options, func) => {
   const times = options?.times ?? 3;
   const delay = options?.delay;
@@ -888,4 +910,4 @@ const trim = (str, charsToTrim = " ") => {
   return str.replace(regex, "");
 };
 
-export { alphabetical, assign, boil, callable, camel, capitalize, chain, clone, cluster, compose, construct, counting, crush, dash, debounce, defer, diff, draw, first, flat, fork, get, group, guard, intersects, invert, isArray, isDate, isEmpty, isEqual, isFloat, isFunction, isInt, isNumber, isObject, isPrimitive, isString, isSymbol, iterate, keys, last, list, listify, lowerize, map, mapEntries, mapKeys, mapValues, max, memo, merge, min, objectify, omit, parallel, partial, partob, pascal, pick, proxied, random, range, reduce, replace, replaceOrAppend, retry, select, series, set, shake, shift, shuffle, sift, sleep, snake, sort, sum, template, throttle, title, toFloat, toInt, toggle, trim, tryit as try, tryit, uid, unique, upperize, zip, zipToObject };
+export { all, alphabetical, assign, boil, callable, camel, capitalize, chain, clone, cluster, compose, construct, counting, crush, dash, debounce, defer, diff, draw, first, flat, fork, get, group, guard, intersects, invert, isArray, isDate, isEmpty, isEqual, isFloat, isFunction, isInt, isNumber, isObject, isPrimitive, isString, isSymbol, iterate, keys, last, list, listify, lowerize, map, mapEntries, mapKeys, mapValues, max, memo, merge, min, objectify, omit, parallel, partial, partob, pascal, pick, proxied, random, range, reduce, replace, replaceOrAppend, retry, select, series, set, shake, shift, shuffle, sift, sleep, snake, sort, sum, template, throttle, title, toFloat, toInt, toggle, trim, tryit as try, tryit, uid, unique, upperize, zip, zipToObject };

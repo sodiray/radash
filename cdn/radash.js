@@ -411,6 +411,28 @@ var radash = (function (exports) {
     }
     return results.map((r) => r.result);
   };
+  async function all(promises) {
+    const entries = isArray(promises) ? promises.map((p) => [null, p]) : Object.entries(promises);
+    const results = await Promise.all(
+      entries.map(
+        ([key, value]) => value.then((result) => ({ result, exc: null, key })).catch((exc) => ({ result: null, exc, key }))
+      )
+    );
+    const exceptions = results.filter((r) => r.exc);
+    if (exceptions.length > 0) {
+      throw new AggregateError(exceptions.map((e) => e.exc));
+    }
+    if (isArray(promises)) {
+      return results.map((r) => r.result);
+    }
+    return results.reduce(
+      (acc, item) => ({
+        ...acc,
+        [item.key]: item.result
+      }),
+      {}
+    );
+  }
   const retry = async (options, func) => {
     const times = options?.times ?? 3;
     const delay = options?.delay;
@@ -891,6 +913,7 @@ var radash = (function (exports) {
     return str.replace(regex, "");
   };
 
+  exports.all = all;
   exports.alphabetical = alphabetical;
   exports.assign = assign;
   exports.boil = boil;
