@@ -146,6 +146,47 @@ export const parallel = async <T, K>(
 }
 
 /**
+ * Functionally similar to Promise.all or Promise.allSettled. However,
+ * using this function promises are provided as a map, all errors are
+ * thrown in an AggregateError instance if any errors occur,
+ * and the result is the same shape/map with the values as the promise
+ * result for each key.
+ *
+ * @example
+ * const { createUser } = await all({
+ *   createUser: api.users.create(...),
+ *   createUserDataBucket: s3.buckets.create(...),
+ *   slack: slack.customerSuccessChannel.sendMessage(...)
+ * })
+ */
+export const all = async <TPromises extends Record<string, Promise<any>>>(
+  promises: TPromises
+): Promise<{ [K in keyof TPromises]: Awaited<TPromises[K]> }> => {
+  const results = await Promise.all(
+    Object.entries(promises).map(([key, value]) =>
+      value
+        .then(result => {
+          return { result, exc: null, key }
+        })
+        .catch(exc => {
+          return { result: null, exc, key }
+        })
+    )
+  )
+  const exceptions = results.filter(r => r.exc)
+  if (exceptions.length > 0) {
+    throw new AggregateError(exceptions.map(e => e.exc))
+  }
+  return results.reduce(
+    (acc, item) => ({
+      ...acc,
+      [item.key]: item.result
+    }),
+    {} as { [K in keyof TPromises]: Awaited<TPromises[K]> }
+  )
+}
+
+/**
  * Retries the given function the specified number
  * of times.
  */
