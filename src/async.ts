@@ -156,11 +156,11 @@ type PromiseValues<T extends Promise<any>[]> = {
  * AggregateError.
  *
  * @example
- * const [user] = await all({
+ * const [user] = await all([
  *   api.users.create(...),
  *   s3.buckets.create(...),
  *   slack.customerSuccessChannel.sendMessage(...)
- * })
+ * ])
  */
 export async function all<T extends Promise<any>[]>(
   promises: T
