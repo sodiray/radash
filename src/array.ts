@@ -180,7 +180,7 @@ export const replace = <T>(
   match: (item: T, idx: number) => boolean
 ): T[] => {
   if (!list) return []
-  if (!newItem) return [...list]
+  if (newItem === undefined) return [...list]
   for (let idx = 0; idx < list.length; idx++) {
     const item = list[idx]
     if (match(item, idx)) {
