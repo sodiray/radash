@@ -327,12 +327,6 @@ function shift(arr, n) {
   return [...arr.slice(-shiftNumber, arr.length), ...arr.slice(0, -shiftNumber)];
 }
 
-var __defProp = Object.defineProperty;
-var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __publicField = (obj, key, value) => {
-  __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
-  return value;
-};
 const reduce = async (array, asyncReducer, initValue) => {
   const initProvided = initValue !== void 0;
   if (!initProvided && array?.length < 1) {
@@ -375,7 +369,6 @@ const defer = async (func) => {
 class AggregateError extends Error {
   constructor(errors = []) {
     super();
-    __publicField(this, "errors");
     const name = errors.find((e) => e.name)?.name ?? "";
     this.name = `AggregateError(${name}...)`;
     this.message = `AggregateError with ${errors.length} errors`;
@@ -513,13 +506,13 @@ const memoize = (cache, func, keyFunc, ttl) => {
     if (existing !== void 0) {
       if (!existing.exp)
         return existing.value;
-      if (existing.exp > (/* @__PURE__ */ new Date()).getTime()) {
+      if (existing.exp > new Date().getTime()) {
         return existing.value;
       }
     }
     const result = func(...args);
     cache[key] = {
-      exp: ttl ? (/* @__PURE__ */ new Date()).getTime() + ttl : null,
+      exp: ttl ? new Date().getTime() + ttl : null,
       value: result
     };
     return result;
