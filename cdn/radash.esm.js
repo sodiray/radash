@@ -334,8 +334,8 @@ const reduce = async (array, asyncReducer, initValue) => {
   }
   const iter = initProvided ? array : array.slice(1);
   let value = initProvided ? initValue : array[0];
-  for (const item of iter) {
-    value = await asyncReducer(value, item);
+  for (const [i, item] of iter.entries()) {
+    value = await asyncReducer(value, item, i);
   }
   return value;
 };

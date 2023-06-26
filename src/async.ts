@@ -8,7 +8,7 @@ import { isArray } from './typed'
  */
 export const reduce = async <T, K>(
   array: readonly T[],
-  asyncReducer: (acc: K, item: T) => Promise<K>,
+  asyncReducer: (acc: K, item: T, index: number) => Promise<K>,
   initValue?: K
 ): Promise<K> => {
   const initProvided = initValue !== undefined
@@ -17,8 +17,8 @@ export const reduce = async <T, K>(
   }
   const iter = initProvided ? array : array.slice(1)
   let value: any = initProvided ? initValue : array[0]
-  for (const item of iter) {
-    value = await asyncReducer(value, item)
+  for (const [i, item] of iter.entries()) {
+    value = await asyncReducer(value, item, i)
   }
   return value
 }
