@@ -102,9 +102,21 @@ export type DebounceFunction<TArgs extends any[]> = {
    */
   cancel(): void
   /**
+   * Checks if there is any invocation debounced
+   */
+  isPending(): boolean
+  /**
    * Runs the debounced function immediately
    */
   flush(...args: TArgs): void
+}
+
+export type ThrottledFunction<TArgs extends any[]> = {
+  (...args: TArgs): void
+  /**
+   * Checks if there is any invocation throttled
+   */
+  isThrottled(): boolean
 }
 
 /**
@@ -128,10 +140,14 @@ export const debounce = <TArgs extends any[]>(
       clearTimeout(timer)
       timer = setTimeout(() => {
         active && func(...args)
+        timer = undefined
       }, delay)
     } else {
       func(...args)
     }
+  }
+  debounced.isPending = () => {
+    return timer !== undefined
   }
   debounced.cancel = () => {
     active = false
@@ -149,17 +165,23 @@ export const debounce = <TArgs extends any[]>(
 export const throttle = <TArgs extends any[]>(
   { interval }: { interval: number },
   func: (...args: TArgs) => any
-): ((...args: TArgs) => any) => {
+) => {
   let ready = true
-  const throttled = (...args: TArgs) => {
+  let timer: NodeJS.Timeout | undefined = undefined
+
+  const throttled: ThrottledFunction<TArgs> = (...args: TArgs) => {
     if (!ready) return
     func(...args)
     ready = false
-    setTimeout(() => {
+    timer = setTimeout(() => {
       ready = true
+      timer = undefined
     }, interval)
   }
-  return throttled as unknown as (...args: TArgs) => any
+  throttled.isThrottled = () => {
+    return timer !== undefined
+  }
+  return throttled
 }
 
 /**

@@ -176,7 +176,7 @@ export const pick = <T extends object, TKeys extends keyof T>(
 ): Pick<T, TKeys> => {
   if (!obj) return {} as Pick<T, TKeys>
   return keys.reduce((acc, key) => {
-    if (obj.hasOwnProperty(key)) acc[key] = obj[key]
+    if (Object.prototype.hasOwnProperty.call(obj, key)) acc[key] = obj[key]
     return acc
   }, {} as Pick<T, TKeys>)
 }
@@ -211,20 +211,20 @@ export const omit = <T, TKeys extends keyof T>(
  *
  * @example get(person, 'friends[0].name')
  */
-export const get = <T, K>(
-  value: T,
+export const get = <TDefault = unknown>(
+  value: any,
   path: string,
-  defaultValue: K | null = null
-): K | null => {
+  defaultValue?: TDefault
+): TDefault => {
   const segments = path.split(/[.[\]]/g)
   let current: any = value
   for (const key of segments) {
-    if (current === null) return defaultValue
-    if (current === undefined) return defaultValue
+    if (current === null) return defaultValue as TDefault
+    if (current === undefined) return defaultValue as TDefault
     if (key.trim() === '') continue
     current = current[key]
   }
-  if (current === undefined) return defaultValue
+  if (current === undefined) return defaultValue as TDefault
   return current
 }
 
@@ -272,19 +272,21 @@ export const assign = <X extends Record<string | symbol | number, any>>(
   initial: X,
   override: X
 ): X => {
-  if (!initial && !override) return {} as X
-  if (!initial) return override as X
-  if (!override) return initial as X
-  return Object.entries(initial).reduce((acc, [key, value]) => {
-    return {
-      ...acc,
-      [key]: (() => {
-        if (isObject(value)) return assign(value, override[key])
-        // if (isArray(value)) return value.map(x => assign)
-        return override[key]
-      })()
-    }
-  }, {} as X)
+  if (!initial || !override) return initial ?? override ?? {}
+
+  return Object.entries({ ...initial, ...override }).reduce(
+    (acc, [key, value]) => {
+      return {
+        ...acc,
+        [key]: (() => {
+          if (isObject(initial[key])) return assign(initial[key], value)
+          // if (isArray(value)) return value.map(x => assign)
+          return value
+        })()
+      }
+    },
+    {} as X
+  )
 }
 
 /**

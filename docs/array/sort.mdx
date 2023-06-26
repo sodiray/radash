@@ -1,12 +1,14 @@
 ---
 title: sort
 group: 'Array'
-description: Sort a list of items by a property
+description: Sort a list of objects by a numerical property
 ---
 
 ## Basic usage
 
-Given an array of items return a new array sorted by the property specified in the get function. A third, and optional, argument allows you to get the sort in descending order.
+Given an array of objects, return a new array sorted by the numerical property specified in the get function. A third, and optional, argument allows you to sort in descending order instead of the default ascending order.
+
+This function only supports numerical sorting. For alphabetic sorting, see the [alphabetical](./alphabetical) function.
 
 ```ts
 import { sort } from 'radash'

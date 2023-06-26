@@ -246,6 +246,40 @@ describe('object module', () => {
         a: 'alpha'
       })
     })
+    test('works with proxified objects', () => {
+      const target = {
+        a: 'hello',
+        b: 'everyone'
+      }
+      const handler1 = {
+        get() {
+          return 'world'
+        }
+      }
+      const proxified = new Proxy(target, handler1)
+      const result = _.pick(proxified, ['a'])
+      assert.deepEqual(result, {
+        a: 'world'
+      })
+    })
+    test('works with objects created without the prototype chain of Object e.g. by `Object.create(null)`', () => {
+      const obj = Object.create(null)
+      obj.a = 2
+      obj.b = 4
+      const result = _.pick(obj, ['a'])
+      assert.deepEqual(result, {
+        a: 2
+      })
+    })
+    test('works with objects that have `hasOwnProperty` overwritten', () => {
+      const obj = { a: 2, b: 4 }
+      // @ts-ignore
+      obj.hasOwnProperty = 'OVERWRITTEN'
+      const result = _.pick(obj, ['a'])
+      assert.deepEqual(result, {
+        a: 2
+      })
+    })
   })
 
   describe('omit function', () => {
@@ -300,6 +334,9 @@ describe('object module', () => {
     test('handles null and undefined input', () => {
       assert.equal(_.get(null, 'name'), null)
       assert.equal(_.get(undefined, 'name'), null)
+    })
+    test('respects undefined as default value', () => {
+      assert.equal(_.get({}, 'a.b.c', undefined), undefined)
     })
     test('returns specified value or default using path', () => {
       assert.equal(_.get({ age: undefined }, 'age', 22), 22)
@@ -398,6 +435,14 @@ describe('object module', () => {
       const result = _.assign(initial, override)
       assert.deepEqual(result, override)
     })
+    test('handles initial have unique value', () => {
+      const result = _.assign({ a: 'x' }, {})
+      assert.deepEqual(result, { a: 'x' })
+    })
+    test('handles override have unique value', () => {
+      const result = _.assign({}, { b: 'y' })
+      assert.deepEqual(result, { b: 'y' })
+    })
   })
 
   describe('keys function', () => {
@@ -439,6 +484,8 @@ describe('object module', () => {
       assert.deepEqual(_.set({}, '', null as any), {})
       assert.deepEqual(_.set(null as any, '', {}), {})
       assert.deepEqual(_.set(null as any, null as any, null as any), {})
+      assert.deepEqual(_.set({ foo: true }, 'foo', false), { foo: false })
+      assert.deepEqual(_.set({}, 'foo', 0), { foo: 0 })
     })
     test('sets deep values correctly', () => {
       assert.deepEqual(_.set({}, 'cards.value', 2), {

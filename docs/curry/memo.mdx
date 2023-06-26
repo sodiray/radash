@@ -24,7 +24,7 @@ now === later // => true
 
 ## Expiration
 
-You can optionally pass a `ttl` (time to live) that will expire memoized results.
+You can optionally pass a `ttl` (time to live) that will expire memoized results. In versions prior to version 10, `ttl` had a value of 300 milliseconds if not specified.
 
 ```ts
 import { memo, sleep } from 'radash'
