@@ -20,6 +20,21 @@ describe('async module', () => {
       const result = await _.reduce<number, number>(numbers, asyncSum, 0)
       assert.equal(result, 10)
     })
+    test('passes correct indexes', async () => {
+      const array = ['a', 'b', 'c', 'd', 'e']
+      const asyncSumIndex = async (
+        a: number[],
+        b: string,
+        i: number
+      ): Promise<number[]> => {
+        return new Promise(res => {
+          a.push(i)
+          res(a)
+        })
+      }
+      const result = await _.reduce<string, number[]>(array, asyncSumIndex, [])
+      assert.deepEqual(result, [0, 1, 2, 3, 4])
+    })
   })
 
   describe('asyncMap function', () => {
@@ -483,6 +498,63 @@ describe('async module', () => {
       } catch (err: any) {
         assert.equal(err.message, 'unknown error')
       }
+    })
+  })
+
+  describe('_.all', () => {
+    const promise = {
+      pass: <T>(value: T) => new Promise<T>(res => res(value)),
+      fail: (err: any) => new Promise((res, rej) => rej(err))
+    }
+    it('returns array with values in correct order when given array', async () => {
+      const result = await _.all([
+        promise.pass(22),
+        promise.pass('hello'),
+        promise.pass({ name: 'ray' })
+      ])
+      assert.deepEqual(result, [22, 'hello', { name: 'ray' }])
+    })
+    it('returns object with values in correct keys when given object', async () => {
+      const result = await _.all({
+        num: promise.pass(22),
+        str: promise.pass('hello'),
+        obj: promise.pass({ name: 'ray' })
+      })
+      assert.deepEqual(result, {
+        num: 22,
+        str: 'hello',
+        obj: { name: 'ray' }
+      })
+    })
+    it('throws aggregate error when a single promise fails (in object mode)', async () => {
+      try {
+        await _.all({
+          num: promise.pass(22),
+          str: promise.pass('hello'),
+          err: promise.fail(new Error('broken'))
+        })
+      } catch (e: any) {
+        const err = e as AggregateError
+        assert.equal(err.errors.length, 1)
+        assert.equal(err.errors[0].message, 'broken')
+        return
+      }
+      assert.fail('Expected error to be thrown but it was not')
+    })
+    it('throws aggregate error when a single promise fails (in array mode)', async () => {
+      try {
+        await _.all([
+          promise.pass(22),
+          promise.pass('hello'),
+          promise.fail(new Error('broken'))
+        ])
+      } catch (e: any) {
+        const err = e as AggregateError
+        assert.equal(err.errors.length, 1)
+        assert.equal(err.errors[0].message, 'broken')
+        return
+      }
+      assert.fail('Expected error to be thrown but it was not')
     })
   })
 })

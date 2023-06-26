@@ -4,9 +4,7 @@ var radash = (function (exports) {
   const isSymbol = (value) => {
     return !!value && value.constructor === Symbol;
   };
-  const isArray = (value) => {
-    return !!value && value.constructor === Array;
-  };
+  const isArray = Array.isArray;
   const isObject = (value) => {
     return !!value && value.constructor === Object;
   };
@@ -339,8 +337,8 @@ var radash = (function (exports) {
     }
     const iter = initProvided ? array : array.slice(1);
     let value = initProvided ? initValue : array[0];
-    for (const item of iter) {
-      value = await asyncReducer(value, item);
+    for (const [i, item] of iter.entries()) {
+      value = await asyncReducer(value, item, i);
     }
     return value;
   };
@@ -411,6 +409,28 @@ var radash = (function (exports) {
     }
     return results.map((r) => r.result);
   };
+  async function all(promises) {
+    const entries = isArray(promises) ? promises.map((p) => [null, p]) : Object.entries(promises);
+    const results = await Promise.all(
+      entries.map(
+        ([key, value]) => value.then((result) => ({ result, exc: null, key })).catch((exc) => ({ result: null, exc, key }))
+      )
+    );
+    const exceptions = results.filter((r) => r.exc);
+    if (exceptions.length > 0) {
+      throw new AggregateError(exceptions.map((e) => e.exc));
+    }
+    if (isArray(promises)) {
+      return results.map((r) => r.result);
+    }
+    return results.reduce(
+      (acc, item) => ({
+        ...acc,
+        [item.key]: item.result
+      }),
+      {}
+    );
+  }
   const retry = async (options, func) => {
     const times = options?.times ?? 3;
     const delay = options?.delay;
@@ -534,14 +554,19 @@ var radash = (function (exports) {
   };
   const throttle = ({ interval }, func) => {
     let ready = true;
+    let timer = void 0;
     const throttled = (...args) => {
       if (!ready)
         return;
       func(...args);
       ready = false;
-      setTimeout(() => {
+      timer = setTimeout(() => {
         ready = true;
+        timer = void 0;
       }, interval);
+    };
+    throttled.isThrottled = () => {
+      return timer !== void 0;
     };
     return throttled;
   };
@@ -668,7 +693,7 @@ var radash = (function (exports) {
       { ...obj }
     );
   };
-  const get = (value, path, defaultValue = null) => {
+  const get = (value, path, defaultValue) => {
     const segments = path.split(/[\.\[\]]/g);
     let current = value;
     for (const key of segments) {
@@ -687,7 +712,7 @@ var radash = (function (exports) {
   const set = (initial, path, value) => {
     if (!initial)
       return {};
-    if (!path || !value)
+    if (!path || value === void 0)
       return initial;
     const segments = path.split(/[\.\[\]]/g).filter((x) => !!x.trim());
     const _set = (node) => {
@@ -705,22 +730,21 @@ var radash = (function (exports) {
     return cloned;
   };
   const assign = (initial, override) => {
-    if (!initial && !override)
-      return {};
-    if (!initial)
-      return override;
-    if (!override)
-      return initial;
-    return Object.entries(initial).reduce((acc, [key, value]) => {
-      return {
-        ...acc,
-        [key]: (() => {
-          if (isObject(value))
-            return assign(value, override[key]);
-          return override[key];
-        })()
-      };
-    }, {});
+    if (!initial || !override)
+      return initial ?? override ?? {};
+    return Object.entries({ ...initial, ...override }).reduce(
+      (acc, [key, value]) => {
+        return {
+          ...acc,
+          [key]: (() => {
+            if (isObject(initial[key]))
+              return assign(initial[key], value);
+            return value;
+          })()
+        };
+      },
+      {}
+    );
   };
   const keys = (value) => {
     if (!value)
@@ -891,10 +915,12 @@ var radash = (function (exports) {
   const trim = (str, charsToTrim = " ") => {
     if (!str)
       return "";
-    const regex = new RegExp(`^[${charsToTrim}]+|[${charsToTrim}]+$`, "g");
+    const toTrim = charsToTrim.replace(/[\W]{1}/g, "\\$&");
+    const regex = new RegExp(`^[${toTrim}]+|[${toTrim}]+$`, "g");
     return str.replace(regex, "");
   };
 
+  exports.all = all;
   exports.alphabetical = alphabetical;
   exports.assign = assign;
   exports.boil = boil;

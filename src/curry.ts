@@ -111,6 +111,14 @@ export type DebounceFunction<TArgs extends any[]> = {
   flush(...args: TArgs): void
 }
 
+export type ThrottledFunction<TArgs extends any[]> = {
+  (...args: TArgs): void
+  /**
+   * Checks if there is any invocation throttled
+   */
+  isThrottled(): boolean
+}
+
 /**
  * Given a delay and a function returns a new function
  * that will only call the source function after delay
@@ -157,17 +165,23 @@ export const debounce = <TArgs extends any[]>(
 export const throttle = <TArgs extends any[]>(
   { interval }: { interval: number },
   func: (...args: TArgs) => any
-): ((...args: TArgs) => any) => {
+) => {
   let ready = true
-  const throttled = (...args: TArgs) => {
+  let timer: NodeJS.Timeout | undefined = undefined
+
+  const throttled: ThrottledFunction<TArgs> = (...args: TArgs) => {
     if (!ready) return
     func(...args)
     ready = false
-    setTimeout(() => {
+    timer = setTimeout(() => {
       ready = true
+      timer = undefined
     }, interval)
   }
-  return throttled as unknown as (...args: TArgs) => any
+  throttled.isThrottled = () => {
+    return timer !== undefined
+  }
+  return throttled
 }
 
 /**
