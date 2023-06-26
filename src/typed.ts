@@ -26,7 +26,6 @@ export const isPrimitive = (value: any): boolean => {
   )
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types
 export const isFunction = (value: any): value is Function => {
   return !!(value && value.constructor && value.call && value.apply)
 }

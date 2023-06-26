@@ -176,7 +176,6 @@ export const pick = <T extends object, TKeys extends keyof T>(
 ): Pick<T, TKeys> => {
   if (!obj) return {} as Pick<T, TKeys>
   return keys.reduce((acc, key) => {
-    // eslint-disable-next-line no-prototype-builtins
     if (obj.hasOwnProperty(key)) acc[key] = obj[key]
     return acc
   }, {} as Pick<T, TKeys>)

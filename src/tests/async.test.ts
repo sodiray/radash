@@ -136,7 +136,6 @@ describe('async module', () => {
           defer(async () => {
             three = 3
           })
-          // eslint-disable-next-line no-constant-condition
           if (!!true) throw new Error('soooo broken')
           return 'x'
         })
@@ -456,7 +455,6 @@ describe('async module', () => {
     })
     it('returns error if given sync function throws', async () => {
       const alwaysThrow = () => {
-        // eslint-disable-next-line no-constant-condition
         if (1 > 0) throw new Error('error')
         return undefined
       }
