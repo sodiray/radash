@@ -430,4 +430,116 @@ describe('async module', () => {
       assert.isAtLeast(diff, backoffs)
     })
   })
+
+  describe('_.guard', () => {
+    it('returns result of given async function', async () => {
+      const result = await _.guard(async () => {
+        return 'hello'
+      })
+      assert.equal(result, 'hello')
+    })
+    it('returns result of given sync function', async () => {
+      const result = _.guard(() => {
+        return 'hello'
+      })
+      assert.equal(result, 'hello')
+    })
+    it('returns error if given async function throws', async () => {
+      const result =
+        (await _.guard(async () => {
+          throw new Error('error')
+        })) ?? 'good-bye'
+      assert.equal(result, 'good-bye')
+    })
+    it('returns error if given sync function throws', async () => {
+      const alwaysThrow = () => {
+        if (1 > 0) throw new Error('error')
+        return undefined
+      }
+      const result = _.guard(alwaysThrow) ?? 'good-bye'
+      assert.equal(result, 'good-bye')
+    })
+    it('throws error if shouldGuard returns false', async () => {
+      const makeFetchUser = (id: number) => {
+        return async () => {
+          if (id === 1) return 'user1'
+          if (id === 2) throw new Error('user not found')
+          throw new Error('unknown error')
+        }
+      }
+      const isUserNotFoundErr = (err: any) => err.message === 'user not found'
+      const fetchUser = async (id: number) =>
+        (await _.guard(makeFetchUser(id), isUserNotFoundErr)) ?? 'default-user'
+
+      const user1 = await fetchUser(1)
+      assert.equal(user1, 'user1')
+
+      const user2 = await fetchUser(2)
+      assert.equal(user2, 'default-user')
+
+      try {
+        await fetchUser(3)
+        assert.fail()
+      } catch (err: any) {
+        assert.equal(err.message, 'unknown error')
+      }
+    })
+  })
+
+  describe('_.all', () => {
+    const promise = {
+      pass: <T>(value: T) => new Promise<T>(res => res(value)),
+      fail: (err: any) => new Promise((res, rej) => rej(err))
+    }
+    it('returns array with values in correct order when given array', async () => {
+      const result = await _.all([
+        promise.pass(22),
+        promise.pass('hello'),
+        promise.pass({ name: 'ray' })
+      ])
+      assert.deepEqual(result, [22, 'hello', { name: 'ray' }])
+    })
+    it('returns object with values in correct keys when given object', async () => {
+      const result = await _.all({
+        num: promise.pass(22),
+        str: promise.pass('hello'),
+        obj: promise.pass({ name: 'ray' })
+      })
+      assert.deepEqual(result, {
+        num: 22,
+        str: 'hello',
+        obj: { name: 'ray' }
+      })
+    })
+    it('throws aggregate error when a single promise fails (in object mode)', async () => {
+      try {
+        await _.all({
+          num: promise.pass(22),
+          str: promise.pass('hello'),
+          err: promise.fail(new Error('broken'))
+        })
+      } catch (e: any) {
+        const err = e as AggregateError
+        assert.equal(err.errors.length, 1)
+        assert.equal(err.errors[0].message, 'broken')
+        return
+      }
+      assert.fail('Expected error to be thrown but it was not')
+    })
+    it('throws aggregate error when a single promise fails (in array mode)', async () => {
+      try {
+        await _.all([
+          promise.pass(22),
+          promise.pass('hello'),
+          promise.fail(new Error('broken'))
+        ])
+      } catch (e: any) {
+        const err = e as AggregateError
+        assert.equal(err.errors.length, 1)
+        assert.equal(err.errors[0].message, 'broken')
+        return
+      }
+      assert.fail('Expected error to be thrown but it was not')
+    })
+  })
 })

@@ -1,4 +1,5 @@
 import { fork, list, range, sort } from './array'
+import { isArray } from './typed'
 
 /**
  * An async reduce function. Works like the
@@ -72,7 +73,7 @@ export const defer = async <TResponse>(
   const [err, response] = await tryit(func)(register)
   for (const { fn, rethrow } of callbacks) {
     const [rethrown] = await tryit(fn)(err)
-    if (rethrow) throw rethrown
+    if (rethrown && rethrow) throw rethrown
   }
   if (err) throw err
   return response
@@ -145,6 +146,75 @@ export const parallel = async <T, K>(
   return results.map(r => r.result)
 }
 
+type PromiseValues<T extends Promise<any>[]> = {
+  [K in keyof T]: T[K] extends Promise<infer U> ? U : never
+}
+
+/**
+ * Functionally similar to Promise.all or Promise.allSettled. If any
+ * errors are thrown, all errors are gathered and thrown in an
+ * AggregateError.
+ *
+ * @example
+ * const [user] = await all([
+ *   api.users.create(...),
+ *   s3.buckets.create(...),
+ *   slack.customerSuccessChannel.sendMessage(...)
+ * ])
+ */
+export async function all<T extends Promise<any>[]>(
+  promises: T
+): Promise<PromiseValues<T>>
+/**
+ * Functionally similar to Promise.all or Promise.allSettled. If any
+ * errors are thrown, all errors are gathered and thrown in an
+ * AggregateError.
+ *
+ * @example
+ * const { user } = await all({
+ *   user: api.users.create(...),
+ *   bucket: s3.buckets.create(...),
+ *   message: slack.customerSuccessChannel.sendMessage(...)
+ * })
+ */
+export async function all<T extends Record<string, Promise<any>>>(
+  promises: T
+): Promise<{ [K in keyof T]: Awaited<T[K]> }>
+export async function all<
+  T extends Record<string, Promise<any>> | Promise<any>[]
+>(promises: T) {
+  const entries = isArray(promises)
+    ? promises.map(p => [null, p] as [null, Promise<any>])
+    : Object.entries(promises)
+
+  const results = await Promise.all(
+    entries.map(([key, value]) =>
+      value
+        .then(result => ({ result, exc: null, key }))
+        .catch(exc => ({ result: null, exc, key }))
+    )
+  )
+
+  const exceptions = results.filter(r => r.exc)
+  if (exceptions.length > 0) {
+    throw new AggregateError(exceptions.map(e => e.exc))
+  }
+
+  if (isArray(promises)) {
+    return results.map(r => r.result) as T extends Promise<any>[]
+      ? PromiseValues<T>
+      : unknown
+  }
+
+  return results.reduce(
+    (acc, item) => ({
+      ...acc,
+      [item.key!]: item.result
+    }),
+    {} as { [K in keyof T]: Awaited<T[K]> }
+  )
+}
+
 /**
  * Retries the given function the specified number
  * of times.
@@ -205,5 +275,31 @@ export const tryit = <TFunction extends (...args: any) => any>(
     } catch (err) {
       return [err as any, undefined]
     }
+  }
+}
+
+/**
+ * A helper to try an async function that returns undefined
+ * if it fails.
+ *
+ * e.g. const result = await guard(fetchUsers)() ?? [];
+ */
+export const guard = <TFunction extends () => any>(
+  func: TFunction,
+  shouldGuard?: (err: any) => boolean
+): ReturnType<TFunction> extends Promise<any>
+  ? Promise<UnwrapPromisify<ReturnType<TFunction>> | undefined>
+  : ReturnType<TFunction> | undefined => {
+  const _guard = (err: any) => {
+    if (shouldGuard && !shouldGuard(err)) throw err
+    return undefined as any
+  }
+  const isPromise = (result: any): result is ReturnType<TFunction> =>
+    result instanceof Promise
+  try {
+    const result = func()
+    return isPromise(result) ? result.catch(_guard) : result
+  } catch (err) {
+    return _guard(err)
   }
 }

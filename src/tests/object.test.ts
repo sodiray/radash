@@ -401,6 +401,14 @@ describe('object module', () => {
       const result = _.assign(initial, override)
       assert.deepEqual(result, override)
     })
+    test('handles initial have unique value', () => {
+      const result = _.assign({ a: 'x' }, {})
+      assert.deepEqual(result, { a: 'x' })
+    })
+    test('handles override have unique value', () => {
+      const result = _.assign({}, { b: 'y' })
+      assert.deepEqual(result, { b: 'y' })
+    })
   })
 
   describe('keys function', () => {
