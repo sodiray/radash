@@ -301,6 +301,9 @@ describe('object module', () => {
       assert.equal(_.get(null, 'name'), null)
       assert.equal(_.get(undefined, 'name'), null)
     })
+    test('respects undefined as default value', () => {
+      assert.equal(_.get({}, 'a.b.c', undefined), undefined)
+    })
     test('returns specified value or default using path', () => {
       assert.equal(_.get({ age: undefined }, 'age', 22), 22)
       assert.equal(_.get(jay, 'friends[0].age'), 17)
@@ -397,6 +400,14 @@ describe('object module', () => {
     test('correctly assign a with values from b', () => {
       const result = _.assign(initial, override)
       assert.deepEqual(result, override)
+    })
+    test('handles initial have unique value', () => {
+      const result = _.assign({ a: 'x' }, {})
+      assert.deepEqual(result, { a: 'x' })
+    })
+    test('handles override have unique value', () => {
+      const result = _.assign({}, { b: 'y' })
+      assert.deepEqual(result, { b: 'y' })
     })
   })
 
