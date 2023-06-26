@@ -7,8 +7,11 @@ description: Sorts an array of objects alphabetically by a property
 ## Basic usage
 
 Given an array of objects and a callback function used to determine
-the property to use for sorting returns a new array with the objects
-sorted alphabetically.
+the property to use for sorting, return a new array with the objects
+sorted alphabetically. A third, and optional, argument allows you to
+sort in descending order instead of the default ascending order.
+
+For numerical sorting, see the [sort](./sort) function.
 
 ```ts
 import { alphabetical } from 'radash'
