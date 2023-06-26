@@ -185,5 +185,9 @@ describe('string module', () => {
       assert.equal(_.trim('//repos////', '/'), 'repos')
       assert.equal(_.trim('/repos/:owner/:repo/', '/'), 'repos/:owner/:repo')
     })
+
+    test('handles when char to trim is special case in regex', () => {
+      assert.equal(_.trim('_- hello_- ', '_- '), 'hello')
+    })
   })
 })
