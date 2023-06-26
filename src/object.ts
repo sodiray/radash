@@ -243,7 +243,7 @@ export const set = <T extends object, K>(
   value: K
 ): T => {
   if (!initial) return {} as T
-  if (!path || !value) return initial
+  if (!path || value === undefined) return initial
   const segments = path.split(/[\.\[\]]/g).filter(x => !!x.trim())
   const _set = (node: any) => {
     if (segments.length > 1) {
