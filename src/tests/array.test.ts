@@ -176,9 +176,13 @@ describe('array module', () => {
       )
       assert.deepEqual(result, [])
     })
-    test('returns the list for a null new item', () => {
-      const result = _.replace(['a'], null, () => false)
+    test('returns the list for an undefined new item', () => {
+      const result = _.replace(['a'], undefined, () => true)
       assert.deepEqual(result, ['a'])
+    })
+    test('returns replaced item when value is null', () => {
+      const result = _.replace(['a'], null, i => i === 'a')
+      assert.deepEqual(result, [null])
     })
     test('returns replaced item by index', () => {
       const result = _.replace(
