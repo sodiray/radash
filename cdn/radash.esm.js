@@ -697,7 +697,7 @@ const omit = (obj, keys2) => {
     { ...obj }
   );
 };
-const get = (value, path, defaultValue = null) => {
+const get = (value, path, defaultValue) => {
   const segments = path.split(/[.[\]]/g);
   let current = value;
   for (const key of segments) {
@@ -716,7 +716,7 @@ const get = (value, path, defaultValue = null) => {
 const set = (initial, path, value) => {
   if (!initial)
     return {};
-  if (!path || value === void 0)
+  if (!path || !value)
     return initial;
   const segments = path.split(/[.[\]]/g).filter((x) => !!x.trim());
   const _set = (node) => {
