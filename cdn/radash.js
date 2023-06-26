@@ -675,7 +675,7 @@ var radash = (function (exports) {
     if (!obj)
       return {};
     return keys2.reduce((acc, key) => {
-      if (obj.hasOwnProperty(key))
+      if (Object.prototype.hasOwnProperty.call(obj, key))
         acc[key] = obj[key];
       return acc;
     }, {});

@@ -246,6 +246,40 @@ describe('object module', () => {
         a: 'alpha'
       })
     })
+    test('works with proxified objects', () => {
+      const target = {
+        a: 'hello',
+        b: 'everyone'
+      }
+      const handler1 = {
+        get() {
+          return 'world'
+        }
+      }
+      const proxified = new Proxy(target, handler1)
+      const result = _.pick(proxified, ['a'])
+      assert.deepEqual(result, {
+        a: 'world'
+      })
+    })
+    test('works with objects created without the prototype chain of Object e.g. by `Object.create(null)`', () => {
+      const obj = Object.create(null)
+      obj.a = 2
+      obj.b = 4
+      const result = _.pick(obj, ['a'])
+      assert.deepEqual(result, {
+        a: 2
+      })
+    })
+    test('works with objects that have `hasOwnProperty` overwritten', () => {
+      const obj = { a: 2, b: 4 }
+      // @ts-ignore
+      obj.hasOwnProperty = 'OVERWRITTEN'
+      const result = _.pick(obj, ['a'])
+      assert.deepEqual(result, {
+        a: 2
+      })
+    })
   })
 
   describe('omit function', () => {
