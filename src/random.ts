@@ -27,7 +27,7 @@ export const shuffle = <T>(array: readonly T[]): T[] => {
     .map(a => a.value)
 }
 
-export const uid = (length: number, specials = '') => {
+export const uid = (length: number, specials: string = '') => {
   const characters =
     'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789' + specials
   return iterate(

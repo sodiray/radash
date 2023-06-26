@@ -21,7 +21,7 @@ export const camel = (str: string): string => {
   const parts =
     str
       ?.replace(/([A-Z])+/g, capitalize)
-      ?.split(/(?=[A-Z])|[.\-\s_]/)
+      ?.split(/(?=[A-Z])|[\.\-\s_]/)
       .map(x => x.toLowerCase()) ?? []
   if (parts.length === 0) return ''
   if (parts.length === 1) return parts[0]
@@ -41,7 +41,7 @@ export const snake = (str: string): string => {
   const parts =
     str
       ?.replace(/([A-Z])+/g, capitalize)
-      .split(/(?=[A-Z])|[.\-\s_]/)
+      .split(/(?=[A-Z])|[\.\-\s_]/)
       .map(x => x.toLowerCase()) ?? []
   if (parts.length === 0) return ''
   if (parts.length === 1) return parts[0]
@@ -61,7 +61,7 @@ export const dash = (str: string): string => {
   const parts =
     str
       ?.replace(/([A-Z])+/g, capitalize)
-      ?.split(/(?=[A-Z])|[.\-\s_]/)
+      ?.split(/(?=[A-Z])|[\.\-\s_]/)
       .map(x => x.toLowerCase()) ?? []
   if (parts.length === 0) return ''
   if (parts.length === 1) return parts[0]
@@ -77,7 +77,7 @@ export const dash = (str: string): string => {
  * pascal('va va boom') -> 'VaVaBoom'
  */
 export const pascal = (str: string): string => {
-  const parts = str?.split(/[.\-\s_]/).map(x => x.toLowerCase()) ?? []
+  const parts = str?.split(/[\.\-\s_]/).map(x => x.toLowerCase()) ?? []
   if (parts.length === 0) return ''
   return parts.map(str => str.charAt(0).toUpperCase() + str.slice(1)).join('')
 }
@@ -93,7 +93,7 @@ export const pascal = (str: string): string => {
 export const title = (str: string | null | undefined): string => {
   if (!str) return ''
   return str
-    .split(/(?=[A-Z])|[.\-\s_]/)
+    .split(/(?=[A-Z])|[\.\-\s_]/)
     .map(s => s.trim())
     .filter(s => !!s)
     .map(s => capitalize(s.toLowerCase()))
@@ -130,7 +130,7 @@ export const template = (
  * trim('222222__hello__1111111', '12_') // => 'hello'
  * ```
  */
-export const trim = (str: string | null | undefined, charsToTrim = ' ') => {
+export const trim = (str: string | null | undefined, charsToTrim: string = ' ') => {
   if (!str) return ''
   const toTrim = charsToTrim.replace(/[\W]{1}/g, '\\$&')
   const regex = new RegExp(`^[${toTrim}]+|[${toTrim}]+$`, 'g')

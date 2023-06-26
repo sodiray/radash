@@ -295,7 +295,7 @@ describe('typed module', () => {
   describe('isEmpty function', () => {
     class Data {}
     class Person {
-      name = 'ray'
+      name: string = 'ray'
     }
     test('returns true for empty values', () => {
       assert.isTrue(_.isEmpty(null))
@@ -320,16 +320,8 @@ describe('typed module', () => {
       assert.isFalse(_.isEmpty('abc'))
       assert.isFalse(_.isEmpty(String('abc')))
       assert.isFalse(_.isEmpty([1, 2, 3]))
-      assert.isFalse(
-        _.isEmpty(function work() {
-          // do nothing
-        })
-      )
-      assert.isFalse(
-        _.isEmpty(() => {
-          // do nothing
-        })
-      )
+      assert.isFalse(_.isEmpty(function work() {}))
+      assert.isFalse(_.isEmpty(() => {}))
       assert.isFalse(_.isEmpty(Symbol('')))
       assert.isFalse(_.isEmpty(Symbol('hello')))
       const map = new Map()
@@ -350,16 +342,8 @@ describe('typed module', () => {
       assert.isFalse(_.isDate('abc'))
       assert.isFalse(_.isDate(String('abc')))
       assert.isFalse(_.isDate([1, 2, 3]))
-      assert.isFalse(
-        _.isDate(function work() {
-          // do nothing
-        })
-      )
-      assert.isFalse(
-        _.isDate(() => {
-          // do nothing
-        })
-      )
+      assert.isFalse(_.isDate(function work() {}))
+      assert.isFalse(_.isDate(() => {}))
       assert.isFalse(_.isDate(Symbol('')))
       assert.isFalse(_.isDate(Symbol('hello')))
     })
@@ -384,7 +368,7 @@ describe('typed module', () => {
     })
     test('returns false for class instance with properties', () => {
       class Data {
-        name = 'ray'
+        name: string = 'ray'
       }
       const input = new Data()
       const result = _.isSymbol(input)

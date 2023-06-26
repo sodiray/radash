@@ -716,9 +716,9 @@ const get = (value, path, defaultValue) => {
 const set = (initial, path, value) => {
   if (!initial)
     return {};
-  if (!path || !value)
+  if (!path || value === void 0)
     return initial;
-  const segments = path.split(/[.[\]]/g).filter((x) => !!x.trim());
+  const segments = path.split(/[\.\[\]]/g).filter((x) => !!x.trim());
   const _set = (node) => {
     if (segments.length > 1) {
       const key = segments.shift();
@@ -871,7 +871,7 @@ const capitalize = (str) => {
   return lower.substring(0, 1).toUpperCase() + lower.substring(1, lower.length);
 };
 const camel = (str) => {
-  const parts = str?.replace(/([A-Z])+/g, capitalize)?.split(/(?=[A-Z])|[.\-\s_]/).map((x) => x.toLowerCase()) ?? [];
+  const parts = str?.replace(/([A-Z])+/g, capitalize)?.split(/(?=[A-Z])|[\.\-\s_]/).map((x) => x.toLowerCase()) ?? [];
   if (parts.length === 0)
     return "";
   if (parts.length === 1)
@@ -881,7 +881,7 @@ const camel = (str) => {
   });
 };
 const snake = (str) => {
-  const parts = str?.replace(/([A-Z])+/g, capitalize).split(/(?=[A-Z])|[.\-\s_]/).map((x) => x.toLowerCase()) ?? [];
+  const parts = str?.replace(/([A-Z])+/g, capitalize).split(/(?=[A-Z])|[\.\-\s_]/).map((x) => x.toLowerCase()) ?? [];
   if (parts.length === 0)
     return "";
   if (parts.length === 1)
@@ -891,7 +891,7 @@ const snake = (str) => {
   });
 };
 const dash = (str) => {
-  const parts = str?.replace(/([A-Z])+/g, capitalize)?.split(/(?=[A-Z])|[.\-\s_]/).map((x) => x.toLowerCase()) ?? [];
+  const parts = str?.replace(/([A-Z])+/g, capitalize)?.split(/(?=[A-Z])|[\.\-\s_]/).map((x) => x.toLowerCase()) ?? [];
   if (parts.length === 0)
     return "";
   if (parts.length === 1)
@@ -901,7 +901,7 @@ const dash = (str) => {
   });
 };
 const pascal = (str) => {
-  const parts = str?.split(/[.\-\s_]/).map((x) => x.toLowerCase()) ?? [];
+  const parts = str?.split(/[\.\-\s_]/).map((x) => x.toLowerCase()) ?? [];
   if (parts.length === 0)
     return "";
   return parts.map((str2) => str2.charAt(0).toUpperCase() + str2.slice(1)).join("");
@@ -909,7 +909,7 @@ const pascal = (str) => {
 const title = (str) => {
   if (!str)
     return "";
-  return str.split(/(?=[A-Z])|[.\-\s_]/).map((s) => s.trim()).filter((s) => !!s).map((s) => capitalize(s.toLowerCase())).join(" ");
+  return str.split(/(?=[A-Z])|[\.\-\s_]/).map((s) => s.trim()).filter((s) => !!s).map((s) => capitalize(s.toLowerCase())).join(" ");
 };
 const template = (str, data, regex = /\{\{(.+?)\}\}/g) => {
   return Array.from(str.matchAll(regex)).reduce((acc, match) => {

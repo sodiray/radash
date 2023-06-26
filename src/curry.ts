@@ -210,9 +210,7 @@ export const callable = <
   fn: (self: TObj) => TFunc
 ): TObj & TFunc => {
   /* istanbul ignore next */
-  const FUNC = () => {
-    // do nothing
-  }
+  const FUNC = () => {}
   return new Proxy(Object.assign(FUNC, obj), {
     get: (target, key: string) => target[key],
     set: (target, key: string, value: any) => {
