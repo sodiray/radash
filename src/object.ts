@@ -272,19 +272,21 @@ export const assign = <X extends Record<string | symbol | number, any>>(
   initial: X,
   override: X
 ): X => {
-  if (!initial && !override) return {} as X
-  if (!initial) return override as X
-  if (!override) return initial as X
-  return Object.entries(initial).reduce((acc, [key, value]) => {
-    return {
-      ...acc,
-      [key]: (() => {
-        if (isObject(value)) return assign(value, override[key])
-        // if (isArray(value)) return value.map(x => assign)
-        return override[key]
-      })()
-    }
-  }, {} as X)
+  if (!initial || !override) return initial ?? override ?? {}
+
+  return Object.entries({ ...initial, ...override }).reduce(
+    (acc, [key, value]) => {
+      return {
+        ...acc,
+        [key]: (() => {
+          if (isObject(initial[key])) return assign(initial[key], value)
+          // if (isArray(value)) return value.map(x => assign)
+          return value
+        })()
+      }
+    },
+    {} as X
+  )
 }
 
 /**
