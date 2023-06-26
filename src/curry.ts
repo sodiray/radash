@@ -102,6 +102,10 @@ export type DebounceFunction<TArgs extends any[]> = {
    */
   cancel(): void
   /**
+   * Checks if there is any invocation debounced
+   */
+  isPending(): boolean
+  /**
    * Runs the debounced function immediately
    */
   flush(...args: TArgs): void
@@ -136,10 +140,14 @@ export const debounce = <TArgs extends any[]>(
       clearTimeout(timer)
       timer = setTimeout(() => {
         active && func(...args)
+        timer = undefined
       }, delay)
     } else {
       func(...args)
     }
+  }
+  debounced.isPending = () => {
+    return timer !== undefined
   }
   debounced.cancel = () => {
     active = false
