@@ -23,5 +23,7 @@ const fish = {
   ]
 }
 
-const maxAdultSize = get(fish, 'sizes[0].range[1]') // => 18
+get( fish, 'sizes[0].range[1]' ) // 18
+get( fish, 'sizes.0.range.1' ) // 18
+get( fish, 'foo', 'default' ) // 'default'
 ```

@@ -30,6 +30,7 @@ export {
   zipToObject
 } from './array'
 export {
+  all,
   defer,
   guard,
   map,
