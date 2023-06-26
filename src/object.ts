@@ -216,7 +216,7 @@ export const get = <TDefault = unknown>(
   path: string,
   defaultValue?: TDefault
 ): TDefault => {
-  const segments = path.split(/[.[\]]/g)
+  const segments = path.split(/[\.\[\]]/g)
   let current: any = value
   for (const key of segments) {
     if (current === null) return defaultValue as TDefault

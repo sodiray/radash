@@ -694,7 +694,7 @@ var radash = (function (exports) {
     );
   };
   const get = (value, path, defaultValue) => {
-    const segments = path.split(/[.[\]]/g);
+    const segments = path.split(/[\.\[\]]/g);
     let current = value;
     for (const key of segments) {
       if (current === null)
