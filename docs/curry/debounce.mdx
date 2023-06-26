@@ -21,21 +21,21 @@ const makeSearchRequest = (event) => {
 input.addEventListener('change', debounce({ delay: 100 }, makeSearchRequest))
 ```
 
-## Timming
+## Timing
 
 A visual of the debounce behavior when `delay` is `100`. The debounce function
 returned by `debounce` can be called every millisecond but it will only call
 the given callback after `delay` milliseconds have passed.
 
 ```sh
-                Time: 0ms - - - - 100ms - - - - 200ms - - - - 300ms - - - - 400ms - - - - 
+                Time: 0ms - - - - 100ms - - - - 200ms - - - - 300ms - - - - 400ms - - - -
 debounce Invocations: x x x x - - - - - - - - x x x x x x x x x x - - - - - - - - - - - -
   Source Invocations: - - - - - - - - - - x - - - - - - - - - - - - - - - - - x - - - - -
 ```
 
 ### Cancel
 
-The function returned by `debounce` has a `cancel` property, a function that when called will permanently stop the source function from being debounced.
+The function returned by `debounce` has a `cancel` method that when called will permanently stop the source function from being debounced.
 
 ```ts
 const debounced = debounce({ delay: 100 }, api.feed.refresh)
@@ -47,7 +47,7 @@ debounced.cancel()
 
 ### Flush
 
-The function returned by `debounce` has a `flush` property, a function that when called will directly invoke the source function.
+The function returned by `debounce` has a `flush` method that when called will directly invoke the source function.
 
 ```ts
 const debounced = debounce({ delay: 100 }, api.feed.refresh)
@@ -55,5 +55,17 @@ const debounced = debounce({ delay: 100 }, api.feed.refresh)
 // ... sometime later
 
 debounced.flush(event)
+```
+
+### isPending
+
+The function returned by `debounce` has a `isPending` method that when called will return if there is any pending invocation the source function.
+
+```ts
+const debounced = debounce({ delay: 100 }, api.feed.refresh)
+
+// ... sometime later
+
+debounced.isPending()
 ```
 
