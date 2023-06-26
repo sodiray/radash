@@ -720,22 +720,21 @@ const set = (initial, path, value) => {
   return cloned;
 };
 const assign = (initial, override) => {
-  if (!initial && !override)
-    return {};
-  if (!initial)
-    return override;
-  if (!override)
-    return initial;
-  return Object.entries(initial).reduce((acc, [key, value]) => {
-    return {
-      ...acc,
-      [key]: (() => {
-        if (isObject(value))
-          return assign(value, override[key]);
-        return override[key];
-      })()
-    };
-  }, {});
+  if (!initial || !override)
+    return initial ?? override ?? {};
+  return Object.entries({ ...initial, ...override }).reduce(
+    (acc, [key, value]) => {
+      return {
+        ...acc,
+        [key]: (() => {
+          if (isObject(initial[key]))
+            return assign(initial[key], value);
+          return value;
+        })()
+      };
+    },
+    {}
+  );
 };
 const keys = (value) => {
   if (!value)
@@ -906,7 +905,8 @@ const template = (str, data, regex = /\{\{(.+?)\}\}/g) => {
 const trim = (str, charsToTrim = " ") => {
   if (!str)
     return "";
-  const regex = new RegExp(`^[${charsToTrim}]+|[${charsToTrim}]+$`, "g");
+  const toTrim = charsToTrim.replace(/[\W]{1}/g, "\\$&");
+  const regex = new RegExp(`^[${toTrim}]+|[${toTrim}]+$`, "g");
   return str.replace(regex, "");
 };
 
