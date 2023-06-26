@@ -1,9 +1,7 @@
 const isSymbol = (value) => {
   return !!value && value.constructor === Symbol;
 };
-const isArray = (value) => {
-  return !!value && value.constructor === Array;
-};
+const isArray = Array.isArray;
 const isObject = (value) => {
   return !!value && value.constructor === Object;
 };
