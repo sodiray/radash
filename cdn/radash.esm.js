@@ -547,14 +547,19 @@ const debounce = ({ delay }, func) => {
 };
 const throttle = ({ interval }, func) => {
   let ready = true;
+  let timer = void 0;
   const throttled = (...args) => {
     if (!ready)
       return;
     func(...args);
     ready = false;
-    setTimeout(() => {
+    timer = setTimeout(() => {
       ready = true;
+      timer = void 0;
     }, interval);
+  };
+  throttled.isThrottled = () => {
+    return timer !== void 0;
   };
   return throttled;
 };
