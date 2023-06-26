@@ -467,12 +467,14 @@ export const toggle = <T>(
   return [item, ...list]
 }
 
+type Falsy = null | undefined | false | '' | 0 | 0n
+
 /**
  * Given a list returns a new list with
  * only truthy values
  */
-export const sift = <T>(list: readonly T[]): NonNullable<T>[] => {
-  return (list?.filter(x => !!x) as NonNullable<T>[]) ?? []
+export const sift = <T>(list: readonly (T | Falsy)[]): T[] => {
+  return (list?.filter(x => !!x) as T[]) ?? []
 }
 
 /**
