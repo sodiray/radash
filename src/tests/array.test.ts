@@ -391,7 +391,7 @@ describe('array module', () => {
   describe('range function', () => {
     const obj = { name: 'radash' }
     const toList = <T>(gen: Generator<T>): T[] => {
-      const items: T[] = []
+      let items: T[] = []
       for (const item of gen) items.push(item)
       return items
     }

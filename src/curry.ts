@@ -89,10 +89,10 @@ export const memo = <TFunc extends (...args: any) => any>(
 ) => {
   return memoize(
     {},
-    func as any,
+    func,
     options.key ?? null,
     options.ttl ?? null
-  ) as any as TFunc
+  ) as TFunc
 }
 
 export type DebounceFunction<TArgs extends any[]> = {

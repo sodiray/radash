@@ -232,7 +232,7 @@ describe('async module', () => {
       })()
       assert.isUndefined(result)
       assert.isNotNull(err)
-      assert.equal((err as Error).message, 'not good enough')
+      assert.equal(err!.message, 'not good enough')
     })
     test('returns result when no error is thrown', async () => {
       const [err, result] = await _.try(async () => {

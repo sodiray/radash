@@ -345,7 +345,7 @@ var radash = (function (exports) {
   const map = async (array, asyncMapFunc) => {
     if (!array)
       return [];
-    const result = [];
+    let result = [];
     let index = 0;
     for (const value of array) {
       const newValue = await asyncMapFunc(value, index++);
