@@ -1,5 +1,5 @@
 import { fork, list, range, sort } from './array'
-import { isArray } from './typed'
+import { isArray, isPromise } from './typed'
 
 /**
  * An async reduce function. Works like the
@@ -262,13 +262,27 @@ export const sleep = (milliseconds: number) => {
 export const tryit = <Args extends any[], Return>(
   func: (...args: Args) => Return
 ) => {
-  return async (
+  return (
     ...args: Args
-  ): Promise<[Error, undefined] | [undefined, Awaited<Return>]> => {
+  ): Return extends Promise<any>
+    ? Promise<[Error, undefined] | [undefined, Awaited<Return>]>
+    : [Error, undefined] | [undefined, Return] => {
     try {
-      return [undefined, await func(...args)]
+      const result = func(...args)
+      if (isPromise(result)) {
+        return result
+          .then(value => [undefined, value])
+          .catch(err => [err, undefined]) as Return extends Promise<any>
+          ? Promise<[Error, undefined] | [undefined, Awaited<Return>]>
+          : [Error, undefined] | [undefined, Return]
+      }
+      return [undefined, result] as Return extends Promise<any>
+        ? Promise<[Error, undefined] | [undefined, Awaited<Return>]>
+        : [Error, undefined] | [undefined, Return]
     } catch (err) {
-      return [err as any, undefined]
+      return [err as any, undefined] as Return extends Promise<any>
+        ? Promise<[Error, undefined] | [undefined, Awaited<Return>]>
+        : [Error, undefined] | [undefined, Return]
     }
   }
 }

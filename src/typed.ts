@@ -52,6 +52,18 @@ export const isDate = (value: any): value is Date => {
   return Object.prototype.toString.call(value) === '[object Date]'
 }
 
+/**
+ * This is really a _best guess_ promise checking. You
+ * should probably use Promise.resolve(value) to be 100%
+ * sure you're handling it correctly.
+ */
+export const isPromise = (value: any): value is Promise<any> => {
+  if (!value) return false
+  if (!value.then) return false
+  if (!isFunction(value.then)) return false
+  return true
+}
+
 export const isEmpty = (value: any) => {
   if (value === true || value === false) return true
   if (value === null || value === undefined) return true

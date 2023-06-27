@@ -349,6 +349,26 @@ describe('typed module', () => {
     })
   })
 
+  describe('isPromise function', () => {
+    test('return true for Promise values', () => {
+      assert.isTrue(_.isPromise(new Promise(res => res(0))))
+      assert.isTrue(_.isPromise(new Promise(res => res(''))))
+      assert.isTrue(_.isPromise((async () => {})()))
+    })
+    test('return false for non-Date values', () => {
+      assert.isFalse(_.isPromise(22))
+      assert.isFalse(_.isPromise({ name: 'x' }))
+      assert.isFalse(_.isPromise('abc'))
+      assert.isFalse(_.isPromise(String('abc')))
+      assert.isFalse(_.isPromise([1, 2, 3]))
+      assert.isFalse(_.isPromise(function work() {}))
+      assert.isFalse(_.isPromise(() => {}))
+      assert.isFalse(_.isPromise(Symbol('')))
+      assert.isFalse(_.isPromise(Symbol('hello')))
+      assert.isFalse(_.isPromise({ then: 2 }))
+    })
+  })
+
   describe('isSymbol function', () => {
     test('returns false for null', () => {
       const input = null
