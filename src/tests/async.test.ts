@@ -521,22 +521,22 @@ describe('async module', () => {
 
   describe('_.all', () => {
     const promise = {
-      pass: <T>(value: T) => new Promise<T>(res => res(value)),
-      fail: (err: any) => new Promise((res, rej) => rej(err))
+      resolve: <T>(value: T) => new Promise<T>(res => res(value)),
+      reject: (err: any) => new Promise((res, rej) => rej(err))
     }
     it('returns array with values in correct order when given array', async () => {
       const result = await _.all([
-        promise.pass(22),
-        promise.pass('hello'),
-        promise.pass({ name: 'ray' })
+        promise.resolve(22),
+        promise.resolve('hello'),
+        promise.resolve({ name: 'ray' })
       ])
       assert.deepEqual(result, [22, 'hello', { name: 'ray' }])
     })
     it('returns object with values in correct keys when given object', async () => {
       const result = await _.all({
-        num: promise.pass(22),
-        str: promise.pass('hello'),
-        obj: promise.pass({ name: 'ray' })
+        num: promise.resolve(22),
+        str: promise.resolve('hello'),
+        obj: promise.resolve({ name: 'ray' })
       })
       assert.deepEqual(result, {
         num: 22,
@@ -547,9 +547,9 @@ describe('async module', () => {
     it('throws aggregate error when a single promise fails (in object mode)', async () => {
       try {
         await _.all({
-          num: promise.pass(22),
-          str: promise.pass('hello'),
-          err: promise.fail(new Error('broken'))
+          num: promise.resolve(22),
+          str: promise.resolve('hello'),
+          err: promise.reject(new Error('broken'))
         })
       } catch (e: any) {
         const err = e as AggregateError
@@ -562,9 +562,9 @@ describe('async module', () => {
     it('throws aggregate error when a single promise fails (in array mode)', async () => {
       try {
         await _.all([
-          promise.pass(22),
-          promise.pass('hello'),
-          promise.fail(new Error('broken'))
+          promise.resolve(22),
+          promise.resolve('hello'),
+          promise.reject(new Error('broken'))
         ])
       } catch (e: any) {
         const err = e as AggregateError
