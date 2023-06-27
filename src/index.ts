@@ -96,6 +96,7 @@ export {
   isNumber,
   isObject,
   isPrimitive,
+  isPromise,
   isString,
   isSymbol
 } from './typed'
