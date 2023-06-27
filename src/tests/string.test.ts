@@ -41,6 +41,16 @@ describe('string module', () => {
       const result = _.snake('hello-world')
       assert.equal(result, 'hello_world')
     })
+    test('splits numbers that are next to letters', () => {
+      const result = _.snake('hello-world12_19-bye')
+      assert.equal(result, 'hello_world_12_19_bye')
+    })
+    test('does not split numbers when flag is set to false', () => {
+      const result = _.snake('hello-world12_19-bye', {
+        splitOnNumber: false
+      })
+      assert.equal(result, 'hello_world12_19_bye')
+    })
     test('returns single word', () => {
       const result = _.snake('hello')
       assert.equal(result, 'hello')
