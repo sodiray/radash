@@ -162,6 +162,9 @@ type PromiseValues<T extends Promise<any>[]> = {
  *   slack.customerSuccessChannel.sendMessage(...)
  * ])
  */
+export async function all<T extends [Promise<any>, ...Promise<any>[]]>(
+  promises: T
+): Promise<PromiseValues<T>>
 export async function all<T extends Promise<any>[]>(
   promises: T
 ): Promise<PromiseValues<T>>
