@@ -30,6 +30,15 @@ const isNumber = (value) => {
 const isDate = (value) => {
   return Object.prototype.toString.call(value) === "[object Date]";
 };
+const isPromise = (value) => {
+  if (!value)
+    return false;
+  if (!value.then)
+    return false;
+  if (!isFunction(value.then))
+    return false;
+  return true;
+};
 const isEmpty = (value) => {
   if (value === true || value === false)
     return true;
@@ -144,7 +153,7 @@ const counting = (list2, identity) => {
 const replace = (list2, newItem, match) => {
   if (!list2)
     return [];
-  if (!newItem)
+  if (newItem === void 0)
     return [...list2];
   for (let idx = 0; idx < list2.length; idx++) {
     const item = list2[idx];
@@ -174,14 +183,14 @@ const select = (array, mapper, condition) => {
     return acc;
   }, []);
 };
-const max = (array, getter) => {
-  const get = getter ? getter : (v) => v;
+function max(array, getter) {
+  const get = getter ?? ((v) => v);
   return boil(array, (a, b) => get(a) > get(b) ? a : b);
-};
-const min = (array, getter) => {
-  const get = getter ? getter : (v) => v;
+}
+function min(array, getter) {
+  const get = getter ?? ((v) => v);
   return boil(array, (a, b) => get(a) < get(b) ? a : b);
-};
+}
 const cluster = (list2, size = 2) => {
   const clusterCount = Math.ceil(list2.length / size);
   return new Array(clusterCount).fill(null).map((_c, i) => {
@@ -453,9 +462,13 @@ const sleep = (milliseconds) => {
   return new Promise((res) => setTimeout(res, milliseconds));
 };
 const tryit = (func) => {
-  return async (...args) => {
+  return (...args) => {
     try {
-      return [void 0, await func(...args)];
+      const result = func(...args);
+      if (isPromise(result)) {
+        return result.then((value) => [void 0, value]).catch((err) => [err, void 0]);
+      }
+      return [void 0, result];
     } catch (err) {
       return [err, void 0];
     }
@@ -467,10 +480,10 @@ const guard = (func, shouldGuard) => {
       throw err;
     return void 0;
   };
-  const isPromise = (result) => result instanceof Promise;
+  const isPromise2 = (result) => result instanceof Promise;
   try {
     const result = func();
-    return isPromise(result) ? result.catch(_guard) : result;
+    return isPromise2(result) ? result.catch(_guard) : result;
   } catch (err) {
     return _guard(err);
   }
@@ -868,15 +881,16 @@ const camel = (str) => {
     return `${acc}${part.charAt(0).toUpperCase()}${part.slice(1)}`;
   });
 };
-const snake = (str) => {
+const snake = (str, options) => {
   const parts = str?.replace(/([A-Z])+/g, capitalize).split(/(?=[A-Z])|[\.\-\s_]/).map((x) => x.toLowerCase()) ?? [];
   if (parts.length === 0)
     return "";
   if (parts.length === 1)
     return parts[0];
-  return parts.reduce((acc, part) => {
+  const result = parts.reduce((acc, part) => {
     return `${acc}_${part.toLowerCase()}`;
   });
+  return options?.splitOnNumber === false ? result : result.replace(/([A-Za-z]{1}[0-9]{1})/, (val) => `${val[0]}_${val[1]}`);
 };
 const dash = (str) => {
   const parts = str?.replace(/([A-Z])+/g, capitalize)?.split(/(?=[A-Z])|[\.\-\s_]/).map((x) => x.toLowerCase()) ?? [];
@@ -912,4 +926,4 @@ const trim = (str, charsToTrim = " ") => {
   return str.replace(regex, "");
 };
 
-export { all, alphabetical, assign, boil, callable, camel, capitalize, chain, clone, cluster, compose, construct, counting, crush, dash, debounce, defer, diff, draw, first, flat, fork, get, group, guard, intersects, invert, isArray, isDate, isEmpty, isEqual, isFloat, isFunction, isInt, isNumber, isObject, isPrimitive, isString, isSymbol, iterate, keys, last, list, listify, lowerize, map, mapEntries, mapKeys, mapValues, max, memo, merge, min, objectify, omit, parallel, partial, partob, pascal, pick, proxied, random, range, reduce, replace, replaceOrAppend, retry, select, series, set, shake, shift, shuffle, sift, sleep, snake, sort, sum, template, throttle, title, toFloat, toInt, toggle, trim, tryit as try, tryit, uid, unique, upperize, zip, zipToObject };
+export { all, alphabetical, assign, boil, callable, camel, capitalize, chain, clone, cluster, compose, construct, counting, crush, dash, debounce, defer, diff, draw, first, flat, fork, get, group, guard, intersects, invert, isArray, isDate, isEmpty, isEqual, isFloat, isFunction, isInt, isNumber, isObject, isPrimitive, isPromise, isString, isSymbol, iterate, keys, last, list, listify, lowerize, map, mapEntries, mapKeys, mapValues, max, memo, merge, min, objectify, omit, parallel, partial, partob, pascal, pick, proxied, random, range, reduce, replace, replaceOrAppend, retry, select, series, set, shake, shift, shuffle, sift, sleep, snake, sort, sum, template, throttle, title, toFloat, toInt, toggle, trim, tryit as try, tryit, uid, unique, upperize, zip, zipToObject };

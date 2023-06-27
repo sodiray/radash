@@ -1,0 +1,17 @@
+---
+title: isPromise
+description: 'Determine if a value is a Promise'
+group: Typed
+---
+
+## Basic usage
+
+Pass in a value and get a boolean telling you if the value is a Promise. This function is not _"bullet proof"_ because determining if a value is a Promise in javascript is not _"bullet proof"_. The standard/recommended method is to use `Promise.resolve` to essentially cast any value, promise or not, into an awaited value. However, this may do in a pinch.
+
+```ts
+import { isPromise } from 'radash'
+
+isPromise('hello') // => false
+isPromise(['hello']) // => false
+isPromise(new Promise(res => res())) // => true
+```
