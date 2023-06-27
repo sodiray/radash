@@ -522,7 +522,7 @@ describe('async module', () => {
   describe('_.all', () => {
     const promise = {
       resolve: <T>(value: T) => new Promise<T>(res => res(value)),
-      throw: (err: any) => new Promise((res, rej) => rej(err))
+      reject: (err: any) => new Promise((res, rej) => rej(err))
     }
     it('returns array with values in correct order when given array', async () => {
       const result = await _.all([
@@ -549,7 +549,7 @@ describe('async module', () => {
         await _.all({
           num: promise.resolve(22),
           str: promise.resolve('hello'),
-          err: promise.throw(new Error('broken'))
+          err: promise.reject(new Error('broken'))
         })
       } catch (e: any) {
         const err = e as AggregateError
@@ -564,7 +564,7 @@ describe('async module', () => {
         await _.all([
           promise.resolve(22),
           promise.resolve('hello'),
-          promise.throw(new Error('broken'))
+          promise.reject(new Error('broken'))
         ])
       } catch (e: any) {
         const err = e as AggregateError
