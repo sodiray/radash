@@ -232,26 +232,42 @@ export const select = <T, K>(
 /**
  * Max gets the greatest value from a list
  *
- * Ex. max([{ num: 1 }, { num: 2 }], x => x.num) == 2
+ * @example
+ * max([ 2, 3, 5]) == 5
+ * max([{ num: 1 }, { num: 2 }], x => x.num) == { num: 2 }
  */
-export const max = <T extends number | object>(
+export function max(array: readonly [number, ...number[]]): number
+export function max(array: readonly number[]): number | null
+export function max<T>(
+  array: readonly T[],
+  getter: (item: T) => number
+): T | null
+export function max<T>(
   array: readonly T[],
   getter?: (item: T) => number
-) => {
-  const get = getter ? getter : (v: any) => v
+): T | null {
+  const get = getter ?? ((v: any) => v)
   return boil(array, (a, b) => (get(a) > get(b) ? a : b))
 }
 
 /**
  * Min gets the smallest value from a list
  *
- * Ex. max([{ num: 1 }, { num: 2 }], x => x.num) == 1
+ * @example
+ * min([1, 2, 3, 4]) == 1
+ * min([{ num: 1 }, { num: 2 }], x => x.num) == { num: 1 }
  */
-export const min = <T extends number | object>(
+export function min(array: readonly [number, ...number[]]): number
+export function min(array: readonly number[]): number | null
+export function min<T>(
+  array: readonly T[],
+  getter: (item: T) => number
+): T | null
+export function min<T>(
   array: readonly T[],
   getter?: (item: T) => number
-) => {
-  const get = getter ? getter : (v: any) => v
+): T | null {
+  const get = getter ?? ((v: any) => v)
   return boil(array, (a, b) => (get(a) < get(b) ? a : b))
 }
 
