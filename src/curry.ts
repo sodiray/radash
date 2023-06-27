@@ -87,12 +87,7 @@ export const memo = <TFunc extends (...args: any) => any>(
     ttl?: number
   } = {}
 ) => {
-  return memoize(
-    {},
-    func,
-    options.key ?? null,
-    options.ttl ?? null
-  ) as TFunc
+  return memoize({}, func, options.key ?? null, options.ttl ?? null) as TFunc
 }
 
 export type DebounceFunction<TArgs extends any[]> = {
