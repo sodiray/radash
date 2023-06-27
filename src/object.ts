@@ -137,7 +137,7 @@ export const clone = <T>(obj: T): T => {
 
   // Access the constructor and create a new object.
   // This method can create an array as well.
-  const newObj = new ((obj as Object).constructor as { new (): T })()
+  const newObj = new ((obj as object).constructor as { new (): T })()
 
   // Assign the props.
   Object.getOwnPropertyNames(obj).forEach(prop => {

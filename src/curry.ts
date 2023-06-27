@@ -80,19 +80,14 @@ const memoize = <T>(
  * is given previously computed values will be checked
  * for expiration before being returned.
  */
-export const memo = <TFunc extends Function>(
+export const memo = <TFunc extends (...args: any) => any>(
   func: TFunc,
   options: {
     key?: Func<any, string>
     ttl?: number
   } = {}
 ) => {
-  return memoize(
-    {},
-    func as any,
-    options.key ?? null,
-    options.ttl ?? null
-  ) as any as TFunc
+  return memoize({}, func, options.key ?? null, options.ttl ?? null) as TFunc
 }
 
 export type DebounceFunction<TArgs extends any[]> = {
@@ -204,7 +199,7 @@ export const throttle = <TArgs extends any[]>(
 export const callable = <
   TValue,
   TObj extends Record<string | number | symbol, TValue>,
-  TFunc extends Function
+  TFunc extends (...args: any) => any
 >(
   obj: TObj,
   fn: (self: TObj) => TFunc

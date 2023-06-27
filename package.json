@@ -12,7 +12,7 @@
   },
   "sideEffects": false,
   "files": [
-    "dist/**/*"
+    "dist"
   ],
   "repository": {
     "url": "https://github.com/rayepps/radash"

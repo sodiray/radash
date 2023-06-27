@@ -522,12 +522,7 @@ var radash = (function (exports) {
     };
   };
   const memo = (func, options = {}) => {
-    return memoize(
-      {},
-      func,
-      options.key ?? null,
-      options.ttl ?? null
-    );
+    return memoize({}, func, options.key ?? null, options.ttl ?? null);
   };
   const debounce = ({ delay }, func) => {
     let timer = void 0;

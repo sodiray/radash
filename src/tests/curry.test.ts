@@ -1,6 +1,6 @@
 import { assert } from 'chai'
 import * as _ from '..'
-import { DebounceFunction } from '../curry'
+import type { DebounceFunction } from '../curry'
 
 describe('curry module', () => {
   describe('compose function', () => {
