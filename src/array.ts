@@ -236,10 +236,8 @@ export const select = <T, K>(
  * max([ 2, 3, 5]) == 5
  * max([{ num: 1 }, { num: 2 }], x => x.num) == { num: 2 }
  */
-export function max<T extends number>(
-  array: readonly T[],
-  getter?: (item: T) => number
-): T | null
+export function max(array: readonly [number, ...number[]]): number
+export function max(array: readonly number[]): number | null
 export function max<T>(
   array: readonly T[],
   getter: (item: T) => number
@@ -259,10 +257,8 @@ export function max<T>(
  * min([1, 2, 3, 4]) == 1
  * min([{ num: 1 }, { num: 2 }], x => x.num) == { num: 1 }
  */
-export function min<T extends number>(
-  array: readonly T[],
-  getter?: (item: T) => number
-): T | null
+export function min(array: readonly [number, ...number[]]): number
+export function min(array: readonly number[]): number | null
 export function min<T>(
   array: readonly T[],
   getter: (item: T) => number
