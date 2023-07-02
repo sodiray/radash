@@ -321,11 +321,24 @@ describe('async module', () => {
       })
       assert.deepEqual(Math.max(...tracking), 3)
     })
+    test('returns item index in the async function', async () => {
+      const [errors, results] = await _.try(async () => {
+        return _.parallel(5, _.list(1, 7), async (num, index) => {
+          await _.sleep(index === 5 ? 1500 : 1000)
+          return `q_${index}`
+        })
+      })()
+      assert.isUndefined(errors)
+      assert.deepEqual(
+          new Set(results),
+          new Set(['q_0', 'q_1', 'q_2', 'q_3', 'q_4', 'q_6', 'q_5'])
+      )
+    })
     test('returns queue index in the async function', async () => {
       const [errors, results] = await _.try(async () => {
-        return _.parallel(5, _.list(1, 5), async (num, index) => {
+        return _.parallel(5, _.list(1, 5), async (num, index, queueIndex) => {
           await _.sleep(1000)
-          return `q_${index}`
+          return `q_${queueIndex}`
         })
       })()
       assert.isUndefined(errors)

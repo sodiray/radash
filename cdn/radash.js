@@ -392,7 +392,7 @@ var radash = (function (exports) {
         const next = work.pop();
         if (!next)
           return res(results2);
-        const [error, result] = await tryit(func)(next.item, queueIndex);
+        const [error, result] = await tryit(func)(next.item, next.index, queueIndex);
         results2.push({
           error,
           result,

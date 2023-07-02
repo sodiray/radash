@@ -11,16 +11,19 @@ description: Run many async function in parallel
 
 Like `_.map` but built specifically to run the async callback functions
 in parallel. The first argument is a limit of how many functions should
-be allowed to run at once. Returns an array of results.
+be allowed to run at once. Async callback functions are supplied with three arguments.
+The first is the array item. The second is the index of the item in the array.
+And the third is the index of the queue in which the item is being processed.
+Returns an array of results.
 
 ```ts
 import { parallel } from 'radash'
 
 const userIds = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
-// Will run the find user async function 3 at a time
+// Will run the find user async function 3 times at maximum at any time
 // starting another request when one of the 3 is freed
-const users = await parallel(3, userIds, async (userId) => {
+const users = await parallel(3, userIds, async (userId, index, queueIndex) => {
   return await api.users.find(userId)
 })
 ```
@@ -28,7 +31,7 @@ const users = await parallel(3, userIds, async (userId) => {
 ## Errors
 
 When all work is complete parallel will check for errors. If any
-occurred they will all be thrown in a single `AggregateError` that 
+occurred they will all be thrown in a single `AggregateError` that
 has an `errors` property that is all the errors that were thrown.
 
 ```ts
