@@ -777,4 +777,60 @@ describe('array module', () => {
       assert.deepEqual(result, ['b', 'a'])
     })
   })
+
+  describe('collect function', () => {
+    test('should return all defined transformations', () => {
+      const arr = [{ num: 3 }, { num: -4 }, { num: -5 }]
+      const res = _.collect(arr, el => (el.num < 0 ? el.num * -1 : undefined))
+      assert.deepEqual(res, [4, 5])
+    })
+
+    test('should return empty list when no transformations defined', () => {
+      const arr = [{ num: 3 }, { num: -4 }, { num: -5 }]
+      const res = _.collect(arr, el => (el.num > 999 ? el.num * -1 : undefined))
+      assert.deepEqual(res, [])
+    })
+
+    test('should return falsy transformations other than undefined', () => {
+      const arr = [
+        { val: null },
+        { val: '' },
+        { val: 0 },
+        { val: false },
+        { val: undefined }
+      ]
+      const res = _.collect(arr, el => el.val)
+      assert.deepEqual(res, [null, '', 0, false])
+    })
+  })
+
+  describe('collectFirst function', () => {
+    test('should return the first defined transformation', () => {
+      const arr = [{ num: 3 }, { num: -4 }, { num: -5 }]
+      const res = _.collectFirst(arr, el =>
+        el.num < 0 ? el.num * -1 : undefined
+      )
+      assert.equal(res, 4)
+    })
+
+    test('shoudl return undefined when no transformations are defined', () => {
+      const arr = [{ num: 3 }, { num: -4 }, { num: -5 }]
+      const res = _.collectFirst(arr, el =>
+        el.num > 999 ? el.num * -1 : undefined
+      )
+      assert.isUndefined(res)
+    })
+
+    test('should return a falsy transformation other than undefined', () => {
+      const arr = [
+        { val: undefined },
+        { val: null },
+        { val: '' },
+        { val: 0 },
+        { val: false }
+      ]
+      const res = _.collectFirst(arr, el => el.val)
+      assert.isNull(res)
+    })
+  })
 })

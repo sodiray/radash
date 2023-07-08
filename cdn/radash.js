@@ -338,6 +338,29 @@ var radash = (function (exports) {
       return arr;
     return [...arr.slice(-shiftNumber, arr.length), ...arr.slice(0, -shiftNumber)];
   }
+  function collect(arr, tx) {
+    const res = [];
+    let idx = 0;
+    for (const el of arr) {
+      const transformed = tx(el, idx);
+      if (transformed !== void 0) {
+        res.push(transformed);
+      }
+      idx += 1;
+    }
+    return res;
+  }
+  function collectFirst(arr, tx) {
+    let idx = 0;
+    for (const el of arr) {
+      const transformed = tx(el, idx);
+      if (transformed !== void 0) {
+        return transformed;
+      }
+      idx += 1;
+    }
+    return void 0;
+  }
 
   const reduce = async (array, asyncReducer, initValue) => {
     const initProvided = initValue !== void 0;
@@ -939,6 +962,8 @@ var radash = (function (exports) {
   exports.chain = chain;
   exports.clone = clone;
   exports.cluster = cluster;
+  exports.collect = collect;
+  exports.collectFirst = collectFirst;
   exports.compose = compose;
   exports.construct = construct;
   exports.counting = counting;

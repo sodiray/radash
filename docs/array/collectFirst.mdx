@@ -1,0 +1,33 @@
+---
+title: collectFirst
+group: 'Array'
+description: Map+find operation where the first defined transformation is returned
+---
+
+## Basic usage
+
+Given an array and a transform function, immediately returns the first
+transformed element that does not evaluate to undefined.
+
+```ts
+import { collectFirst } from 'radash'
+
+const gods = [
+  {
+    name: 'Ra',
+    culture: 'egypt'
+  },
+  {
+    name: 'Zeus',
+    culture: 'greek'
+  },
+  {
+    name: 'Loki',
+    culture: 'greek'
+  }
+]
+
+collectFirst(gods, g =>
+  g.culture === 'greek' ? g.name.toUpperCase() : undefined
+) // => 'ZEUS'
+```

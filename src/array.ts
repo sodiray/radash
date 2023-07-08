@@ -548,3 +548,50 @@ export function shift<T>(arr: Array<T>, n: number) {
 
   return [...arr.slice(-shiftNumber, arr.length), ...arr.slice(0, -shiftNumber)]
 }
+
+/**
+ * A transform function for collect()/collectFirst() operations.
+ */
+type CollectTxFunction<T, R> = (el: T, idx: number) => R | undefined
+
+/**
+ * Transform and return every element for which the tx function returns a defined value.
+ *
+ * @param arr the array of inputs to process
+ * @param tx the transform function
+ * @returns a new array containing all transformed elements which are not undefined.
+ */
+export function collect<T, R>(arr: T[], tx: CollectTxFunction<T, R>): R[] {
+  const res: R[] = []
+  let idx = 0
+  for (const el of arr) {
+    const transformed = tx(el, idx)
+    if (transformed !== undefined) {
+      res.push(transformed)
+    }
+    idx += 1
+  }
+  return res
+}
+
+/**
+ * Transform and immediately return the first element for which the tx function returns a defined value.
+ *
+ * @param arr the array of inputs to process
+ * @param tx the transform function
+ * @returns the first transformed element which is not undefined; else, undefined
+ */
+export function collectFirst<T, R>(
+  arr: T[],
+  tx: CollectTxFunction<T, R>
+): R | undefined {
+  let idx = 0
+  for (const el of arr) {
+    const transformed = tx(el, idx)
+    if (transformed !== undefined) {
+      return transformed
+    }
+    idx += 1
+  }
+  return undefined
+}
