@@ -1,0 +1,31 @@
+---
+title: collect
+group: 'Array'
+description: Map+filter operation where undefined transformations are filtered out
+---
+
+## Basic usage
+
+Given an array and a transform function, returns a new array
+with each transformed element that does not evaluate to undefined.
+
+```ts
+import { collect } from 'radash'
+
+const gods = [
+  {
+    name: 'Ra',
+    culture: 'egypt'
+  },
+  {
+    name: 'Zeus',
+    culture: 'greek'
+  },
+  {
+    name: 'Loki',
+    culture: 'greek'
+  }
+]
+
+collect(gods, g => (g.culture === 'greek' ? g.name.toUpperCase() : undefined)) // => ['ZEUS', 'LOKI']
+```

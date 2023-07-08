@@ -335,6 +335,29 @@ function shift(arr, n) {
     return arr;
   return [...arr.slice(-shiftNumber, arr.length), ...arr.slice(0, -shiftNumber)];
 }
+function collect(arr, tx) {
+  const res = [];
+  let idx = 0;
+  for (const el of arr) {
+    const transformed = tx(el, idx);
+    if (transformed !== void 0) {
+      res.push(transformed);
+    }
+    idx += 1;
+  }
+  return res;
+}
+function collectFirst(arr, tx) {
+  let idx = 0;
+  for (const el of arr) {
+    const transformed = tx(el, idx);
+    if (transformed !== void 0) {
+      return transformed;
+    }
+    idx += 1;
+  }
+  return void 0;
+}
 
 const reduce = async (array, asyncReducer, initValue) => {
   const initProvided = initValue !== void 0;
@@ -926,4 +949,4 @@ const trim = (str, charsToTrim = " ") => {
   return str.replace(regex, "");
 };
 
-export { all, alphabetical, assign, boil, callable, camel, capitalize, chain, clone, cluster, compose, construct, counting, crush, dash, debounce, defer, diff, draw, first, flat, fork, get, group, guard, intersects, invert, isArray, isDate, isEmpty, isEqual, isFloat, isFunction, isInt, isNumber, isObject, isPrimitive, isPromise, isString, isSymbol, iterate, keys, last, list, listify, lowerize, map, mapEntries, mapKeys, mapValues, max, memo, merge, min, objectify, omit, parallel, partial, partob, pascal, pick, proxied, random, range, reduce, replace, replaceOrAppend, retry, select, series, set, shake, shift, shuffle, sift, sleep, snake, sort, sum, template, throttle, title, toFloat, toInt, toggle, trim, tryit as try, tryit, uid, unique, upperize, zip, zipToObject };
+export { all, alphabetical, assign, boil, callable, camel, capitalize, chain, clone, cluster, collect, collectFirst, compose, construct, counting, crush, dash, debounce, defer, diff, draw, first, flat, fork, get, group, guard, intersects, invert, isArray, isDate, isEmpty, isEqual, isFloat, isFunction, isInt, isNumber, isObject, isPrimitive, isPromise, isString, isSymbol, iterate, keys, last, list, listify, lowerize, map, mapEntries, mapKeys, mapValues, max, memo, merge, min, objectify, omit, parallel, partial, partob, pascal, pick, proxied, random, range, reduce, replace, replaceOrAppend, retry, select, series, set, shake, shift, shuffle, sift, sleep, snake, sort, sum, template, throttle, title, toFloat, toInt, toggle, trim, tryit as try, tryit, uid, unique, upperize, zip, zipToObject };
