@@ -26,14 +26,14 @@ export const series = <T>(
   )
   /**
    * Given two values in the series, returns the
-   * value that occurs later in the series
+   * value that occurs earlier in the series
    */
   const min = (a: T, b: T): T => {
     return indexesByKey[toKey(a)] < indexesByKey[toKey(b)] ? a : b
   }
   /**
    * Given two values in the series, returns the
-   * value that occurs earlier in the series
+   * value that occurs later in the series
    */
   const max = (a: T, b: T): T => {
     return indexesByKey[toKey(a)] > indexesByKey[toKey(b)] ? a : b
