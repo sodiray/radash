@@ -200,12 +200,12 @@ const cluster = (list2, size = 2) => {
 const unique = (array, toKey) => {
   const valueMap = array.reduce((acc, item) => {
     const key = toKey ? toKey(item) : item;
-    if (acc[key])
+    if (acc.get(key))
       return acc;
-    acc[key] = item;
+    acc.set(key, item);
     return acc;
-  }, {});
-  return Object.values(valueMap);
+  }, /* @__PURE__ */ new Map());
+  return Array.from(valueMap.values());
 };
 function* range(startOrLength, end, valueOrMapper = (i) => i, step = 1) {
   const mapper = isFunction(valueOrMapper) ? valueOrMapper : () => valueOrMapper;
