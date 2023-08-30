@@ -390,6 +390,27 @@ describe('array module', () => {
       assert.equal(c.id, 'c')
       assert.equal(c.word, 'yolo')
     })
+    test('correctly handles non string, number or symbol values', () => {
+      const list = [
+        null,
+        null,
+        true,
+        true,
+        "true",
+        false,
+        { id: 'a', word: 'hello' },
+        { id: 'a', word: 'hello' },
+      ]
+      const result = _.unique(list)
+      assert.deepEqual(result, [
+        null,
+        true,
+        "true",
+        false,
+        { id: 'a', word: 'hello' },
+        { id: 'a', word: 'hello' },
+      ])
+    })
   })
 
   describe('range function', () => {
