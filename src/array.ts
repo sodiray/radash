@@ -299,7 +299,7 @@ export const unique = <T, K>(
     acc.set(key, item)
     return acc
   }, new Map())
-  return Array.from(valueMap.values());
+  return Array.from(valueMap.values())
 }
 
 /**

@@ -396,19 +396,19 @@ describe('array module', () => {
         null,
         true,
         true,
-        "true",
+        'true',
         false,
         { id: 'a', word: 'hello' },
-        { id: 'a', word: 'hello' },
+        { id: 'a', word: 'hello' }
       ]
       const result = _.unique(list)
       assert.deepEqual(result, [
         null,
         true,
-        "true",
+        'true',
         false,
         { id: 'a', word: 'hello' },
-        { id: 'a', word: 'hello' },
+        { id: 'a', word: 'hello' }
       ])
     })
   })
