@@ -26,7 +26,7 @@
     "build": "yarn tsc --noEmit && yarn rollup -c",
     "docs:install": "yarn && yarn add --dev next@12.3.4",
     "docs:build": "chiller build --ci",
-    "lint": "tslint -p tsconfig.json",
+    "lint": "eslint --ext .ts src/",
     "format": "prettier --write \"src/**/*.ts\"",
     "format:check": "prettier --check \"src/**/*.ts\" --ignore-unknown"
   },
@@ -34,9 +34,15 @@
     "@rollup/plugin-typescript": "^10.0.1",
     "@types/chai": "^4.3.3",
     "@types/jest": "^28.1.1",
+    "@typescript-eslint/eslint-plugin": "^5.62.0",
+    "@typescript-eslint/parser": "^5.62.0",
     "chai": "^4.3.6",
     "chiller": "^1.0.0-rc.30",
     "esbuild": "^0.16.3",
+    "eslint": "^8.52.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-security": "^1.7.1",
+    "eslint-plugin-sonarjs": "^0.22.0",
     "jest": "^28.1.3",
     "prettier": "^2.7.1",
     "prettier-plugin-organize-imports": "^3.0.3",
@@ -45,7 +51,6 @@
     "rollup-plugin-esbuild": "^5.0.0",
     "rollup-plugin-node-externals": "^5.0.2",
     "ts-jest": "^28.0.8",
-    "tslint": "^6.0.0",
     "typescript": "^4.8.4"
   },
   "engines": {
