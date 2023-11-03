@@ -138,7 +138,7 @@ export const sort = <T>(
   if (!array) return []
   const asc = (a: T, b: T) => getter(a) - getter(b)
   const dsc = (a: T, b: T) => getter(b) - getter(a)
-  return array.slice().sort(desc === true ? dsc : asc)
+  return array.slice().sort(desc ? dsc : asc)
 }
 
 /**
@@ -276,7 +276,7 @@ export function min<T>(
  * given a list of 10 items and a size of 2, it will return 5
  * lists with 2 items each
  */
-export const cluster = <T>(list: readonly T[], size: number = 2): T[][] => {
+export const cluster = <T>(list: readonly T[], size = 2): T[][] => {
   const clusterCount = Math.ceil(list.length / size)
   return new Array(clusterCount).fill(null).map((_c: null, i: number) => {
     return list.slice(i * size, i * size + size)
@@ -320,7 +320,7 @@ export function* range<T = number>(
   startOrLength: number,
   end?: number,
   valueOrMapper: T | ((i: number) => T) = i => i as T,
-  step: number = 1
+  step = 1
 ): Generator<T> {
   const mapper = isFunction(valueOrMapper) ? valueOrMapper : () => valueOrMapper
   const start = end ? startOrLength : 0

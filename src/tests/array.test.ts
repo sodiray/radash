@@ -395,7 +395,7 @@ describe('array module', () => {
   describe('range function', () => {
     const obj = { name: 'radash' }
     const toList = <T>(gen: Generator<T>): T[] => {
-      let items: T[] = []
+      const items: T[] = []
       for (const item of gen) items.push(item)
       return items
     }
@@ -520,19 +520,19 @@ describe('array module', () => {
 
   describe('merge function', () => {
     test('returns empty array for two null inputs', () => {
-      const result = _.merge(NULL, NULL, x => '')
+      const result = _.merge(NULL, NULL, () => '')
       assert.deepEqual(result, [])
     })
     test('returns an empty array for two empty array inputs', () => {
-      const result = _.merge([], [], x => '')
+      const result = _.merge([], [], () => '')
       assert.deepEqual(result, [])
     })
     test('returns root for a null other input', () => {
-      const result = _.merge([], NULL, x => '')
+      const result = _.merge([], NULL, () => '')
       assert.deepEqual(result, [])
     })
     test('returns empty array for a null root input', () => {
-      const result = _.merge(NULL, [], x => '')
+      const result = _.merge(NULL, [], () => '')
       assert.deepEqual(result, [])
     })
     test('returns root for a null matcher input', () => {
@@ -569,15 +569,15 @@ describe('array module', () => {
     const lettersXE = ['a', 'b', 'c', 'd', 'XE']
     const lettersXX = ['a', 'b', 'c', 'd', 'e', 'XX']
     test('returns empty array for two null inputs', () => {
-      const result = _.replaceOrAppend(NULL, null, x => false)
+      const result = _.replaceOrAppend(NULL, null, () => false)
       assert.deepEqual(result, [])
     })
     test('returns array with new item for null list input', () => {
-      const result = _.replaceOrAppend(NULL, 'a', x => false)
+      const result = _.replaceOrAppend(NULL, 'a', () => false)
       assert.deepEqual(result, ['a'])
     })
     test('returns list for null new item input', () => {
-      const result = _.replaceOrAppend(['a'], null, x => false)
+      const result = _.replaceOrAppend(['a'], null, () => false)
       assert.deepEqual(result, ['a'])
     })
     test('returns list with item replacing match by index', () => {

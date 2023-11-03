@@ -21,7 +21,7 @@ export const camel = (str: string): string => {
   const parts =
     str
       ?.replace(/([A-Z])+/g, capitalize)
-      ?.split(/(?=[A-Z])|[\.\-\s_]/)
+      ?.split(/(?=[A-Z])|[.\-\s_]/)
       .map(x => x.toLowerCase()) ?? []
   if (parts.length === 0) return ''
   if (parts.length === 1) return parts[0]
@@ -46,7 +46,7 @@ export const snake = (
   const parts =
     str
       ?.replace(/([A-Z])+/g, capitalize)
-      .split(/(?=[A-Z])|[\.\-\s_]/)
+      .split(/(?=[A-Z])|[.\-\s_]/)
       .map(x => x.toLowerCase()) ?? []
   if (parts.length === 0) return ''
   if (parts.length === 1) return parts[0]
@@ -55,7 +55,7 @@ export const snake = (
   })
   return options?.splitOnNumber === false
     ? result
-    : result.replace(/([A-Za-z]{1}[0-9]{1})/, val => `${val[0]!}_${val[1]!}`)
+    : result.replace(/([A-Za-z][0-9])/, val => `${val[0]!}_${val[1]!}`)
 }
 
 /**
@@ -69,7 +69,7 @@ export const dash = (str: string): string => {
   const parts =
     str
       ?.replace(/([A-Z])+/g, capitalize)
-      ?.split(/(?=[A-Z])|[\.\-\s_]/)
+      ?.split(/(?=[A-Z])|[.\-\s_]/)
       .map(x => x.toLowerCase()) ?? []
   if (parts.length === 0) return ''
   if (parts.length === 1) return parts[0]
@@ -85,7 +85,7 @@ export const dash = (str: string): string => {
  * pascal('va va boom') -> 'VaVaBoom'
  */
 export const pascal = (str: string): string => {
-  const parts = str?.split(/[\.\-\s_]/).map(x => x.toLowerCase()) ?? []
+  const parts = str?.split(/[.\-\s_]/).map(x => x.toLowerCase()) ?? []
   if (parts.length === 0) return ''
   return parts.map(str => str.charAt(0).toUpperCase() + str.slice(1)).join('')
 }
@@ -101,7 +101,7 @@ export const pascal = (str: string): string => {
 export const title = (str: string | null | undefined): string => {
   if (!str) return ''
   return str
-    .split(/(?=[A-Z])|[\.\-\s_]/)
+    .split(/(?=[A-Z])|[.\-\s_]/)
     .map(s => s.trim())
     .filter(s => !!s)
     .map(s => capitalize(s.toLowerCase()))
@@ -118,7 +118,7 @@ export const title = (str: string | null | undefined): string => {
 export const template = (
   str: string,
   data: Record<string, any>,
-  regex = /\{\{(.+?)\}\}/g
+  regex = /\{\{(.+?)}}/g
 ) => {
   return Array.from(str.matchAll(regex)).reduce((acc, match) => {
     return acc.replace(match[0], data[match[1]])
@@ -138,12 +138,9 @@ export const template = (
  * trim('222222__hello__1111111', '12_') // => 'hello'
  * ```
  */
-export const trim = (
-  str: string | null | undefined,
-  charsToTrim: string = ' '
-) => {
+export const trim = (str: string | null | undefined, charsToTrim = ' ') => {
   if (!str) return ''
-  const toTrim = charsToTrim.replace(/[\W]{1}/g, '\\$&')
+  const toTrim = charsToTrim.replace(/\W/g, '\\$&')
   const regex = new RegExp(`^[${toTrim}]+|[${toTrim}]+$`, 'g')
   return str.replace(regex, '')
 }

@@ -161,7 +161,7 @@ describe('object module', () => {
     })
     test('copies all attributes from class instance', () => {
       class Data {
-        public x: number = 22
+        public x = 22
         public add(a: number, b: number) {
           return a + b
         }
@@ -501,7 +501,7 @@ describe('object module', () => {
         cards: [[{ value: 2 }]]
       })
       assert.deepEqual(_.set({}, 'cards.[1].[1].value', 2), {
-        cards: [, [, { value: 2 }]]
+        cards: [undefined, [undefined, { value: 2 }]]
       })
     })
   })

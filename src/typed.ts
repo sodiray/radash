@@ -60,8 +60,7 @@ export const isDate = (value: any): value is Date => {
 export const isPromise = (value: any): value is Promise<any> => {
   if (!value) return false
   if (!value.then) return false
-  if (!isFunction(value.then)) return false
-  return true
+  return isFunction(value.then)
 }
 
 export const isEmpty = (value: any) => {
