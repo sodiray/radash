@@ -35,9 +35,7 @@ const isPromise = (value) => {
     return false;
   if (!value.then)
     return false;
-  if (!isFunction(value.then))
-    return false;
-  return true;
+  return isFunction(value.then);
 };
 const isEmpty = (value) => {
   if (value === true || value === false)
@@ -132,7 +130,7 @@ const sort = (array, getter, desc = false) => {
     return [];
   const asc = (a, b) => getter(a) - getter(b);
   const dsc = (a, b) => getter(b) - getter(a);
-  return array.slice().sort(desc === true ? dsc : asc);
+  return array.slice().sort(desc ? dsc : asc);
 };
 const alphabetical = (array, getter, dir = "asc") => {
   if (!array)
@@ -351,7 +349,7 @@ const reduce = async (array, asyncReducer, initValue) => {
 const map = async (array, asyncMapFunc) => {
   if (!array)
     return [];
-  let result = [];
+  const result = [];
   let index = 0;
   for (const value of array) {
     const newValue = await asyncMapFunc(value, index++);
@@ -699,7 +697,7 @@ const omit = (obj, keys2) => {
   );
 };
 const get = (value, path, defaultValue) => {
-  const segments = path.split(/[\.\[\]]/g);
+  const segments = path.split(/[.[\]]/g);
   let current = value;
   for (const key of segments) {
     if (current === null)
@@ -719,11 +717,11 @@ const set = (initial, path, value) => {
     return {};
   if (!path || value === void 0)
     return initial;
-  const segments = path.split(/[\.\[\]]/g).filter((x) => !!x.trim());
+  const segments = path.split(/[.[\]]/g).filter((x) => !!x.trim());
   const _set = (node) => {
     if (segments.length > 1) {
       const key = segments.shift();
-      const nextIsNum = toInt(segments[0], null) === null ? false : true;
+      const nextIsNum = toInt(segments[0], null) !== null;
       node[key] = node[key] === void 0 ? nextIsNum ? [] : {} : node[key];
       _set(node[key]);
     } else {
@@ -872,7 +870,7 @@ const capitalize = (str) => {
   return lower.substring(0, 1).toUpperCase() + lower.substring(1, lower.length);
 };
 const camel = (str) => {
-  const parts = str?.replace(/([A-Z])+/g, capitalize)?.split(/(?=[A-Z])|[\.\-\s_]/).map((x) => x.toLowerCase()) ?? [];
+  const parts = str?.replace(/([A-Z])+/g, capitalize)?.split(/(?=[A-Z])|[.\-\s_]/).map((x) => x.toLowerCase()) ?? [];
   if (parts.length === 0)
     return "";
   if (parts.length === 1)
@@ -882,7 +880,7 @@ const camel = (str) => {
   });
 };
 const snake = (str, options) => {
-  const parts = str?.replace(/([A-Z])+/g, capitalize).split(/(?=[A-Z])|[\.\-\s_]/).map((x) => x.toLowerCase()) ?? [];
+  const parts = str?.replace(/([A-Z])+/g, capitalize).split(/(?=[A-Z])|[.\-\s_]/).map((x) => x.toLowerCase()) ?? [];
   if (parts.length === 0)
     return "";
   if (parts.length === 1)
@@ -890,10 +888,10 @@ const snake = (str, options) => {
   const result = parts.reduce((acc, part) => {
     return `${acc}_${part.toLowerCase()}`;
   });
-  return options?.splitOnNumber === false ? result : result.replace(/([A-Za-z]{1}[0-9]{1})/, (val) => `${val[0]}_${val[1]}`);
+  return options?.splitOnNumber === false ? result : result.replace(/([A-Za-z][0-9])/, (val) => `${val[0]}_${val[1]}`);
 };
 const dash = (str) => {
-  const parts = str?.replace(/([A-Z])+/g, capitalize)?.split(/(?=[A-Z])|[\.\-\s_]/).map((x) => x.toLowerCase()) ?? [];
+  const parts = str?.replace(/([A-Z])+/g, capitalize)?.split(/(?=[A-Z])|[.\-\s_]/).map((x) => x.toLowerCase()) ?? [];
   if (parts.length === 0)
     return "";
   if (parts.length === 1)
@@ -903,7 +901,7 @@ const dash = (str) => {
   });
 };
 const pascal = (str) => {
-  const parts = str?.split(/[\.\-\s_]/).map((x) => x.toLowerCase()) ?? [];
+  const parts = str?.split(/[.\-\s_]/).map((x) => x.toLowerCase()) ?? [];
   if (parts.length === 0)
     return "";
   return parts.map((str2) => str2.charAt(0).toUpperCase() + str2.slice(1)).join("");
@@ -911,9 +909,9 @@ const pascal = (str) => {
 const title = (str) => {
   if (!str)
     return "";
-  return str.split(/(?=[A-Z])|[\.\-\s_]/).map((s) => s.trim()).filter((s) => !!s).map((s) => capitalize(s.toLowerCase())).join(" ");
+  return str.split(/(?=[A-Z])|[.\-\s_]/).map((s) => s.trim()).filter((s) => !!s).map((s) => capitalize(s.toLowerCase())).join(" ");
 };
-const template = (str, data, regex = /\{\{(.+?)\}\}/g) => {
+const template = (str, data, regex = /\{\{(.+?)}}/g) => {
   return Array.from(str.matchAll(regex)).reduce((acc, match) => {
     return acc.replace(match[0], data[match[1]]);
   }, str);
@@ -921,7 +919,7 @@ const template = (str, data, regex = /\{\{(.+?)\}\}/g) => {
 const trim = (str, charsToTrim = " ") => {
   if (!str)
     return "";
-  const toTrim = charsToTrim.replace(/[\W]{1}/g, "\\$&");
+  const toTrim = charsToTrim.replace(/\W/g, "\\$&");
   const regex = new RegExp(`^[${toTrim}]+|[${toTrim}]+$`, "g");
   return str.replace(regex, "");
 };
