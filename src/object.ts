@@ -216,7 +216,7 @@ export const get = <TDefault = unknown>(
   path: string,
   defaultValue?: TDefault
 ): TDefault => {
-  const segments = path.split(/[\.\[\]]/g)
+  const segments = path.split(/[.[\]]/g)
   let current: any = value
   for (const key of segments) {
     if (current === null) return defaultValue as TDefault
@@ -244,11 +244,11 @@ export const set = <T extends object, K>(
 ): T => {
   if (!initial) return {} as T
   if (!path || value === undefined) return initial
-  const segments = path.split(/[\.\[\]]/g).filter(x => !!x.trim())
+  const segments = path.split(/[.[\]]/g).filter(x => !!x.trim())
   const _set = (node: any) => {
     if (segments.length > 1) {
       const key = segments.shift() as string
-      const nextIsNum = toInt(segments[0], null) === null ? false : true
+      const nextIsNum = toInt(segments[0], null) !== null
       node[key] = node[key] === undefined ? (nextIsNum ? [] : {}) : node[key]
       _set(node[key])
     } else {

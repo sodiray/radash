@@ -93,14 +93,14 @@ describe('typed module', () => {
       for (const elm of arr) {
         assert.isTrue(_.isPrimitive(elm))
       }
-    }),
-      test('returns false for non-primitives', () => {
-        const arr = [new Date(), Number, {}, Object({}), () => 0, [1, 2]]
+    })
+    test('returns false for non-primitives', () => {
+      const arr = [new Date(), Number, {}, Object({}), () => 0, [1, 2]]
 
-        for (const elm of arr) {
-          assert.isFalse(_.isPrimitive(elm))
-        }
-      })
+      for (const elm of arr) {
+        assert.isFalse(_.isPrimitive(elm))
+      }
+    })
   })
 
   describe('isFunction function', () => {
@@ -295,7 +295,7 @@ describe('typed module', () => {
   describe('isEmpty function', () => {
     class Data {}
     class Person {
-      name: string = 'ray'
+      name = 'ray'
     }
     test('returns true for empty values', () => {
       assert.isTrue(_.isEmpty(null))
@@ -388,7 +388,7 @@ describe('typed module', () => {
     })
     test('returns false for class instance with properties', () => {
       class Data {
-        name: string = 'ray'
+        name = 'ray'
       }
       const input = new Data()
       const result = _.isSymbol(input)
