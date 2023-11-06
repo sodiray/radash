@@ -23,7 +23,7 @@ export function inRange(number: number, end: number): boolean
  * @param {number} end The end of the range. Exclusive.
  * @returns {boolean} Returns `true` if `number` is in the range, else `false`.
  */
-export function inRange(number: number, start: number, end: number): boolean 
+export function inRange(number: number, start: number, end: number): boolean
 export function inRange(number: number, start: number, end?: number): boolean {
   const isTypeSafe =
     typeof number === 'number' &&
