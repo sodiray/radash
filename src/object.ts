@@ -321,12 +321,30 @@ export const keys = <TValue extends object>(value: TValue): string[] => {
  * crush({ name: 'ra', children: [{ name: 'hathor' }] })
  * // { name: 'ra', 'children.0.name': 'hathor' }
  */
-export const crush = <TValue extends object>(value: TValue): object => {
+export const old_crush = <TValue extends object>(value: TValue): object => {
   if (!value) return {}
   return objectify(
     keys(value),
     k => k,
     k => get(value, k)
+  )
+}
+
+export const crush = <TValue extends object>(value: TValue): object => {
+  if (!value) return {}
+  const getKeys = (nested: any, paths: string[]): object[] => {
+    const inner = (k: string, v: any) => {
+      if (!(isObject(v) || isArray(v)))
+        return [{ [[...paths, `${k}`].join('.')]: v }]
+      return getKeys(v, [...paths, `${k}`])
+    }
+
+    return isArray(nested)
+      ? nested.flatMap((v, i) => inner(`${i}`, v))
+      : Object.entries(nested).flatMap(([k, v]) => inner(k, v))
+  }
+  return Object.fromEntries(
+    getKeys(value, []).flatMap(obj => Object.entries(obj))
   )
 }
 

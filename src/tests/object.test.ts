@@ -517,16 +517,8 @@ describe('object module', () => {
       const ra = {
         name: 'ra',
         power: 100,
-        friend: {
-          name: 'loki',
-          power: 80
-        },
-        enemies: [
-          {
-            name: 'hathor',
-            power: 12
-          }
-        ],
+        friend: { name: 'loki', power: 80 },
+        enemies: [{ name: 'hathor', power: 12 }],
         timestamp: now
       }
       assert.deepEqual(_.crush(ra), {
@@ -537,6 +529,23 @@ describe('object module', () => {
         'enemies.0.name': 'hathor',
         'enemies.0.power': 12,
         timestamp: now
+      })
+    })
+    test('handles key in dots correctly', () => {
+      const now = new Date()
+      const ra = {
+        key1: 'value1',
+        obj1: { x: 'x', y: 10 },
+        arr1: ['xx', { key2: 'value2' }, { key3: [false, now] }]
+      }
+      assert.deepEqual(_.crush(ra), {
+        key1: 'value1',
+        'obj1.x': 'x',
+        'obj1.y': 10,
+        'arr1.0': 'xx',
+        'arr1.1.key2': 'value2',
+        'arr1.2.key3.0': false,
+        'arr1.2.key3.1': now
       })
     })
   })
