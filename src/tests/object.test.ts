@@ -376,6 +376,15 @@ describe('object module', () => {
       assert.equal(result.fey, 'USER')
       assert.equal(result.bray, 'GUEST')
     })
+    test('filtering', () => {
+      const result = _.mapEntries(peopleByRole, (key, value) =>
+        key === 'guest' ? undefined : [value, key.toUpperCase()]
+      )
+      assert.equal(Object.keys(result).length, 2)
+      assert.equal(result.jay, 'ADMIN')
+      assert.equal(result.fey, 'USER')
+      assert.equal(result.bray, undefined)
+    })
   })
 
   describe('invert function', () => {

@@ -9,7 +9,8 @@ group: Object
 Iterates the entries of an object, calling the given `toEntry` callback function
 to generate new entries. It's a `_.mapValues` and `_.mapKeys`
 in one. The `toEntry` callback function should return an array with
-two items `[key, value]` (a.k.a the new entry).
+two items `[key, value]` (a.k.a the new entry).  If the function returns 
+`undefined`, the entry will be ignored
 
 ```ts
 import { mapEntries } from 'radash'
@@ -21,5 +22,6 @@ const ra = {
   culture: 'egypt'
 }
 
-mapEntries(ra, (key, value) => [key.toUpperCase(), `${value}`]) // => { NAME: 'Ra', POWER: 'sun', RANK: '100', CULTURE: 'egypt' }
+mapEntries(ra, (key, value) => key === 'culture' ? undefined : [key.toUpperCase(), `${value}`]) 
+// => { NAME: 'Ra', POWER: 'sun', RANK: '100' }
 ```
