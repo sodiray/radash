@@ -773,10 +773,16 @@ var radash = (function (exports) {
   const crush = (value) => {
     if (!value)
       return {};
-    return objectify(
-      keys(value),
-      (k) => k,
-      (k) => get(value, k)
+    const getKeys = (nested, paths) => {
+      const inner = (k, v) => {
+        if (!(isObject(v) || isArray(v)))
+          return [{ [[...paths, `${k}`].join(".")]: v }];
+        return getKeys(v, [...paths, `${k}`]);
+      };
+      return isArray(nested) ? nested.flatMap((v, i) => inner(`${i}`, v)) : Object.entries(nested).flatMap(([k, v]) => inner(k, v));
+    };
+    return Object.fromEntries(
+      getKeys(value, []).flatMap((obj) => Object.entries(obj))
     );
   };
   const construct = (obj) => {
