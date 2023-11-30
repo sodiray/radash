@@ -639,8 +639,9 @@ var radash = (function (exports) {
     if (!obj)
       return {};
     return Object.entries(obj).reduce((acc, [key, value]) => {
-      const [newKey, newValue] = toEntry(key, value);
-      acc[newKey] = newValue;
+      const alteredEntry = toEntry(key, value);
+      if (alteredEntry !== void 0)
+        acc[alteredEntry[0]] = alteredEntry[1];
       return acc;
     }, {});
   };

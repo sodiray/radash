@@ -78,13 +78,13 @@ export const mapEntries = <
   TNewValue
 >(
   obj: Record<TKey, TValue>,
-  toEntry: (key: TKey, value: TValue) => [TNewKey, TNewValue]
+  toEntry: (key: TKey, value: TValue) => [TNewKey, TNewValue] | undefined
 ): Record<TNewKey, TNewValue> => {
   if (!obj) return {} as Record<TNewKey, TNewValue>
-    return Object.entries(obj).reduce((acc, [key, value]) => {
-      const alteredEntry = toEntry(key as TKey, value as TValue)
-      if (alteredEntry !== undefined) acc[alteredEntry[0]] = alteredEntry[1]
-      return acc
+  return Object.entries(obj).reduce((acc, [key, value]) => {
+    const alteredEntry = toEntry(key as TKey, value as TValue)
+    if (alteredEntry !== undefined) acc[alteredEntry[0]] = alteredEntry[1]
+    return acc
   }, {} as Record<TNewKey, TNewValue>)
 }
 
