@@ -1,9 +1,15 @@
 import { assert } from 'chai'
 import * as _ from '..'
-import { AggregateError } from '../async'
+import { AggregateError, isLeft, isRight, left, right } from '../async'
+
+class CustomError extends Error {
+  constructor(public readonly customProperty: string, message?: string) {
+    super(message)
+  }
+}
 
 describe('async module', () => {
-  beforeEach(() => jest.useFakeTimers({ advanceTimers: true }))
+  // beforeEach(() => jest.useFakeTimers({ advanceTimers: true }))
 
   describe('asyncReduce function', () => {
     test('returns result of reducer', async () => {
@@ -262,6 +268,44 @@ describe('async module', () => {
     })
     test('alias exists', () => {
       assert.isNotNull(_.tryit)
+    })
+  })
+
+  describe('Either', () => {
+    test('sync error recognised as left', async () => {
+      const throwsSync = () => {
+        throw new CustomError('test', 'message')
+      }
+      const either = _.try(throwsSync)()
+      assert.isTrue(isLeft(either))
+      assert.isFalse(isRight(either))
+      assert.instanceOf(left(either), CustomError)
+      assert.equal(left(either).message, 'message')
+      assert.equal(left<CustomError>(either).customProperty, 'test')
+    })
+    test('async error recognised as left', async () => {
+      const task = async () => {
+        throw new CustomError('test', 'message')
+      }
+      const either = await _.try(task)()
+      assert.isTrue(isLeft(either))
+      assert.isFalse(isRight(either))
+      assert.equal(left<CustomError>(either).message, 'message')
+      assert.equal(left<CustomError>(either).customProperty, 'test')
+    })
+    test('sync result recognised as right', async () => {
+      const resultSync = () => 'result'
+      const either = _.try(resultSync)()
+      assert.isFalse(isLeft(either))
+      assert.isTrue(isRight(either))
+      assert.equal(right(either), 'result')
+    })
+    test('async result recognised as right', async () => {
+      const resultAsync = async () => 'result'
+      const task = await _.try(resultAsync)()
+      assert.isFalse(isLeft(task))
+      assert.isTrue(isRight(task))
+      assert.equal(right(task), 'result')
     })
   })
 

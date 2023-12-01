@@ -257,35 +257,41 @@ export const sleep = (milliseconds: number) => {
   return new Promise(res => setTimeout(res, milliseconds))
 }
 
+export type Left<E = Error> = [E, undefined]
+export type Right<T = any> = [undefined, T]
+export type Either<E = Error, T = any> = Left<E> | Right<T>
+export type Task<E = Error, T = any> = Promise<
+  [E, undefined] | [undefined, Awaited<T>]
+>
+export type TaskOrEither<E = Error, T = any> = T extends Promise<any>
+  ? Task<E, T>
+  : Either<E, T>
+export const isLeft = <E = Error, T = any>(either: Either<E, T>): boolean =>
+  either[0] !== undefined
+export const isRight = <E = Error, T = any>(either: Either<E, T>): boolean =>
+  either[0] === undefined
+export const left = <E = Error>(either: Either<any, E>): E => either[0]
+export const right = <T = any>(either: Either<Error, T>): T => either[1] as T
+
 /**
  * A helper to try an async function without forking
  * the control flow. Returns an error first callback _like_
  * array response as [Error, result]
  */
-export const tryit = <Args extends any[], Return>(
-  func: (...args: Args) => Return
+export const tryit = <Args extends any[], T, E = Error>(
+  func: (...args: Args) => T
 ) => {
-  return (
-    ...args: Args
-  ): Return extends Promise<any>
-    ? Promise<[Error, undefined] | [undefined, Awaited<Return>]>
-    : [Error, undefined] | [undefined, Return] => {
+  return (...args: Args): TaskOrEither<E, T> => {
     try {
       const result = func(...args)
       if (isPromise(result)) {
         return result
           .then(value => [undefined, value])
-          .catch(err => [err, undefined]) as Return extends Promise<any>
-          ? Promise<[Error, undefined] | [undefined, Awaited<Return>]>
-          : [Error, undefined] | [undefined, Return]
+          .catch(err => [err, undefined]) as TaskOrEither<E, T>
       }
-      return [undefined, result] as Return extends Promise<any>
-        ? Promise<[Error, undefined] | [undefined, Awaited<Return>]>
-        : [Error, undefined] | [undefined, Return]
+      return [undefined, result] as TaskOrEither<E, T>
     } catch (err) {
-      return [err as any, undefined] as Return extends Promise<any>
-        ? Promise<[Error, undefined] | [undefined, Awaited<Return>]>
-        : [Error, undefined] | [undefined, Return]
+      return [err as any, undefined] as TaskOrEither<E, T>
     }
   }
 }
