@@ -266,17 +266,12 @@ export type Task<E = Error, T = any> = Promise<
 export type TaskOrEither<E = Error, T = any> = T extends Promise<any>
   ? Task<E, T>
   : Either<E, T>
-export const isLeft = <E = Error, T = any>(either: Either<E, T>) =>
+export const isLeft = <E = Error, T = any>(either: Either<E, T>): boolean =>
   either[0] !== undefined
-export const isRight = <E = Error, T = any>(either: Either<E, T>) =>
+export const isRight = <E = Error, T = any>(either: Either<E, T>): boolean =>
   either[0] === undefined
 export const left = <E = Error>(either: Either<any, E>): E => either[0]
 export const right = <T = any>(either: Either<Error, T>): T => either[1] as T
-// export const toLeft = <E = Error>(error: E): Either<any, E> => [
-//   error,
-//   undefined
-// ]
-// export const toRight = <T>(result: T): Either<Error, T> => [undefined, result]
 
 /**
  * A helper to try an async function without forking

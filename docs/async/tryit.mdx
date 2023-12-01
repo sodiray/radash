@@ -27,3 +27,24 @@ const findUser = tryit(api.users.find)
 
 const [err, user] = await findUser(userId)
 ```
+
+## Type support
+
+These utility types and functions help handling the result of tryit
+
+### types
+
+```ts
+export type Left<E = Error> = [E, undefined]  // errored result
+export type Right<T = any> = [undefined, T]   // successfull result
+export type Either<E = Error, T = any> = Left<E> | Right<T>  // errored or successfull result
+export type Task<E = Error, T = any> = Promise<[E, undefined] | [undefined, Awaited<T>]>  // async Either
+```
+
+### support functions
+```ts
+isLeft(either: Either): boolean // tests if the result was errored
+isRight(either: Either): boolean // tests if the result was successfull
+left(either: Either): E // extracts the error from an errored operation
+right(either: Either): T // extracts the result from a successfull operation
+```
