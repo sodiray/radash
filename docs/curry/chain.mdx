@@ -7,15 +7,42 @@ description: Create a chain of function to run in order
 ## Basic usage
 
 Chaining functions will cause them to execute one after another, passing the output from each function as the input to the next, returning the final output at the end of the chain.
-
 ```ts
 import { chain } from 'radash'
 
-const genesis = () => 0
-const addFive = (num: number) => num + 5
-const twoX = (num: number) => num * 2
+const add = (y: number) => (x: number) => x + y
+const mult = (y: number) => (x: number) => x * y
+const addFive = add(5)
+const double = mult(2)
 
-const chained = chain(genesis, addFive, twoX)
+const chained = chain(addFive, double)
 
-chained() // => 10
+chained(0) // => 10
+chained(7) // => 24
+```
+
+### More example
+```ts
+import { chain } from 'radash'
+
+type User = { id: number; name: string }
+const users: User[] = [
+  { id: 1, name: 'John Doe' },
+  { id: 2, name: 'John Smith' },
+  { id: 3, name: 'John Wick' }
+]
+function getName<T extends { name: string }>(item: T) {
+  return item.name;
+}
+function upperCase(text: string): Uppercase<string> {
+  return text.toUpperCase() as Uppercase<string>;
+}
+
+const getUpperName = chain<User, Uppercase<string>>(getName, upperCase)
+//                     ^ Use chain function here
+
+getUpperName(users[0])                  // => 'JOHN DOE'
+users.map((user) => getUpperName(user)) // => ['JOHN DOE', 'JOHN SMITH', 'JOHN WICK']
+users.map(getUpperName)                 // => ['JOHN DOE', 'JOHN SMITH', 'JOHN WICK']
+//              ^ use chained function as a Point-free
 ```

@@ -489,9 +489,11 @@ const guard = (func, shouldGuard) => {
   }
 };
 
-const chain = (...funcs) => (...args) => {
-  return funcs.slice(1).reduce((acc, fn) => fn(acc), funcs[0](...args));
-};
+function chain(...funcs) {
+  return function forInitialArg(initialArg) {
+    return funcs.reduce((acc, fn) => fn(acc), initialArg);
+  };
+}
 const compose = (...funcs) => {
   return funcs.reverse().reduce((acc, fn) => fn(acc));
 };
