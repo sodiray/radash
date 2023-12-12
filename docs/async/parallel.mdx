@@ -25,10 +25,23 @@ const users = await parallel(3, userIds, async (userId) => {
 })
 ```
 
+By default `parallel` will pick from the array in reverse order.
+If you want to run the functions in the order they are in the array
+you can pass `executeInOrder` option in the 4th argument.
+
+```ts
+// Will run the find user async function 3 at a time
+// starting at the beginning of the array
+const users = await parallel(3, userIds, async (userId) => {
+  return await api.users.find(userId)
+}, {executeInOrder: true})
+```
+
+
 ## Errors
 
 When all work is complete parallel will check for errors. If any
-occurred they will all be thrown in a single `AggregateError` that 
+occurred they will all be thrown in a single `AggregateError` that
 has an `errors` property that is all the errors that were thrown.
 
 ```ts

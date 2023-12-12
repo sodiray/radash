@@ -112,7 +112,8 @@ export class AggregateError extends Error {
 export const parallel = async <T, K>(
   limit: number,
   array: readonly T[],
-  func: (item: T) => Promise<K>
+  func: (item: T) => Promise<K>,
+  options?: { executeInOrder?: boolean }
 ): Promise<K[]> => {
   const work = array.map((item, index) => ({
     index,
@@ -122,7 +123,7 @@ export const parallel = async <T, K>(
   const processor = async (res: (value: WorkItemResult<K>[]) => void) => {
     const results: WorkItemResult<K>[] = []
     while (true) {
-      const next = work.pop()
+      const next = options?.executeInOrder ? work.shift() : work.pop()
       if (!next) return res(results)
       const [error, result] = await tryit(func)(next.item)
       results.push({
