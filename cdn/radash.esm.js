@@ -385,7 +385,7 @@ class AggregateError extends Error {
     this.errors = errors;
   }
 }
-const parallel = async (limit, array, func) => {
+const parallel = async (limit, array, func, options) => {
   const work = array.map((item, index) => ({
     index,
     item
@@ -393,7 +393,7 @@ const parallel = async (limit, array, func) => {
   const processor = async (res) => {
     const results2 = [];
     while (true) {
-      const next = work.pop();
+      const next = options?.executeInOrder ? work.shift() : work.pop();
       if (!next)
         return res(results2);
       const [error, result] = await tryit(func)(next.item);
