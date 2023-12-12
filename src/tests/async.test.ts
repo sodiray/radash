@@ -355,22 +355,27 @@ describe('async module', () => {
       assert.deepEqual(Math.max(...tracking), 3)
     })
     test('execute in reverse order', async () => {
-          let numInProgress = 0
-          const tracking: number[] = []
-          await _.parallel(1, _.list(1, 4), async (num) => {
-            tracking.push(num)
-            await _.sleep(10)
-          })
-          assert.deepEqual(tracking, [4, 3, 2, 1]);
-        })
+      let numInProgress = 0
+      const tracking: number[] = []
+      await _.parallel(1, _.list(1, 4), async num => {
+        tracking.push(num)
+        await _.sleep(10)
+      })
+      assert.deepEqual(tracking, [4, 3, 2, 1])
+    })
     test('execute in order', async () => {
       let numInProgress = 0
       const tracking: number[] = []
-      await _.parallel(1, _.list(1, 4), async (num) => {
-        tracking.push(num)
-        await _.sleep(10)
-      }, {executeInOrder: true})
-      assert.deepEqual(tracking, [1, 2, 3, 4]);
+      await _.parallel(
+        1,
+        _.list(1, 4),
+        async num => {
+          tracking.push(num)
+          await _.sleep(10)
+        },
+        { executeInOrder: true }
+      )
+      assert.deepEqual(tracking, [1, 2, 3, 4])
     })
   })
 
