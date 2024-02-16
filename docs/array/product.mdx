@@ -1,0 +1,31 @@
+---
+title: product
+group: 'Array'
+description: Get Cartesian product of the arguments
+---
+
+## Basic usage
+
+```ts
+import { product } from 'radash'
+
+const array1 = [0, 1]
+const array2 = ['a', 'b']
+const array3 = ['A', 'B', 'C']
+
+product(array1, array2, array3) /* => [
+  [0, 'a', 'A'],
+  [0, 'a', 'B'],
+  [0, 'a', 'C'],
+  [0, 'b', 'A'],
+  [0, 'b', 'B'],
+  [0, 'b', 'C'],
+  [1, 'a', 'A'],
+  [1, 'a', 'B'],
+  [1, 'a', 'C'],
+  [1, 'b', 'A'],
+  [1, 'b', 'B'],
+  [1, 'b', 'C'],
+]
+*/
+```

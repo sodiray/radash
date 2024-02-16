@@ -777,4 +777,60 @@ describe('array module', () => {
       assert.deepEqual(result, ['b', 'a'])
     })
   })
+
+  describe('product function', () => {
+    const arrA = [{}, {}, {}]
+    const arrB = [{}, {}]
+    const arrC = [{}]
+    test('returns cartesian product of two arguments', () => {
+      const result = _.product(arrA, arrB)
+      assert.deepEqual(result, [
+        [arrA[0], arrB[0]],
+        [arrA[0], arrB[1]],
+        [arrA[1], arrB[0]],
+        [arrA[1], arrB[1]],
+        [arrA[2], arrB[0]],
+        [arrA[2], arrB[1]],
+      ])
+    })
+    test('returns cartesian product of more than two arguments', () => {
+      const result = _.product(arrB, arrB, arrB)
+      assert.deepEqual(result, [
+        [arrB[0], arrB[0], arrB[0]],
+        [arrB[0], arrB[0], arrB[1]],
+        [arrB[0], arrB[1], arrB[0]],
+        [arrB[0], arrB[1], arrB[1]],
+        [arrB[1], arrB[0], arrB[0]],
+        [arrB[1], arrB[0], arrB[1]],
+        [arrB[1], arrB[1], arrB[0]],
+        [arrB[1], arrB[1], arrB[1]],
+      ])
+    })
+    test('works when one of the arguments has 1 item', () => {
+      const result = _.product(arrB, arrC, arrB)
+      assert.deepEqual(result, [
+        [arrB[0], arrC[0], arrB[0]],
+        [arrB[0], arrC[0], arrB[1]],
+        [arrB[1], arrC[0], arrB[0]],
+        [arrB[1], arrC[0], arrB[1]],
+      ])
+    })
+    test('works when called with a single argument', () => {
+      const result = _.product(arrA)
+      assert.deepEqual(result, [
+        [arrA[0]],
+        [arrA[1]],
+        [arrA[2]],
+      ])
+    })
+    test('returns empty array when one of the arguments is an empty array', () => {
+      const result = _.product(arrA, [], arrB)
+      assert.deepEqual(result, [])
+    })
+    test('returns empty array when called with no arguments', () => {
+      const result = _.product()
+      assert.deepEqual(result, [])
+    })
+  })
+
 })
