@@ -221,8 +221,9 @@ export const get = <TDefault = unknown>(
   for (const key of segments) {
     if (current === null) return defaultValue as TDefault
     if (current === undefined) return defaultValue as TDefault
-    if (key.trim() === '') continue
-    current = current[key]
+    const dequoted = key.replace(/['"]/g, '')
+    if (dequoted.trim() === '') continue
+    current = current[dequoted]
   }
   if (current === undefined) return defaultValue as TDefault
   return current

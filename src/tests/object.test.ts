@@ -341,11 +341,13 @@ describe('object module', () => {
     test('returns specified value or default using path', () => {
       assert.equal(_.get({ age: undefined }, 'age', 22), 22)
       assert.equal(_.get(jay, 'friends[0].age'), 17)
+      assert.equal(_.get(jay, 'friends["0"].age'), 17)
       assert.equal(_.get(jay, 'friends.0.age'), 17)
       assert.equal(_.get(jay, 'friends.1.age'), null)
       assert.equal(_.get(jay, 'friends.0.friends[0].name'), 'sara')
       assert.equal(_.get(jay, 'name'), 'jay')
       assert.equal(_.get(jay, '[name]'), 'jay')
+      assert.equal(_.get(jay, '["name"]'), 'jay')
       assert.equal(_.get(jay, 'friends[0][name]'), 'carl')
       assert.equal(_.get(jay, 'friends[0].friends[0].friends[0].age', 22), 22)
     })
