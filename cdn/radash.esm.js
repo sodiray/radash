@@ -487,15 +487,15 @@ const guard = (func, shouldGuard) => {
 };
 
 function chain(...funcs) {
-  return function forInitialArg(initialArg) {
-    return funcs.reduce((acc, fn) => fn(acc), initialArg);
+  return (...args) => {
+    return funcs.slice(1).reduce((acc, fn) => fn(acc), funcs[0](...args));
   };
 }
-const compose = (...funcs) => {
+function compose(...funcs) {
   return funcs.reverse().reduce((acc, fn) => fn(acc));
-};
+}
 const partial = (fn, ...args) => {
-  return (...rest) => fn(...args, ...rest);
+  return (...rest) => fn(...[...args, ...rest]);
 };
 const partob = (fn, argobj) => {
   return (restobj) => fn({
@@ -711,15 +711,15 @@ const omit = (obj, keys2) => {
 const get = (value, path, defaultValue) => {
   const segments = path.split(/[\.\[\]]/g);
   let current = value;
-  for (let key of segments) {
+  for (const key of segments) {
     if (current === null)
       return defaultValue;
     if (current === void 0)
       return defaultValue;
-    key = key.replace(/['"]/g, "");
-    if (key.trim() === "")
+    const dequoted = key.replace(/['"]/g, "");
+    if (dequoted.trim() === "")
       continue;
-    current = current[key];
+    current = current[dequoted];
   }
   if (current === void 0)
     return defaultValue;

@@ -5,13 +5,15 @@ import type { DebounceFunction } from '../curry'
 describe('curry module', () => {
   describe('compose function', () => {
     test('composes functions', () => {
-      const useZero = (fn: any) => () => fn(0)
-      const objectize = (fn: any) => (num: any) => fn({ num })
+      const useZero = (fn: (num: number) => number) => () => fn(0)
+      const objectize =
+        (fn: (obj: { num: number }) => number) => (num: number) =>
+          fn({ num })
       const increment =
-        (fn: any) =>
-        ({ num }: any) =>
+        (fn: (arg: { num: number }) => number) =>
+        ({ num }: { num: number }) =>
           fn({ num: num + 1 })
-      const returnArg = (arg: any) => (args: any) => args[arg]
+      const returnArg = (arg: 'num') => (args: { num: number }) => args[arg]
 
       const composed = _.compose(
         useZero,
@@ -29,15 +31,21 @@ describe('curry module', () => {
       const result = composed()
 
       assert.equal(result, expected)
+      assert.equal(result, 2)
     })
     test('composes async function', async () => {
-      const useZero = (fn: any) => async () => await fn(0)
-      const objectize = (fn: any) => async (num: any) => await fn({ num })
+      const useZero = (fn: (num: number) => Promise<number>) => async () =>
+        fn(0)
+      const objectize =
+        (fn: (obj: { num: number }) => Promise<number>) =>
+        async (num: number) =>
+          fn({ num })
       const increment =
-        (fn: any) =>
-        async ({ num }: any) =>
-          await fn({ num: num + 1 })
-      const returnArg = (arg: any) => async (args: any) => await args[arg]
+        (fn: (arg: { num: number }) => Promise<number>) =>
+        async ({ num }: { num: number }) =>
+          fn({ num: num + 1 })
+      const returnArg = (arg: 'num') => async (args: { num: number }) =>
+        args[arg]
 
       const composed = _.compose(
         useZero,
@@ -56,13 +64,110 @@ describe('curry module', () => {
 
       assert.equal(result, expected)
     })
+    test('composes function type overloads', () => {
+      const useZero = (fn: (num: number) => number) => () => fn(0)
+      const objectize =
+        (fn: (obj: { num: number }) => number) => (num: number) =>
+          fn({ num })
+      const increment =
+        (fn: (arg: { num: number }) => number) =>
+        ({ num }: { num: number }) =>
+          fn({ num: num + 1 })
+      const returnArg = (arg: 'num') => (args: { num: number }) => args[arg]
+      const returnNum = () => (num: number) => num
+
+      assert.equal(_.compose(useZero, returnNum())(), 0)
+
+      assert.equal(_.compose(useZero, objectize, returnArg('num'))(), 0)
+
+      assert.equal(
+        _.compose(useZero, objectize, increment, returnArg('num'))(),
+        1
+      )
+
+      assert.equal(
+        _.compose(useZero, objectize, increment, increment, returnArg('num'))(),
+        2
+      )
+
+      assert.equal(
+        _.compose(
+          useZero,
+          objectize,
+          increment,
+          increment,
+          increment,
+          returnArg('num')
+        )(),
+        3
+      )
+
+      assert.equal(
+        _.compose(
+          useZero,
+          objectize,
+          increment,
+          increment,
+          increment,
+          increment,
+          returnArg('num')
+        )(),
+        4
+      )
+
+      assert.equal(
+        _.compose(
+          useZero,
+          objectize,
+          increment,
+          increment,
+          increment,
+          increment,
+          increment,
+          returnArg('num')
+        )(),
+        5
+      )
+
+      assert.equal(
+        _.compose(
+          useZero,
+          objectize,
+          increment,
+          increment,
+          increment,
+          increment,
+          increment,
+          increment,
+          returnArg('num')
+        )(),
+        6
+      )
+
+      assert.equal(
+        _.compose(
+          useZero,
+          objectize,
+          increment,
+          increment,
+          increment,
+          increment,
+          increment,
+          increment,
+          increment,
+          returnArg('num')
+        )(),
+        7
+      )
+    })
   })
 
   describe('partial function', () => {
     test('passes single args', () => {
       const add = (a: number, b: number) => a + b
       const expected = 20
-      const result = _.partial(add, 10)(10)
+      const partialed = _.partial(add, 10)
+      const result = partialed(10)
       assert.equal(result, expected)
     })
     test('passes many args', () => {
@@ -90,11 +195,11 @@ describe('curry module', () => {
 
   describe('chain function', () => {
     test('calls all given functions', () => {
-      const genesis = () => 0
+      const genesis = (num: number, name: string) => 0
       const addFive = (num: number) => num + 5
       const twoX = (num: number) => num * 2
       const func = _.chain(genesis, addFive, twoX)
-      const result = func(0)
+      const result = func(0, '')
       assert.equal(result, 10)
     })
 
@@ -138,7 +243,7 @@ describe('curry module', () => {
       const upperCase: (x: string) => Uppercase<string> = (text: string) =>
         text.toUpperCase() as Uppercase<string>
 
-      const getUpperName = _.chain<User, Uppercase<string>>(getName, upperCase)
+      const getUpperName = _.chain(getName, upperCase)
       const result = users.map(getUpperName)
       assert.deepEqual(result, ['JOHN DOE', 'JOHN SMITH', 'JOHN WICK'])
     })
@@ -167,17 +272,17 @@ describe('curry module', () => {
     })
     test('uses key to identify unique calls', () => {
       const func = _.memo(
-        ({ id }: { id: string }) => {
+        (arg: { user: { id: string } }) => {
           const ts = new Date().getTime()
-          return `${ts}::${id}`
+          return `${ts}::${arg.user.id}`
         },
         {
-          key: ({ id }: { id: string }) => id
+          key: arg => arg.user.id
         }
       )
-      const resultA = func({ id: 'alpha' })
-      const resultB = func({ id: 'beta' })
-      const resultA2 = func({ id: 'alpha' })
+      const resultA = func({ user: { id: 'alpha' } })
+      const resultB = func({ user: { id: 'beta' } })
+      const resultA2 = func({ user: { id: 'alpha' } })
       assert.equal(resultA, resultA2)
       assert.notEqual(resultB, resultA)
     })
