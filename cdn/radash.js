@@ -118,12 +118,9 @@ var radash = (function (exports) {
       return null;
     return array.reduce(compareFunc);
   };
-  const sum = (array, fn) => {
-    return (array || []).reduce(
-      (acc, item) => acc + (fn ? fn(item) : item),
-      0
-    );
-  };
+  function sum(array, fn) {
+    return (array || []).reduce((acc, item) => acc + (fn ? fn(item) : item), 0);
+  }
   const first = (array, defaultValue = void 0) => {
     return array?.length > 0 ? array[0] : defaultValue;
   };
