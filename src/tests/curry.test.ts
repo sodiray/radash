@@ -272,17 +272,17 @@ describe('curry module', () => {
     })
     test('uses key to identify unique calls', () => {
       const func = _.memo(
-        ({ id }: { id: string }) => {
+        (arg: { user: { id: string } }) => {
           const ts = new Date().getTime()
-          return `${ts}::${id}`
+          return `${ts}::${arg.user.id}`
         },
         {
-          key: ({ id }: { id: string }) => id
+          key: arg => arg.user.id
         }
       )
-      const resultA = func({ id: 'alpha' })
-      const resultB = func({ id: 'beta' })
-      const resultA2 = func({ id: 'alpha' })
+      const resultA = func({ user: { id: 'alpha' } })
+      const resultB = func({ user: { id: 'beta' } })
+      const resultA2 = func({ user: { id: 'alpha' } })
       assert.equal(resultA, resultA2)
       assert.notEqual(resultB, resultA)
     })
