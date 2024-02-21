@@ -218,12 +218,12 @@ export const get = <TDefault = unknown>(
 ): TDefault => {
   const segments = path.split(/[\.\[\]]/g)
   let current: any = value
-  for (let key of segments) {
+  for (const key of segments) {
     if (current === null) return defaultValue as TDefault
     if (current === undefined) return defaultValue as TDefault
-    key = key.replace(/['"]/g, '')
-    if (key.trim() === '') continue
-    current = current[key]
+    const dequoted = key.replace(/['"]/g, '')
+    if (dequoted.trim() === '') continue
+    current = current[dequoted]
   }
   if (current === undefined) return defaultValue as TDefault
   return current
