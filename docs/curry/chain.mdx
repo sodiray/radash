@@ -21,28 +21,29 @@ chained(0) // => 10
 chained(7) // => 24
 ```
 
-### More example
+### Example
 ```ts
 import { chain } from 'radash'
 
-type User = { id: number; name: string }
-const users: User[] = [
-  { id: 1, name: 'John Doe' },
-  { id: 2, name: 'John Smith' },
-  { id: 3, name: 'John Wick' }
+type Deity = { 
+  name: string
+  rank: number 
+}
+
+const gods: Deity[] = [
+  { rank: 8, name: 'Ra' },
+  { rank: 7, name: 'Zeus' },
+  { rank: 9, name: 'Loki' }
 ]
-function getName<T extends { name: string }>(item: T) {
-  return item.name;
-}
-function upperCase(text: string): Uppercase<string> {
-  return text.toUpperCase() as Uppercase<string>;
-}
 
-const getUpperName = chain<User, Uppercase<string>>(getName, upperCase)
-//                     ^ Use chain function here
+const getName = (god: Deity) => item.name
+const upperCase = (text: string) => text.toUpperCase() as Uppercase<string>
 
-getUpperName(users[0])                  // => 'JOHN DOE'
-users.map((user) => getUpperName(user)) // => ['JOHN DOE', 'JOHN SMITH', 'JOHN WICK']
-users.map(getUpperName)                 // => ['JOHN DOE', 'JOHN SMITH', 'JOHN WICK']
-//              ^ use chained function as a Point-free
+const getUpperName = chain(
+  getName, 
+  upperCase
+)
+
+getUpperName(gods[0])       // => 'RA'
+gods.map(getUpperName)      // => ['RA', 'ZEUS', 'LOKI']
 ```

@@ -115,9 +115,12 @@ const boil = (array, compareFunc) => {
     return null;
   return array.reduce(compareFunc);
 };
-function sum(array, fn) {
-  return (array || []).reduce((acc, item) => acc + (fn ? fn(item) : item), 0);
-}
+const sum = (array, fn) => {
+  return (array || []).reduce(
+    (acc, item) => acc + (fn ? fn(item) : item),
+    0
+  );
+};
 const first = (array, defaultValue = void 0) => {
   return array?.length > 0 ? array[0] : defaultValue;
 };
@@ -487,15 +490,15 @@ const guard = (func, shouldGuard) => {
 };
 
 function chain(...funcs) {
-  return function forInitialArg(initialArg) {
-    return funcs.reduce((acc, fn) => fn(acc), initialArg);
+  return (...args) => {
+    return funcs.slice(1).reduce((acc, fn) => fn(acc), funcs[0](...args));
   };
 }
-const compose = (...funcs) => {
+function compose(...funcs) {
   return funcs.reverse().reduce((acc, fn) => fn(acc));
-};
+}
 const partial = (fn, ...args) => {
-  return (...rest) => fn(...args, ...rest);
+  return (...rest) => fn(...[...args, ...rest]);
 };
 const partob = (fn, argobj) => {
   return (restobj) => fn({
@@ -587,17 +590,6 @@ const callable = (obj, fn) => {
   });
 };
 
-function inRange(number, start, end) {
-  const isTypeSafe = typeof number === "number" && typeof start === "number" && (typeof end === "undefined" || typeof end === "number");
-  if (!isTypeSafe) {
-    return false;
-  }
-  if (typeof end === "undefined") {
-    end = start;
-    start = 0;
-  }
-  return number >= Math.min(start, end) && number < Math.max(start, end);
-}
 const toFloat = (value, defaultValue) => {
   const def = defaultValue === void 0 ? 0 : defaultValue;
   if (value === null || value === void 0) {
@@ -711,12 +703,11 @@ const omit = (obj, keys2) => {
 const get = (value, path, defaultValue) => {
   const segments = path.split(/[\.\[\]]/g);
   let current = value;
-  for (let key of segments) {
+  for (const key of segments) {
     if (current === null)
       return defaultValue;
     if (current === void 0)
       return defaultValue;
-    key = key.replace(/['"]/g, "");
     if (key.trim() === "")
       continue;
     current = current[key];
@@ -937,4 +928,4 @@ const trim = (str, charsToTrim = " ") => {
   return str.replace(regex, "");
 };
 
-export { all, alphabetical, assign, boil, callable, camel, capitalize, chain, clone, cluster, compose, construct, counting, crush, dash, debounce, defer, diff, draw, first, flat, fork, get, group, guard, inRange, intersects, invert, isArray, isDate, isEmpty, isEqual, isFloat, isFunction, isInt, isNumber, isObject, isPrimitive, isPromise, isString, isSymbol, iterate, keys, last, list, listify, lowerize, map, mapEntries, mapKeys, mapValues, max, memo, merge, min, objectify, omit, parallel, partial, partob, pascal, pick, proxied, random, range, reduce, replace, replaceOrAppend, retry, select, series, set, shake, shift, shuffle, sift, sleep, snake, sort, sum, template, throttle, title, toFloat, toInt, toggle, trim, tryit as try, tryit, uid, unique, upperize, zip, zipToObject };
+export { all, alphabetical, assign, boil, callable, camel, capitalize, chain, clone, cluster, compose, construct, counting, crush, dash, debounce, defer, diff, draw, first, flat, fork, get, group, guard, intersects, invert, isArray, isDate, isEmpty, isEqual, isFloat, isFunction, isInt, isNumber, isObject, isPrimitive, isPromise, isString, isSymbol, iterate, keys, last, list, listify, lowerize, map, mapEntries, mapKeys, mapValues, max, memo, merge, min, objectify, omit, parallel, partial, partob, pascal, pick, proxied, random, range, reduce, replace, replaceOrAppend, retry, select, series, set, shake, shift, shuffle, sift, sleep, snake, sort, sum, template, throttle, title, toFloat, toInt, toggle, trim, tryit as try, tryit, uid, unique, upperize, zip, zipToObject };

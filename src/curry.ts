@@ -1,62 +1,390 @@
-export type UnaryFunc<T, R> = (arg: T) => R
-export type Func<TArgs = any, KReturn = any | void> = (
-  ...args: TArgs[]
-) => KReturn
-
-export function chain<T1, T2, R>(
-  fn1: UnaryFunc<T1, T2>,
-  fn2: UnaryFunc<T2, R>
-): UnaryFunc<T1, R>
-export function chain<T1, T2, T3, R>(
-  fn1: UnaryFunc<T1, T2>,
-  fn2: UnaryFunc<T2, T3>,
-  fn3: UnaryFunc<T3, R>
-): UnaryFunc<T1, R>
-export function chain<T1, T2, T3, T4, R>(
-  fn1: UnaryFunc<T1, T2>,
-  fn2: UnaryFunc<T2, T3>,
-  fn3: UnaryFunc<T3, T4>,
-  fn4: UnaryFunc<T4, R>
-): UnaryFunc<T1, R>
-export function chain<T1, T2, T3, T4, T5, R>(
-  fn1: UnaryFunc<T1, T2>,
-  fn2: UnaryFunc<T2, T3>,
-  fn3: UnaryFunc<T3, T4>,
-  fn4: UnaryFunc<T4, T5>,
-  fn5: UnaryFunc<T5, R>
-): UnaryFunc<T1, R>
-export function chain<T1, T2, T3, T4, T5, T6, R>(
-  fn1: UnaryFunc<T1, T2>,
-  fn2: UnaryFunc<T2, T3>,
-  fn3: UnaryFunc<T3, T4>,
-  fn4: UnaryFunc<T4, T5>,
-  fn5: UnaryFunc<T5, T6>,
-  fn6: UnaryFunc<T6, R>
-): UnaryFunc<T1, R>
-export function chain<T1, T2, T3, T4, T5, T6, T7, R>(
-  fn1: UnaryFunc<T1, T2>,
-  fn2: UnaryFunc<T2, T3>,
-  fn3: UnaryFunc<T3, T4>,
-  fn4: UnaryFunc<T4, T5>,
-  fn5: UnaryFunc<T5, T6>,
-  fn6: UnaryFunc<T6, T7>,
-  fn7: UnaryFunc<T7, R>
-): UnaryFunc<T1, R>
-export function chain<T = any, R = any>(
-  ...fns: ((arg: any) => any)[]
-): UnaryFunc<T, R>
-export function chain(...funcs: Func[]): Func {
-  return function forInitialArg(initialArg: Parameters<Func>[0]) {
-    return funcs.reduce((acc, fn) => fn(acc), initialArg)
+export function chain<T1 extends any[], T2, T3>(
+  f1: (...arg: T1) => T2,
+  f2: (arg: T2) => T3
+): (...arg: T1) => T3
+export function chain<T1 extends any[], T2, T3, T4>(
+  f1: (...arg: T1) => T2,
+  f2: (arg: T2) => T3,
+  f3: (arg: T3) => T4
+): (...arg: T1) => T4
+export function chain<T1 extends any[], T2, T3, T4, T5>(
+  f1: (...arg: T1) => T2,
+  f2: (arg: T2) => T3,
+  f3: (arg: T3) => T4,
+  f4: (arg: T3) => T5
+): (...arg: T1) => T5
+export function chain<T1 extends any[], T2, T3, T4, T5, T6>(
+  f1: (...arg: T1) => T2,
+  f2: (arg: T2) => T3,
+  f3: (arg: T3) => T4,
+  f4: (arg: T3) => T5,
+  f5: (arg: T3) => T6
+): (...arg: T1) => T6
+export function chain<T1 extends any[], T2, T3, T4, T5, T6, T7>(
+  f1: (...arg: T1) => T2,
+  f2: (arg: T2) => T3,
+  f3: (arg: T3) => T4,
+  f4: (arg: T3) => T5,
+  f5: (arg: T3) => T6,
+  f6: (arg: T3) => T7
+): (...arg: T1) => T7
+export function chain<T1 extends any[], T2, T3, T4, T5, T6, T7, T8>(
+  f1: (...arg: T1) => T2,
+  f2: (arg: T2) => T3,
+  f3: (arg: T3) => T4,
+  f4: (arg: T3) => T5,
+  f5: (arg: T3) => T6,
+  f6: (arg: T3) => T7,
+  f7: (arg: T3) => T8
+): (...arg: T1) => T8
+export function chain<T1 extends any[], T2, T3, T4, T5, T6, T7, T8, T9>(
+  f1: (...arg: T1) => T2,
+  f2: (arg: T2) => T3,
+  f3: (arg: T3) => T4,
+  f4: (arg: T3) => T5,
+  f5: (arg: T3) => T6,
+  f6: (arg: T3) => T7,
+  f7: (arg: T3) => T8,
+  f8: (arg: T3) => T9
+): (...arg: T1) => T9
+export function chain<T1 extends any[], T2, T3, T4, T5, T6, T7, T8, T9, T10>(
+  f1: (...arg: T1) => T2,
+  f2: (arg: T2) => T3,
+  f3: (arg: T3) => T4,
+  f4: (arg: T3) => T5,
+  f5: (arg: T3) => T6,
+  f6: (arg: T3) => T7,
+  f7: (arg: T3) => T8,
+  f8: (arg: T3) => T9,
+  f9: (arg: T3) => T10
+): (...arg: T1) => T10
+export function chain<
+  T1 extends any[],
+  T2,
+  T3,
+  T4,
+  T5,
+  T6,
+  T7,
+  T8,
+  T9,
+  T10,
+  T11
+>(
+  f1: (...arg: T1) => T2,
+  f2: (arg: T2) => T3,
+  f3: (arg: T3) => T4,
+  f4: (arg: T3) => T5,
+  f5: (arg: T3) => T6,
+  f6: (arg: T3) => T7,
+  f7: (arg: T3) => T8,
+  f8: (arg: T3) => T9,
+  f9: (arg: T3) => T10,
+  f10: (arg: T3) => T11
+): (...arg: T1) => T11
+export function chain(...funcs: ((...args: any[]) => any)[]) {
+  return (...args: any[]) => {
+    return funcs.slice(1).reduce((acc, fn) => fn(acc), funcs[0](...args))
   }
 }
 
-export const compose = (...funcs: Func[]) => {
+export function compose<
+  F1Result,
+  F1Args extends any[],
+  F1NextArgs extends any[],
+  LastResult
+>(
+  f1: (
+    next: (...args: F1NextArgs) => LastResult
+  ) => (...args: F1Args) => F1Result,
+  last: (...args: F1NextArgs) => LastResult
+): (...args: F1Args) => F1Result
+
+export function compose<
+  F1Result,
+  F1Args extends any[],
+  F1NextArgs extends any[],
+  F2Result,
+  F2NextArgs extends any[],
+  LastResult
+>(
+  f1: (
+    next: (...args: F1NextArgs) => F2Result
+  ) => (...args: F1Args) => F1Result,
+  f2: (
+    next: (...args: F2NextArgs) => LastResult
+  ) => (...args: F1NextArgs) => F2Result,
+  last: (...args: F2NextArgs) => LastResult
+): (...args: F1Args) => F1Result
+
+export function compose<
+  F1Result,
+  F1Args extends any[],
+  F1NextArgs extends any[],
+  F2NextArgs extends any[],
+  F2Result,
+  F3NextArgs extends any[],
+  F3Result,
+  LastResult
+>(
+  f1: (
+    next: (...args: F1NextArgs) => F2Result
+  ) => (...args: F1Args) => F1Result,
+  f2: (
+    next: (...args: F2NextArgs) => F3Result
+  ) => (...args: F1NextArgs) => F2Result,
+  f3: (
+    next: (...args: F3NextArgs) => LastResult
+  ) => (...args: F2NextArgs) => F3Result,
+  last: (...args: F3NextArgs) => LastResult
+): (...args: F1Args) => F1Result
+
+export function compose<
+  F1Result,
+  F1Args extends any[],
+  F1NextArgs extends any[],
+  F2NextArgs extends any[],
+  F2Result,
+  F3NextArgs extends any[],
+  F3Result,
+  F4NextArgs extends any[],
+  F4Result,
+  LastResult
+>(
+  f1: (
+    next: (...args: F1NextArgs) => F2Result
+  ) => (...args: F1Args) => F1Result,
+  f2: (
+    next: (...args: F2NextArgs) => F3Result
+  ) => (...args: F1NextArgs) => F2Result,
+  f3: (
+    next: (...args: F3NextArgs) => F4Result
+  ) => (...args: F2NextArgs) => F3Result,
+  f4: (
+    next: (...args: F4NextArgs) => LastResult
+  ) => (...args: F3NextArgs) => F4Result,
+  last: (...args: F4NextArgs) => LastResult
+): (...args: F1Args) => F1Result
+
+export function compose<
+  F1Result,
+  F1Args extends any[],
+  F1NextArgs extends any[],
+  F2NextArgs extends any[],
+  F2Result,
+  F3NextArgs extends any[],
+  F3Result,
+  F4NextArgs extends any[],
+  F4Result,
+  F5NextArgs extends any[],
+  F5Result,
+  LastResult
+>(
+  f1: (
+    next: (...args: F1NextArgs) => F2Result
+  ) => (...args: F1Args) => F1Result,
+  f2: (
+    next: (...args: F2NextArgs) => F3Result
+  ) => (...args: F1NextArgs) => F2Result,
+  f3: (
+    next: (...args: F3NextArgs) => F4Result
+  ) => (...args: F2NextArgs) => F3Result,
+  f4: (
+    next: (...args: F4NextArgs) => F5Result
+  ) => (...args: F3NextArgs) => F4Result,
+  f5: (
+    next: (...args: F5NextArgs) => LastResult
+  ) => (...args: F4NextArgs) => F5Result,
+  last: (...args: F5NextArgs) => LastResult
+): (...args: F1Args) => F1Result
+
+export function compose<
+  F1Result,
+  F1Args extends any[],
+  F1NextArgs extends any[],
+  F2NextArgs extends any[],
+  F2Result,
+  F3NextArgs extends any[],
+  F3Result,
+  F4NextArgs extends any[],
+  F4Result,
+  F5NextArgs extends any[],
+  F5Result,
+  F6NextArgs extends any[],
+  F6Result,
+  LastResult
+>(
+  f1: (
+    next: (...args: F1NextArgs) => F2Result
+  ) => (...args: F1Args) => F1Result,
+  f2: (
+    next: (...args: F2NextArgs) => F3Result
+  ) => (...args: F1NextArgs) => F2Result,
+  f3: (
+    next: (...args: F3NextArgs) => F4Result
+  ) => (...args: F2NextArgs) => F3Result,
+  f4: (
+    next: (...args: F4NextArgs) => F5Result
+  ) => (...args: F3NextArgs) => F4Result,
+  f5: (
+    next: (...args: F5NextArgs) => F6Result
+  ) => (...args: F4NextArgs) => F5Result,
+  f6: (
+    next: (...args: F6NextArgs) => LastResult
+  ) => (...args: F5NextArgs) => F6Result,
+  last: (...args: F6NextArgs) => LastResult
+): (...args: F1Args) => F1Result
+
+export function compose<
+  F1Result,
+  F1Args extends any[],
+  F1NextArgs extends any[],
+  F2NextArgs extends any[],
+  F2Result,
+  F3NextArgs extends any[],
+  F3Result,
+  F4NextArgs extends any[],
+  F4Result,
+  F5NextArgs extends any[],
+  F5Result,
+  F6NextArgs extends any[],
+  F6Result,
+  F7NextArgs extends any[],
+  F7Result,
+  LastResult
+>(
+  f1: (
+    next: (...args: F1NextArgs) => F2Result
+  ) => (...args: F1Args) => F1Result,
+  f2: (
+    next: (...args: F2NextArgs) => F3Result
+  ) => (...args: F1NextArgs) => F2Result,
+  f3: (
+    next: (...args: F3NextArgs) => F4Result
+  ) => (...args: F2NextArgs) => F3Result,
+  f4: (
+    next: (...args: F4NextArgs) => F5Result
+  ) => (...args: F3NextArgs) => F4Result,
+  f5: (
+    next: (...args: F5NextArgs) => F6Result
+  ) => (...args: F4NextArgs) => F5Result,
+  f6: (
+    next: (...args: F6NextArgs) => F7Result
+  ) => (...args: F5NextArgs) => F6Result,
+  f7: (
+    next: (...args: F7NextArgs) => LastResult
+  ) => (...args: F6NextArgs) => F7Result,
+  last: (...args: F7NextArgs) => LastResult
+): (...args: F1Args) => F1Result
+
+export function compose<
+  F1Result,
+  F1Args extends any[],
+  F1NextArgs extends any[],
+  F2NextArgs extends any[],
+  F2Result,
+  F3NextArgs extends any[],
+  F3Result,
+  F4NextArgs extends any[],
+  F4Result,
+  F5NextArgs extends any[],
+  F5Result,
+  F6NextArgs extends any[],
+  F6Result,
+  F7NextArgs extends any[],
+  F7Result,
+  F8NextArgs extends any[],
+  F8Result,
+  LastResult
+>(
+  f1: (
+    next: (...args: F1NextArgs) => F2Result
+  ) => (...args: F1Args) => F1Result,
+  f2: (
+    next: (...args: F2NextArgs) => F3Result
+  ) => (...args: F1NextArgs) => F2Result,
+  f3: (
+    next: (...args: F3NextArgs) => F4Result
+  ) => (...args: F2NextArgs) => F3Result,
+  f4: (
+    next: (...args: F4NextArgs) => F5Result
+  ) => (...args: F3NextArgs) => F4Result,
+  f5: (
+    next: (...args: F5NextArgs) => F6Result
+  ) => (...args: F4NextArgs) => F5Result,
+  f6: (
+    next: (...args: F6NextArgs) => F7Result
+  ) => (...args: F5NextArgs) => F6Result,
+  f7: (
+    next: (...args: F7NextArgs) => LastResult
+  ) => (...args: F6NextArgs) => F7Result,
+  f8: (
+    next: (...args: F8NextArgs) => LastResult
+  ) => (...args: F7NextArgs) => F8Result,
+  last: (...args: F8NextArgs) => LastResult
+): (...args: F1Args) => F1Result
+
+export function compose<
+  F1Result,
+  F1Args extends any[],
+  F1NextArgs extends any[],
+  F2NextArgs extends any[],
+  F2Result,
+  F3NextArgs extends any[],
+  F3Result,
+  F4NextArgs extends any[],
+  F4Result,
+  F5NextArgs extends any[],
+  F5Result,
+  F6NextArgs extends any[],
+  F6Result,
+  F7NextArgs extends any[],
+  F7Result,
+  F8NextArgs extends any[],
+  F8Result,
+  F9NextArgs extends any[],
+  F9Result,
+  LastResult
+>(
+  f1: (
+    next: (...args: F1NextArgs) => F2Result
+  ) => (...args: F1Args) => F1Result,
+  f2: (
+    next: (...args: F2NextArgs) => F3Result
+  ) => (...args: F1NextArgs) => F2Result,
+  f3: (
+    next: (...args: F3NextArgs) => F4Result
+  ) => (...args: F2NextArgs) => F3Result,
+  f4: (
+    next: (...args: F4NextArgs) => F5Result
+  ) => (...args: F3NextArgs) => F4Result,
+  f5: (
+    next: (...args: F5NextArgs) => F6Result
+  ) => (...args: F4NextArgs) => F5Result,
+  f6: (
+    next: (...args: F6NextArgs) => F7Result
+  ) => (...args: F5NextArgs) => F6Result,
+  f7: (
+    next: (...args: F7NextArgs) => LastResult
+  ) => (...args: F6NextArgs) => F7Result,
+  f8: (
+    next: (...args: F8NextArgs) => LastResult
+  ) => (...args: F7NextArgs) => F8Result,
+  f9: (
+    next: (...args: F9NextArgs) => LastResult
+  ) => (...args: F8NextArgs) => F9Result,
+  last: (...args: F9NextArgs) => LastResult
+): (...args: F1Args) => F1Result
+
+export function compose(...funcs: ((...args: any[]) => any)[]) {
   return funcs.reverse().reduce((acc, fn) => fn(acc))
 }
 
-export const partial = (fn: Func, ...args: any[]) => {
-  return (...rest: any[]) => fn(...args, ...rest)
+export const partial = <T extends any[], R>(
+  fn: (...args: T) => R,
+  ...args: Partial<T>
+) => {
+  return (...rest: T) => fn(...([...args, ...rest] as T))
 }
 
 /**
@@ -92,13 +420,13 @@ export const proxied = <T, K>(
 
 type Cache<T> = Record<string, { exp: number | null; value: T }>
 
-const memoize = <T>(
-  cache: Cache<T>,
-  func: Func<any, T>,
-  keyFunc: Func<string> | null,
+const memoize = <TArgs extends any[], TResult>(
+  cache: Cache<TResult>,
+  func: (...args: TArgs) => TResult,
+  keyFunc: ((...args: TArgs) => string) | null,
   ttl: number | null
 ) => {
-  return function callWithMemo(...args: any): T {
+  return function callWithMemo(...args: any): TResult {
     const key = keyFunc ? keyFunc(...args) : JSON.stringify({ args })
     const existing = cache[key]
     if (existing !== undefined) {
@@ -123,10 +451,13 @@ const memoize = <T>(
  * is given previously computed values will be checked
  * for expiration before being returned.
  */
-export const memo = <TFunc extends (...args: any) => any>(
+export const memo = <
+  TArgs extends any[],
+  TFunc extends (...args: TArgs) => any
+>(
   func: TFunc,
   options: {
-    key?: Func<any, string>
+    key?: (...args: TArgs) => string
     ttl?: number
   } = {}
 ) => {
