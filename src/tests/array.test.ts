@@ -99,7 +99,7 @@ describe('array module', () => {
       assert.equal(result, 22)
     })
     test('gracefully handles null input list', () => {
-      const result = _.sum(null as unknown as readonly (number | object)[])
+      const result = _.sum(null as unknown as readonly number[])
       assert.equal(result, 0)
     })
   })

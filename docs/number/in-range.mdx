@@ -1,0 +1,22 @@
+---
+title: inRange
+description: Checks if the given number is between two numbers. The starting number is inclusive. The ending number is exclusive. The start and the end of the range can be ascending OR descending order. If end is not specified, it's set to start value. And start is set to 0.
+group: Number
+---
+
+## Basic usage
+
+Pass the number, the start and the end (optional) of the range. The `_.inRange` function will return true if the given number is in the range.
+
+```ts
+import { inRange } from 'radash'
+
+inRange(10, 0, 20) // true
+inRange(9.99, 0, 10) // true
+inRange(Math.PI, 0, 3.15) // true
+inRange(10, 10, 20) // true
+inRange(10, 0, 10) // false
+
+inRange(1, 2) // true
+inRange(1, 0) // false
+```
