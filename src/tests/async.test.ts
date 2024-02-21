@@ -3,7 +3,7 @@ import * as _ from '..'
 import { AggregateError } from '../async'
 
 describe('async module', () => {
-  beforeEach(() => jest.useFakeTimers({ advanceTimers: true }))
+  jest.useFakeTimers({ advanceTimers: true })
 
   describe('asyncReduce function', () => {
     test('returns result of reducer', async () => {
