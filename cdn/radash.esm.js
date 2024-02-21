@@ -709,11 +709,12 @@ const omit = (obj, keys2) => {
 const get = (value, path, defaultValue) => {
   const segments = path.split(/[\.\[\]]/g);
   let current = value;
-  for (const key of segments) {
+  for (let key of segments) {
     if (current === null)
       return defaultValue;
     if (current === void 0)
       return defaultValue;
+    key = key.replace(/['"]/g, "");
     if (key.trim() === "")
       continue;
     current = current[key];
