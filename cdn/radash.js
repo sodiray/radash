@@ -118,12 +118,9 @@ var radash = (function (exports) {
       return null;
     return array.reduce(compareFunc);
   };
-  const sum = (array, fn) => {
-    return (array || []).reduce(
-      (acc, item) => acc + (fn ? fn(item) : item),
-      0
-    );
-  };
+  function sum(array, fn) {
+    return (array || []).reduce((acc, item) => acc + (fn ? fn(item) : item), 0);
+  }
   const first = (array, defaultValue = void 0) => {
     return array?.length > 0 ? array[0] : defaultValue;
   };
@@ -593,6 +590,17 @@ var radash = (function (exports) {
     });
   };
 
+  function inRange(number, start, end) {
+    const isTypeSafe = typeof number === "number" && typeof start === "number" && (typeof end === "undefined" || typeof end === "number");
+    if (!isTypeSafe) {
+      return false;
+    }
+    if (typeof end === "undefined") {
+      end = start;
+      start = 0;
+    }
+    return number >= Math.min(start, end) && number < Math.max(start, end);
+  }
   const toFloat = (value, defaultValue) => {
     const def = defaultValue === void 0 ? 0 : defaultValue;
     if (value === null || value === void 0) {
@@ -711,9 +719,10 @@ var radash = (function (exports) {
         return defaultValue;
       if (current === void 0)
         return defaultValue;
-      if (key.trim() === "")
+      const dequoted = key.replace(/['"]/g, "");
+      if (dequoted.trim() === "")
         continue;
-      current = current[key];
+      current = current[dequoted];
     }
     if (current === void 0)
       return defaultValue;
@@ -956,6 +965,7 @@ var radash = (function (exports) {
   exports.get = get;
   exports.group = group;
   exports.guard = guard;
+  exports.inRange = inRange;
   exports.intersects = intersects;
   exports.invert = invert;
   exports.isArray = isArray;
