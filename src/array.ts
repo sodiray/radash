@@ -291,17 +291,17 @@ export const cluster = <T>(list: readonly T[], size: number = 2): T[][] => {
  * to convert each item in the list to a comparable identity
  * value
  */
-export const unique = <T, K extends string | number | symbol>(
+export const unique = <T, K>(
   array: readonly T[],
   toKey?: (item: T) => K
 ): T[] => {
   const valueMap = array.reduce((acc, item) => {
-    const key = toKey ? toKey(item) : (item as any as string | number | symbol)
-    if (acc[key]) return acc
-    acc[key] = item
+    const key = toKey ? toKey(item) : item
+    if (acc.get(key)) return acc
+    acc.set(key, item)
     return acc
-  }, {} as Record<string | number | symbol, T>)
-  return Object.values(valueMap)
+  }, new Map())
+  return Array.from(valueMap.values())
 }
 
 /**
