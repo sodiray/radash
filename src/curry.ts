@@ -1,12 +1,55 @@
+export type UnaryFunc<T, R> = (arg: T) => R
 export type Func<TArgs = any, KReturn = any | void> = (
   ...args: TArgs[]
 ) => KReturn
 
-export const chain =
-  (...funcs: Func[]) =>
-  (...args: any[]) => {
-    return funcs.slice(1).reduce((acc, fn) => fn(acc), funcs[0](...args))
+export function chain<T1, T2, R>(
+  fn1: UnaryFunc<T1, T2>,
+  fn2: UnaryFunc<T2, R>
+): UnaryFunc<T1, R>
+export function chain<T1, T2, T3, R>(
+  fn1: UnaryFunc<T1, T2>,
+  fn2: UnaryFunc<T2, T3>,
+  fn3: UnaryFunc<T3, R>
+): UnaryFunc<T1, R>
+export function chain<T1, T2, T3, T4, R>(
+  fn1: UnaryFunc<T1, T2>,
+  fn2: UnaryFunc<T2, T3>,
+  fn3: UnaryFunc<T3, T4>,
+  fn4: UnaryFunc<T4, R>
+): UnaryFunc<T1, R>
+export function chain<T1, T2, T3, T4, T5, R>(
+  fn1: UnaryFunc<T1, T2>,
+  fn2: UnaryFunc<T2, T3>,
+  fn3: UnaryFunc<T3, T4>,
+  fn4: UnaryFunc<T4, T5>,
+  fn5: UnaryFunc<T5, R>
+): UnaryFunc<T1, R>
+export function chain<T1, T2, T3, T4, T5, T6, R>(
+  fn1: UnaryFunc<T1, T2>,
+  fn2: UnaryFunc<T2, T3>,
+  fn3: UnaryFunc<T3, T4>,
+  fn4: UnaryFunc<T4, T5>,
+  fn5: UnaryFunc<T5, T6>,
+  fn6: UnaryFunc<T6, R>
+): UnaryFunc<T1, R>
+export function chain<T1, T2, T3, T4, T5, T6, T7, R>(
+  fn1: UnaryFunc<T1, T2>,
+  fn2: UnaryFunc<T2, T3>,
+  fn3: UnaryFunc<T3, T4>,
+  fn4: UnaryFunc<T4, T5>,
+  fn5: UnaryFunc<T5, T6>,
+  fn6: UnaryFunc<T6, T7>,
+  fn7: UnaryFunc<T7, R>
+): UnaryFunc<T1, R>
+export function chain<T = any, R = any>(
+  ...fns: ((arg: any) => any)[]
+): UnaryFunc<T, R>
+export function chain(...funcs: Func[]): Func {
+  return function forInitialArg(initialArg: Parameters<Func>[0]) {
+    return funcs.reduce((acc, fn) => fn(acc), initialArg)
   }
+}
 
 export const compose = (...funcs: Func[]) => {
   return funcs.reverse().reduce((acc, fn) => fn(acc))
