@@ -380,13 +380,28 @@ export function compose(...funcs: ((...args: any[]) => any)[]) {
   return funcs.reverse().reduce((acc, fn) => fn(acc))
 }
 
-export const partial = <T extends any[], R>(
-  fn: (...args: T) => R,
-  ...args: Partial<T>
-) => {
-  return (...rest: T) => fn(...([...args, ...rest] as T))
-}
+/**
+ * This type produces the type array of TItems with all the type items
+ * in TItemsToRemove removed from the start of the array type.
+ *
+ * @example
+ * ```
+ * RemoveItemsInFront<[number, number], [number]> = [number]
+ * RemoveItemsInFront<[File, number, string], [File, number]> = [string]
+ * ```
+ */
+type RemoveItemsInFront<
+  TItems extends any[],
+  TItemsToRemove extends any[]
+> = TItems extends [...TItemsToRemove, ...infer TRest] ? TRest : TItems
 
+export const partial = <T extends any[], TA extends Partial<T>, R>(
+  fn: (...args: T) => R,
+  ...args: TA
+) => {
+  return (...rest: RemoveItemsInFront<T, TA>) =>
+    fn(...([...args, ...rest] as T))
+}
 /**
  * Like partial but for unary functions that accept
  * a single object argument

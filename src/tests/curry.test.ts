@@ -166,7 +166,8 @@ describe('curry module', () => {
     test('passes single args', () => {
       const add = (a: number, b: number) => a + b
       const expected = 20
-      const result = (_.partial(add, 10) as any)(10)
+      const partialed = _.partial(add, 10)
+      const result = partialed(10)
       assert.equal(result, expected)
     })
     test('passes many args', () => {
