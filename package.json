@@ -1,6 +1,6 @@
 {
   "name": "radash",
-  "version": "12.0.0",
+  "version": "12.1.0",
   "description": "Functional utility library - modern, simple, typed, powerful",
   "main": "dist/cjs/index.cjs",
   "module": "dist/esm/index.mjs",
