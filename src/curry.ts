@@ -466,8 +466,8 @@ const memoize = <TArgs extends any[], TResult>(
  * is given previously computed values will be checked
  * for expiration before being returned.
  */
-export const memo = <TArgs extends any[]>(
-  func: (...args: TArgs) => any,
+export const memo = <TArgs extends any[], TResult>(
+  func: (...args: TArgs) => TResult,
   options: {
     key?: (...args: TArgs) => string
     ttl?: number
@@ -475,7 +475,7 @@ export const memo = <TArgs extends any[]>(
 ) => {
   return memoize({}, func, options.key ?? null, options.ttl ?? null) as (
     ...args: TArgs
-  ) => any
+  ) => TResult
 }
 
 export type DebounceFunction<TArgs extends any[]> = {
