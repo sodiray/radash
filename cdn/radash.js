@@ -7,6 +7,21 @@ var radash = (function (exports) {
   const isArray = (value) => {
     return !!value && value.constructor === Array;
   };
+  const isTypedArray = (value) => {
+    return !!value && (value.constructor === Int8Array || value.constructor === Uint8Array || value.constructor === Uint8ClampedArray || value.constructor === Int16Array || value.constructor === Uint16Array || value.constructor === Int32Array || value.constructor === Uint32Array || value.constructor === BigInt64Array || value.constructor === BigUint64Array || value.constructor === Float32Array || value.constructor === Float64Array);
+  };
+  const isIndexedCollections = (value) => {
+    return isArray(value) || isTypedArray(value);
+  };
+  const isSet = (value) => {
+    return !!value && value.constructor === Set;
+  };
+  const isMap = (value) => {
+    return !!value && value.constructor === Map;
+  };
+  const isKeyedCollections = (value) => {
+    return isSet(value) || isMap(value);
+  };
   const isObject = (value) => {
     return !!value && value.constructor === Object;
   };
@@ -20,7 +35,7 @@ var radash = (function (exports) {
     return typeof value === "string" || value instanceof String;
   };
   const isInt = (value) => {
-    return isNumber(value) && value % 1 === 0;
+    return isNumber(value) && value % 1 === 0 || isBigInt(value);
   };
   const isFloat = (value) => {
     return isNumber(value) && value % 1 !== 0;
@@ -32,6 +47,9 @@ var radash = (function (exports) {
       return false;
     }
   };
+  const isBigInt = (value) => {
+    return typeof value === "bigint";
+  };
   const isDate = (value) => {
     return Object.prototype.toString.call(value) === "[object Date]";
   };
@@ -42,20 +60,19 @@ var radash = (function (exports) {
       return true;
     if (isNumber(value))
       return value === 0;
+    if (isBigInt(value))
+      return value === 0n;
     if (isDate(value))
       return isNaN(value.getTime());
     if (isFunction(value))
       return false;
     if (isSymbol(value))
       return false;
-    const length = value.length;
-    if (isNumber(length))
-      return length === 0;
-    const size = value.size;
-    if (isNumber(size))
-      return size === 0;
-    const keys = Object.keys(value).length;
-    return keys === 0;
+    if (isIndexedCollections(value))
+      return value.length === 0;
+    if (isKeyedCollections(value))
+      return value.size === 0;
+    return Object.keys(value).length === 0;
   };
   const isEqual = (x, y) => {
     if (Object.is(x, y))
@@ -918,17 +935,23 @@ var radash = (function (exports) {
   exports.intersects = intersects;
   exports.invert = invert;
   exports.isArray = isArray;
+  exports.isBigInt = isBigInt;
   exports.isDate = isDate;
   exports.isEmpty = isEmpty;
   exports.isEqual = isEqual;
   exports.isFloat = isFloat;
   exports.isFunction = isFunction;
+  exports.isIndexedCollections = isIndexedCollections;
   exports.isInt = isInt;
+  exports.isKeyedCollections = isKeyedCollections;
+  exports.isMap = isMap;
   exports.isNumber = isNumber;
   exports.isObject = isObject;
   exports.isPrimitive = isPrimitive;
+  exports.isSet = isSet;
   exports.isString = isString;
   exports.isSymbol = isSymbol;
+  exports.isTypedArray = isTypedArray;
   exports.iterate = iterate;
   exports.keys = keys;
   exports.last = last;

@@ -86,15 +86,21 @@ export {
 } from './string'
 export {
   isArray,
+  isBigInt,
   isDate,
   isEmpty,
   isEqual,
   isFloat,
   isFunction,
+  isIndexedCollections,
   isInt,
+  isKeyedCollections,
+  isMap,
   isNumber,
   isObject,
   isPrimitive,
+  isSet,
   isString,
-  isSymbol
+  isSymbol,
+  isTypedArray
 } from './typed'

@@ -4,6 +4,21 @@ const isSymbol = (value) => {
 const isArray = (value) => {
   return !!value && value.constructor === Array;
 };
+const isTypedArray = (value) => {
+  return !!value && (value.constructor === Int8Array || value.constructor === Uint8Array || value.constructor === Uint8ClampedArray || value.constructor === Int16Array || value.constructor === Uint16Array || value.constructor === Int32Array || value.constructor === Uint32Array || value.constructor === BigInt64Array || value.constructor === BigUint64Array || value.constructor === Float32Array || value.constructor === Float64Array);
+};
+const isIndexedCollections = (value) => {
+  return isArray(value) || isTypedArray(value);
+};
+const isSet = (value) => {
+  return !!value && value.constructor === Set;
+};
+const isMap = (value) => {
+  return !!value && value.constructor === Map;
+};
+const isKeyedCollections = (value) => {
+  return isSet(value) || isMap(value);
+};
 const isObject = (value) => {
   return !!value && value.constructor === Object;
 };
@@ -17,7 +32,7 @@ const isString = (value) => {
   return typeof value === "string" || value instanceof String;
 };
 const isInt = (value) => {
-  return isNumber(value) && value % 1 === 0;
+  return isNumber(value) && value % 1 === 0 || isBigInt(value);
 };
 const isFloat = (value) => {
   return isNumber(value) && value % 1 !== 0;
@@ -29,6 +44,9 @@ const isNumber = (value) => {
     return false;
   }
 };
+const isBigInt = (value) => {
+  return typeof value === "bigint";
+};
 const isDate = (value) => {
   return Object.prototype.toString.call(value) === "[object Date]";
 };
@@ -39,20 +57,19 @@ const isEmpty = (value) => {
     return true;
   if (isNumber(value))
     return value === 0;
+  if (isBigInt(value))
+    return value === 0n;
   if (isDate(value))
     return isNaN(value.getTime());
   if (isFunction(value))
     return false;
   if (isSymbol(value))
     return false;
-  const length = value.length;
-  if (isNumber(length))
-    return length === 0;
-  const size = value.size;
-  if (isNumber(size))
-    return size === 0;
-  const keys = Object.keys(value).length;
-  return keys === 0;
+  if (isIndexedCollections(value))
+    return value.length === 0;
+  if (isKeyedCollections(value))
+    return value.size === 0;
+  return Object.keys(value).length === 0;
 };
 const isEqual = (x, y) => {
   if (Object.is(x, y))
@@ -888,4 +905,4 @@ const trim = (str, charsToTrim = " ") => {
   return str.replace(regex, "");
 };
 
-export { alphabetical, assign, boil, callable, camel, capitalize, chain, clone, cluster, compose, construct, counting, crush, dash, debounce, defer, diff, draw, first, flat, fork, get, group, guard, intersects, invert, isArray, isDate, isEmpty, isEqual, isFloat, isFunction, isInt, isNumber, isObject, isPrimitive, isString, isSymbol, iterate, keys, last, list, listify, lowerize, map, mapEntries, mapKeys, mapValues, max, memo, merge, min, objectify, omit, parallel, partial, partob, pascal, pick, proxied, random, range, reduce, replace, replaceOrAppend, retry, select, series, set, shake, shift, shuffle, sift, sleep, snake, sort, sum, template, throttle, title, toFloat, toInt, toggle, trim, tryit as try, tryit, uid, unique, upperize, zip, zipToObject };
+export { alphabetical, assign, boil, callable, camel, capitalize, chain, clone, cluster, compose, construct, counting, crush, dash, debounce, defer, diff, draw, first, flat, fork, get, group, guard, intersects, invert, isArray, isBigInt, isDate, isEmpty, isEqual, isFloat, isFunction, isIndexedCollections, isInt, isKeyedCollections, isMap, isNumber, isObject, isPrimitive, isSet, isString, isSymbol, isTypedArray, iterate, keys, last, list, listify, lowerize, map, mapEntries, mapKeys, mapValues, max, memo, merge, min, objectify, omit, parallel, partial, partob, pascal, pick, proxied, random, range, reduce, replace, replaceOrAppend, retry, select, series, set, shake, shift, shuffle, sift, sleep, snake, sort, sum, template, throttle, title, toFloat, toInt, toggle, trim, tryit as try, tryit, uid, unique, upperize, zip, zipToObject };
