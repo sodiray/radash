@@ -248,7 +248,8 @@ export const set = <T extends object, K>(
   const _set = (node: any) => {
     if (segments.length > 1) {
       const key = segments.shift() as string
-      const nextIsNum = toInt(segments[0], null) === null ? false : true
+      const numCast = toInt(segments[0], null)
+      const nextIsNum = numCast !== null && numCast.toString().length === segments[0].length
       node[key] = node[key] === undefined ? (nextIsNum ? [] : {}) : node[key]
       _set(node[key])
     } else {

@@ -447,14 +447,28 @@ describe('object module', () => {
       assert.deepEqual(_.set({}, 'cards.0.value', 2), {
         cards: [{ value: 2 }]
       })
+      assert.deepEqual(_.set({}, 'cards.2.value', 2), {
+        cards: [, , { value: 2 }]
+      })
       assert.deepEqual(_.set({}, 'cards.0.0.value', 2), {
         cards: [[{ value: 2 }]]
+      })
+      assert.deepEqual(_.set({}, 'cards.2.2.value', 2), {
+        cards: [, , [, , { value: 2 }]]
       })
       assert.deepEqual(_.set({}, 'cards.[0].[0].value', 2), {
         cards: [[{ value: 2 }]]
       })
       assert.deepEqual(_.set({}, 'cards.[1].[1].value', 2), {
         cards: [, [, { value: 2 }]]
+      })
+    })
+    test('sets keys starting with numbers correctly', () => {
+      assert.deepEqual(_.set({}, 'cards.0value', 2), {
+        cards: { "0value": 2 }
+      })
+      assert.deepEqual(_.set({}, 'cards.1234value', 2), {
+        cards: { "1234value": 2 }
       })
     })
   })
