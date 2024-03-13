@@ -98,5 +98,7 @@ export {
   isPrimitive,
   isPromise,
   isString,
-  isSymbol
+  isSymbol,
+  isNonNullish,
+  isNullish,
 } from './typed'
