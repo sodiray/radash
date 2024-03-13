@@ -104,3 +104,19 @@ export const isEqual = <TType>(x: TType, y: TType): boolean => {
   }
   return true
 }
+
+
+/**
+ * Checks if the given value is null or undefined.
+ */
+export const isNullish = (value: any): value is null | undefined => {
+  return value === null || value === undefined
+}
+
+
+/**
+ * Checks if the given value is not null or undefined.
+ */
+export const isNonNullish = <TType>(value: TType): value is Exclude<TType, null | undefined> => {
+  return value !== null && value !== undefined
+}
