@@ -88,6 +88,12 @@ var radash = (function (exports) {
     }
     return true;
   };
+  const isNullish = (value) => {
+    return value === null || value === void 0;
+  };
+  const isNonNullish = (value) => {
+    return value !== null && value !== void 0;
+  };
 
   const group = (array, getGroupId) => {
     return array.reduce((acc, item) => {
@@ -975,6 +981,8 @@ var radash = (function (exports) {
   exports.isFloat = isFloat;
   exports.isFunction = isFunction;
   exports.isInt = isInt;
+  exports.isNonNullish = isNonNullish;
+  exports.isNullish = isNullish;
   exports.isNumber = isNumber;
   exports.isObject = isObject;
   exports.isPrimitive = isPrimitive;
