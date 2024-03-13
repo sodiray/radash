@@ -93,12 +93,12 @@ export {
   isFloat,
   isFunction,
   isInt,
+  isNonNullish,
+  isNullish,
   isNumber,
   isObject,
   isPrimitive,
   isPromise,
   isString,
-  isSymbol,
-  isNonNullish,
-  isNullish,
+  isSymbol
 } from './typed'

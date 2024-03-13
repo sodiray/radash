@@ -20,7 +20,7 @@ describe('typed module', () => {
       assert.isFalse(result)
     })
     test('returns false for class instance', () => {
-      class Data { }
+      class Data {}
       const result = _.isArray(new Data())
       assert.isFalse(result)
     })
@@ -56,7 +56,7 @@ describe('typed module', () => {
       assert.isFalse(result)
     })
     test('returns false for class instance', () => {
-      class Data { }
+      class Data {}
       const result = _.isObject(new Data())
       assert.isFalse(result)
     })
@@ -117,7 +117,7 @@ describe('typed module', () => {
       assert.isFalse(result)
     })
     test('returns false for class instance', () => {
-      class Data { }
+      class Data {}
       const result = _.isFunction(new Data())
       assert.isFalse(result)
     })
@@ -172,7 +172,7 @@ describe('typed module', () => {
       assert.isFalse(result)
     })
     test('returns false for class instance', () => {
-      class Data { }
+      class Data {}
       const result = _.isString(new Data())
       assert.isFalse(result)
     })
@@ -212,7 +212,7 @@ describe('typed module', () => {
       assert.isFalse(result)
     })
     test('returns false for class instance', () => {
-      class Data { }
+      class Data {}
       const result = _.isNumber(new Data())
       assert.isFalse(result)
     })
@@ -247,7 +247,7 @@ describe('typed module', () => {
   })
 
   describe('isInt function', () => {
-    class Data { }
+    class Data {}
     test('returns false for non-number values', () => {
       assert.isFalse(_.isInt(undefined))
       assert.isFalse(_.isInt(null))
@@ -270,7 +270,7 @@ describe('typed module', () => {
   })
 
   describe('isFloat function', () => {
-    class Data { }
+    class Data {}
     test('returns false for non-number values', () => {
       assert.isFalse(_.isFloat(undefined))
       assert.isFalse(_.isFloat(null))
@@ -293,7 +293,7 @@ describe('typed module', () => {
   })
 
   describe('isEmpty function', () => {
-    class Data { }
+    class Data {}
     class Person {
       name: string = 'ray'
     }
@@ -320,8 +320,8 @@ describe('typed module', () => {
       assert.isFalse(_.isEmpty('abc'))
       assert.isFalse(_.isEmpty(String('abc')))
       assert.isFalse(_.isEmpty([1, 2, 3]))
-      assert.isFalse(_.isEmpty(function work() { }))
-      assert.isFalse(_.isEmpty(() => { }))
+      assert.isFalse(_.isEmpty(function work() {}))
+      assert.isFalse(_.isEmpty(() => {}))
       assert.isFalse(_.isEmpty(Symbol('')))
       assert.isFalse(_.isEmpty(Symbol('hello')))
       const map = new Map()
@@ -342,8 +342,8 @@ describe('typed module', () => {
       assert.isFalse(_.isDate('abc'))
       assert.isFalse(_.isDate(String('abc')))
       assert.isFalse(_.isDate([1, 2, 3]))
-      assert.isFalse(_.isDate(function work() { }))
-      assert.isFalse(_.isDate(() => { }))
+      assert.isFalse(_.isDate(function work() {}))
+      assert.isFalse(_.isDate(() => {}))
       assert.isFalse(_.isDate(Symbol('')))
       assert.isFalse(_.isDate(Symbol('hello')))
     })
@@ -353,7 +353,7 @@ describe('typed module', () => {
     test('return true for Promise values', () => {
       assert.isTrue(_.isPromise(new Promise(res => res(0))))
       assert.isTrue(_.isPromise(new Promise(res => res(''))))
-      assert.isTrue(_.isPromise((async () => { })()))
+      assert.isTrue(_.isPromise((async () => {})()))
     })
     test('return false for non-Date values', () => {
       assert.isFalse(_.isPromise(22))
@@ -361,8 +361,8 @@ describe('typed module', () => {
       assert.isFalse(_.isPromise('abc'))
       assert.isFalse(_.isPromise(String('abc')))
       assert.isFalse(_.isPromise([1, 2, 3]))
-      assert.isFalse(_.isPromise(function work() { }))
-      assert.isFalse(_.isPromise(() => { }))
+      assert.isFalse(_.isPromise(function work() {}))
+      assert.isFalse(_.isPromise(() => {}))
       assert.isFalse(_.isPromise(Symbol('')))
       assert.isFalse(_.isPromise(Symbol('hello')))
       assert.isFalse(_.isPromise({ then: 2 }))
@@ -381,7 +381,7 @@ describe('typed module', () => {
       assert.isFalse(result)
     })
     test('returns false for empty class instance', () => {
-      class Data { }
+      class Data {}
       const input = new Data()
       const result = _.isSymbol(input)
       assert.isFalse(result)
@@ -553,7 +553,7 @@ describe('typed module', () => {
       assert.isFalse(_.isNullish(false))
       assert.isFalse(_.isNullish([]))
       assert.isFalse(_.isNullish({}))
-      assert.isFalse(_.isNullish(() => { }))
+      assert.isFalse(_.isNullish(() => {}))
       assert.isFalse(_.isNullish(Symbol('')))
       assert.isFalse(_.isNullish(new Date()))
     })
@@ -570,7 +570,7 @@ describe('typed module', () => {
       assert.isTrue(_.isNonNullish(false))
       assert.isTrue(_.isNonNullish([]))
       assert.isTrue(_.isNonNullish({}))
-      assert.isTrue(_.isNonNullish(() => { }))
+      assert.isTrue(_.isNonNullish(() => {}))
       assert.isTrue(_.isNonNullish(Symbol('')))
       assert.isTrue(_.isNonNullish(new Date()))
     })
