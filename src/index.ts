@@ -93,6 +93,7 @@ export {
   isFloat,
   isFunction,
   isInt,
+  isKeyOf,
   isNonNullish,
   isNullish,
   isNumber,

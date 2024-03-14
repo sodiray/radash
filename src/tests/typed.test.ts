@@ -575,4 +575,17 @@ describe('typed module', () => {
       assert.isTrue(_.isNonNullish(new Date()))
     })
   })
+
+  describe('isKeyOf function', () => {
+    test('returns true for keys of the object', () => {
+      const obj = { name: 'ray', age: 22 }
+      assert.isTrue(_.isKeyOf('name', obj))
+      assert.isTrue(_.isKeyOf('age', obj))
+    })
+    test('returns false for keys not in the object', () => {
+      const obj = { name: 'ray', age: 22 }
+      assert.isFalse(_.isKeyOf('height', obj))
+      assert.isFalse(_.isKeyOf('weight', obj))
+    })
+  })
 })

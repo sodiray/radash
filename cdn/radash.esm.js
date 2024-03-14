@@ -91,6 +91,9 @@ const isNullish = (value) => {
 const isNonNullish = (value) => {
   return value !== null && value !== void 0;
 };
+const isKeyOf = (value, obj) => {
+  return value in obj;
+};
 
 const group = (array, getGroupId) => {
   return array.reduce((acc, item) => {
@@ -943,4 +946,4 @@ const trim = (str, charsToTrim = " ") => {
   return str.replace(regex, "");
 };
 
-export { all, alphabetical, assign, boil, callable, camel, capitalize, chain, clone, cluster, compose, construct, counting, crush, dash, debounce, defer, diff, draw, first, flat, fork, get, group, guard, inRange, intersects, invert, isArray, isDate, isEmpty, isEqual, isFloat, isFunction, isInt, isNonNullish, isNullish, isNumber, isObject, isPrimitive, isPromise, isString, isSymbol, iterate, keys, last, list, listify, lowerize, map, mapEntries, mapKeys, mapValues, max, memo, merge, min, objectify, omit, parallel, partial, partob, pascal, pick, proxied, random, range, reduce, replace, replaceOrAppend, retry, select, series, set, shake, shift, shuffle, sift, sleep, snake, sort, sum, template, throttle, title, toFloat, toInt, toggle, trim, tryit as try, tryit, uid, unique, upperize, zip, zipToObject };
+export { all, alphabetical, assign, boil, callable, camel, capitalize, chain, clone, cluster, compose, construct, counting, crush, dash, debounce, defer, diff, draw, first, flat, fork, get, group, guard, inRange, intersects, invert, isArray, isDate, isEmpty, isEqual, isFloat, isFunction, isInt, isKeyOf, isNonNullish, isNullish, isNumber, isObject, isPrimitive, isPromise, isString, isSymbol, iterate, keys, last, list, listify, lowerize, map, mapEntries, mapKeys, mapValues, max, memo, merge, min, objectify, omit, parallel, partial, partob, pascal, pick, proxied, random, range, reduce, replace, replaceOrAppend, retry, select, series, set, shake, shift, shuffle, sift, sleep, snake, sort, sum, template, throttle, title, toFloat, toInt, toggle, trim, tryit as try, tryit, uid, unique, upperize, zip, zipToObject };
