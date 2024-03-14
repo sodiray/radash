@@ -1,0 +1,23 @@
+---
+title: isNonNullish
+description: 'Checks if the given value is not null or undefined.'
+group: Typed
+---
+
+## Basic usage
+
+Pass in a value and get a boolean telling you if the value is not a Nullish.
+
+```ts
+import { isNonNullish } from 'radash'
+
+isNonNullish(null) // false
+isNonNullish(undefined) // false
+isNonNullish('') // true
+isNonNullish(0) // true
+isNonNullish(false) // true
+isNonNullish(NaN) // true
+isNonNullish([]) // true
+isNonNullish({}) // true
+
+```

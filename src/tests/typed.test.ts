@@ -541,4 +541,51 @@ describe('typed module', () => {
       assert.isFalse(_.isEqual([complex], [{ ...complex, num: 222 }]))
     })
   })
+
+  describe('isNullish function', () => {
+    test('returns true for null and undefined', () => {
+      assert.isTrue(_.isNullish(null))
+      assert.isTrue(_.isNullish(undefined))
+    })
+    test('returns false for non-nullish values', () => {
+      assert.isFalse(_.isNullish(0))
+      assert.isFalse(_.isNullish(''))
+      assert.isFalse(_.isNullish(false))
+      assert.isFalse(_.isNullish([]))
+      assert.isFalse(_.isNullish({}))
+      assert.isFalse(_.isNullish(() => {}))
+      assert.isFalse(_.isNullish(Symbol('')))
+      assert.isFalse(_.isNullish(new Date()))
+    })
+  })
+
+  describe('isNonNullish function', () => {
+    test('returns false for null and undefined', () => {
+      assert.isFalse(_.isNonNullish(null))
+      assert.isFalse(_.isNonNullish(undefined))
+    })
+    test('returns true for non-nullish values', () => {
+      assert.isTrue(_.isNonNullish(0))
+      assert.isTrue(_.isNonNullish(''))
+      assert.isTrue(_.isNonNullish(false))
+      assert.isTrue(_.isNonNullish([]))
+      assert.isTrue(_.isNonNullish({}))
+      assert.isTrue(_.isNonNullish(() => {}))
+      assert.isTrue(_.isNonNullish(Symbol('')))
+      assert.isTrue(_.isNonNullish(new Date()))
+    })
+  })
+
+  describe('isKeyOf function', () => {
+    test('returns true for keys of the object', () => {
+      const obj = { name: 'ray', age: 22 }
+      assert.isTrue(_.isKeyOf('name', obj))
+      assert.isTrue(_.isKeyOf('age', obj))
+    })
+    test('returns false for keys not in the object', () => {
+      const obj = { name: 'ray', age: 22 }
+      assert.isFalse(_.isKeyOf('height', obj))
+      assert.isFalse(_.isKeyOf('weight', obj))
+    })
+  })
 })

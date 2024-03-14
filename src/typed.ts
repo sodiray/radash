@@ -104,3 +104,32 @@ export const isEqual = <TType>(x: TType, y: TType): boolean => {
   }
   return true
 }
+
+/**
+ * Checks if the given value is null or undefined.
+ */
+export const isNullish = (value: any): value is null | undefined => {
+  return value === null || value === undefined
+}
+
+/**
+ * Checks if the given value is not null or undefined.
+ */
+export const isNonNullish = <TType>(
+  value: TType
+): value is Exclude<TType, null | undefined> => {
+  return value !== null && value !== undefined
+}
+
+/**
+ * Checks if the given value is a key of the given object. It is useful for narrowing down the type of a value.
+ * @param value key to check
+ * @param obj object to check
+ * @returns true if the value is a key of the object
+ */
+export const isKeyOf = <TType extends Record<string | number | symbol, any>>(
+  value: string | number | symbol,
+  obj: TType
+): value is keyof TType => {
+  return value in obj
+}
