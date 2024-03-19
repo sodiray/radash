@@ -330,6 +330,14 @@ describe('curry module', () => {
       expect(mockFunc).toHaveBeenCalledTimes(1)
     })
 
+    test('executes the function immediately on the first invocation of the debounce function when set `leading` to true', async () => {
+      func = _.debounce({ delay: 600, leading: true }, mockFunc)
+      runFunc3Times()
+      expect(mockFunc).toHaveBeenCalledTimes(1)
+      await _.sleep(610)
+      expect(mockFunc).toHaveBeenCalledTimes(2)
+    })
+
     test('does not debounce after cancel is called', () => {
       runFunc3Times()
       expect(mockFunc).toHaveBeenCalledTimes(0)

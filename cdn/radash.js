@@ -536,7 +536,7 @@ var radash = (function (exports) {
   const memo = (func, options = {}) => {
     return memoize({}, func, options.key ?? null, options.ttl ?? null);
   };
-  const debounce = ({ delay }, func) => {
+  const debounce = ({ delay, leading = false }, func) => {
     let timer = void 0;
     let active = true;
     const debounced = (...args) => {
@@ -546,6 +546,10 @@ var radash = (function (exports) {
           active && func(...args);
           timer = void 0;
         }, delay);
+        if (leading) {
+          func(...args);
+          leading = false;
+        }
       } else {
         func(...args);
       }
