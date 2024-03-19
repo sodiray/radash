@@ -499,12 +499,12 @@ export type DebounceConfig = {
    * The time in milliseconds to wait before calling the
    * source function
    */
-  delay: number;
+  delay: number
   /**
    * whether the source function will be called on the first
    * invocation of the debounce function. `false` by default
    */
-  leading?: boolean;
+  leading?: boolean
 }
 
 export type ThrottledFunction<TArgs extends any[]> = {
