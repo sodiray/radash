@@ -533,7 +533,7 @@ const memoize = (cache, func, keyFunc, ttl) => {
 const memo = (func, options = {}) => {
   return memoize({}, func, options.key ?? null, options.ttl ?? null);
 };
-const debounce = ({ delay }, func) => {
+const debounce = ({ delay, leading = false }, func) => {
   let timer = void 0;
   let active = true;
   const debounced = (...args) => {
@@ -543,6 +543,10 @@ const debounce = ({ delay }, func) => {
         active && func(...args);
         timer = void 0;
       }, delay);
+      if (leading) {
+        func(...args);
+        leading = false;
+      }
     } else {
       func(...args);
     }
@@ -556,15 +560,16 @@ const debounce = ({ delay }, func) => {
   debounced.flush = (...args) => func(...args);
   return debounced;
 };
-const throttle = ({ interval }, func) => {
+const throttle = ({ interval, leading = true }, func) => {
   let ready = true;
   let timer = void 0;
   const throttled = (...args) => {
     if (!ready)
       return;
-    func(...args);
+    leading && func(...args);
     ready = false;
     timer = setTimeout(() => {
+      !leading && func(...args);
       ready = true;
       timer = void 0;
     }, interval);

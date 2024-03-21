@@ -4,16 +4,13 @@ group: 'Curry'
 description: Create a throttled callback function
 ---
 
-
-
-
 ## Basic usage
 
 Throttle accepts an options object with an `interval` and a source function to call
 when invoked. When the returned function is invoked it will only call the source
 function if the `interval` milliseconds of time has passed. Otherwise, it will ignore
-the invocation.
-
+the invocation. The `leading` option decides whether the source function is called on
+the first invocation of the throttle function or not.
 
 ```ts
 import { throttle } from 'radash'
@@ -22,24 +19,32 @@ const onMouseMove = () => {
   rerender()
 }
 
-addEventListener('mousemove', throttle({ interval: 200 }, onMouseMove))
+addEventListener(
+  'mousemove',
+  throttle({ interval: 200, leading = false }, onMouseMove)
+)
 ```
 
-## Timing
+## Timing & Leading
 
-A visual of the throttle behavior when `interval` is `200`. The throttle function
-returned by `throttle` can be called every millisecond but it will only call
-the given callback after `interval` milliseconds have passed.
+A visual of the throttle behavior when `interval` is `200` and `leading` is in different
+values. The throttle function returned by `throttle` can be called every millisecond but
+it will only call the given callback after `interval` milliseconds have passed. The `leading`
+option, `true` by default, will delay the execution cycle of source function by one interval
+as a whole when set to `false`.
 
 ```sh
-                Time: 0ms - - - - 100ms - - - - 200ms - - - - 300ms - - - - 400ms - - - -
-Throttle Invocations: x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x - - -
-  Source Invocations: x - - - - - - - - - - - - x - - - - - - - - - - - - - x - - - - - -
+                           Time: 0ms - - - - 200ms - - - - 400ms - - - - 600ms - - - - 800ms - - - -
+           Throttle Invocations: x x x x x x x x x x x x x x x x x x x x x x x - - - - - - - - - - -
+    Source Invocations(leading): x - - - - - x - - - - - - x - - - - - - x - - - - - - - - - - - - -
+Source Invocations(not leading): - - - - - - x - - - - - - x - - - - - - x - - - - - - x - - - - - -
+
 ```
 
 ### isThrottled
 
-The function returned by `throttle` has a `isThrottled` method that when called will return if there is any active throttle.
+The function returned by `throttle` has a `isThrottled` method that when called will return
+if there is any active throttle.
 
 ```ts
 const debounced = throttle({ interval: 200 }, onMouseMove)

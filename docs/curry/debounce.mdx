@@ -6,31 +6,39 @@ description: Create a debounced callback function
 
 ## Basic usage
 
-Debounce accepts an options object with a `delay` and a source function to call
+Debounce accepts an options object with `delay`, `leading`, and a source function to call
 when invoked. When the returned function is invoked it will only call the source
 function after the `delay` milliseconds of time has passed. Calls that don't result
-in invoking the source reset the delay, pushing off the next invocation.
+in invoking the source reset the delay, pushing off the next invocation. The `leading`
+option decides whether the source function is called on the first invocation of the debounce
+function or not.
 
 ```ts
 import { debounce } from 'radash'
 
-const makeSearchRequest = (event) => {
+const makeSearchRequest = event => {
   api.movies.search(event.target.value)
 }
 
-input.addEventListener('change', debounce({ delay: 100 }, makeSearchRequest))
+input.addEventListener(
+  'change',
+  debounce({ delay: 100, leading = true }, makeSearchRequest)
+)
 ```
 
-## Timing
+## Timing & Leading
 
-A visual of the debounce behavior when `delay` is `100`. The debounce function
-returned by `debounce` can be called every millisecond but it will only call
-the given callback after `delay` milliseconds have passed.
+A visual of the debounce behavior when `delay` is `100` and `leading` is in different values.
+The debounce function returned by `debounce` can be called every millisecond but it will only
+call the given callback after `delay` milliseconds have passed. The `leading` option, `false`
+by default, will call the source function immediately the first time the debounce function is
+invoked when set to `true`.
 
 ```sh
-                Time: 0ms - - - - 100ms - - - - 200ms - - - - 300ms - - - - 400ms - - - -
-debounce Invocations: x x x x - - - - - - - - x x x x x x x x x x - - - - - - - - - - - -
-  Source Invocations: - - - - - - - - - - x - - - - - - - - - - - - - - - - - x - - - - -
+                           Time: 0ms - - - - 100ms - - - - 200ms - - - - 300ms - - - - 400ms - - - -
+           debounce Invocations: x x x x - - - - - - - - x x x x x x x x x x - - - - - - - - - - - -
+    Source Invocations(leading): x - - - - - - - - - x - - - - - - - - - - - - - - - - - x - - - - -
+Source Invocations(not leading): - - - - - - - - - - x - - - - - - - - - - - - - - - - - x - - - - -
 ```
 
 ### Cancel
@@ -68,4 +76,3 @@ const debounced = debounce({ delay: 100 }, api.feed.refresh)
 
 debounced.isPending()
 ```
-
