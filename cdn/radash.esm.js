@@ -560,15 +560,16 @@ const debounce = ({ delay, leading = false }, func) => {
   debounced.flush = (...args) => func(...args);
   return debounced;
 };
-const throttle = ({ interval }, func) => {
+const throttle = ({ interval, leading = true }, func) => {
   let ready = true;
   let timer = void 0;
   const throttled = (...args) => {
     if (!ready)
       return;
-    func(...args);
+    leading && func(...args);
     ready = false;
     timer = setTimeout(() => {
+      !leading && func(...args);
       ready = true;
       timer = void 0;
     }, interval);

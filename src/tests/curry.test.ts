@@ -403,6 +403,26 @@ describe('curry module', () => {
       assert.equal(calls, 2)
     })
 
+    test('leading option is set to `false`', async () => {
+      let calls = 0
+      const func = _.throttle({ interval: 600, leading: false }, () => calls++)
+      func()
+      func()
+      func()
+      await _.sleep(550)
+      assert.equal(calls, 0)
+      func()
+      func()
+      func()
+      await _.sleep(60)
+      func()
+      func()
+      func()
+      assert.equal(calls, 1)
+      await _.sleep(610)
+      assert.equal(calls, 2)
+    })
+
     test('returns if the throttle is active', async () => {
       const results = []
       const func = _.throttle({ interval: 600 }, () => {})

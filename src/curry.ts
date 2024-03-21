@@ -515,6 +515,20 @@ export type ThrottledFunction<TArgs extends any[]> = {
   isThrottled(): boolean
 }
 
+export type ThrottleConfig = {
+  /**
+   * The time in milliseconds to wait before calling the
+   * source function again.
+   */
+  interval: number
+
+  /**
+   * whether the source function will be called on the first
+   * invocation of the debounce function. `true` by default
+   */
+  leading?: boolean
+}
+
 /**
  * Given a delay and a function returns a new function
  * that will only call the source function after delay
@@ -563,7 +577,7 @@ export const debounce = <TArgs extends any[]>(
  * have passed since the last invocation
  */
 export const throttle = <TArgs extends any[]>(
-  { interval }: { interval: number },
+  { interval, leading = true }: ThrottleConfig,
   func: (...args: TArgs) => any
 ) => {
   let ready = true
@@ -571,9 +585,10 @@ export const throttle = <TArgs extends any[]>(
 
   const throttled: ThrottledFunction<TArgs> = (...args: TArgs) => {
     if (!ready) return
-    func(...args)
+    leading && func(...args)
     ready = false
     timer = setTimeout(() => {
+      !leading && func(...args)
       ready = true
       timer = undefined
     }, interval)
