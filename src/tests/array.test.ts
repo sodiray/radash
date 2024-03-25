@@ -777,4 +777,21 @@ describe('array module', () => {
       assert.deepEqual(result, ['b', 'a'])
     })
   })
+
+  describe('cast function', () => {
+    test('should return itself when value is array', () => {
+      assert.deepEqual(_.cast(['a']), ['a'])
+      assert.deepEqual(_.cast([[]]), [[]])
+    })
+    test('should return array when value is not array', () => {
+      assert.deepEqual(_.cast('a'), ['a'])
+      assert.deepEqual(_.cast(), [undefined])
+      assert.deepEqual(
+        _.cast({
+          a: 1
+        }),
+        [{ a: 1 }]
+      )
+    })
+  })
 })

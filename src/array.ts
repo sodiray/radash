@@ -550,3 +550,10 @@ export function shift<T>(arr: Array<T>, n: number) {
 
   return [...arr.slice(-shiftNumber, arr.length), ...arr.slice(0, -shiftNumber)]
 }
+
+/**
+ * cast value into an array if it is not an array
+ */
+export function cast<T>(value?: T[] | T) {
+  return isArray(value) ? value : [value]
+}

@@ -1,0 +1,19 @@
+---
+title: cast
+group: 'Array'
+description: 'Cast value into an array'
+---
+
+## Basic usage
+
+Cast value into an array if it is not an array
+
+```ts
+import { cast } from 'radash'
+
+const fish = 'marlin'
+const oceanFish = ['tuna', 'tarpon']
+
+cast(fish) // => ['marlin']
+cast(oceanFish) // => ['tuna', 'tarpon']
+```
