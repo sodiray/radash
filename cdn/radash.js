@@ -335,6 +335,9 @@ var radash = (function (exports) {
       return arr;
     return [...arr.slice(-shiftNumber, arr.length), ...arr.slice(0, -shiftNumber)];
   }
+  function cast(value) {
+    return isArray(value) ? value : [value];
+  }
 
   const reduce = async (array, asyncReducer, initValue) => {
     const initProvided = initValue !== void 0;
@@ -947,6 +950,7 @@ var radash = (function (exports) {
   exports.callable = callable;
   exports.camel = camel;
   exports.capitalize = capitalize;
+  exports.cast = cast;
   exports.chain = chain;
   exports.clone = clone;
   exports.cluster = cluster;
