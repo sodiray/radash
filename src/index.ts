@@ -1,6 +1,7 @@
 export {
   alphabetical,
   boil,
+  cast,
   cluster,
   counting,
   diff,
@@ -27,8 +28,7 @@ export {
   toggle,
   unique,
   zip,
-  zipToObject,
-  cast
+  zipToObject
 } from './array'
 export {
   all,
