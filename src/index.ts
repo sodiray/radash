@@ -27,7 +27,8 @@ export {
   toggle,
   unique,
   zip,
-  zipToObject
+  zipToObject,
+  cast
 } from './array'
 export {
   all,
