@@ -751,19 +751,17 @@ var radash = (function (exports) {
   const assign = (initial, override) => {
     if (!initial || !override)
       return initial ?? override ?? {};
-    return Object.entries({ ...initial, ...override }).reduce(
-      (acc, [key, value]) => {
-        return {
-          ...acc,
-          [key]: (() => {
-            if (isObject(initial[key]))
-              return assign(initial[key], value);
-            return value;
-          })()
-        };
-      },
-      {}
-    );
+    const merged = { ...initial };
+    for (const key in override) {
+      if (override.hasOwnProperty(key)) {
+        if (isObject(initial[key])) {
+          merged[key] = assign(initial[key], override[key]);
+        } else {
+          merged[key] = override[key];
+        }
+      }
+    }
+    return merged;
   };
   const keys = (value) => {
     if (!value)
