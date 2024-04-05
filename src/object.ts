@@ -278,17 +278,16 @@ export const assign = <X extends Record<string | symbol | number, any>>(
   const merged = { ...initial }
 
   for (const key in override) {
-    if(override.hasOwnProperty(key)) {
-      if(isObject(initial[key])) {
+    if (override.hasOwnProperty(key)) {
+      if (isObject(initial[key])) {
         merged[key] = assign(initial[key], override[key])
-      }
-      else {
+      } else {
         merged[key] = override[key]
       }
     }
   }
 
-  return merged;
+  return merged
 }
 
 /**
