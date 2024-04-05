@@ -275,19 +275,20 @@ export const assign = <X extends Record<string | symbol | number, any>>(
 ): X => {
   if (!initial || !override) return initial ?? override ?? {}
 
-  return Object.entries({ ...initial, ...override }).reduce(
-    (acc, [key, value]) => {
-      return {
-        ...acc,
-        [key]: (() => {
-          if (isObject(initial[key])) return assign(initial[key], value)
-          // if (isArray(value)) return value.map(x => assign)
-          return value
-        })()
+  const merged = { ...initial }
+
+  for (const key in override) {
+    if(override.hasOwnProperty(key)) {
+      if(isObject(initial[key])) {
+        merged[key] = assign(initial[key], override[key])
       }
-    },
-    {} as X
-  )
+      else {
+        merged[key] = override[key]
+      }
+    }
+  }
+
+  return merged;
 }
 
 /**
