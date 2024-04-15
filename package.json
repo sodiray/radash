@@ -33,7 +33,8 @@
   "devDependencies": {
     "@rollup/plugin-typescript": "^10.0.1",
     "@types/chai": "^4.3.3",
-    "@types/jest": "^28.1.1",
+    "@types/jest": "^29.5.12",
+    "@types/mocha": "^10.0.6",
     "chai": "^4.3.6",
     "chiller": "^1.0.0-rc.30",
     "esbuild": "^0.16.3",

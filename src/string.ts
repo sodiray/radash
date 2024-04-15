@@ -91,6 +91,29 @@ export const pascal = (str: string): string => {
 }
 
 /**
+ * repeats the given string n times
+ * @param str the string to repeat
+ * @param num the number of times to repeat the string
+ * @returns the repeated string
+ * 
+ * ```typescript
+ * repeat('a', 3) // 'aaa'
+ * repeat('a', 0) // ''
+ * repeat('a', -1) // ''
+ * ```
+ */
+export function repeat(str: string, num: number): string {
+  let result = ''
+  if (!str || num < 1 || num > Number.MAX_SAFE_INTEGER)
+    return result
+
+  for (let i = 0; i < num; i++)
+    result += str
+
+  return result
+}
+
+/**
  * Formats the given string in title case fashion
  *
  * title('hello world') -> 'Hello World'

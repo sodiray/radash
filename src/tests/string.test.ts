@@ -164,6 +164,18 @@ describe('string module', () => {
     })
   })
 
+  describe('repeat function', () => { 
+    test('return empty string in repeat', () => { 
+      assert.equal(_.repeat('a', 0), '')
+      assert.equal(_.repeat('a', -1), '')
+    })
+    
+    test('return a string specifying the number of repetitions', () => {
+      assert.equal(_.repeat('a', 3), 'aaa')
+      assert.equal(_.repeat('a', 1), 'a')
+    })
+   })
+
   describe('title function', () => {
     test('returns input formatted in title case', () => {
       assert.equal(_.title('hello world'), 'Hello World')

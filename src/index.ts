@@ -80,6 +80,7 @@ export {
   capitalize,
   dash,
   pascal,
+  repeat,
   snake,
   template,
   title,
