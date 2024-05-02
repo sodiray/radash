@@ -1,0 +1,22 @@
+---
+title: pickBy
+description: Pick only the desired attributes from an object
+group: Object
+---
+
+## Basic usage
+
+Given an object and an identity function, returns a new object with only the values which makes identity returns true.
+
+```ts
+import { pickBy } from 'radash'
+
+const fish = {
+  name: 'Bass',
+  weight: 8,
+  source: 'lake',
+  barckish: false
+}
+
+pick(fish, v => v === 8) // => { weight }
+```
