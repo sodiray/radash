@@ -698,6 +698,11 @@ var radash = (function (exports) {
       return acc;
     }, {});
   };
+  const pickBy = (obj, predicate = () => true) => {
+    if (!obj)
+      return {};
+    return pick(obj, Object.keys(obj).filter((key) => predicate(obj[key])));
+  };
   const omit = (obj, keys2) => {
     if (!obj)
       return {};
@@ -710,6 +715,11 @@ var radash = (function (exports) {
       },
       { ...obj }
     );
+  };
+  const omitBy = (obj, predicate = () => true) => {
+    if (!obj)
+      return {};
+    return omit(obj, Object.keys(obj).filter((key) => predicate(obj[key])));
   };
   const get = (value, path, defaultValue) => {
     const segments = path.split(/[\.\[\]]/g);
@@ -997,11 +1007,13 @@ var radash = (function (exports) {
   exports.min = min;
   exports.objectify = objectify;
   exports.omit = omit;
+  exports.omitBy = omitBy;
   exports.parallel = parallel;
   exports.partial = partial;
   exports.partob = partob;
   exports.pascal = pascal;
   exports.pick = pick;
+  exports.pickBy = pickBy;
   exports.proxied = proxied;
   exports.random = random;
   exports.range = range;
