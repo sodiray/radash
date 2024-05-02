@@ -182,6 +182,21 @@ export const pick = <T extends object, TKeys extends keyof T>(
 }
 
 /**
+ * Picks properties of an object based on a predicate function.
+ *
+ * @param {T} obj - The object from which to pick properties.
+ * @param {function} predicate - The function used to filter the object's properties.
+ * @return {object} A new object with properties picked based on the predicate.
+ */
+export const pickBy = <T extends object, TKeys extends keyof T>(
+  obj: T,
+  predicate: (value: T[TKeys]) => boolean = () => true
+): Pick<T, TKeys> => {
+  if (!obj) return {} as Pick<T, TKeys>
+  return pick(obj, (Object.keys(obj) as TKeys[]).filter(key => predicate(obj[key])))
+}
+
+/**
  * Omit a list of properties from an object
  * returning a new object with the properties
  * that remain
@@ -203,6 +218,21 @@ export const omit = <T, TKeys extends keyof T>(
     },
     { ...obj }
   )
+}
+
+/**
+ * Omit properties from an object based on a predicate function.
+ *
+ * @param {T} obj - The object to omit properties from.
+ * @param {function} predicate - The function used to determine which properties to omit.
+ * @return {Omit<T, TKeys>} A new object with properties omitted based on the predicate.
+ */
+export const omitBy = <T, TKeys extends keyof T>(
+  obj: T,
+  predicate: (value: T[TKeys]) => boolean = () => true
+): Omit<T, TKeys> => {
+  if (!obj) return {} as Omit<T, TKeys>
+  return omit(obj, (Object.keys(obj) as TKeys[]).filter(key => predicate(obj[key])))
 }
 
 /**

@@ -2,6 +2,11 @@ import { assert } from 'chai'
 import * as _ from '..'
 import { AggregateError } from '../async'
 
+// fix error of calling useFakeTimers https://stackoverflow.com/a/77694958/5131623
+Object.defineProperty(global, 'performance', {
+  writable: true,
+});
+
 describe('async module', () => {
   beforeEach(() => jest.useFakeTimers({ advanceTimers: true }))
 

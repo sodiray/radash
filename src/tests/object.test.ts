@@ -282,6 +282,23 @@ describe('object module', () => {
     })
   })
 
+  describe('pickBy function', () => {
+    test('handles null input', () => {
+      const result = _.pickBy(null as unknown as Record<string, unknown>)
+      assert.deepEqual(result, {})
+    })
+
+    test('handles no identity function', () => {
+      const result = _.pickBy({ a: 2 })
+      assert.deepEqual(result, { a: 2 })
+    })
+
+    test('returns picked properties only', () => {
+      const result = _.pickBy({ a: 1, b: 2, c: 3, d: 4 }, v => v % 2 === 0)
+      assert.deepEqual(result, { b: 2, d: 4 } as any)
+    })
+  })
+
   describe('omit function', () => {
     const person = {
       name: 'jay',
@@ -302,6 +319,32 @@ describe('object module', () => {
     })
     test('returns object without omitted properties', () => {
       const result = _.omit(person, ['name'])
+      assert.deepEqual(result, {
+        age: 20,
+        active: true
+      })
+    })
+  })
+
+  describe('omitBy function', () => {
+    const person = {
+      name: 'jay',
+      age: 20,
+      active: true
+    }
+
+    test('handles null input', () => {
+      const result = _.omitBy(null)
+      assert.deepEqual(result, {})
+    })
+
+    test('handles no identity function', () => {
+      const result = _.omitBy({ a: 2 })
+      assert.deepEqual(result, {})
+    })
+
+    test('returns object without omitted properties', () => {
+      const result = _.omitBy(person, v => typeof v === 'string')
       assert.deepEqual(result, {
         age: 20,
         active: true
