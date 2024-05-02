@@ -701,7 +701,10 @@ var radash = (function (exports) {
   const pickBy = (obj, predicate = () => true) => {
     if (!obj)
       return {};
-    return pick(obj, Object.keys(obj).filter((key) => predicate(obj[key])));
+    return pick(
+      obj,
+      Object.keys(obj).filter((key) => predicate(obj[key]))
+    );
   };
   const omit = (obj, keys2) => {
     if (!obj)
@@ -719,7 +722,10 @@ var radash = (function (exports) {
   const omitBy = (obj, predicate = () => true) => {
     if (!obj)
       return {};
-    return omit(obj, Object.keys(obj).filter((key) => predicate(obj[key])));
+    return omit(
+      obj,
+      Object.keys(obj).filter((key) => predicate(obj[key]))
+    );
   };
   const get = (value, path, defaultValue) => {
     const segments = path.split(/[\.\[\]]/g);
