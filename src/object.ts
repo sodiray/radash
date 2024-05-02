@@ -193,7 +193,10 @@ export const pickBy = <T extends object, TKeys extends keyof T>(
   predicate: (value: T[TKeys]) => boolean = () => true
 ): Pick<T, TKeys> => {
   if (!obj) return {} as Pick<T, TKeys>
-  return pick(obj, (Object.keys(obj) as TKeys[]).filter(key => predicate(obj[key])))
+  return pick(
+    obj,
+    (Object.keys(obj) as TKeys[]).filter(key => predicate(obj[key]))
+  )
 }
 
 /**
@@ -232,7 +235,10 @@ export const omitBy = <T, TKeys extends keyof T>(
   predicate: (value: T[TKeys]) => boolean = () => true
 ): Omit<T, TKeys> => {
   if (!obj) return {} as Omit<T, TKeys>
-  return omit(obj, (Object.keys(obj) as TKeys[]).filter(key => predicate(obj[key])))
+  return omit(
+    obj,
+    (Object.keys(obj) as TKeys[]).filter(key => predicate(obj[key]))
+  )
 }
 
 /**
