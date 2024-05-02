@@ -326,32 +326,6 @@ describe('object module', () => {
     })
   })
 
-  describe('omitBy function', () => {
-    const person = {
-      name: 'jay',
-      age: 20,
-      active: true
-    }
-
-    test('handles null input', () => {
-      const result = _.omitBy(null)
-      assert.deepEqual(result, {})
-    })
-
-    test('handles no identity function', () => {
-      const result = _.omitBy({ a: 2 })
-      assert.deepEqual(result, {})
-    })
-
-    test('returns object without omitted properties', () => {
-      const result = _.omitBy(person, v => typeof v === 'string')
-      assert.deepEqual(result, {
-        age: 20,
-        active: true
-      })
-    })
-  })
-
   describe('get function', () => {
     type Person = {
       name: string

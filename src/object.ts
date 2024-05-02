@@ -224,24 +224,6 @@ export const omit = <T, TKeys extends keyof T>(
 }
 
 /**
- * Omit properties from an object based on a predicate function.
- *
- * @param {T} obj - The object to omit properties from.
- * @param {function} predicate - The function used to determine which properties to omit.
- * @return {Omit<T, TKeys>} A new object with properties omitted based on the predicate.
- */
-export const omitBy = <T, TKeys extends keyof T>(
-  obj: T,
-  predicate: (value: T[TKeys]) => boolean = () => true
-): Omit<T, TKeys> => {
-  if (!obj) return {} as Omit<T, TKeys>
-  return omit(
-    obj,
-    (Object.keys(obj) as TKeys[]).filter(key => predicate(obj[key]))
-  )
-}
-
-/**
  * Dynamically get a nested value from an array or
  * object with a string.
  *

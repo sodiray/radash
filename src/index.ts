@@ -68,7 +68,6 @@ export {
   mapKeys,
   mapValues,
   omit,
-  omitBy,
   pick,
   pickBy,
   set,

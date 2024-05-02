@@ -719,14 +719,6 @@ var radash = (function (exports) {
       { ...obj }
     );
   };
-  const omitBy = (obj, predicate = () => true) => {
-    if (!obj)
-      return {};
-    return omit(
-      obj,
-      Object.keys(obj).filter((key) => predicate(obj[key]))
-    );
-  };
   const get = (value, path, defaultValue) => {
     const segments = path.split(/[\.\[\]]/g);
     let current = value;
@@ -1013,7 +1005,6 @@ var radash = (function (exports) {
   exports.min = min;
   exports.objectify = objectify;
   exports.omit = omit;
-  exports.omitBy = omitBy;
   exports.parallel = parallel;
   exports.partial = partial;
   exports.partob = partob;
