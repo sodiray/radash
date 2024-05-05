@@ -11,23 +11,30 @@ type UppercasedKeys<T extends Record<string, any>> = {
 }
 
 /**
- * Removes (shakes out) undefined entries from an
- * object. Optional second argument shakes out values
+ * Removes (shakes out) undefined entries from an object.
+ * Optional second argument shakes out values
  * by custom evaluation.
+ *
+ * @example use generics
+ * let obj = {a: 1, b: 2};
+ * shake<typeof obj, 'a'>(obj, (item) => item < 2);
+ * // -->  { b: 2 }
+ *
+ * @example default using
+ * shake({a: 1, b: 2, c: undefined})
+ * // -->  {a: 1, b: 2}
  */
-export const shake = <RemovedKeys extends string, T>(
+export const shake = <T extends Object, RemovedKeys extends keyof T>(
   obj: T,
-  filter: (value: any) => boolean = x => x === undefined
+  filter: (value: T[keyof T]) => boolean = x => x === undefined
 ): Omit<T, RemovedKeys> => {
   if (!obj) return {} as T
   const keys = Object.keys(obj) as (keyof T)[]
   return keys.reduce((acc, key) => {
-    if (filter(obj[key])) {
-      return acc
-    } else {
+    if (!filter(obj[key])) {
       acc[key] = obj[key]
-      return acc
     }
+    return acc
   }, {} as T)
 }
 
