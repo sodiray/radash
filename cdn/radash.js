@@ -623,12 +623,10 @@ var radash = (function (exports) {
       return {};
     const keys2 = Object.keys(obj);
     return keys2.reduce((acc, key) => {
-      if (filter(obj[key])) {
-        return acc;
-      } else {
+      if (!filter(obj[key])) {
         acc[key] = obj[key];
-        return acc;
       }
+      return acc;
     }, {});
   };
   const mapKeys = (obj, mapFunc) => {

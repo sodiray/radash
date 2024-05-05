@@ -36,7 +36,7 @@ describe('object module', () => {
       })
     })
     test('handles undefined input', () => {
-      const result = _.shake(undefined)
+      const result = _.shake(undefined as unknown as Object)
       assert.deepEqual(result, {})
     })
   })
