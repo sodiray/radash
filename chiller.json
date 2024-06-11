@@ -7,7 +7,7 @@
     "light": "docs/logo-light.png",
     "dark": "docs/logo-dark.png"
   },
-  "version": "v10.x.x",
+  "version": "v12.x.x",
   "index": "docs/getting-started",
   "pages": "./docs/**/*.mdx",
   "theme": "red-400",
