@@ -82,8 +82,8 @@ export default [
         },
         preserveModules: false,
         strict: useStrict,
-        file: 'cdn/radash.js',
-        name: 'radash',
+        file: 'cdn/radashi.js',
+        name: 'radashi',
         sourcemap: false
       },
       {
@@ -93,8 +93,8 @@ export default [
         },
         preserveModules: false,
         strict: useStrict,
-        file: 'cdn/radash.min.js',
-        name: 'radash',
+        file: 'cdn/radashi.min.js',
+        name: 'radashi',
         sourcemap: false,
         plugins: [minify()]
       },
@@ -105,7 +105,7 @@ export default [
         },
         preserveModules: false,
         strict: useStrict,
-        file: 'cdn/radash.esm.js',
+        file: 'cdn/radashi.esm.js',
         sourcemap: false
       }
     ],
