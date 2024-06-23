@@ -26,7 +26,6 @@
     "build": "yarn tsc --noEmit && yarn rollup -c",
     "docs:install": "yarn && yarn add --dev next@12.3.4",
     "docs:build": "chiller build --ci",
-    "lint": "tslint -p tsconfig.json",
     "format": "prettier --write \"src/**/*.ts\"",
     "format:check": "prettier --check \"src/**/*.ts\" --ignore-unknown"
   },
@@ -45,7 +44,6 @@
     "rollup-plugin-esbuild": "^5.0.0",
     "rollup-plugin-node-externals": "^5.0.2",
     "ts-jest": "^28.0.8",
-    "tslint": "^6.0.0",
     "typescript": "^4.8.4"
   },
   "engines": {
