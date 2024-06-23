@@ -1,3 +1,6 @@
+declare const setTimeout: (fn: () => void, ms: number) => unknown
+declare const clearTimeout: (timer: unknown) => void
+
 export function chain<T1 extends any[], T2, T3>(
   f1: (...arg: T1) => T2,
   f2: (arg: T2) => T3
@@ -515,7 +518,7 @@ export const debounce = <TArgs extends any[]>(
   { delay }: { delay: number },
   func: (...args: TArgs) => any
 ) => {
-  let timer: NodeJS.Timeout | undefined = undefined
+  let timer: unknown = undefined
   let active = true
 
   const debounced: DebounceFunction<TArgs> = (...args: TArgs) => {
@@ -550,7 +553,7 @@ export const throttle = <TArgs extends any[]>(
   func: (...args: TArgs) => any
 ) => {
   let ready = true
-  let timer: NodeJS.Timeout | undefined = undefined
+  let timer: unknown = undefined
 
   const throttled: ThrottledFunction<TArgs> = (...args: TArgs) => {
     if (!ready) return

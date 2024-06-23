@@ -1,6 +1,8 @@
 import { fork, list, range, sort } from './array'
 import { isArray, isPromise } from './typed'
 
+declare const setTimeout: (fn: () => void, ms: number) => unknown
+
 /**
  * An async reduce function. Works like the
  * built-in Array.reduce function but handles
@@ -254,7 +256,7 @@ export const retry = async <TResponse>(
  * Async wait
  */
 export const sleep = (milliseconds: number) => {
-  return new Promise(res => setTimeout(res, milliseconds))
+  return new Promise<void>(res => setTimeout(res, milliseconds))
 }
 
 /**
