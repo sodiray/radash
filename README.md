@@ -2,6 +2,12 @@
 
 :loud_sound: `/raw-dash-ee/`
 
+<div align="center">
+  <p align="center">
+    <img src="https://github.com/aleclarson/radashi/raw/master/banner.png" alt="radash" width="100%" style="border-radius:4px" />
+  </p>
+</div>
+
 - **What is this?**  
   A fork of the renowned [`radash`](https://github.com/sodiray/radash) library by Ray Epps [@sodiray](https://github.com/sodiray).
 - **Why does this exist?**  
@@ -18,9 +24,11 @@
 ```sh
 pnpm add radashi
 ```
+
 ```sh
 yarn add radashi
 ```
+
 ```sh
 npm install radashi
 ```
