@@ -1,9 +1,11 @@
-import { assert } from 'chai'
+import { expect, vi } from 'vitest'
 import * as _ from '..'
 import { AggregateError } from '../async'
 
 describe('async module', () => {
-  beforeEach(() => jest.useFakeTimers({ advanceTimers: true }))
+  beforeEach(() => {
+    vi.useFakeTimers({ shouldAdvanceTime: true })
+  })
 
   describe('asyncReduce function', () => {
     test('returns result of reducer', async () => {
@@ -18,7 +20,7 @@ describe('async module', () => {
         return new Promise(res => res(a + b))
       }
       const result = await _.reduce<number, number>(numbers, asyncSum, 0)
-      assert.equal(result, 10)
+      expect(result).toBe(10)
     })
     test('passes correct indexes', async () => {
       const array = ['a', 'b', 'c', 'd', 'e']
@@ -33,7 +35,7 @@ describe('async module', () => {
         })
       }
       const result = await _.reduce<string, number[]>(array, asyncSumIndex, [])
-      assert.deepEqual(result, [0, 1, 2, 3, 4])
+      expect(result).toEqual([0, 1, 2, 3, 4])
     })
   })
 
@@ -44,19 +46,19 @@ describe('async module', () => {
         return new Promise(res => res(a * a))
       }
       const result = await _.map<number, number>(numbers, asyncSquare)
-      assert.deepEqual(result, [1, 4, 9, 16])
+      expect(result).toEqual([1, 4, 9, 16])
     })
 
     test('handles null input', async () => {
       const result = await _.map(null as unknown as unknown[], async () => '')
-      assert.deepEqual(result, [])
+      expect(result).toEqual([])
     })
 
     test('passes correct indexes', async () => {
       const array = ['a', 'b', 'c', 'd']
       const mapper = async (l: string, index: number) => `${l}${index}`
       const result = await _.map(array, mapper)
-      assert.deepEqual(result, ['a0', 'b1', 'c2', 'd3'])
+      expect(result).toEqual(['a0', 'b1', 'c2', 'd3'])
     })
   })
 
@@ -68,29 +70,29 @@ describe('async module', () => {
 
     test('calls asyncReduce', async () => {
       const result = await _.reduce<number, number>(numbers, reducer, 0)
-      assert.equal(result, 10)
+      expect(result).toBe(10)
     })
     test('uses first item in array when no init provided', async () => {
       const result = await _.reduce(numbers, reducer)
-      assert.equal(result, 10)
+      expect(result).toBe(10)
     })
     test('throws on no init value and an empty array', async () => {
       try {
         await _.reduce([], reducer)
       } catch (err) {
-        assert.isNotNull(err)
+        expect(err).not.toBeNull()
         return
       }
-      assert.fail('Expected error to be thrown')
+      expect.fail('Expected error to be thrown')
     })
     test('throws on no init value and a null array input', async () => {
       try {
         await _.reduce(null as unknown as number[], reducer)
       } catch (err) {
-        assert.isNotNull(err)
+        expect(err).not.toBeNull()
         return
       }
-      assert.fail('Expected error to be thrown')
+      expect.fail('Expected error to be thrown')
     })
   })
 
@@ -102,7 +104,7 @@ describe('async module', () => {
           val = 1
         })
       })
-      assert.equal(val, 1)
+      expect(val).toBe(1)
     })
     test('returns the resulting value of the given function', async () => {
       let val = 0
@@ -112,8 +114,8 @@ describe('async module', () => {
         })
         return 'x'
       })
-      assert.equal(val, 1)
-      assert.equal(result, 'x')
+      expect(val).toBe(1)
+      expect(result).toBe('x')
     })
     test('calls all registered defer functions', async () => {
       let one = 0
@@ -131,10 +133,10 @@ describe('async module', () => {
         })
         return 'x'
       })
-      assert.equal(one, 1)
-      assert.equal(two, 2)
-      assert.equal(three, 3)
-      assert.equal(result, 'x')
+      expect(one).toBe(1)
+      expect(two).toBe(2)
+      expect(three).toBe(3)
+      expect(result).toBe('x')
     })
     test('calls all registered defer functions when error is thrown', async () => {
       let one = 0
@@ -155,9 +157,9 @@ describe('async module', () => {
           return 'x'
         })
       } catch {}
-      assert.equal(one, 1)
-      assert.equal(two, 2)
-      assert.equal(three, 3)
+      expect(one).toBe(1)
+      expect(two).toBe(2)
+      expect(three).toBe(3)
     })
     test('throws the error', async () => {
       let error: Error | null = null
@@ -168,8 +170,8 @@ describe('async module', () => {
       } catch (err: any) {
         error = err
       }
-      assert.isNotNull(error)
-      assert.equal(error?.message, 'soooo broken')
+      expect(error).not.toBeNull()
+      expect(error?.message).toBe('soooo broken')
     })
     test('rethrows the rethrown error when rethrow is true', async () => {
       let error: Error | null = null
@@ -185,8 +187,8 @@ describe('async module', () => {
       } catch (err: any) {
         error = err
       }
-      assert.isNotNull(error)
-      assert.equal(error?.message, 'soooo broken')
+      expect(error).not.toBeNull()
+      expect(error?.message).toBe('soooo broken')
     })
     test('does not rethrow the rethrown error when rethrow is false', async () => {
       let error: Error | null = null
@@ -202,7 +204,7 @@ describe('async module', () => {
       } catch (err: any) {
         error = err
       }
-      assert.isNull(error)
+      expect(error).toBeNull()
     })
     test('does not rethrow the rethrown error by default', async () => {
       let error: Error | null = null
@@ -215,13 +217,13 @@ describe('async module', () => {
       } catch (err: any) {
         error = err
       }
-      assert.isNull(error)
+      expect(error).toBeNull()
     })
     test('returns awaited async results', async () => {
       const result = await _.defer(() => {
         return new Promise<string>(res => res('x'))
       })
-      assert.equal(result, 'x')
+      expect(result).toBe('x')
     })
   })
 
@@ -231,37 +233,37 @@ describe('async module', () => {
         throw new Error('not good enough')
       })
       const [err, result] = await fn()
-      assert.isUndefined(result)
-      assert.isNotNull(err)
-      assert.equal(err!.message, 'not good enough')
+      expect(result).toBeUndefined()
+      expect(err).not.toBeNull()
+      expect(err!.message).toBe('not good enough')
     })
     test('returns result when no error is thrown', async () => {
       const [err, result] = await _.try(async () => {
         return 'hello'
       })()
-      assert.isUndefined(err)
-      assert.isNotNull(result)
-      assert.equal(result, 'hello')
+      expect(err).toBeUndefined()
+      expect(result).not.toBeNull()
+      expect(result).toBe('hello')
     })
     test('handles non-async function results', async () => {
       const [err, result] = _.try(() => {
         return 'hello'
       })()
-      assert.isUndefined(err)
-      assert.isNotNull(result)
-      assert.equal(result, 'hello')
+      expect(err).toBeUndefined()
+      expect(result).not.toBeNull()
+      expect(result).toBe('hello')
     })
     test('handles non-async function errors', async () => {
       const [err, result] = _.try(() => {
         if (1 < 0) return ''
         throw new Error('unknown')
       })()
-      assert.isUndefined(result)
-      assert.isNotNull(err)
-      assert.equal(err!.message, 'unknown')
+      expect(result).toBeUndefined()
+      expect(err).not.toBeNull()
+      expect(err!.message).toBe('unknown')
     })
     test('alias exists', () => {
-      assert.isNotNull(_.tryit)
+      expect(_.tryit).not.toBeNull()
     })
   })
 
@@ -271,7 +273,7 @@ describe('async module', () => {
       const before = Date.now()
       await _.sleep(ONE_SECOND)
       const after = Date.now()
-      assert.isAtLeast(after, before + ONE_SECOND)
+      expect(after).toBeGreaterThanOrEqual(before + ONE_SECOND)
     })
   })
 
@@ -298,8 +300,8 @@ describe('async module', () => {
         errors.push(e as Error)
       }
       const aggregate = new AggregateError(errors)
-      assert.include(aggregate.stack, 'at fakeMicrotask')
-      assert.include(aggregate.message, 'with 1')
+      expect(aggregate.stack).toContain('at fakeMicrotask')
+      expect(aggregate.message).toContain('with 1')
     })
     test('uses stack from first error with a stack', () => {
       const errors: Error[] = [{} as Error]
@@ -309,9 +311,9 @@ describe('async module', () => {
         errors.push(e as Error)
       }
       const aggregate = new AggregateError(errors)
-      assert.equal(aggregate.name, 'AggregateError(MicrotaskError...)')
-      assert.include(aggregate.stack, 'at fakeMicrotask')
-      assert.include(aggregate.message, 'with 2')
+      expect(aggregate.name).toBe('AggregateError(MicrotaskError...)')
+      expect(aggregate.stack).toContain('at fakeMicrotask')
+      expect(aggregate.message).toContain('with 2')
     })
     test('does not fail if no errors given', () => {
       new AggregateError([])
@@ -327,8 +329,8 @@ describe('async module', () => {
           return `hi_${num}`
         })
       })()
-      assert.isUndefined(errors)
-      assert.deepEqual(results, ['hi_1', 'hi_2', 'hi_3'])
+      expect(errors).toBeUndefined()
+      expect(results).toEqual(['hi_1', 'hi_2', 'hi_3'])
     })
     test('throws erros as array of all errors', async () => {
       const [error, results] = await _.try(async () => {
@@ -339,9 +341,9 @@ describe('async module', () => {
         })
       })()
       const err = error as AggregateError
-      assert.isUndefined(results)
-      assert.equal(err.errors.length, 1)
-      assert.equal(err.errors[0].message, 'number is 2')
+      expect(results).toBeUndefined()
+      expect(err.errors.length).toBe(1)
+      expect(err.errors[0].message).toBe('number is 2')
     })
     test('does not run more than the limit at once', async () => {
       let numInProgress = 0
@@ -352,7 +354,7 @@ describe('async module', () => {
         await _.sleep(300)
         numInProgress--
       })
-      assert.deepEqual(Math.max(...tracking), 3)
+      expect(Math.max(...tracking)).toBe(3)
     })
   })
 
@@ -369,13 +371,13 @@ describe('async module', () => {
       const result = await _.retry(NULL, async bail => {
         return 'hello'
       })
-      assert.equal(result, 'hello')
+      expect(result).toBe('hello')
     })
     test('simple + quick + happy path', async () => {
       const result = await _.retry(NULL, async () => {
         return 'hello'
       })
-      assert.equal(result, 'hello')
+      expect(result).toBe('hello')
     })
     test('retries on failure', async () => {
       let failedOnce = false
@@ -386,7 +388,7 @@ describe('async module', () => {
         }
         return 'hello'
       })
-      assert.equal(result, 'hello')
+      expect(result).toBe('hello')
     })
     test('quits on bail', async () => {
       try {
@@ -394,10 +396,10 @@ describe('async module', () => {
           bail('iquit')
         })
       } catch (err) {
-        assert.equal(err, 'iquit')
+        expect(err).toBe('iquit')
         return
       }
-      assert.fail('error should have been thrown')
+      expect.fail('error should have been thrown')
     })
     test('quits after max retries', async () => {
       try {
@@ -405,10 +407,10 @@ describe('async module', () => {
           throw 'quitagain'
         })
       } catch (err) {
-        assert.equal(err, 'quitagain')
+        expect(err).toBe('quitagain')
         return
       }
-      assert.fail('error should have been thrown')
+      expect.fail('error should have been thrown')
     })
     test('quits after max retries without delay', async () => {
       try {
@@ -417,10 +419,10 @@ describe('async module', () => {
         }
         await _.retry({ times: 3 }, func)
       } catch (err) {
-        assert.equal(err, 'quitagain')
+        expect(err).toBe('quitagain')
         return
       }
-      assert.fail('error should have been thrown')
+      expect.fail('error should have been thrown')
     })
     test('quits after max retries with delay', async () => {
       try {
@@ -429,10 +431,10 @@ describe('async module', () => {
         }
         await _.retry({ delay: 100 }, func)
       } catch (err) {
-        assert.equal(err, 'quitagain')
+        expect(err).toBe('quitagain')
         return
       }
-      assert.fail('error should have been thrown')
+      expect.fail('error should have been thrown')
     })
     test('uses backoff between retries', async () => {
       let count = 0
@@ -452,7 +454,7 @@ describe('async module', () => {
         }
       )
       const diff = Date.now() - start
-      assert.equal(count, 3)
+      expect(count).toBe(3)
       // Time taken should at least be the
       // total ms backed off. Using exponential
       // backoff (above) 3 times (passing on
@@ -460,7 +462,7 @@ describe('async module', () => {
       //   - 10**1 + 10**2 = 1025
       // The performance typically comes in 1
       // or 2 milliseconds after.
-      assert.isAtLeast(diff, backoffs)
+      expect(diff).toBeGreaterThanOrEqual(backoffs)
     })
   })
 
@@ -469,20 +471,20 @@ describe('async module', () => {
       const result = await _.guard(async () => {
         return 'hello'
       })
-      assert.equal(result, 'hello')
+      expect(result).toBe('hello')
     })
     it('returns result of given sync function', async () => {
       const result = _.guard(() => {
         return 'hello'
       })
-      assert.equal(result, 'hello')
+      expect(result).toBe('hello')
     })
     it('returns error if given async function throws', async () => {
       const result =
         (await _.guard(async () => {
           throw new Error('error')
         })) ?? 'good-bye'
-      assert.equal(result, 'good-bye')
+      expect(result).toBe('good-bye')
     })
     it('returns error if given sync function throws', async () => {
       const alwaysThrow = () => {
@@ -490,7 +492,7 @@ describe('async module', () => {
         return undefined
       }
       const result = _.guard(alwaysThrow) ?? 'good-bye'
-      assert.equal(result, 'good-bye')
+      expect(result).toBe('good-bye')
     })
     it('throws error if shouldGuard returns false', async () => {
       const makeFetchUser = (id: number) => {
@@ -505,16 +507,16 @@ describe('async module', () => {
         (await _.guard(makeFetchUser(id), isUserNotFoundErr)) ?? 'default-user'
 
       const user1 = await fetchUser(1)
-      assert.equal(user1, 'user1')
+      expect(user1).toBe('user1')
 
       const user2 = await fetchUser(2)
-      assert.equal(user2, 'default-user')
+      expect(user2).toBe('default-user')
 
       try {
         await fetchUser(3)
-        assert.fail()
+        expect.fail()
       } catch (err: any) {
-        assert.equal(err.message, 'unknown error')
+        expect(err.message).toBe('unknown error')
       }
     })
   })
@@ -530,7 +532,7 @@ describe('async module', () => {
         promise.resolve('hello'),
         promise.resolve({ name: 'ray' })
       ])
-      assert.deepEqual(result, [22, 'hello', { name: 'ray' }])
+      expect(result).toEqual([22, 'hello', { name: 'ray' }])
     })
     it('returns object with values in correct keys when given object', async () => {
       const result = await _.all({
@@ -538,7 +540,7 @@ describe('async module', () => {
         str: promise.resolve('hello'),
         obj: promise.resolve({ name: 'ray' })
       })
-      assert.deepEqual(result, {
+      expect(result).toEqual({
         num: 22,
         str: 'hello',
         obj: { name: 'ray' }
@@ -553,11 +555,11 @@ describe('async module', () => {
         })
       } catch (e: any) {
         const err = e as AggregateError
-        assert.equal(err.errors.length, 1)
-        assert.equal(err.errors[0].message, 'broken')
+        expect(err.errors.length).toBe(1)
+        expect(err.errors[0].message).toBe('broken')
         return
       }
-      assert.fail('Expected error to be thrown but it was not')
+      expect.fail('Expected error to be thrown but it was not')
     })
     it('throws aggregate error when a single promise fails (in array mode)', async () => {
       try {
@@ -568,11 +570,11 @@ describe('async module', () => {
         ])
       } catch (e: any) {
         const err = e as AggregateError
-        assert.equal(err.errors.length, 1)
-        assert.equal(err.errors[0].message, 'broken')
+        expect(err.errors.length).toBe(1)
+        expect(err.errors[0].message).toBe('broken')
         return
       }
-      assert.fail('Expected error to be thrown but it was not')
+      expect.fail('Expected error to be thrown but it was not')
     })
   })
 })

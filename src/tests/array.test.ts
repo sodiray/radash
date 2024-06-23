@@ -1,4 +1,4 @@
-import { assert } from 'chai'
+import { expect } from 'vitest'
 import * as _ from '..'
 
 const NULL = null as unknown as unknown[]
@@ -14,10 +14,10 @@ describe('array module', () => {
         { group: 'c', word: 'ok' }
       ]
       const groups = _.group(list, x => x.group)
-      assert.equal(groups.a?.length, 2)
-      assert.equal(groups.b?.length, 2)
-      assert.equal(groups.c?.length, 1)
-      assert.equal(groups.c?.[0].word, 'ok')
+      expect(groups.a?.length).toBe(2)
+      expect(groups.b?.length).toBe(2)
+      expect(groups.c?.length).toBe(1)
+      expect(groups.c?.[0].word).toBe('ok')
     })
   })
 
@@ -31,27 +31,27 @@ describe('array module', () => {
         { game: 'e', score: 500 }
       ]
       const result = _.boil(list, (a, b) => (a.score > b.score ? a : b))
-      assert.equal(result!.game, 'e')
-      assert.equal(result!.score, 500)
+      expect(result!.game).toBe('e')
+      expect(result!.score).toBe(500)
     })
     test('does not fail when provided array is empty', () => {
       const result = _.boil([], () => true)
-      assert.isNull(result)
+      expect(result).toBeNull()
     })
     test('does not fail when provided array is null', () => {
       const result = _.boil(null as unknown as readonly boolean[], () => true)
-      assert.isNull(result)
+      expect(result).toBeNull()
     })
     test('does not fail when provided array is funky shaped', () => {
       const result = _.boil({} as any, () => true)
-      assert.isNull(result)
+      expect(result).toBeNull()
     })
   })
 
   describe('zip function', () => {
     test('zips an array correctly', () => {
       const result = _.zip(['a', 'b'], [1, 2], [true, false])
-      assert.deepEqual(result, [
+      expect(result).toEqual([
         ['a', 1, true],
         ['b', 2, false]
       ])
@@ -60,30 +60,30 @@ describe('array module', () => {
     test('returns an empty array if nothing is passed', () => {
       // @ts-ignore
       const result = _.zip()
-      assert.deepEqual(result, [])
+      expect(result).toEqual([])
     })
   })
 
   describe('zipToObject function', () => {
     test('zips to an object correctly', () => {
       const result = _.zipToObject(['a', 'b'], [1, 2])
-      assert.deepEqual(result, { a: 1, b: 2 })
+      expect(result).toEqual({ a: 1, b: 2 })
     })
 
     test('zips to an object with custom map function', () => {
       const result = _.zipToObject(['a', 'b'], (k, i) => k + i)
-      assert.deepEqual(result, { a: 'a0', b: 'b1' })
+      expect(result).toEqual({ a: 'a0', b: 'b1' })
     })
 
     test('zips to an object with only one value', () => {
       const result = _.zipToObject(['a', 'b'], 1)
-      assert.deepEqual(result, { a: 1, b: 1 })
+      expect(result).toEqual({ a: 1, b: 1 })
     })
 
     test('returns an empty object if bad parameters are passed', () => {
       // @ts-ignore
       const result = _.zipToObject()
-      assert.deepEqual(result, {})
+      expect(result).toEqual({})
     })
   })
 
@@ -91,16 +91,16 @@ describe('array module', () => {
     test('adds list of number correctly', () => {
       const list = [5, 5, 10, 2]
       const result = _.sum(list)
-      assert.equal(result, 22)
+      expect(result).toBe(22)
     })
     test('adds list of objects correctly using getter fn', () => {
       const list = [{ value: 5 }, { value: 5 }, { value: 10 }, { value: 2 }]
       const result = _.sum(list, x => x.value)
-      assert.equal(result, 22)
+      expect(result).toBe(22)
     })
     test('gracefully handles null input list', () => {
       const result = _.sum(null as unknown as readonly number[])
-      assert.equal(result, 0)
+      expect(result).toBe(0)
     })
   })
 
@@ -111,17 +111,17 @@ describe('array module', () => {
         { game: 'b', score: 200 }
       ]
       const result = _.first(list)
-      assert.equal(result!.game, 'a')
-      assert.equal(result!.score, 100)
+      expect(result!.game).toBe('a')
+      expect(result!.score).toBe(100)
     })
     test('returns default value without error when list is empty', () => {
       const list = [] as string[]
       const result = _.first(list, 'yolo')
-      assert.equal(result, 'yolo')
+      expect(result).toBe('yolo')
     })
     test('gracefully handles null input list', () => {
       const result = _.first(NULL)
-      assert.equal(result, null)
+      expect(result).toBeUndefined()
     })
   })
 
@@ -132,17 +132,17 @@ describe('array module', () => {
         { game: 'b', score: 200 }
       ]
       const result = _.last(list)
-      assert.equal(result!.game, 'b')
-      assert.equal(result!.score, 200)
+      expect(result!.game).toBe('b')
+      expect(result!.score).toBe(200)
     })
     test('returns default value without error when list is empty', () => {
       const list = [] as string[]
       const result = _.last(list, 'yolo')
-      assert.equal(result, 'yolo')
+      expect(result).toBe('yolo')
     })
     test('gracefully handles null input list', () => {
       const result = _.last(NULL)
-      assert.equal(result, null)
+      expect(result).toBeUndefined()
     })
   })
 
@@ -150,20 +150,20 @@ describe('array module', () => {
     test('uses getter', () => {
       const list = [{ index: 2 }, { index: 0 }, { index: 1 }]
       const result = _.sort(list, i => i.index)
-      assert.equal(result[0].index, 0)
-      assert.equal(result[1].index, 1)
-      assert.equal(result[2].index, 2)
+      expect(result[0].index).toBe(0)
+      expect(result[1].index).toBe(1)
+      expect(result[2].index).toBe(2)
     })
     test('uses descending order', () => {
       const list = [{ index: 2 }, { index: 0 }, { index: 1 }]
       const result = _.sort(list, i => i.index, true)
-      assert.equal(result[0].index, 2)
-      assert.equal(result[1].index, 1)
-      assert.equal(result[2].index, 0)
+      expect(result[0].index).toBe(2)
+      expect(result[1].index).toBe(1)
+      expect(result[2].index).toBe(0)
     })
     test('gracefully handles null input list', () => {
       const result = _.sort(null as any as number[], x => x)
-      assert.deepEqual(result, [])
+      expect(result).toEqual([])
     })
   })
 
@@ -174,15 +174,15 @@ describe('array module', () => {
         'x',
         () => false
       )
-      assert.deepEqual(result, [])
+      expect(result).toEqual([])
     })
     test('returns the list for an undefined new item', () => {
       const result = _.replace(['a'], undefined, () => true)
-      assert.deepEqual(result, ['a'])
+      expect(result).toEqual(['a'])
     })
     test('returns replaced item when value is null', () => {
       const result = _.replace(['a'], null, i => i === 'a')
-      assert.deepEqual(result, [null])
+      expect(result).toEqual([null])
     })
     test('returns replaced item by index', () => {
       const result = _.replace(
@@ -190,7 +190,7 @@ describe('array module', () => {
         'BB',
         (letter, idx) => idx === 1
       )
-      assert.equal(result[1], 'BB')
+      expect(result[1]).toBe('BB')
     })
     test('returns copy of list with replaced item', () => {
       const list = [
@@ -202,8 +202,8 @@ describe('array module', () => {
         { game: 'x', score: 800 },
         item => item.game === 'a'
       )
-      assert.equal(result[0].game, 'x')
-      assert.equal(list[1].game, 'b')
+      expect(result[0].game).toBe('x')
+      expect(list[1].game).toBe('b')
     })
     test('returns copy of list without changing', () => {
       const list = [
@@ -215,8 +215,8 @@ describe('array module', () => {
         { game: 'x', score: 800 },
         item => item.game === 'XX'
       )
-      assert.equal(result[0].game, 'a')
-      assert.equal(list[1].game, 'b')
+      expect(result[0].game).toBe('a')
+      expect(list[1].game).toBe('b')
     })
   })
 
@@ -234,8 +234,8 @@ describe('array module', () => {
         x => x.id,
         x => x
       )
-      assert.equal(result.a.word, 'hello')
-      assert.equal(result.b.word, 'bye')
+      expect(result.a.word).toBe('hello')
+      expect(result.b.word).toBe('bye')
     })
     test('does not fail on empty input list', () => {
       const result = _.objectify(
@@ -243,11 +243,11 @@ describe('array module', () => {
         (x: any) => x.id,
         x => x
       )
-      assert.deepEqual(result, {})
+      expect(result).toEqual({})
     })
     test('defaults value to array item', () => {
       const result = _.objectify(list.slice(0, 1), x => x.id)
-      assert.deepEqual(result, {
+      expect(result).toEqual({
         a: { id: 'a', word: 'hello' }
       })
     })
@@ -255,22 +255,20 @@ describe('array module', () => {
 
   describe('select function', () => {
     test('does not fail on bad input', () => {
-      assert.deepEqual(
+      expect(
         _.select(
           null as unknown as any[],
           x => x,
           x => x
-        ),
-        []
-      )
-      assert.deepEqual(
+        )
+      ).toEqual([])
+      expect(
         _.select(
           undefined as unknown as any[],
           x => x,
           x => x
-        ),
-        []
-      )
+        )
+      ).toEqual([])
     })
     test('returns mapped and filtered values', () => {
       const list = [
@@ -285,7 +283,7 @@ describe('array module', () => {
         x => x.word,
         x => x.group === 'a'
       )
-      assert.deepEqual(result, ['hello', 'oh'])
+      expect(result).toEqual(['hello', 'oh'])
     })
     test('does not fail on empty input list', () => {
       const list: any[] = []
@@ -294,7 +292,7 @@ describe('array module', () => {
         (x: any) => x.word,
         x => x.group === 'a'
       )
-      assert.deepEqual(result, [])
+      expect(result).toEqual([])
     })
     test('works with index', () => {
       const letters = ['a', 'b', 'c', 'd']
@@ -303,7 +301,7 @@ describe('array module', () => {
         (l, idx) => `${l}${idx}`,
         (l, idx) => idx > 1
       )
-      assert.deepEqual(result, ['c2', 'd3'])
+      expect(result).toEqual(['c2', 'd3'])
     })
   })
 
@@ -311,7 +309,7 @@ describe('array module', () => {
     test('returns the max value from list of number', () => {
       const list = [5, 5, 10, 2]
       const result = _.max(list)
-      assert.equal(result, 10)
+      expect(result).toBe(10)
     })
     test('returns the max value from list of objects', () => {
       const list = [
@@ -322,8 +320,8 @@ describe('array module', () => {
         { game: 'e', score: 500 }
       ]
       const result = _.max(list, x => x.score)
-      assert.equal(result!.game, 'e')
-      assert.equal(result!.score, 500)
+      expect(result!.game).toBe('e')
+      expect(result!.score).toBe(500)
     })
   })
 
@@ -331,7 +329,7 @@ describe('array module', () => {
     test('returns the min value from list of number', () => {
       const list = [5, 5, 10, 2]
       const result = _.min(list)
-      assert.equal(result, 2)
+      expect(result).toBe(2)
     })
     test('returns the min value from list of objects', () => {
       const list = [
@@ -342,8 +340,8 @@ describe('array module', () => {
         { game: 'e', score: 500 }
       ]
       const result = _.min(list, x => x.score)
-      assert.equal(result!.game, 'a')
-      assert.equal(result!.score, 100)
+      expect(result!.game).toBe('a')
+      expect(result!.score).toBe(100)
     })
   })
 
@@ -352,18 +350,18 @@ describe('array module', () => {
       const list = [1, 1, 1, 1, 1, 1, 1, 1]
       const result = _.cluster(list)
       const [a, b, c] = result
-      assert.deepEqual(a, [1, 1])
-      assert.deepEqual(b, [1, 1])
-      assert.deepEqual(c, [1, 1])
+      expect(a).toEqual([1, 1])
+      expect(b).toEqual([1, 1])
+      expect(c).toEqual([1, 1])
     })
     test('returns remainder in final cluster', () => {
       const list = [1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2]
       const result = _.cluster(list, 3)
       const [a, b, c, d] = result
-      assert.deepEqual(a, [1, 1, 1])
-      assert.deepEqual(b, [1, 1, 1])
-      assert.deepEqual(c, [1, 1, 1])
-      assert.deepEqual(d, [2, 2])
+      expect(a).toEqual([1, 1, 1])
+      expect(b).toEqual([1, 1, 1])
+      expect(c).toEqual([1, 1, 1])
+      expect(d).toEqual([2, 2])
     })
   })
 
@@ -371,7 +369,7 @@ describe('array module', () => {
     test('correctly removed duplicate items', () => {
       const list = [1, 1, 2]
       const result = _.unique(list)
-      assert.deepEqual(result, [1, 2])
+      expect(result).toEqual([1, 2])
     })
     test('uses key fn to correctly remove duplicate items', () => {
       const list = [
@@ -383,12 +381,12 @@ describe('array module', () => {
       ]
       const result = _.unique(list, x => x.id)
       const [a, b, c] = result
-      assert.equal(a.id, 'a')
-      assert.equal(a.word, 'hello')
-      assert.equal(b.id, 'b')
-      assert.equal(b.word, 'oh')
-      assert.equal(c.id, 'c')
-      assert.equal(c.word, 'yolo')
+      expect(a.id).toBe('a')
+      expect(a.word).toBe('hello')
+      expect(b.id).toBe('b')
+      expect(b.word).toBe('oh')
+      expect(c.id).toBe('c')
+      expect(c.word).toBe('yolo')
     })
   })
 
@@ -401,55 +399,43 @@ describe('array module', () => {
     }
 
     test('yields expected values', () => {
-      assert.deepEqual(toList(_.range(0, 4)), [0, 1, 2, 3, 4])
-      assert.deepEqual(toList(_.range(3)), [0, 1, 2, 3])
-      assert.deepEqual(toList(_.range(0, 3)), [0, 1, 2, 3])
-      assert.deepEqual(toList(_.range(0, 3, 'y')), ['y', 'y', 'y', 'y'])
-      assert.deepEqual(toList(_.range(0, 3, () => 'y')), ['y', 'y', 'y', 'y'])
-      assert.deepEqual(toList(_.range(0, 3, i => i)), [0, 1, 2, 3])
-      assert.deepEqual(toList(_.range(0, 3, i => `y${i}`)), [
+      expect(toList(_.range(0, 4))).toEqual([0, 1, 2, 3, 4])
+      expect(toList(_.range(3))).toEqual([0, 1, 2, 3])
+      expect(toList(_.range(0, 3))).toEqual([0, 1, 2, 3])
+      expect(toList(_.range(0, 3, 'y'))).toEqual(['y', 'y', 'y', 'y'])
+      expect(toList(_.range(0, 3, () => 'y'))).toEqual(['y', 'y', 'y', 'y'])
+      expect(toList(_.range(0, 3, i => i))).toEqual([0, 1, 2, 3])
+      expect(toList(_.range(0, 3, i => `y${i}`))).toEqual([
         'y0',
         'y1',
         'y2',
         'y3'
       ])
-      assert.deepEqual(toList(_.range(0, 3, obj)), [obj, obj, obj, obj])
-      assert.deepEqual(toList(_.range(0, 6, i => i, 2)), [0, 2, 4, 6])
+      expect(toList(_.range(0, 3, obj))).toEqual([obj, obj, obj, obj])
+      expect(toList(_.range(0, 6, i => i, 2))).toEqual([0, 2, 4, 6])
     })
   })
 
   describe('list function', () => {
     const obj = { name: 'radash' }
     test('creates correct list', () => {
-      assert.deepEqual(_.list(0, 4), [0, 1, 2, 3, 4])
-      assert.deepEqual(_.list(3), [0, 1, 2, 3])
-      assert.deepEqual(_.list(0, 3), [0, 1, 2, 3])
-      assert.deepEqual(_.list(0, 3, 'y'), ['y', 'y', 'y', 'y'])
-      assert.deepEqual(
-        _.list(0, 3, () => 'y'),
-        ['y', 'y', 'y', 'y']
-      )
-      assert.deepEqual(
-        _.list(0, 3, i => i),
-        [0, 1, 2, 3]
-      )
-      assert.deepEqual(
-        _.list(0, 3, i => `y${i}`),
-        ['y0', 'y1', 'y2', 'y3']
-      )
-      assert.deepEqual(_.list(0, 3, obj), [obj, obj, obj, obj])
-      assert.deepEqual(
-        _.list(0, 6, i => i, 2),
-        [0, 2, 4, 6]
-      )
+      expect(_.list(0, 4)).toEqual([0, 1, 2, 3, 4])
+      expect(_.list(3)).toEqual([0, 1, 2, 3])
+      expect(_.list(0, 3)).toEqual([0, 1, 2, 3])
+      expect(_.list(0, 3, 'y')).toEqual(['y', 'y', 'y', 'y'])
+      expect(_.list(0, 3, () => 'y')).toEqual(['y', 'y', 'y', 'y'])
+      expect(_.list(0, 3, i => i)).toEqual([0, 1, 2, 3])
+      expect(_.list(0, 3, i => `y${i}`)).toEqual(['y0', 'y1', 'y2', 'y3'])
+      expect(_.list(0, 3, obj)).toEqual([obj, obj, obj, obj])
+      expect(_.list(0, 6, i => i, 2)).toEqual([0, 2, 4, 6])
     })
     test('omits end if step does not land on it', () => {
       const result = _.list(0, 5, i => i, 2)
-      assert.deepEqual(result, [0, 2, 4])
+      expect(result).toEqual([0, 2, 4])
     })
     test('returns start only if step larger than end', () => {
       const result = _.list(0, 5, i => i, 20)
-      assert.deepEqual(result, [0])
+      expect(result).toEqual([0])
     })
   })
 
@@ -457,9 +443,9 @@ describe('array module', () => {
     test('returns all items in all arrays', () => {
       const lists = [['a', 'b'], ['c', 'd'], ['e']]
       const result = _.flat(lists)
-      assert.deepEqual(result, ['a', 'b', 'c', 'd', 'e'])
-      assert.equal(result[0], 'a')
-      assert.equal(result[4], 'e')
+      expect(result).toEqual(['a', 'b', 'c', 'd', 'e'])
+      expect(result[0]).toBe('a')
+      expect(result[4]).toBe('e')
     })
   })
 
@@ -468,36 +454,36 @@ describe('array module', () => {
       const listA = ['a', 'b']
       const listB = [1, 2, 'b', 'x']
       const result = _.intersects(listA, listB)
-      assert.isTrue(result)
+      expect(result).toBeTruthy()
     })
     test('returns false if list a & b have no items in common', () => {
       const listA = ['a', 'b', 'c']
       const listB = ['x', 'y']
       const result = _.intersects(listA, listB)
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
     test('returns true using custom identity', () => {
       const listA = [{ value: 23 }, { value: 12 }]
       const listB = [{ value: 12 }]
       const result = _.intersects(listA, listB, x => x.value)
-      assert.isTrue(result)
+      expect(result).toBeTruthy()
     })
     test('returns false without failing if either list is null', () => {
-      assert.isFalse(_.intersects(null as unknown as never, []))
-      assert.isFalse(_.intersects([], null as unknown as never))
+      expect(_.intersects(null as unknown as never, [])).toBeFalsy()
+      expect(_.intersects([], null as unknown as never)).toBeFalsy()
     })
   })
 
   describe('fork function', () => {
     test('returns two empty arrays for null input', () => {
       const [a, b] = _.fork(NULL, x => !!x)
-      assert.deepEqual(a, [])
-      assert.deepEqual(b, [])
+      expect(a).toEqual([])
+      expect(b).toEqual([])
     })
     test('returns two empty arrays for one empty array input', () => {
       const [a, b] = _.fork([], x => !!x)
-      assert.deepEqual(a, [])
-      assert.deepEqual(b, [])
+      expect(a).toEqual([])
+      expect(b).toEqual([])
     })
     test('returns correctly forked list', () => {
       const input = [
@@ -507,33 +493,33 @@ describe('array module', () => {
         { name: 'mary', group: 'Y' }
       ]
       const [xs, ys] = _.fork(input, x => x.group === 'X')
-      assert.lengthOf(xs, 2)
-      assert.lengthOf(ys, 2)
+      expect(xs).toHaveLength(2)
+      expect(ys).toHaveLength(2)
       const [r, s] = xs
-      assert.equal(r.name, 'ray')
-      assert.equal(s.name, 'sara')
+      expect(r.name).toBe('ray')
+      expect(s.name).toBe('sara')
       const [b, m] = ys
-      assert.equal(b.name, 'bo')
-      assert.equal(m.name, 'mary')
+      expect(b.name).toBe('bo')
+      expect(m.name).toBe('mary')
     })
   })
 
   describe('merge function', () => {
     test('returns empty array for two null inputs', () => {
       const result = _.merge(NULL, NULL, x => '')
-      assert.deepEqual(result, [])
+      expect(result).toEqual([])
     })
     test('returns an empty array for two empty array inputs', () => {
       const result = _.merge([], [], x => '')
-      assert.deepEqual(result, [])
+      expect(result).toEqual([])
     })
     test('returns root for a null other input', () => {
       const result = _.merge([], NULL, x => '')
-      assert.deepEqual(result, [])
+      expect(result).toEqual([])
     })
     test('returns empty array for a null root input', () => {
       const result = _.merge(NULL, [], x => '')
-      assert.deepEqual(result, [])
+      expect(result).toEqual([])
     })
     test('returns root for a null matcher input', () => {
       const result = _.merge(
@@ -541,7 +527,7 @@ describe('array module', () => {
         [],
         null as unknown as (x: string) => string
       )
-      assert.deepEqual(result, ['a'])
+      expect(result).toEqual(['a'])
     })
     test('returns correctly mergeped lists', () => {
       const inputA = [
@@ -555,10 +541,10 @@ describe('array module', () => {
         { name: 'mary', group: 'YYY' }
       ]
       const result = _.merge(inputA, inputB, x => x.name)
-      assert.equal(result[0].group, 'XXX')
-      assert.equal(result[1].group, 'X')
-      assert.equal(result[2].group, 'Y')
-      assert.equal(result[3].group, 'YYY')
+      expect(result[0].group).toBe('XXX')
+      expect(result[1].group).toBe('X')
+      expect(result[2].group).toBe('Y')
+      expect(result[3].group).toBe('YYY')
     })
   })
 
@@ -570,15 +556,15 @@ describe('array module', () => {
     const lettersXX = ['a', 'b', 'c', 'd', 'e', 'XX']
     test('returns empty array for two null inputs', () => {
       const result = _.replaceOrAppend(NULL, null, x => false)
-      assert.deepEqual(result, [])
+      expect(result).toEqual([])
     })
     test('returns array with new item for null list input', () => {
       const result = _.replaceOrAppend(NULL, 'a', x => false)
-      assert.deepEqual(result, ['a'])
+      expect(result).toEqual(['a'])
     })
     test('returns list for null new item input', () => {
       const result = _.replaceOrAppend(['a'], null, x => false)
-      assert.deepEqual(result, ['a'])
+      expect(result).toEqual(['a'])
     })
     test('returns list with item replacing match by index', () => {
       const result = _.replaceOrAppend(
@@ -586,23 +572,23 @@ describe('array module', () => {
         'BB',
         (letter, idx) => idx === 1
       )
-      assert.equal(result[1], 'BB')
+      expect(result[1]).toBe('BB')
     })
     test('returns list with item replacing match', () => {
       const result = _.replaceOrAppend(letters, 'XA', x => x === 'a')
-      assert.deepEqual(result, lettersXA)
+      expect(result).toEqual(lettersXA)
     })
     test('returns list with item replacing match in middle', () => {
       const result = _.replaceOrAppend(letters, 'XC', x => x === 'c')
-      assert.deepEqual(result, lettersXC)
+      expect(result).toEqual(lettersXC)
     })
     test('returns list with item replacing match at end', () => {
       const result = _.replaceOrAppend(letters, 'XE', x => x === 'e')
-      assert.deepEqual(result, lettersXE)
+      expect(result).toEqual(lettersXE)
     })
     test('returns list with item appended', () => {
       const result = _.replaceOrAppend(letters, 'XX', x => x === 'x')
-      assert.deepEqual(result, lettersXX)
+      expect(result).toEqual(lettersXX)
     })
   })
 
@@ -610,45 +596,45 @@ describe('array module', () => {
     const people = [null, 'hello', undefined, false, 23]
     test('returns empty array for null input array', () => {
       const result = _.sift(NULL)
-      assert.deepEqual(result, [])
+      expect(result).toEqual([])
     })
     test('returns array with falsy values filtered out', () => {
       const result = _.sift(people)
-      assert.deepEqual(result, ['hello', 23])
+      expect(result).toEqual(['hello', 23])
     })
   })
 
   describe('iterate function', () => {
     test('iterates correct number of times', () => {
       const result = _.iterate(5, (acc, idx) => acc + idx, 0)
-      assert.equal(result, 15)
+      expect(result).toBe(15)
     })
   })
 
   describe('diff function', () => {
     test('handles null root', () => {
       const result = _.diff(NULL, ['a'])
-      assert.deepEqual(result, ['a'])
+      expect(result).toEqual(['a'])
     })
     test('handles null other', () => {
       const result = _.diff(['a'], NULL)
-      assert.deepEqual(result, ['a'])
+      expect(result).toEqual(['a'])
     })
     test('handles null inputs', () => {
       const result = _.diff(NULL, NULL)
-      assert.deepEqual(result, [])
+      expect(result).toEqual([])
     })
     test('handles empty array root', () => {
       const result = _.diff([], ['a'])
-      assert.deepEqual(result, [])
+      expect(result).toEqual([])
     })
     test('handles empty array other', () => {
       const result = _.diff(['a'], [])
-      assert.deepEqual(result, ['a'])
+      expect(result).toEqual(['a'])
     })
     test('returns all items from root that dont exist in other', () => {
       const result = _.diff(['a', 'b', 'c'], ['c', 'd', 'e'])
-      assert.deepEqual(result, ['a', 'b'])
+      expect(result).toEqual(['a', 'b'])
     })
     test('uses identity function', () => {
       const identity = ({ letter }: { letter: string }) => letter
@@ -658,7 +644,7 @@ describe('array module', () => {
         [letter('c'), letter('d'), letter('e')],
         identity
       )
-      assert.deepEqual(result, [letter('a'), letter('b')])
+      expect(result).toEqual([letter('a'), letter('b')])
     })
   })
 
@@ -666,20 +652,20 @@ describe('array module', () => {
     test('uses getter', () => {
       const list = [{ name: 'Leo' }, { name: 'AJ' }, { name: 'Cynthia' }]
       const result = _.alphabetical(list, i => i.name)
-      assert.equal(result[0].name, 'AJ')
-      assert.equal(result[1].name, 'Cynthia')
-      assert.equal(result[2].name, 'Leo')
+      expect(result[0].name).toBe('AJ')
+      expect(result[1].name).toBe('Cynthia')
+      expect(result[2].name).toBe('Leo')
     })
     test('uses descending order', () => {
       const list = [{ name: 'Leo' }, { name: 'AJ' }, { name: 'Cynthia' }]
       const result = _.alphabetical(list, i => i.name, 'desc')
-      assert.equal(result[0].name, 'Leo')
-      assert.equal(result[1].name, 'Cynthia')
-      assert.equal(result[2].name, 'AJ')
+      expect(result[0].name).toBe('Leo')
+      expect(result[1].name).toBe('Cynthia')
+      expect(result[2].name).toBe('AJ')
     })
     test('gracefully handles null input list', () => {
       const result = _.alphabetical(null as any as string[], x => x)
-      assert.deepEqual(result, [])
+      expect(result).toEqual([])
     })
   })
 
@@ -692,14 +678,18 @@ describe('array module', () => {
     ]
     test('returns correctly counted items object', () => {
       const result = _.counting(people, p => p.group)
-      assert.deepEqual(result, {
+      expect(result).toEqual({
         X: 2,
         Y: 2
       })
     })
     test('does not error on bad input', () => {
-      _.counting(null as unknown as number[], x => x)
-      _.counting(undefined as unknown as number[], x => x)
+      expect(() =>
+        _.counting(null as unknown as number[], x => x)
+      ).not.toThrow()
+      expect(() =>
+        _.counting(undefined as unknown as number[], x => x)
+      ).not.toThrow()
     })
   })
 
@@ -707,58 +697,58 @@ describe('array module', () => {
     const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9]
     test('should shift array right 3 positions', () => {
       const result = _.shift(arr, 3)
-      assert.deepEqual(result, [7, 8, 9, 1, 2, 3, 4, 5, 6])
+      expect(result).toEqual([7, 8, 9, 1, 2, 3, 4, 5, 6])
     })
     test('should shift array left 3 positions', () => {
       const result = _.shift(arr, -3)
-      assert.deepEqual(result, [4, 5, 6, 7, 8, 9, 1, 2, 3])
+      expect(result).toEqual([4, 5, 6, 7, 8, 9, 1, 2, 3])
     })
     test('should shift array right 6 positions', () => {
       const result = _.shift(arr, 15)
-      assert.deepEqual(result, [4, 5, 6, 7, 8, 9, 1, 2, 3])
+      expect(result).toEqual([4, 5, 6, 7, 8, 9, 1, 2, 3])
     })
     test('should shift array left 6 positions', () => {
       const result = _.shift(arr, -15)
-      assert.deepEqual(result, [7, 8, 9, 1, 2, 3, 4, 5, 6])
+      expect(result).toEqual([7, 8, 9, 1, 2, 3, 4, 5, 6])
     })
     test('should keep array as is', () => {
       const result = _.shift(arr, 0)
-      assert.deepEqual(result, [1, 2, 3, 4, 5, 6, 7, 8, 9])
+      expect(result).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9])
     })
     test('should keep array as is', () => {
       const result = _.shift(arr, 9)
-      assert.deepEqual(result, [1, 2, 3, 4, 5, 6, 7, 8, 9])
+      expect(result).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9])
     })
     test('should return empty array', () => {
       const results = _.shift([], 0)
-      assert.deepEqual(results, [])
+      expect(results).toEqual([])
     })
     test('should return empty array', () => {
       const results = _.shift([], 10)
-      assert.deepEqual(results, [])
+      expect(results).toEqual([])
     })
   })
 
   describe('toggle function', () => {
     test('should handle null input list', () => {
       const result = _.toggle(null as unknown as any[], 'a')
-      assert.deepEqual(result, ['a'])
+      expect(result).toEqual(['a'])
     })
     test('should handle null input list and null item', () => {
       const result = _.toggle(null as unknown as any[], null)
-      assert.deepEqual(result, [])
+      expect(result).toEqual([])
     })
     test('should handle null item', () => {
       const result = _.toggle(['a'], null)
-      assert.deepEqual(result, ['a'])
+      expect(result).toEqual(['a'])
     })
     test('should add item when it does not exist using default matcher', () => {
       const result = _.toggle(['a'], 'b')
-      assert.deepEqual(result, ['a', 'b'])
+      expect(result).toEqual(['a', 'b'])
     })
     test('should remove item when it does exist using default matcher', () => {
       const result = _.toggle(['a', 'b'], 'b')
-      assert.deepEqual(result, ['a'])
+      expect(result).toEqual(['a'])
     })
     test('should remove item when it does exist using custom matcher', () => {
       const result = _.toggle(
@@ -766,15 +756,15 @@ describe('array module', () => {
         { value: 'b' },
         v => v.value
       )
-      assert.deepEqual(result, [{ value: 'a' }])
+      expect(result).toEqual([{ value: 'a' }])
     })
     test('should add item when it does not exist using custom matcher', () => {
       const result = _.toggle([{ value: 'a' }], { value: 'b' }, v => v.value)
-      assert.deepEqual(result, [{ value: 'a' }, { value: 'b' }])
+      expect(result).toEqual([{ value: 'a' }, { value: 'b' }])
     })
     test('should prepend item when strategy is set', () => {
       const result = _.toggle(['a'], 'b', null, { strategy: 'prepend' })
-      assert.deepEqual(result, ['b', 'a'])
+      expect(result).toEqual(['b', 'a'])
     })
   })
 })

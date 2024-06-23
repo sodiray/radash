@@ -1,80 +1,80 @@
-import { assert } from 'chai'
+import { expect } from 'vitest'
 import * as _ from '..'
 
 describe('typed module', () => {
   describe('isArray function', () => {
     test('returns false for null', () => {
       const result = _.isArray(null)
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
     test('returns false for undefined', () => {
       const result = _.isArray(undefined)
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
     test('returns false for boolean', () => {
       const result = _.isArray(false)
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
     test('returns false for object', () => {
       const result = _.isArray({})
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
     test('returns false for class instance', () => {
       class Data {}
       const result = _.isArray(new Data())
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
     test('returns false for number', () => {
       const result = _.isArray(22)
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
     test('returns false for string', () => {
       const result = _.isArray('abc')
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
     test('returns true for array', () => {
       const result = _.isArray([1, 2, 3])
-      assert.isTrue(result)
+      expect(result).toBeTruthy()
     })
     test('returns true for empty array', () => {
       const result = _.isArray([])
-      assert.isTrue(result)
+      expect(result).toBeTruthy()
     })
   })
 
   describe('isObject function', () => {
     test('returns false for null', () => {
       const result = _.isObject(null)
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
     test('returns false for undefined', () => {
       const result = _.isObject(undefined)
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
     test('returns false for boolean', () => {
       const result = _.isObject(false)
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
     test('returns false for class instance', () => {
       class Data {}
       const result = _.isObject(new Data())
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
     test('returns false for number', () => {
       const result = _.isObject(22)
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
     test('returns false for string', () => {
       const result = _.isObject('abc')
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
     test('returns false for array', () => {
       const result = _.isObject([1, 2, 3])
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
     test('returns true for object', () => {
       const result = _.isObject({})
-      assert.isTrue(result)
+      expect(result).toBeTruthy()
     })
   })
 
@@ -91,14 +91,14 @@ describe('typed module', () => {
       ]
 
       for (const elm of arr) {
-        assert.isTrue(_.isPrimitive(elm))
+        expect(_.isPrimitive(elm)).toBeTruthy()
       }
     }),
       test('returns false for non-primitives', () => {
         const arr = [new Date(), Number, {}, Object({}), () => 0, [1, 2]]
 
         for (const elm of arr) {
-          assert.isFalse(_.isPrimitive(elm))
+          expect(_.isPrimitive(elm)).toBeFalsy()
         }
       })
   })
@@ -106,189 +106,189 @@ describe('typed module', () => {
   describe('isFunction function', () => {
     test('returns false for null', () => {
       const result = _.isFunction(null)
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
     test('returns false for undefined', () => {
       const result = _.isFunction(undefined)
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
     test('returns false for boolean', () => {
       const result = _.isFunction(false)
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
     test('returns false for class instance', () => {
       class Data {}
       const result = _.isFunction(new Data())
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
     test('returns false for number', () => {
       const result = _.isFunction(22)
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
     test('returns false for string', () => {
       const result = _.isFunction('abc')
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
     test('returns false for array', () => {
       const result = _.isFunction([1, 2, 3])
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
     test('returns false for object', () => {
       const result = _.isFunction({})
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
     test('returns true for anonymous function', () => {
       const result = _.isFunction(function () {
         return 'hello'
       })
-      assert.isTrue(result)
+      expect(result).toBeTruthy()
     })
     test('returns true for arrow function', () => {
       const result = _.isFunction(() => {
         return 'hello'
       })
-      assert.isTrue(result)
+      expect(result).toBeTruthy()
     })
     test('returns true for named function', () => {
       function sayHello() {
         return 'hello'
       }
       const result = _.isFunction(sayHello)
-      assert.isTrue(result)
+      expect(result).toBeTruthy()
     })
   })
 
   describe('isString function', () => {
     test('returns false for null', () => {
       const result = _.isString(null)
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
     test('returns false for undefined', () => {
       const result = _.isString(undefined)
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
     test('returns false for boolean', () => {
       const result = _.isString(false)
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
     test('returns false for class instance', () => {
       class Data {}
       const result = _.isString(new Data())
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
     test('returns false for number', () => {
       const result = _.isString(22)
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
     test('returns false for array', () => {
       const result = _.isString([1, 2, 3])
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
     test('returns false for object', () => {
       const result = _.isString({})
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
     test('returns true for string', () => {
       const result = _.isString('abc')
-      assert.isTrue(result)
+      expect(result).toBeTruthy()
     })
     test('returns true for string class', () => {
       const result = _.isString(String('abc'))
-      assert.isTrue(result)
+      expect(result).toBeTruthy()
     })
   })
 
   describe('isNumber function', () => {
     test('returns false for null', () => {
       const result = _.isNumber(null)
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
     test('returns false for undefined', () => {
       const result = _.isNumber(undefined)
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
     test('returns false for boolean', () => {
       const result = _.isNumber(false)
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
     test('returns false for class instance', () => {
       class Data {}
       const result = _.isNumber(new Data())
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
     test('returns true for int', () => {
       const result = _.isNumber(22)
-      assert.isTrue(result)
+      expect(result).toBeTruthy()
     })
     test('returns true for float', () => {
       const result = _.isNumber(22.0567)
-      assert.isTrue(result)
+      expect(result).toBeTruthy()
     })
     test('returns false for NaN', () => {
       const result = _.isNumber(NaN)
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
     test('returns false for array', () => {
       const result = _.isNumber([1, 2, 3])
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
     test('returns false for object', () => {
       const result = _.isNumber({})
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
     test('returns false for string', () => {
       const result = _.isNumber('abc')
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
     test('returns false for string class', () => {
       const result = _.isNumber(String('abc'))
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
   })
 
   describe('isInt function', () => {
     class Data {}
     test('returns false for non-number values', () => {
-      assert.isFalse(_.isInt(undefined))
-      assert.isFalse(_.isInt(null))
-      assert.isFalse(_.isInt(false))
-      assert.isFalse(_.isInt(new Data()))
-      assert.isFalse(_.isInt(NaN))
-      assert.isFalse(_.isInt([1, 2, 3]))
-      assert.isFalse(_.isInt({}))
-      assert.isFalse(_.isInt('abc'))
-      assert.isFalse(_.isInt(String('abc')))
+      expect(_.isInt(undefined)).toBeFalsy()
+      expect(_.isInt(null)).toBeFalsy()
+      expect(_.isInt(false)).toBeFalsy()
+      expect(_.isInt(new Data())).toBeFalsy()
+      expect(_.isInt(NaN)).toBeFalsy()
+      expect(_.isInt([1, 2, 3])).toBeFalsy()
+      expect(_.isInt({})).toBeFalsy()
+      expect(_.isInt('abc')).toBeFalsy()
+      expect(_.isInt(String('abc'))).toBeFalsy()
     })
     test('returns true for int', () => {
       const result = _.isInt(22)
-      assert.isTrue(result)
+      expect(result).toBeTruthy()
     })
     test('returns false for float', () => {
       const result = _.isInt(22.0567)
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
   })
 
   describe('isFloat function', () => {
     class Data {}
     test('returns false for non-number values', () => {
-      assert.isFalse(_.isFloat(undefined))
-      assert.isFalse(_.isFloat(null))
-      assert.isFalse(_.isFloat(false))
-      assert.isFalse(_.isFloat(new Data()))
-      assert.isFalse(_.isFloat(NaN))
-      assert.isFalse(_.isFloat([1, 2, 3]))
-      assert.isFalse(_.isFloat({}))
-      assert.isFalse(_.isFloat('abc'))
-      assert.isFalse(_.isFloat(String('abc')))
+      expect(_.isFloat(undefined)).toBeFalsy()
+      expect(_.isFloat(null)).toBeFalsy()
+      expect(_.isFloat(false)).toBeFalsy()
+      expect(_.isFloat(new Data())).toBeFalsy()
+      expect(_.isFloat(NaN)).toBeFalsy()
+      expect(_.isFloat([1, 2, 3])).toBeFalsy()
+      expect(_.isFloat({})).toBeFalsy()
+      expect(_.isFloat('abc')).toBeFalsy()
+      expect(_.isFloat(String('abc'))).toBeFalsy()
     })
     test('returns false for int', () => {
       const result = _.isFloat(22)
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
     test('returns true for float', () => {
       const result = _.isFloat(22.0567)
-      assert.isTrue(result)
+      expect(result).toBeTruthy()
     })
   })
 
@@ -298,74 +298,74 @@ describe('typed module', () => {
       name: string = 'ray'
     }
     test('returns true for empty values', () => {
-      assert.isTrue(_.isEmpty(null))
-      assert.isTrue(_.isEmpty(undefined))
-      assert.isTrue(_.isEmpty(new Data()))
-      assert.isTrue(_.isEmpty(0))
-      assert.isTrue(_.isEmpty(true))
-      assert.isTrue(_.isEmpty([]))
-      assert.isTrue(_.isEmpty(false))
-      assert.isTrue(_.isEmpty({}))
-      assert.isTrue(_.isEmpty(''))
-      assert.isTrue(_.isEmpty(String()))
-      assert.isTrue(_.isEmpty(new Map()))
-      assert.isTrue(_.isEmpty(new Date('invalid value')))
+      expect(_.isEmpty(null)).toBeTruthy()
+      expect(_.isEmpty(undefined)).toBeTruthy()
+      expect(_.isEmpty(new Data())).toBeTruthy()
+      expect(_.isEmpty(0)).toBeTruthy()
+      expect(_.isEmpty(true)).toBeTruthy()
+      expect(_.isEmpty([])).toBeTruthy()
+      expect(_.isEmpty(false)).toBeTruthy()
+      expect(_.isEmpty({})).toBeTruthy()
+      expect(_.isEmpty('')).toBeTruthy()
+      expect(_.isEmpty(String())).toBeTruthy()
+      expect(_.isEmpty(new Map())).toBeTruthy()
+      expect(_.isEmpty(new Date('invalid value'))).toBeTruthy()
     })
     test('returns false for non-empty values', () => {
-      assert.isFalse(_.isEmpty(new Date()))
-      assert.isFalse(_.isEmpty(new Date('2022-09-01T02:19:55.976Z')))
-      assert.isFalse(_.isEmpty(22))
-      assert.isFalse(_.isEmpty(new Person()))
-      assert.isFalse(_.isEmpty({ name: 'x' }))
-      assert.isFalse(_.isEmpty('abc'))
-      assert.isFalse(_.isEmpty(String('abc')))
-      assert.isFalse(_.isEmpty([1, 2, 3]))
-      assert.isFalse(_.isEmpty(function work() {}))
-      assert.isFalse(_.isEmpty(() => {}))
-      assert.isFalse(_.isEmpty(Symbol('')))
-      assert.isFalse(_.isEmpty(Symbol('hello')))
+      expect(_.isEmpty(new Date())).toBeFalsy()
+      expect(_.isEmpty(new Date('2022-09-01T02:19:55.976Z'))).toBeFalsy()
+      expect(_.isEmpty(22)).toBeFalsy()
+      expect(_.isEmpty(new Person())).toBeFalsy()
+      expect(_.isEmpty({ name: 'x' })).toBeFalsy()
+      expect(_.isEmpty('abc')).toBeFalsy()
+      expect(_.isEmpty(String('abc'))).toBeFalsy()
+      expect(_.isEmpty([1, 2, 3])).toBeFalsy()
+      expect(_.isEmpty(function work() {})).toBeFalsy()
+      expect(_.isEmpty(() => {})).toBeFalsy()
+      expect(_.isEmpty(Symbol(''))).toBeFalsy()
+      expect(_.isEmpty(Symbol('hello'))).toBeFalsy()
       const map = new Map()
       map.set('a', 1)
-      assert.isFalse(_.isEmpty(map))
+      expect(_.isEmpty(map)).toBeFalsy()
     })
   })
 
   describe('isDate function', () => {
     test('return true for Date values', () => {
-      assert.isTrue(_.isDate(new Date()))
-      assert.isTrue(_.isDate(new Date('2022-09-01T02:19:55.976Z')))
-      assert.isTrue(_.isDate(new Date('invalid value')))
+      expect(_.isDate(new Date())).toBeTruthy()
+      expect(_.isDate(new Date('2022-09-01T02:19:55.976Z'))).toBeTruthy()
+      expect(_.isDate(new Date('invalid value'))).toBeTruthy()
     })
     test('return false for non-Date values', () => {
-      assert.isFalse(_.isDate(22))
-      assert.isFalse(_.isDate({ name: 'x' }))
-      assert.isFalse(_.isDate('abc'))
-      assert.isFalse(_.isDate(String('abc')))
-      assert.isFalse(_.isDate([1, 2, 3]))
-      assert.isFalse(_.isDate(function work() {}))
-      assert.isFalse(_.isDate(() => {}))
-      assert.isFalse(_.isDate(Symbol('')))
-      assert.isFalse(_.isDate(Symbol('hello')))
+      expect(_.isDate(22)).toBeFalsy()
+      expect(_.isDate({ name: 'x' })).toBeFalsy()
+      expect(_.isDate('abc')).toBeFalsy()
+      expect(_.isDate(String('abc'))).toBeFalsy()
+      expect(_.isDate([1, 2, 3])).toBeFalsy()
+      expect(_.isDate(function work() {})).toBeFalsy()
+      expect(_.isDate(() => {})).toBeFalsy()
+      expect(_.isDate(Symbol(''))).toBeFalsy()
+      expect(_.isDate(Symbol('hello'))).toBeFalsy()
     })
   })
 
   describe('isPromise function', () => {
     test('return true for Promise values', () => {
-      assert.isTrue(_.isPromise(new Promise(res => res(0))))
-      assert.isTrue(_.isPromise(new Promise(res => res(''))))
-      assert.isTrue(_.isPromise((async () => {})()))
+      expect(_.isPromise(new Promise(res => res(0)))).toBeTruthy()
+      expect(_.isPromise(new Promise(res => res('')))).toBeTruthy()
+      expect(_.isPromise((async () => {})())).toBeTruthy()
     })
     test('return false for non-Date values', () => {
-      assert.isFalse(_.isPromise(22))
-      assert.isFalse(_.isPromise({ name: 'x' }))
-      assert.isFalse(_.isPromise('abc'))
-      assert.isFalse(_.isPromise(String('abc')))
-      assert.isFalse(_.isPromise([1, 2, 3]))
-      assert.isFalse(_.isPromise(function work() {}))
-      assert.isFalse(_.isPromise(() => {}))
-      assert.isFalse(_.isPromise(Symbol('')))
-      assert.isFalse(_.isPromise(Symbol('hello')))
-      assert.isFalse(_.isPromise({ then: 2 }))
+      expect(_.isPromise(22)).toBeFalsy()
+      expect(_.isPromise({ name: 'x' })).toBeFalsy()
+      expect(_.isPromise('abc')).toBeFalsy()
+      expect(_.isPromise(String('abc'))).toBeFalsy()
+      expect(_.isPromise([1, 2, 3])).toBeFalsy()
+      expect(_.isPromise(function work() {})).toBeFalsy()
+      expect(_.isPromise(() => {})).toBeFalsy()
+      expect(_.isPromise(Symbol(''))).toBeFalsy()
+      expect(_.isPromise(Symbol('hello'))).toBeFalsy()
+      expect(_.isPromise({ then: 2 })).toBeFalsy()
     })
   })
 
@@ -373,18 +373,18 @@ describe('typed module', () => {
     test('returns false for null', () => {
       const input = null
       const result = _.isSymbol(input)
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
     test('returns false for undefined', () => {
       const input = undefined
       const result = _.isSymbol(input)
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
     test('returns false for empty class instance', () => {
       class Data {}
       const input = new Data()
       const result = _.isSymbol(input)
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
     test('returns false for class instance with properties', () => {
       class Data {
@@ -392,82 +392,82 @@ describe('typed module', () => {
       }
       const input = new Data()
       const result = _.isSymbol(input)
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
     test('returns false for number greater than 0', () => {
       const input = 22
       const result = _.isSymbol(input)
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
     test('returns false for number 0', () => {
       const input = 0
       const result = _.isSymbol(input)
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
     test('returns false for array with values', () => {
       const input = [1, 2, 3]
       const result = _.isSymbol(input)
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
     test('returns false for empty array', () => {
       const input: unknown[] = []
       const result = _.isSymbol(input)
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
     test('returns false for true', () => {
       const input = true
       const result = _.isSymbol(input)
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
     test('returns false for false', () => {
       const input = false
       const result = _.isSymbol(input)
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
     test('returns false for empty object', () => {
       const input = {}
       const result = _.isSymbol(input)
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
     test('returns false for object with values', () => {
       const input = { name: 'x' }
       const result = _.isSymbol(input)
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
     test('returns false for string with chars', () => {
       const input = 'abc'
       const result = _.isSymbol(input)
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
     test('returns false for empty string', () => {
       const input = ''
       const result = _.isSymbol(input)
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
     test('returns false for empty string class', () => {
       const input = ''
       const result = _.isSymbol(input)
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
     test('returns false for string class with chars', () => {
       const input = 'abc'
       const result = _.isSymbol(input)
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
     test('returns false for empty Map', () => {
       const input = new Map()
       const result = _.isSymbol(input)
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
     test('returns true for empty Symbol', () => {
       const input = Symbol('')
       const result = _.isSymbol(input)
-      assert.isTrue(result)
+      expect(result).toBeTruthy()
     })
     test('returns true for Symbol instance', () => {
       const input = Symbol('hello')
       const result = _.isSymbol(input)
-      assert.isTrue(result)
+      expect(result).toBeTruthy()
     })
     test('returns false for Map with values', () => {
       const input = new Map()
@@ -475,7 +475,7 @@ describe('typed module', () => {
       input.set('b', 2)
       input.set('c', 3)
       const result = _.isSymbol(input)
-      assert.isFalse(result)
+      expect(result).toBeFalsy()
     })
   })
 
@@ -511,34 +511,34 @@ describe('typed module', () => {
     }
     complex.loop = complex
     test('returns true for equal things', () => {
-      assert.isTrue(_.isEqual(0, 0))
-      assert.isTrue(_.isEqual('a', 'a'))
+      expect(_.isEqual(0, 0)).toBeTruthy()
+      expect(_.isEqual('a', 'a')).toBeTruthy()
       const hello = Symbol('hello')
-      assert.isTrue(_.isEqual(hello, hello))
-      assert.isTrue(_.isEqual({}, {}))
-      assert.isTrue(_.isEqual(true, true))
-      assert.isTrue(_.isEqual(new RegExp(/a*s/), new RegExp(/a*s/)))
+      expect(_.isEqual(hello, hello)).toBeTruthy()
+      expect(_.isEqual({}, {})).toBeTruthy()
+      expect(_.isEqual(true, true)).toBeTruthy()
+      expect(_.isEqual(new RegExp(/a*s/), new RegExp(/a*s/))).toBeTruthy()
       const now = new Date()
-      assert.isTrue(_.isEqual(now, now))
-      assert.isTrue(_.isEqual([], []))
-      assert.isTrue(_.isEqual(complex, { ...complex }))
-      assert.isTrue(
+      expect(_.isEqual(now, now)).toBeTruthy()
+      expect(_.isEqual([], [])).toBeTruthy()
+      expect(_.isEqual(complex, { ...complex })).toBeTruthy()
+      expect(
         _.isEqual([complex, complex], [{ ...complex }, { ...complex }])
-      )
+      ).toBeTruthy()
     })
     test('returns false for non-equal things', () => {
-      assert.isFalse(_.isEqual(0, 1))
-      assert.isFalse(_.isEqual('a', 'b'))
-      assert.isFalse(_.isEqual(new RegExp(/^http:/), new RegExp(/https/)))
-      assert.isFalse(_.isEqual(Symbol('hello'), Symbol('goodbye')))
-      assert.isFalse(_.isEqual({ z: 23 }, { a: 1 }))
-      assert.isFalse(_.isEqual(true, false))
-      assert.isFalse(
+      expect(_.isEqual(0, 1)).toBeFalsy()
+      expect(_.isEqual('a', 'b')).toBeFalsy()
+      expect(_.isEqual(new RegExp(/^http:/), new RegExp(/https/))).toBeFalsy()
+      expect(_.isEqual(Symbol('hello'), Symbol('goodbye'))).toBeFalsy()
+      expect(_.isEqual({ z: 23 }, { a: 1 })).toBeFalsy()
+      expect(_.isEqual(true, false)).toBeFalsy()
+      expect(
         _.isEqual(new Date(), new Date('2022-09-01T03:25:12.750Z'))
-      )
-      assert.isFalse(_.isEqual([], [1]))
-      assert.isFalse(_.isEqual(complex, { ...complex, num: 222 }))
-      assert.isFalse(_.isEqual([complex], [{ ...complex, num: 222 }]))
+      ).toBeFalsy()
+      expect(_.isEqual([], [1])).toBeFalsy()
+      expect(_.isEqual(complex, { ...complex, num: 222 })).toBeFalsy()
+      expect(_.isEqual([complex], [{ ...complex, num: 222 }])).toBeFalsy()
     })
   })
 })
