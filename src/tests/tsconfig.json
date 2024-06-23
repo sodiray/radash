@@ -1,6 +1,4 @@
 {
-  "include": ["src/**/*.ts"],
-  "exclude": ["**/*.test.ts"],
   "compilerOptions": {
     "moduleResolution": "node",
     "noEmit": true,
@@ -8,7 +6,6 @@
     "lib": ["es2020"],
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "strict": true,
-    "types": []
+    "strict": true
   }
 }
