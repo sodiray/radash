@@ -4,7 +4,7 @@
 
 <div align="center">
   <p align="center">
-    <img src="https://github.com/aleclarson/radashi/raw/master/banner.png" alt="radash" width="100%" style="border-radius:4px" />
+    <img src="https://github.com/radashi-org/radashi/raw/main/radashi.png" alt="Radashi" width="100%" />
   </p>
 </div>
 
