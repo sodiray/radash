@@ -93,11 +93,12 @@
     "dev": "tsup --clean --watch --sourcemap",
     "build": "tsup --clean",
     "lint": "tsc -p . --noEmit",
-    "test": "vitest",
+    "test": "vitest run --coverage",
     "docs:install": "pnpm add next@12.3.4 chiller@1.0.0-rc.30 -D",
     "docs:build": "chiller build --ci"
   },
   "devDependencies": {
+    "@vitest/coverage-v8": "^1.6.0",
     "fast-glob": "^3.3.2",
     "prettier": "^2.7.1",
     "prettier-plugin-organize-imports": "^3.0.3",
