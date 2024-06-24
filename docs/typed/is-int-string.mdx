@@ -1,0 +1,24 @@
+---
+title: isIntString
+description: 'Determine if a value is an int in string form'
+group: Typed
+---
+
+## Basic usage
+
+Pass in a value and get a boolean telling you if the value is an int in string form.
+
+```ts
+import { isIntString } from 'radash'
+
+isIntString('12') // => true
+isIntString('-12') // => true
+
+isIntString('12.233') // => false
+isIntString('12.0') // => false
+isIntString('+12') // => false
+
+isIntString('hello') // => false
+isIntString(null) // => false
+isIntString(12) // => false
+```

@@ -93,6 +93,7 @@ export {
   isFloat,
   isFunction,
   isInt,
+  isIntString,
   isNumber,
   isObject,
   isPrimitive,

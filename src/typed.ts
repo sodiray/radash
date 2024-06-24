@@ -36,6 +36,12 @@ export const isInt = (value: any): value is number => {
   return isNumber(value) && value % 1 === 0
 }
 
+export const isIntString = (value: any): value is string => {
+  if (!isString(value)) return false
+  const num = +value
+  return num === Math.floor(num) && `${num}` === value
+}
+
 export const isFloat = (value: any): value is number => {
   return isNumber(value) && value % 1 !== 0
 }
