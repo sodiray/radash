@@ -36,7 +36,7 @@ describe('object module', () => {
       })
     })
     test('handles undefined input', () => {
-      const result = _.shake(undefined)
+      const result = _.shake(undefined!)
       expect(result).toEqual({})
     })
   })
