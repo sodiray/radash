@@ -235,21 +235,17 @@ export const retry = async <TResponse>(
   const times = options?.times ?? 3
   const delay = options?.delay
   const backoff = options?.backoff ?? null
-  for (const i of range(1, times)) {
+  let i = 0
+  while (true) {
     const [err, result] = (await tryit(func)((err: any) => {
       throw { _exited: err }
     })) as [any, TResponse]
     if (!err) return result
     if (err._exited) throw err._exited
-    if (i === times) throw err
+    if (++i === times) throw err
     if (delay) await sleep(delay)
     if (backoff) await sleep(backoff(i))
   }
-  // Logically, we should never reach this
-  // code path. It makes the function meet
-  // strict mode requirements.
-  /* istanbul ignore next */
-  return undefined as unknown as TResponse
 }
 
 /**
