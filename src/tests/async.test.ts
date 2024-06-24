@@ -332,7 +332,7 @@ describe('async module', () => {
       expect(errors).toBeUndefined()
       expect(results).toEqual(['hi_1', 'hi_2', 'hi_3'])
     })
-    test('throws erros as array of all errors', async () => {
+    test('throws errors as array of all errors', async () => {
       const [error, results] = await _.try(async () => {
         return _.parallel(1, _.list(1, 3), async num => {
           await _.sleep(1000)
