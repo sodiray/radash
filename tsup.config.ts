@@ -7,7 +7,5 @@ export default defineConfig({
   dts: true,
   esbuildOptions(options) {
     options.chunkNames = 'chunks/[name]-[hash]'
-    options.minifyIdentifiers = true
-    options.minifySyntax = true
   }
 })
