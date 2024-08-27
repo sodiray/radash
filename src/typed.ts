@@ -52,6 +52,10 @@ export const isDate = (value: any): value is Date => {
   return Object.prototype.toString.call(value) === '[object Date]'
 }
 
+export const isMap = (value: any): value is Map => {
+  return Object.prototype.toString.call(value) === '[object Map]'
+}
+
 /**
  * This is really a _best guess_ promise checking. You
  * should probably use Promise.resolve(value) to be 100%
