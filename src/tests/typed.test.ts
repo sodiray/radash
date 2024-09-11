@@ -246,6 +246,62 @@ describe('typed module', () => {
     })
   })
 
+  describe('isBigInt function', () => {
+    test('returns false for null', () => {
+      const result = _.isBigInt(null)
+      assert.isFalse(result)
+    })
+    test('returns false for undefined', () => {
+      const result = _.isBigInt(undefined)
+      assert.isFalse(result)
+    })
+    test('returns false for boolean', () => {
+      const result = _.isBigInt(false)
+      assert.isFalse(result)
+    })
+    test('returns false for class instance', () => {
+      class Data {}
+      const result = _.isBigInt(new Data())
+      assert.isFalse(result)
+    })
+    test('returns false for int', () => {
+      const result = _.isBigInt(22)
+      assert.isFalse(result)
+    })
+    test('returns false for float', () => {
+      const result = _.isBigInt(22.0567)
+      assert.isFalse(result)
+    })
+    test('returns false for NaN', () => {
+      const result = _.isBigInt(NaN)
+      assert.isFalse(result)
+    })
+    test('returns false for array', () => {
+      const result = _.isBigInt([1, 2, 3])
+      assert.isFalse(result)
+    })
+    test('returns false for object', () => {
+      const result = _.isBigInt({})
+      assert.isFalse(result)
+    })
+    test('returns false for string', () => {
+      const result = _.isBigInt('abc')
+      assert.isFalse(result)
+    })
+    test('returns false for string class', () => {
+      const result = _.isBigInt(String('abc'))
+      assert.isFalse(result)
+    })
+    test('returns true for bigint', () => {
+      const result = _.isBigInt(22n)
+      assert.isTrue(result)
+    })
+    test('returns true for bigint class', () => {
+      const result = _.isBigInt(BigInt(22))
+      assert.isTrue(result)
+    })
+  })
+
   describe('isInt function', () => {
     class Data {}
     test('returns false for non-number values', () => {

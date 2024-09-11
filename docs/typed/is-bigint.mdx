@@ -1,0 +1,18 @@
+---
+title: isBigInt
+description: 'Determine if a value is a bigint'
+group: Typed
+---
+
+## Basic usage
+
+Pass in a value and get a boolean telling you if the value is a bigint.
+
+```ts
+import { isBigInt } from 'radash'
+
+isBigInt('hello') // => false
+isBigInt(['hello']) // => false
+isBigInt(12) // => false
+isBigInt(0n) // => true
+```

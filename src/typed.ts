@@ -48,6 +48,10 @@ export const isNumber = (value: any): value is number => {
   }
 }
 
+export const isBigInt = (value: any): value is bigint => {
+  return typeof value === 'bigint'
+}
+
 export const isDate = (value: any): value is Date => {
   return Object.prototype.toString.call(value) === '[object Date]'
 }
