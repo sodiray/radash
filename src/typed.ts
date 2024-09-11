@@ -72,6 +72,7 @@ export const isEmpty = (value: any) => {
   if (value === true || value === false) return true
   if (value === null || value === undefined) return true
   if (isNumber(value)) return value === 0
+  if (isBigInt(value)) return value === 0n
   if (isDate(value)) return isNaN(value.getTime())
   if (isFunction(value)) return false
   if (isSymbol(value)) return false
