@@ -30,6 +30,9 @@ var radash = (function (exports) {
       return false;
     }
   };
+  const isBigInt = (value) => {
+    return typeof value === "bigint";
+  };
   const isDate = (value) => {
     return Object.prototype.toString.call(value) === "[object Date]";
   };
@@ -49,6 +52,8 @@ var radash = (function (exports) {
       return true;
     if (isNumber(value))
       return value === 0;
+    if (isBigInt(value))
+      return value === 0n;
     if (isDate(value))
       return isNaN(value.getTime());
     if (isFunction(value))
@@ -969,6 +974,7 @@ var radash = (function (exports) {
   exports.intersects = intersects;
   exports.invert = invert;
   exports.isArray = isArray;
+  exports.isBigInt = isBigInt;
   exports.isDate = isDate;
   exports.isEmpty = isEmpty;
   exports.isEqual = isEqual;
