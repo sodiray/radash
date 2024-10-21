@@ -87,6 +87,7 @@ export {
 } from './string'
 export {
   isArray,
+  isBigInt,
   isDate,
   isEmpty,
   isEqual,

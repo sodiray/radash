@@ -48,6 +48,10 @@ export const isNumber = (value: any): value is number => {
   }
 }
 
+export const isBigInt = (value: any): value is bigint => {
+  return typeof value === 'bigint'
+}
+
 export const isDate = (value: any): value is Date => {
   return Object.prototype.toString.call(value) === '[object Date]'
 }
@@ -68,6 +72,7 @@ export const isEmpty = (value: any) => {
   if (value === true || value === false) return true
   if (value === null || value === undefined) return true
   if (isNumber(value)) return value === 0
+  if (isBigInt(value)) return value === 0n
   if (isDate(value)) return isNaN(value.getTime())
   if (isFunction(value)) return false
   if (isSymbol(value)) return false
