@@ -97,14 +97,23 @@ export const pascal = (str: string): string => {
  * title('va_va_boom') -> 'Va Va Boom'
  * title('root-hook') -> 'Root Hook'
  * title('queryItems') -> 'Query Items'
+ * title('ABC') -> 'Abc'
+ * title('ABC_content') -> 'Abc Content'
  */
 export const title = (str: string | null | undefined): string => {
   if (!str) return ''
+
   return str
-    .split(/(?=[A-Z])|[\.\-\s_]/)
+    .split(/(?=[A-Z][a-z])|[\.\-\s_]/)
     .map(s => s.trim())
     .filter(s => !!s)
-    .map(s => capitalize(s.toLowerCase()))
+    .map(s => {
+      if (s === s.toUpperCase()) {
+        // If the entire string segment is uppercase, capitalize it properly
+        return capitalize(s.toLowerCase())
+      }
+      return capitalize(s)
+    })
     .join(' ')
 }
 

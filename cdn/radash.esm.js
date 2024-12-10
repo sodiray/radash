@@ -922,7 +922,12 @@ const pascal = (str) => {
 const title = (str) => {
   if (!str)
     return "";
-  return str.split(/(?=[A-Z])|[\.\-\s_]/).map((s) => s.trim()).filter((s) => !!s).map((s) => capitalize(s.toLowerCase())).join(" ");
+  return str.split(/(?=[A-Z][a-z])|[\.\-\s_]/).map((s) => s.trim()).filter((s) => !!s).map((s) => {
+    if (s === s.toUpperCase()) {
+      return capitalize(s.toLowerCase());
+    }
+    return capitalize(s);
+  }).join(" ");
 };
 const template = (str, data, regex = /\{\{(.+?)\}\}/g) => {
   return Array.from(str.matchAll(regex)).reduce((acc, match) => {

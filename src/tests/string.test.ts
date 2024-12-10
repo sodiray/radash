@@ -174,6 +174,8 @@ describe('string module', () => {
         _.title('queryAllItems-in_Database'),
         'Query All Items In Database'
       )
+      assert.equal(_.title('ABC'), 'Abc')
+      assert.equal(_.title('ABC_content'), 'Abc Content')
     })
     test('returns empty string for bad input', () => {
       assert.equal(_.title(null), '')
