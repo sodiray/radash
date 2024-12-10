@@ -105,6 +105,8 @@ export const title = (str: string | null | undefined): string => {
 
   return str
     .split(/(?=[A-Z][a-z])|[\.\-\s_]/)
+    .map(s => s.trim())
+    .filter(s => !!s)
     .map(s => {
       if (s === s.toUpperCase()) {
         // If the entire string segment is uppercase, capitalize it properly
