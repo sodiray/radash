@@ -1,0 +1,17 @@
+---
+title: remove
+group: 'Array'
+description: Removes all instances of the specified value from the array.
+---
+
+## Basic usage
+
+Given a list of items, return a new list with all instances of the specified value removed.
+
+```ts
+import { remove } from 'radash'
+
+const fruits = ['apple', 'banana', 'orange', 'banana', 'grape']
+
+remove(fruits, 'banana') // => ['apple', 'orange', 'grape']
+```
