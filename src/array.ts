@@ -550,3 +550,13 @@ export function shift<T>(arr: Array<T>, n: number) {
 
   return [...arr.slice(-shiftNumber, arr.length), ...arr.slice(0, -shiftNumber)]
 }
+
+/**
+ * Removes all instances of the specified value from the array.
+ * Returns a new array without modifying the original array.
+ */
+export function remove<T>(arr: Array<T>, value: T): Array<T> {
+  if (!arr.includes(value)) return arr
+
+  return arr.filter(item => item !== value)
+}

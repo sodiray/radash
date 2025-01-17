@@ -17,6 +17,7 @@ export {
   min,
   objectify,
   range,
+  remove,
   replace,
   replaceOrAppend,
   select,

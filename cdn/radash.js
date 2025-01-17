@@ -335,6 +335,11 @@ var radash = (function (exports) {
       return arr;
     return [...arr.slice(-shiftNumber, arr.length), ...arr.slice(0, -shiftNumber)];
   }
+  function remove(arr, value) {
+    if (!arr.includes(value))
+      return arr;
+    return arr.filter((item) => item !== value);
+  }
 
   const reduce = async (array, asyncReducer, initValue) => {
     const initProvided = initValue !== void 0;
@@ -1006,6 +1011,7 @@ var radash = (function (exports) {
   exports.random = random;
   exports.range = range;
   exports.reduce = reduce;
+  exports.remove = remove;
   exports.replace = replace;
   exports.replaceOrAppend = replaceOrAppend;
   exports.retry = retry;

@@ -777,4 +777,35 @@ describe('array module', () => {
       assert.deepEqual(result, ['b', 'a'])
     })
   })
+
+  describe('remove function', () => {
+    test('should handle null item', () => {
+      const result = _.remove(['a'], null)
+      assert.deepEqual(result, ['a'])
+    })
+    test('should remove all occurrences of the item', () => {
+      const result = _.remove(['a', 'b', 'a'], 'a')
+      assert.deepEqual(result, ['b'])
+    })
+    test('should return the same array if the item does not exist', () => {
+      const result = _.remove(['a', 'b'], 'c')
+      assert.deepEqual(result, ['a', 'b'])
+    })
+    test('should remove undefined values', () => {
+      const result = _.remove([undefined, 'a', undefined, 'b'], undefined)
+      assert.deepEqual(result, ['a', 'b'])
+    })
+    test('should remove null values', () => {
+      const result = _.remove([null, 'a', null, 'b'], null)
+      assert.deepEqual(result, ['a', 'b'])
+    })
+    test('should work with mixed data types', () => {
+      const result = _.remove([1, 'a', true, 'a', 1], 'a')
+      assert.deepEqual(result, [1, true, 1])
+    })
+    test('should return an empty array if the input list is empty', () => {
+      const result = _.remove([], 'a')
+      assert.deepEqual(result, [])
+    })
+  })
 })
