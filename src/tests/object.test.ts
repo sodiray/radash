@@ -488,6 +488,11 @@ describe('object module', () => {
       assert.deepEqual(_.set(null as any, null as any, null as any), {})
       assert.deepEqual(_.set({ foo: true }, 'foo', false), { foo: false })
       assert.deepEqual(_.set({}, 'foo', 0), { foo: 0 })
+      assert.deepEqual(_.set({}, '', 2), {})
+      assert.deepEqual(_.set({}, '[]', 2), {})
+      assert.deepEqual(_.set({}, '[0]', 2), {})
+      assert.deepEqual(_.set({}, undefined as any, 2), {})
+      assert.deepEqual(_.set({}, null as any, 2), {})
     })
     test('sets deep values correctly', () => {
       assert.deepEqual(_.set({}, 'cards.value', 2), {

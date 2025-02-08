@@ -245,6 +245,13 @@ export const set = <T extends object, K>(
 ): T => {
   if (!initial) return {} as T
   if (!path || value === undefined) return initial
+  if (
+    typeof path !== 'string' ||
+    !/(\w+|\[\d+\])/.test(path) ||
+    path === '[]'
+  ) {
+    return initial
+  }
 
   const segments: (string | number)[] =
     path
@@ -252,6 +259,8 @@ export const set = <T extends object, K>(
       ?.map(segment =>
         segment.startsWith('[') ? Number(segment.slice(1, -1)) : segment
       ) ?? []
+
+  if (segments.length === 1 && typeof segments[0] === 'number') return initial
 
   const _set = (node: any) => {
     if (segments.length > 1) {
