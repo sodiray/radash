@@ -493,17 +493,29 @@ describe('object module', () => {
       assert.deepEqual(_.set({}, 'cards.value', 2), {
         cards: { value: 2 }
       })
-      assert.deepEqual(_.set({}, 'cards.0.value', 2), {
-        cards: [{ value: 2 }]
+      assert.deepEqual(_.set({}, '0', 2), {
+        '0': 2
       })
-      assert.deepEqual(_.set({}, 'cards.0.0.value', 2), {
-        cards: [[{ value: 2 }]]
+      assert.deepEqual(_.set({}, 'cards.1083.value', 5), {
+        cards: { '1083': { value: 5 } }
+      })
+      assert.deepEqual(_.set({}, 'users.100.200.name', 'Alice'), {
+        users: { '100': { '200': { name: 'Alice' } } }
+      })
+      assert.deepEqual(_.set({}, 'cards.[0].value', 2), {
+        cards: [{ value: 2 }]
       })
       assert.deepEqual(_.set({}, 'cards.[0].[0].value', 2), {
         cards: [[{ value: 2 }]]
       })
       assert.deepEqual(_.set({}, 'cards.[1].[1].value', 2), {
         cards: [, [, { value: 2 }]]
+      })
+      assert.deepEqual(_.set({}, 'users.[0].100.name', 'Alice'), {
+        users: [{ '100': { name: 'Alice' } }]
+      })
+      assert.deepEqual(_.set({}, 'users.100.[0].name', 'Bob'), {
+        users: { '100': [{ name: 'Bob' }] }
       })
     })
   })
@@ -568,7 +580,15 @@ describe('object module', () => {
             power: 58
           }
         ],
-        timestamp: now
+        timestamp: now,
+        2024: {
+          info: 'year info'
+        },
+        data: {
+          '123': {
+            value: 456
+          }
+        }
       }
       assert.deepEqual(
         _.construct({
@@ -576,10 +596,12 @@ describe('object module', () => {
           power: 100,
           'friend.name': 'loki',
           'friend.power': 80,
-          'enemies.0.name': 'hathor',
-          'enemies.0.power': 12,
-          'enemies.1.name': 'vishnu',
-          'enemies.1.power': 58,
+          'enemies.[0].name': 'hathor',
+          'enemies.[0].power': 12,
+          'enemies.[1].name': 'vishnu',
+          'enemies.[1].power': 58,
+          '2024.info': 'year info',
+          'data.123.value': 456,
           timestamp: now
         }),
         ra
