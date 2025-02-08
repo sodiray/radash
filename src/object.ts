@@ -1,5 +1,4 @@
 import { objectify } from './array'
-import { toInt } from './number'
 import { isArray, isObject, isPrimitive } from './typed'
 
 type LowercasedKeys<T extends Record<string, any>> = {
@@ -237,6 +236,7 @@ export const get = <TDefault = unknown>(
  * @example
  * set({}, 'name', 'ra') // => { name: 'ra' }
  * set({}, 'cards[0].value', 2) // => { cards: [{ value: 2 }] }
+ * set({}, 'cards.1083.value', 2) // => { cards: { '1083': { value: 2 } } }
  */
 export const set = <T extends object, K>(
   initial: T,
@@ -245,20 +245,40 @@ export const set = <T extends object, K>(
 ): T => {
   if (!initial) return {} as T
   if (!path || value === undefined) return initial
-  const segments = path.split(/[\.\[\]]/g).filter(x => !!x.trim())
+  if (
+    typeof path !== 'string' ||
+    !/(\w+|\[\d+\])/.test(path) ||
+    path === '[]'
+  ) {
+    return initial
+  }
+
+  const segments: (string | number)[] =
+    path
+      .match(/(\w+|\[\d+\])/g)
+      ?.map(segment =>
+        segment.startsWith('[') ? Number(segment.slice(1, -1)) : segment
+      ) ?? []
+
+  if (segments.length === 1 && typeof segments[0] === 'number') return initial
+
   const _set = (node: any) => {
     if (segments.length > 1) {
-      const key = segments.shift() as string
-      const nextIsNum = toInt(segments[0], null) === null ? false : true
-      node[key] = node[key] === undefined ? (nextIsNum ? [] : {}) : node[key]
+      const key = segments.shift()!
+      const nextKey = segments[0]
+
+      if (typeof nextKey === 'number') {
+        node[key] = node[key] === undefined ? [] : node[key]
+      } else {
+        node[key] = node[key] === undefined ? {} : node[key]
+      }
+
       _set(node[key])
     } else {
       node[segments[0]] = value
     }
   }
-  // NOTE: One day, when structuredClone has more
-  // compatability use it to clone the value
-  // https://developer.mozilla.org/en-US/docs/Web/API/structuredClone
+
   const cloned = clone(initial)
   _set(cloned)
   return cloned
