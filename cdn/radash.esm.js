@@ -171,7 +171,7 @@ const objectify = (array, getKey, getValue = (item) => item) => {
   }, {});
 };
 const select = (array, mapper, condition) => {
-  if (!array)
+  if (!Array.isArray(array))
     return [];
   return array.reduce((acc, item, index) => {
     if (!condition(item, index))
