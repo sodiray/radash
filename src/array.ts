@@ -82,7 +82,7 @@ export function zipToObject<K extends string | number | symbol, V>(
  * and comparing with the second. Keep the one you want then
  * compare that to the next item in the list with the same
  *
- * Ex. const greatest = () => boil(numbers, (a, b) => a > b)
+ * Ex. const greatest = () => boil(numbers, (a, b) => a > b ? a : b)
  */
 export const boil = <T>(
   array: readonly T[],
