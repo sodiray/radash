@@ -43,7 +43,7 @@ describe('array module', () => {
       assert.isNull(result)
     })
     test('does not fail when provided array is funky shaped', () => {
-      const result = _.boil({} as any, () => true)
+      const result = _.boil({ length: 10 } as any, () => true)
       assert.isNull(result)
     })
   })
