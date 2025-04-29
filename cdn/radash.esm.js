@@ -111,7 +111,7 @@ function zipToObject(keys, values) {
   }, {});
 }
 const boil = (array, compareFunc) => {
-  if (!array || (array.length ?? 0) === 0)
+  if (!array || !Array.isArray(array) || (array.length ?? 0) === 0)
     return null;
   return array.reduce(compareFunc);
 };
