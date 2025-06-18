@@ -507,10 +507,11 @@ describe('object module', () => {
       })
     })
 
-    // This test demonstrates the bug where string keys that start with numbers
-    // are incorrectly treated as array indices, causing objects to be created as arrays
-    test('uuid starting with digits is treated as an identifier', () => {
-      // Test with UUID (starts with numbers but is a string key)
+    /**
+     * FIX: Bug where UUID keys that start with numbers
+     * are incorrectly treated as array indices, causing objects to be created as arrays
+     */
+    test('treats uuid starting with digits as an identifier -- not an array index', () => {
       const result = _.set(
         {},
         'fields.754a24c1-c15b-49a2-bf37-2dc5f2b3a823.max',
@@ -525,8 +526,11 @@ describe('object module', () => {
       })
     })
 
-    test('string starting with numbers is incorrectly treated as array index', () => {
-      // Test with string that starts with numbers but is not a valid array index
+    /**
+     * FIX: Bug where string keys that start with numbers
+     * are incorrectly treated as array indices, causing objects to be created as arrays
+     */
+    test('treats string starting with numbers as an identifier -- not an array index', () => {
       const result = _.set({}, 'items.123abc.name', 'test')
       assert.deepEqual(result, {
         items: {
@@ -615,10 +619,12 @@ describe('object module', () => {
         ra
       )
     })
-    test('incorrectly reconstructs objects with UUID keys as arrays', () => {
-      // This test demonstrates the bug where objects with UUID keys that start with numbers
-      // are incorrectly reconstructed as arrays instead of objects
 
+    /**
+     * FIX: Bug where objects with UUID keys that start with numbers are
+     * ommited in the reconstructed object.
+     */
+    test('returns objects with UUID keys as arrays', () => {
       const expected = {
         fields: {
           '754a24c1-c15b-49a2-bf37-2dc5f2b3a823': {
@@ -645,10 +651,11 @@ describe('object module', () => {
       assert.deepEqual(result, expected)
     })
 
-    test('incorrectly reconstructs objects with alphanumeric keys as arrays', () => {
-      // This test demonstrates the bug where objects with string keys that start with numbers
-      // are incorrectly reconstructed as arrays instead of objects
-
+    /**
+     * FIX: Bug where objects with string keys that start with numbers are
+     * ommited in the reconstructed object.
+     */
+    test('returns objects with alphanumeric keys as arrays', () => {
       const expected = {
         items: {
           '123abc': {
