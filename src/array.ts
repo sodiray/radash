@@ -550,3 +550,22 @@ export function shift<T>(arr: Array<T>, n: number) {
 
   return [...arr.slice(-shiftNumber, arr.length), ...arr.slice(0, -shiftNumber)]
 }
+
+export type ProductItem<Arrs> = Arrs extends [Array<infer T>, ...infer Rest] ? Rest extends [] ? [T] : [T, ...ProductItem<Rest>] : never;
+export function product<T extends Array<any>[]>(...args: T): Array<ProductItem<T>> {
+  if (args.some(arg => arg.length < 1)) return [];
+  const indices = new Array(args.length).fill(0);
+  let currentIndex = args.length - 1;
+  const result = [] as Array<T[number][number]>;
+  while (indices[0] < args[0]?.length) {
+    result.push(indices.map((j, i) => args[i][j]));
+    indices[currentIndex] += 1;
+    while (currentIndex > 0 && indices[currentIndex] === args[currentIndex].length) {
+      indices[currentIndex] = 0;
+      indices[currentIndex - 1] += 1;
+      currentIndex -= 1;
+    }
+    currentIndex = args.length - 1;
+  }
+  return result;
+}

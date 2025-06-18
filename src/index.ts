@@ -16,6 +16,8 @@ export {
   merge,
   min,
   objectify,
+  product,
+  ProductItem,
   range,
   replace,
   replaceOrAppend,
