@@ -615,5 +615,62 @@ describe('object module', () => {
         ra
       )
     })
+    test('incorrectly reconstructs objects with UUID keys as arrays', () => {
+      // This test demonstrates the bug where objects with UUID keys that start with numbers
+      // are incorrectly reconstructed as arrays instead of objects
+
+      const expected = {
+        fields: {
+          '754a24c1-c15b-49a2-bf37-2dc5f2b3a823': {
+            max: 100,
+            min: 0,
+            type: 'number',
+            label: 'baba123',
+            required: true
+          }
+        },
+        instructions: 'qde2ref2424'
+      }
+
+      const crushed = {
+        'fields.754a24c1-c15b-49a2-bf37-2dc5f2b3a823.max': 100,
+        'fields.754a24c1-c15b-49a2-bf37-2dc5f2b3a823.min': 0,
+        'fields.754a24c1-c15b-49a2-bf37-2dc5f2b3a823.type': 'number',
+        'fields.754a24c1-c15b-49a2-bf37-2dc5f2b3a823.label': 'baba123',
+        'fields.754a24c1-c15b-49a2-bf37-2dc5f2b3a823.required': true,
+        instructions: 'qde2ref2424'
+      }
+
+      const result = _.construct(crushed)
+      assert.deepEqual(result, expected)
+    })
+
+    test('incorrectly reconstructs objects with alphanumeric keys as arrays', () => {
+      // This test demonstrates the bug where objects with string keys that start with numbers
+      // are incorrectly reconstructed as arrays instead of objects
+
+      const expected = {
+        items: {
+          '123abc': {
+            name: 'test',
+            enabled: true
+          },
+          '456def': {
+            name: 'another',
+            enabled: false
+          }
+        }
+      }
+
+      const crushed = {
+        'items.123abc.name': 'test',
+        'items.123abc.enabled': true,
+        'items.456def.name': 'another',
+        'items.456def.enabled': false
+      }
+
+      const result = _.construct(crushed)
+      assert.deepEqual(result, expected)
+    })
   })
 })
