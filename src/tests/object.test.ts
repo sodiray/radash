@@ -506,6 +506,36 @@ describe('object module', () => {
         cards: [, [, { value: 2 }]]
       })
     })
+
+    // This test demonstrates the bug where string keys that start with numbers
+    // are incorrectly treated as array indices, causing objects to be created as arrays
+    test('uuid starting with digits is treated as an identifier', () => {
+      // Test with UUID (starts with numbers but is a string key)
+      const result = _.set(
+        {},
+        'fields.754a24c1-c15b-49a2-bf37-2dc5f2b3a823.max',
+        100
+      )
+      assert.deepEqual(result, {
+        fields: {
+          '754a24c1-c15b-49a2-bf37-2dc5f2b3a823': {
+            max: 100
+          }
+        }
+      })
+    })
+
+    test('string starting with numbers is incorrectly treated as array index', () => {
+      // Test with string that starts with numbers but is not a valid array index
+      const result = _.set({}, 'items.123abc.name', 'test')
+      assert.deepEqual(result, {
+        items: {
+          '123abc': {
+            name: 'test'
+          }
+        }
+      })
+    })
   })
 
   describe('crush function', () => {
@@ -564,7 +594,7 @@ describe('object module', () => {
             power: 12
           },
           {
-            name: 'vishnu',
+            name: 'Orgo',
             power: 58
           }
         ],
@@ -578,7 +608,7 @@ describe('object module', () => {
           'friend.power': 80,
           'enemies.0.name': 'hathor',
           'enemies.0.power': 12,
-          'enemies.1.name': 'vishnu',
+          'enemies.1.name': 'Orgo',
           'enemies.1.power': 58,
           timestamp: now
         }),
