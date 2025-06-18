@@ -1,5 +1,4 @@
 import { objectify } from './array'
-import { toInt } from './number'
 import { isArray, isObject, isPrimitive } from './typed'
 
 type LowercasedKeys<T extends Record<string, any>> = {
@@ -249,7 +248,7 @@ export const set = <T extends object, K>(
   const _set = (node: any) => {
     if (segments.length > 1) {
       const key = segments.shift() as string
-      const nextIsNum = toInt(segments[0], null) === null ? false : true
+      const nextIsNum = /^\d+$/.test(segments[0])
       node[key] = node[key] === undefined ? (nextIsNum ? [] : {}) : node[key]
       _set(node[key])
     } else {

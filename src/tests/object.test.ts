@@ -506,6 +506,40 @@ describe('object module', () => {
         cards: [, [, { value: 2 }]]
       })
     })
+
+    /**
+     * FIX: Bug where UUID keys that start with numbers
+     * are incorrectly treated as array indices, causing objects to be created as arrays
+     */
+    test('treats uuid starting with digits as an identifier -- not an array index', () => {
+      const result = _.set(
+        {},
+        'fields.754a24c1-c15b-49a2-bf37-2dc5f2b3a823.max',
+        100
+      )
+      assert.deepEqual(result, {
+        fields: {
+          '754a24c1-c15b-49a2-bf37-2dc5f2b3a823': {
+            max: 100
+          }
+        }
+      })
+    })
+
+    /**
+     * FIX: Bug where string keys that start with numbers
+     * are incorrectly treated as array indices, causing objects to be created as arrays
+     */
+    test('treats string starting with numbers as an identifier -- not an array index', () => {
+      const result = _.set({}, 'items.123abc.name', 'test')
+      assert.deepEqual(result, {
+        items: {
+          '123abc': {
+            name: 'test'
+          }
+        }
+      })
+    })
   })
 
   describe('crush function', () => {
@@ -564,7 +598,7 @@ describe('object module', () => {
             power: 12
           },
           {
-            name: 'vishnu',
+            name: 'Orgo',
             power: 58
           }
         ],
@@ -578,12 +612,72 @@ describe('object module', () => {
           'friend.power': 80,
           'enemies.0.name': 'hathor',
           'enemies.0.power': 12,
-          'enemies.1.name': 'vishnu',
+          'enemies.1.name': 'Orgo',
           'enemies.1.power': 58,
           timestamp: now
         }),
         ra
       )
+    })
+
+    /**
+     * FIX: Bug where objects with UUID keys that start with numbers are
+     * ommited in the reconstructed object.
+     */
+    test('returns objects with UUID keys as arrays', () => {
+      const expected = {
+        fields: {
+          '754a24c1-c15b-49a2-bf37-2dc5f2b3a823': {
+            max: 100,
+            min: 0,
+            type: 'number',
+            label: 'baba123',
+            required: true
+          }
+        },
+        instructions: 'qde2ref2424'
+      }
+
+      const crushed = {
+        'fields.754a24c1-c15b-49a2-bf37-2dc5f2b3a823.max': 100,
+        'fields.754a24c1-c15b-49a2-bf37-2dc5f2b3a823.min': 0,
+        'fields.754a24c1-c15b-49a2-bf37-2dc5f2b3a823.type': 'number',
+        'fields.754a24c1-c15b-49a2-bf37-2dc5f2b3a823.label': 'baba123',
+        'fields.754a24c1-c15b-49a2-bf37-2dc5f2b3a823.required': true,
+        instructions: 'qde2ref2424'
+      }
+
+      const result = _.construct(crushed)
+      assert.deepEqual(result, expected)
+    })
+
+    /**
+     * FIX: Bug where objects with string keys that start with numbers are
+     * ommited in the reconstructed object.
+     */
+    test('returns objects with alphanumeric keys as arrays', () => {
+      const expected = {
+        items: {
+          '123abc': {
+            name: 'test',
+            enabled: true
+          },
+          '456def': {
+            name: 'another',
+            enabled: false
+          }
+        }
+      }
+
+      const crushed = {
+        'items.123abc.name': 'test',
+        'items.123abc.enabled': true,
+        'items.456def.name': 'another',
+        'items.456def.enabled': false
+      }
+
+      const result = _.construct(crushed)
+      assert.deepEqual(result, expected)
     })
   })
 })

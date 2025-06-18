@@ -734,7 +734,7 @@ const set = (initial, path, value) => {
   const _set = (node) => {
     if (segments.length > 1) {
       const key = segments.shift();
-      const nextIsNum = toInt(segments[0], null) === null ? false : true;
+      const nextIsNum = /^\d+$/.test(segments[0]);
       node[key] = node[key] === void 0 ? nextIsNum ? [] : {} : node[key];
       _set(node[key]);
     } else {
