@@ -4,10 +4,11 @@
  * capitalize('hello')   -> 'Hello'
  * capitalize('va va voom') -> 'Va va voom'
  */
-export const capitalize = (str: string): string => {
-  if (!str || str.length === 0) return ''
+export const capitalize = <Str extends string>(str: Str): Capitalize<Str> => {
+  if (!str || str.length === 0) return '' as Capitalize<Str>
   const lower = str.toLowerCase()
-  return lower.substring(0, 1).toUpperCase() + lower.substring(1, lower.length)
+  return (lower.substring(0, 1).toUpperCase() +
+    lower.substring(1, lower.length)) as Capitalize<Str>
 }
 
 /**
