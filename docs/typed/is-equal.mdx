@@ -13,6 +13,7 @@ import { isEqual } from 'radash'
 
 isEqual(null, null) // => true
 isEqual([], [])     // => true
+isEqual({ hello: 'world' }, { hello: 'world' }) // => true
 
 isEqual('hello', 'world') // => false
 isEqual(22, 'abc')        // => false
