@@ -162,7 +162,7 @@ export const alphabetical = <T>(
 export const counting = <T, TId extends string | number | symbol>(
   list: readonly T[],
   identity: (item: T) => TId
-): Record<TId, number> => {
+): Partial<Record<TId, number>> => {
   if (!list) return {} as Record<TId, number>
   return list.reduce((acc, item) => {
     const id = identity(item)
