@@ -17,6 +17,6 @@ const ra = {
   power: 'sun'
 }
 
-mapKeys(ra, key => key.toUpperCase()) // => { MODE, POWER }
-mapKeys(ra, (key, value) => value) // => { god: 'god', power: 'power' }
+mapKeys(ra, key => key.toUpperCase()) // => { MODE: 'god', POWER: 'sun' }
+mapKeys(ra, (key, value) => value) // => { god: 'god', sun: 'sun' }
 ```
