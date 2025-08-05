@@ -712,17 +712,17 @@ const get = (value, path, defaultValue) => {
   const segments = path.split(/[\.\[\]]/g);
   let current = value;
   for (const key of segments) {
-    if (current === null)
+    if (current === void 0 || current === null) {
       return defaultValue;
-    if (current === void 0)
-      return defaultValue;
+    }
     const dequoted = key.replace(/['"]/g, "");
     if (dequoted.trim() === "")
       continue;
     current = current[dequoted];
   }
-  if (current === void 0)
+  if (current === void 0 || current === null) {
     return defaultValue;
+  }
   return current;
 };
 const set = (initial, path, value) => {
