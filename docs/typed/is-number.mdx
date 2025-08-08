@@ -13,5 +13,6 @@ import { isNumber } from 'radash'
 
 isNumber('hello') // => false
 isNumber(['hello']) // => false
+isNumber(NaN) // => false
 isNumber(12) // => true
 ```
