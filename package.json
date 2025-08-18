@@ -43,7 +43,7 @@
     "rollup": "^3.2.5",
     "rollup-plugin-dts": "^5.0.0",
     "rollup-plugin-esbuild": "^5.0.0",
-    "rollup-plugin-node-externals": "^5.0.2",
+    "rollup-plugin-node-externals": "^6.1.1",
     "ts-jest": "^28.0.8",
     "tslint": "^6.0.0",
     "typescript": "^4.8.4"
