@@ -649,10 +649,10 @@
     "@jridgewell/resolve-uri" "3.1.0"
     "@jridgewell/sourcemap-codec" "1.4.14"
 
-"@rollup/plugin-typescript@^10.0.1":
-  version "10.0.1"
-  resolved "https://registry.yarnpkg.com/@rollup/plugin-typescript/-/plugin-typescript-10.0.1.tgz#270b515b116ea28320e6bb62451c4767d49072d6"
-  integrity sha512-wBykxRLlX7EzL8BmUqMqk5zpx2onnmRMSw/l9M1sVfkJvdwfxogZQVNUM9gVMJbjRLDR5H6U0OMOrlDGmIV45A==
+"@rollup/plugin-typescript@^11.1.3":
+  version "11.1.3"
+  resolved "https://registry.yarnpkg.com/@rollup/plugin-typescript/-/plugin-typescript-11.1.3.tgz#8172858a1e5f4c181aebc61f8920002fd5e04b91"
+  integrity sha512-8o6cNgN44kQBcpsUJTbTXMTtb87oR1O0zgP3Dxm71hrNgparap3VujgofEilTYJo+ivf2ke6uy3/E5QEaiRlDA==
   dependencies:
     "@rollup/pluginutils" "^5.0.1"
     resolve "^1.22.1"
