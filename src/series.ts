@@ -5,7 +5,7 @@ import { list } from './array'
  * that should be treated with order.
  */
 export const series = <T>(
-  items: T[],
+  items: T[] | readonly T[],
   toKey: (item: T) => string | symbol = item => `${item}`
 ) => {
   const { indexesByKey, itemsByIndex } = items.reduce(
