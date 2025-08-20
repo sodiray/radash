@@ -404,6 +404,7 @@ describe('array module', () => {
       assert.deepEqual(toList(_.range(0, 4)), [0, 1, 2, 3, 4])
       assert.deepEqual(toList(_.range(3)), [0, 1, 2, 3])
       assert.deepEqual(toList(_.range(0, 3)), [0, 1, 2, 3])
+      assert.deepEqual(toList(_.range(-3, 0)), [-3, -2, -1, 0])
       assert.deepEqual(toList(_.range(0, 3, 'y')), ['y', 'y', 'y', 'y'])
       assert.deepEqual(toList(_.range(0, 3, () => 'y')), ['y', 'y', 'y', 'y'])
       assert.deepEqual(toList(_.range(0, 3, i => i)), [0, 1, 2, 3])
