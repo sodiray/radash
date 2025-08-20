@@ -325,7 +325,7 @@ export function* range<T = number>(
   step: number = 1
 ): Generator<T> {
   const mapper = isFunction(valueOrMapper) ? valueOrMapper : () => valueOrMapper
-  const start = end ? startOrLength : 0
+  const start = end !== undefined ? startOrLength : 0
   const final = end ?? startOrLength
   for (let i = start; i <= final; i += step) {
     yield mapper(i)

@@ -206,7 +206,7 @@ const unique = (array, toKey) => {
 };
 function* range(startOrLength, end, valueOrMapper = (i) => i, step = 1) {
   const mapper = isFunction(valueOrMapper) ? valueOrMapper : () => valueOrMapper;
-  const start = end ? startOrLength : 0;
+  const start = end !== void 0 ? startOrLength : 0;
   const final = end ?? startOrLength;
   for (let i = start; i <= final; i += step) {
     yield mapper(i);
