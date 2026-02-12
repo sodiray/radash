@@ -575,6 +575,18 @@ describe('object module', () => {
         timestamp: now
       })
     })
+    test('preserves values when object keys contain dots', () => {
+      const obj = {
+        key1: {
+          key2: 'value'
+        },
+        'bar.baz': 'fiz'
+      }
+      assert.deepEqual(_.crush(obj), {
+        'key1.key2': 'value',
+        'bar.baz': 'fiz'
+      })
+    })
   })
 
   describe('construct function', () => {

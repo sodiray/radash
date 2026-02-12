@@ -323,11 +323,26 @@ export const keys = <TValue extends object>(value: TValue): string[] => {
  */
 export const crush = <TValue extends object>(value: TValue): object => {
   if (!value) return {}
-  return objectify(
-    keys(value),
-    k => k,
-    k => get(value, k)
-  )
+  const crushImpl = (
+    nested: any,
+    paths: string[],
+    result: Record<string, any>
+  ): void => {
+    if (isObject(nested)) {
+      for (const [k, v] of Object.entries(nested)) {
+        crushImpl(v, [...paths, k], result)
+      }
+    } else if (isArray(nested)) {
+      for (let i = 0; i < nested.length; i++) {
+        crushImpl(nested[i], [...paths, `${i}`], result)
+      }
+    } else {
+      result[paths.join('.')] = nested
+    }
+  }
+  const result: Record<string, any> = {}
+  crushImpl(value, [], result)
+  return result
 }
 
 /**
