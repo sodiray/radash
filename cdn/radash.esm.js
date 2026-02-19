@@ -719,6 +719,8 @@ const get = (value, path, defaultValue) => {
     const dequoted = key.replace(/['"]/g, "");
     if (dequoted.trim() === "")
       continue;
+    if (dequoted === "__proto__" || dequoted === "constructor" || dequoted === "prototype")
+      return defaultValue;
     current = current[dequoted];
   }
   if (current === void 0)
@@ -734,11 +736,16 @@ const set = (initial, path, value) => {
   const _set = (node) => {
     if (segments.length > 1) {
       const key = segments.shift();
+      if (key === "__proto__" || key === "constructor" || key === "prototype")
+        return;
       const nextIsNum = /^\d+$/.test(segments[0]);
       node[key] = node[key] === void 0 ? nextIsNum ? [] : {} : node[key];
       _set(node[key]);
     } else {
-      node[segments[0]] = value;
+      const key = segments[0];
+      if (key === "__proto__" || key === "constructor" || key === "prototype")
+        return;
+      node[key] = value;
     }
   };
   const cloned = clone(initial);
