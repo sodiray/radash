@@ -72,9 +72,9 @@ export const isEmpty = (value: any) => {
   if (isFunction(value)) return false
   if (isSymbol(value)) return false
   const length = (value as any).length
-  if (isNumber(length)) return length === 0
+  if (isNumber(length) && (isArray(value) || isString(value))) return length === 0
   const size = (value as any).size
-  if (isNumber(size)) return size === 0
+  if (isNumber(size) && (value instanceof Map || value instanceof Set)) return size === 0
   const keys = Object.keys(value).length
   return keys === 0
 }
