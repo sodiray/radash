@@ -293,6 +293,11 @@ describe('typed module', () => {
   })
 
   describe('isEmpty function', () => {
+    test('returns false for object with length property', () => {
+      assert.isFalse(_.isEmpty({ status: 'DRAFT', length: 0, name: 'Joe Doe' }))
+      assert.isFalse(_.isEmpty({ length: 0 }))
+      assert.isFalse(_.isEmpty({ size: 0 }))
+    })
     class Data {}
     class Person {
       name: string = 'ray'
