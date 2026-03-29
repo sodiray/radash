@@ -5,7 +5,8 @@ export const isSymbol = (value: any): value is symbol => {
 export const isArray = Array.isArray
 
 export const isObject = (value: any): value is object => {
-  return !!value && value.constructor === Object
+  return !!value && typeof value === 'object' && !Array.isArray(value) && 
+    (value.constructor === Object || Object.getPrototypeOf(value) === null)
 }
 
 /**
