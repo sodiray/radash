@@ -535,7 +535,11 @@ export const debounce = <TArgs extends any[]>(
   debounced.cancel = () => {
     active = false
   }
-  debounced.flush = (...args: TArgs) => func(...args)
+  debounced.flush = (...args: TArgs) => {
+    clearTimeout(timer)
+    timer = undefined
+    func(...args)
+  }
 
   return debounced
 }
