@@ -158,6 +158,10 @@ describe('string module', () => {
       const result = _.pascal('hello')
       assert.equal(result, 'Hello')
     })
+    test('handles camelcase input', () => {
+      const result = _.pascal('fooBar')
+      assert.equal(result, 'FooBar')
+    })
     test('returns empty string for empty input', () => {
       const result = _.pascal(null as any)
       assert.equal(result, '')
