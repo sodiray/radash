@@ -249,8 +249,9 @@ export const set = <T extends object, K>(
     if (segments.length > 1) {
       const key = segments.shift() as string
       const nextIsNum = /^\d+$/.test(segments[0])
-      node[key] = node[key] === undefined ? (nextIsNum ? [] : {}) : node[key]
-      _set(node[key])
+      const next = node[key] === undefined ? (nextIsNum ? [] : {}) : clone(node[key])
+      node[key] = next
+      _set(next)
     } else {
       node[segments[0]] = value
     }
