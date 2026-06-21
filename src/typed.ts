@@ -87,6 +87,20 @@ export const isEqual = <TType>(x: TType, y: TType): boolean => {
   if (x instanceof RegExp && y instanceof RegExp) {
     return x.toString() === y.toString()
   }
+  if (x instanceof Map && y instanceof Map) {
+    if (x.size !== y.size) return false
+    for (const [key, val] of x) {
+      if (!y.has(key) || !isEqual(val, y.get(key))) return false
+    }
+    return true
+  }
+  if (x instanceof Set && y instanceof Set) {
+    if (x.size !== y.size) return false
+    for (const val of x) {
+      if (!y.has(val)) return false
+    }
+    return true
+  }
   if (
     typeof x !== 'object' ||
     x === null ||
