@@ -11,7 +11,7 @@
   "index": "docs/getting-started",
   "pages": "./docs/**/*.mdx",
   "theme": "red-400",
-  "repo": "https://github.com/rayepps/radash",
+  "repo": "https://github.com/sodiray/radash",
   "branch": "master",
   "sidebar": {
     "links": [
@@ -26,7 +26,7 @@
         "label": "Playground"
       },
       {
-        "url": "https://github.com/rayepps/radash/discussions",
+        "url": "https://github.com/sodiray/radash/discussions",
         "icon": "chat",
         "label": "Community"
       }
