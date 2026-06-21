@@ -71,6 +71,7 @@ export const isEmpty = (value: any) => {
   if (isDate(value)) return isNaN(value.getTime())
   if (isFunction(value)) return false
   if (isSymbol(value)) return false
+  if (typeof value === 'object' && value !== null && 'nodeType' in value) return false
   const length = (value as any).length
   if (isNumber(length)) return length === 0
   const size = (value as any).size
