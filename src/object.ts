@@ -326,7 +326,7 @@ export const crush = <TValue extends object>(value: TValue): object => {
   return objectify(
     keys(value),
     k => k,
-    k => get(value, k)
+    k => k in value ? (value as any)[k] : get(value, k)
   )
 }
 
