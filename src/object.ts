@@ -249,7 +249,11 @@ export const set = <T extends object, K>(
     if (segments.length > 1) {
       const key = segments.shift() as string
       const nextIsNum = /^\d+$/.test(segments[0])
-      node[key] = node[key] === undefined ? (nextIsNum ? [] : {}) : node[key]
+      if (node[key] === undefined) {
+        node[key] = nextIsNum ? [] : {}
+      } else if (typeof node[key] === 'object' && node[key] !== null) {
+        node[key] = Array.isArray(node[key]) ? [...node[key]] : { ...node[key] }
+      }
       _set(node[key])
     } else {
       node[segments[0]] = value

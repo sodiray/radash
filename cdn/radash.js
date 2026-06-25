@@ -738,7 +738,11 @@ var radash = (function (exports) {
       if (segments.length > 1) {
         const key = segments.shift();
         const nextIsNum = /^\d+$/.test(segments[0]);
-        node[key] = node[key] === void 0 ? nextIsNum ? [] : {} : node[key];
+        if (node[key] === void 0) {
+          node[key] = nextIsNum ? [] : {};
+        } else if (typeof node[key] === "object" && node[key] !== null) {
+          node[key] = Array.isArray(node[key]) ? [...node[key]] : { ...node[key] };
+        }
         _set(node[key]);
       } else {
         node[segments[0]] = value;
