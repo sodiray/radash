@@ -14,7 +14,7 @@ export const group = <T, Key extends string | number | symbol>(
     if (!acc[groupId]) acc[groupId] = []
     acc[groupId].push(item)
     return acc
-  }, {} as Record<Key, T[]>)
+  }, Object.create(null) as Record<Key, T[]>)
 }
 
 /**
