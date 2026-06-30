@@ -19,6 +19,13 @@ describe('array module', () => {
       assert.equal(groups.c?.length, 1)
       assert.equal(groups.c?.[0].word, 'ok')
     })
+    test('does not crash when group key collides with Object.prototype', () => {
+      const keys = ['constructor', 'toString', '__proto__']
+      const groups = _.group(keys, x => x)
+      assert.deepEqual(groups['constructor'], ['constructor'])
+      assert.deepEqual(groups['toString'], ['toString'])
+      assert.deepEqual(groups['__proto__'], ['__proto__'])
+    })
   })
 
   describe('boil function', () => {
