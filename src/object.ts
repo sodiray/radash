@@ -169,6 +169,22 @@ export const listify = <TValue, TKey extends string | number | symbol, KResult>(
  * Pick a list of properties from an object
  * into a new object
  */
+/**
+ * Returns a copy of `obj` containing only the entries whose value passes the
+ * `predicate` function. The inverse of {@link omit} by predicate. See #157.
+ */
+export const pickBy = <T extends object>(
+  obj: T,
+  predicate: (value: T[keyof T], key: keyof T) => unknown
+): Partial<T> => {
+  if (!obj) return {} as Partial<T>
+  return (Object.keys(obj) as (keyof T)[]).reduce((acc, key) => {
+    const value = obj[key]
+    if (predicate(value, key)) acc[key] = value
+    return acc
+  }, {} as Partial<T>)
+}
+
 export const pick = <T extends object, TKeys extends keyof T>(
   obj: T,
   keys: TKeys[]

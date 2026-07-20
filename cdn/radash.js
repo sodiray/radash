@@ -689,6 +689,16 @@ var radash = (function (exports) {
       return acc;
     }, []);
   };
+  const pickBy = (obj, predicate) => {
+    if (!obj)
+      return {};
+    return Object.keys(obj).reduce((acc, key) => {
+      const value = obj[key];
+      if (predicate(value, key))
+        acc[key] = value;
+      return acc;
+    }, {});
+  };
   const pick = (obj, keys2) => {
     if (!obj)
       return {};
@@ -1002,6 +1012,7 @@ var radash = (function (exports) {
   exports.partob = partob;
   exports.pascal = pascal;
   exports.pick = pick;
+  exports.pickBy = pickBy;
   exports.proxied = proxied;
   exports.random = random;
   exports.range = range;

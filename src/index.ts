@@ -69,6 +69,7 @@ export {
   mapValues,
   omit,
   pick,
+  pickBy,
   set,
   shake,
   upperize

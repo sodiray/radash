@@ -681,3 +681,35 @@ describe('object module', () => {
     })
   })
 })
+
+describe('pickBy function', () => {
+  test('keeps entries whose value passes the predicate', () => {
+    assert.deepEqual(
+      _.pickBy({ a: 1, b: 2, c: 3, d: 4 }, v => v > 2),
+      { c: 3, d: 4 }
+    )
+  })
+  test('predicate receives value and key', () => {
+    const seen: [any, string][] = []
+    _.pickBy({ x: 'a', y: 'b' }, (v, k) => {
+      seen.push([v, k])
+      return false
+    })
+    assert.deepEqual(seen, [
+      ['a', 'x'],
+      ['b', 'y']
+    ])
+  })
+  test('returns empty object for a falsy input', () => {
+    assert.deepEqual(
+      _.pickBy(null as any, () => true),
+      {}
+    )
+  })
+  test('returns empty object when nothing matches', () => {
+    assert.deepEqual(
+      _.pickBy({ a: 1, b: 2 }, () => false),
+      {}
+    )
+  })
+})
