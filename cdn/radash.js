@@ -631,6 +631,27 @@ var radash = (function (exports) {
       }
     }, {});
   };
+  const shakeDeep = (obj, filter = (x) => x === void 0) => {
+    if (!obj)
+      return {};
+    return Object.keys(obj).reduce((acc, key) => {
+      const value = obj[key];
+      if (filter(value, key)) {
+        return acc;
+      }
+      acc[key] = shakeItem(value, filter);
+      return acc;
+    }, {});
+  };
+  function shakeItem(value, filter) {
+    if (Array.isArray(value)) {
+      return value.map((item) => shakeItem(item, filter)).filter((item) => !filter(item, ""));
+    }
+    if (isObject(value)) {
+      return shakeDeep(value, filter);
+    }
+    return value;
+  }
   const mapKeys = (obj, mapFunc) => {
     const keys2 = Object.keys(obj);
     return keys2.reduce((acc, key) => {
@@ -1013,6 +1034,7 @@ var radash = (function (exports) {
   exports.series = series;
   exports.set = set;
   exports.shake = shake;
+  exports.shakeDeep = shakeDeep;
   exports.shift = shift;
   exports.shuffle = shuffle;
   exports.sift = sift;

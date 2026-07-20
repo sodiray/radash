@@ -71,6 +71,7 @@ export {
   pick,
   set,
   shake,
+  shakeDeep,
   upperize
 } from './object'
 export { draw, random, shuffle, uid } from './random'

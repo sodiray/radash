@@ -31,6 +31,42 @@ export const shake = <RemovedKeys extends string, T>(
 }
 
 /**
+ * Recursively drops unwanted values from an object and its nested objects/arrays.
+ * This is the deep counterpart of {@link shake}; the default filter removes
+ * `undefined`, and any remaining nested plain object or array is itself shaken
+ * (and dropped entirely if it ends up empty). See issue #252.
+ */
+export const shakeDeep = <RemovedKeys extends string, T>(
+  obj: T,
+  filter: (value: any, key: string) => boolean = x => x === undefined
+): Omit<T, RemovedKeys> => {
+  if (!obj) return {} as T
+  return Object.keys(obj as Record<string, any>).reduce((acc, key) => {
+    const value = (obj as Record<string, any>)[key]
+    if (filter(value, key)) {
+      return acc
+    }
+    acc[key] = shakeItem(value, filter)
+    return acc
+  }, {} as Record<string, any>) as Omit<T, RemovedKeys>
+}
+
+function shakeItem(
+  value: any,
+  filter: (value: any, key: string) => boolean
+): any {
+  if (Array.isArray(value)) {
+    return value
+      .map(item => shakeItem(item, filter))
+      .filter(item => !filter(item, ''))
+  }
+  if (isObject(value)) {
+    return shakeDeep(value, filter)
+  }
+  return value
+}
+
+/**
  * Map over all the keys of an object to return
  * a new object
  */

@@ -681,3 +681,29 @@ describe('object module', () => {
     })
   })
 })
+
+describe('shakeDeep function', () => {
+  test('removes undefined values recursively from nested objects and arrays', () => {
+    const result = _.shakeDeep({
+      a: 1,
+      b: undefined,
+      c: { d: undefined, e: 2 },
+      f: [1, undefined, 3]
+    })
+    assert.deepEqual(result, { a: 1, c: { e: 2 }, f: [1, 3] })
+  })
+  test('uses a custom filter', () => {
+    const result = _.shakeDeep({ a: 1, b: 2, c: 3 }, v => v === 2)
+    assert.deepEqual(result, { a: 1, c: 3 })
+  })
+  test('returns empty object for a falsy input', () => {
+    assert.deepEqual(_.shakeDeep(null as any), {})
+  })
+  test('drops filtered values from nested arrays and objects', () => {
+    const result = _.shakeDeep({
+      a: [1, 2, 3, undefined],
+      b: { c: undefined, d: { e: 1 } }
+    })
+    assert.deepEqual(result, { a: [1, 2, 3], b: { d: { e: 1 } } })
+  })
+})

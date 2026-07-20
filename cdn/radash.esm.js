@@ -628,6 +628,27 @@ const shake = (obj, filter = (x) => x === void 0) => {
     }
   }, {});
 };
+const shakeDeep = (obj, filter = (x) => x === void 0) => {
+  if (!obj)
+    return {};
+  return Object.keys(obj).reduce((acc, key) => {
+    const value = obj[key];
+    if (filter(value, key)) {
+      return acc;
+    }
+    acc[key] = shakeItem(value, filter);
+    return acc;
+  }, {});
+};
+function shakeItem(value, filter) {
+  if (Array.isArray(value)) {
+    return value.map((item) => shakeItem(item, filter)).filter((item) => !filter(item, ""));
+  }
+  if (isObject(value)) {
+    return shakeDeep(value, filter);
+  }
+  return value;
+}
 const mapKeys = (obj, mapFunc) => {
   const keys2 = Object.keys(obj);
   return keys2.reduce((acc, key) => {
@@ -937,4 +958,4 @@ const trim = (str, charsToTrim = " ") => {
   return str.replace(regex, "");
 };
 
-export { all, alphabetical, assign, boil, callable, camel, capitalize, chain, clone, cluster, compose, construct, counting, crush, dash, debounce, defer, diff, draw, first, flat, fork, get, group, guard, inRange, intersects, invert, isArray, isDate, isEmpty, isEqual, isFloat, isFunction, isInt, isNumber, isObject, isPrimitive, isPromise, isString, isSymbol, iterate, keys, last, list, listify, lowerize, map, mapEntries, mapKeys, mapValues, max, memo, merge, min, objectify, omit, parallel, partial, partob, pascal, pick, proxied, random, range, reduce, replace, replaceOrAppend, retry, select, series, set, shake, shift, shuffle, sift, sleep, snake, sort, sum, template, throttle, title, toFloat, toInt, toggle, trim, tryit as try, tryit, uid, unique, upperize, zip, zipToObject };
+export { all, alphabetical, assign, boil, callable, camel, capitalize, chain, clone, cluster, compose, construct, counting, crush, dash, debounce, defer, diff, draw, first, flat, fork, get, group, guard, inRange, intersects, invert, isArray, isDate, isEmpty, isEqual, isFloat, isFunction, isInt, isNumber, isObject, isPrimitive, isPromise, isString, isSymbol, iterate, keys, last, list, listify, lowerize, map, mapEntries, mapKeys, mapValues, max, memo, merge, min, objectify, omit, parallel, partial, partob, pascal, pick, proxied, random, range, reduce, replace, replaceOrAppend, retry, select, series, set, shake, shakeDeep, shift, shuffle, sift, sleep, snake, sort, sum, template, throttle, title, toFloat, toInt, toggle, trim, tryit as try, tryit, uid, unique, upperize, zip, zipToObject };
