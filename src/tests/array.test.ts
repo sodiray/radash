@@ -778,3 +778,34 @@ describe('array module', () => {
     })
   })
 })
+
+describe('mapify function', () => {
+  test('builds a Map using a key function with default value', () => {
+    const map = _.mapify(
+      [
+        { id: 1, name: 'a' },
+        { id: 2, name: 'b' }
+      ],
+      i => i.id
+    )
+    assert.strictEqual(map.size, 2)
+    assert.deepEqual(map.get(1), { id: 1, name: 'a' })
+    assert.deepEqual(map.get(2), { id: 2, name: 'b' })
+  })
+  test('builds a Map using key and value functions', () => {
+    const map = _.mapify(
+      [1, 2, 3],
+      n => n,
+      n => n * 10
+    )
+    assert.strictEqual(map.get(2), 20)
+  })
+  test('returns an empty Map for an empty array', () => {
+    assert.strictEqual(_.mapify([], () => 0).size, 0)
+  })
+  test('keeps the last value for duplicate keys', () => {
+    const map = _.mapify(['a', 'b', 'a'], x => x)
+    assert.strictEqual(map.size, 2)
+    assert.strictEqual(map.get('a'), 'a')
+  })
+})

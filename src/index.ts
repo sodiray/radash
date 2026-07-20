@@ -12,6 +12,7 @@ export {
   iterate,
   last,
   list,
+  mapify,
   max,
   merge,
   min,

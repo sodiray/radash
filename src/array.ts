@@ -212,6 +212,23 @@ export const objectify = <T, Key extends string | number | symbol, Value = T>(
 }
 
 /**
+ * Builds a {@link Map} from an array, similar to {@link objectify} but returning
+ * a Map (which supports non-string keys and preserves insertion order). See
+ * issue #401.
+ */
+export const mapify = <T, Key, Value = T>(
+  array: readonly T[],
+  getKey: (item: T) => Key,
+  getValue: (item: T) => Value = item => item as unknown as Value
+): Map<Key, Value> => {
+  const map = new Map<Key, Value>()
+  for (const item of array) {
+    map.set(getKey(item), getValue(item))
+  }
+  return map
+}
+
+/**
  * Select performs a filter and a mapper inside of a reduce,
  * only iterating the list one time.
  *

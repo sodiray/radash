@@ -173,6 +173,13 @@ var radash = (function (exports) {
       return acc;
     }, {});
   };
+  const mapify = (array, getKey, getValue = (item) => item) => {
+    const map = /* @__PURE__ */ new Map();
+    for (const item of array) {
+      map.set(getKey(item), getValue(item));
+    }
+    return map;
+  };
   const select = (array, mapper, condition) => {
     if (!array)
       return [];
@@ -991,6 +998,7 @@ var radash = (function (exports) {
   exports.mapEntries = mapEntries;
   exports.mapKeys = mapKeys;
   exports.mapValues = mapValues;
+  exports.mapify = mapify;
   exports.max = max;
   exports.memo = memo;
   exports.merge = merge;
