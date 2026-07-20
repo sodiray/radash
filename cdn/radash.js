@@ -494,6 +494,9 @@ var radash = (function (exports) {
       return funcs.slice(1).reduce((acc, fn) => fn(acc), funcs[0](...args));
     };
   }
+  function pipe(value, ...funcs) {
+    return funcs.reduce((acc, fn) => fn(acc), value);
+  }
   function compose(...funcs) {
     return funcs.reverse().reduce((acc, fn) => fn(acc));
   }
@@ -1002,6 +1005,7 @@ var radash = (function (exports) {
   exports.partob = partob;
   exports.pascal = pascal;
   exports.pick = pick;
+  exports.pipe = pipe;
   exports.proxied = proxied;
   exports.random = random;
   exports.range = range;

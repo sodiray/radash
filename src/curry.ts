@@ -88,6 +88,43 @@ export function chain(...funcs: ((...args: any[]) => any)[]) {
   }
 }
 
+/**
+ * Passes `value` through a list of functions left-to-right, returning the final
+ * result. This is like {@link chain} but applies immediately instead of
+ * returning a composed function. See issue #45.
+ */
+export function pipe<T1>(value: T1): T1
+export function pipe<T1, T2>(value: T1, f1: (arg: T1) => T2): T2
+export function pipe<T1, T2, T3>(
+  value: T1,
+  f1: (arg: T1) => T2,
+  f2: (arg: T2) => T3
+): T3
+export function pipe<T1, T2, T3, T4>(
+  value: T1,
+  f1: (arg: T1) => T2,
+  f2: (arg: T2) => T3,
+  f3: (arg: T3) => T4
+): T4
+export function pipe<T1, T2, T3, T4, T5>(
+  value: T1,
+  f1: (arg: T1) => T2,
+  f2: (arg: T2) => T3,
+  f3: (arg: T3) => T4,
+  f4: (arg: T4) => T5
+): T5
+export function pipe<T1, T2, T3, T4, T5, T6>(
+  value: T1,
+  f1: (arg: T1) => T2,
+  f2: (arg: T2) => T3,
+  f3: (arg: T3) => T4,
+  f4: (arg: T4) => T5,
+  f5: (arg: T5) => T6
+): T6
+export function pipe(value: any, ...funcs: ((arg: any) => any)[]): any {
+  return funcs.reduce((acc, fn) => fn(acc), value)
+}
+
 export function compose<
   F1Result,
   F1Args extends any[],

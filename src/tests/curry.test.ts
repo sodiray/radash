@@ -436,3 +436,24 @@ describe('callable function', () => {
     expect(x.id).toBe('9')
   })
 })
+
+describe('pipe function', () => {
+  test('returns value unchanged when no functions given', () => {
+    assert.strictEqual(_.pipe(42), 42)
+  })
+  test('applies a single function', () => {
+    assert.strictEqual(
+      _.pipe(5, (x: number) => x * 2),
+      10
+    )
+  })
+  test('applies functions left to right', () => {
+    const r = _.pipe(
+      2,
+      (x: number) => x + 3,
+      (x: number) => x * 4,
+      (x: number) => `${x}!`
+    )
+    assert.strictEqual(r, '20!')
+  })
+})

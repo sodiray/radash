@@ -50,6 +50,7 @@ export {
   memo,
   partial,
   partob,
+  pipe,
   proxied,
   throttle
 } from './curry'
