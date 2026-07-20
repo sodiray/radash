@@ -665,6 +665,42 @@ var radash = (function (exports) {
   };
   const lowerize = (obj) => mapKeys(obj, (k) => k.toLowerCase());
   const upperize = (obj) => mapKeys(obj, (k) => k.toUpperCase());
+  const cloneDeep = (obj) => {
+    if (isPrimitive(obj) || typeof obj === "function") {
+      return obj;
+    }
+    if (obj instanceof Date) {
+      return new Date(obj.getTime());
+    }
+    if (obj instanceof RegExp) {
+      return new RegExp(obj.source, obj.flags);
+    }
+    if (obj instanceof Map) {
+      const map = /* @__PURE__ */ new Map();
+      for (const [key, value] of obj) {
+        map.set(cloneDeep(key), cloneDeep(value));
+      }
+      return map;
+    }
+    if (obj instanceof Set) {
+      const set2 = /* @__PURE__ */ new Set();
+      for (const value of obj) {
+        set2.add(cloneDeep(value));
+      }
+      return set2;
+    }
+    if (Array.isArray(obj)) {
+      return obj.map((item) => cloneDeep(item));
+    }
+    if (isObject(obj)) {
+      const copy = {};
+      Reflect.ownKeys(obj).forEach((key) => {
+        copy[key] = cloneDeep(obj[key]);
+      });
+      return copy;
+    }
+    return obj;
+  };
   const clone = (obj) => {
     if (isPrimitive(obj)) {
       return obj;
@@ -949,6 +985,7 @@ var radash = (function (exports) {
   exports.capitalize = capitalize;
   exports.chain = chain;
   exports.clone = clone;
+  exports.cloneDeep = cloneDeep;
   exports.cluster = cluster;
   exports.compose = compose;
   exports.construct = construct;

@@ -662,6 +662,42 @@ const invert = (obj) => {
 };
 const lowerize = (obj) => mapKeys(obj, (k) => k.toLowerCase());
 const upperize = (obj) => mapKeys(obj, (k) => k.toUpperCase());
+const cloneDeep = (obj) => {
+  if (isPrimitive(obj) || typeof obj === "function") {
+    return obj;
+  }
+  if (obj instanceof Date) {
+    return new Date(obj.getTime());
+  }
+  if (obj instanceof RegExp) {
+    return new RegExp(obj.source, obj.flags);
+  }
+  if (obj instanceof Map) {
+    const map = /* @__PURE__ */ new Map();
+    for (const [key, value] of obj) {
+      map.set(cloneDeep(key), cloneDeep(value));
+    }
+    return map;
+  }
+  if (obj instanceof Set) {
+    const set2 = /* @__PURE__ */ new Set();
+    for (const value of obj) {
+      set2.add(cloneDeep(value));
+    }
+    return set2;
+  }
+  if (Array.isArray(obj)) {
+    return obj.map((item) => cloneDeep(item));
+  }
+  if (isObject(obj)) {
+    const copy = {};
+    Reflect.ownKeys(obj).forEach((key) => {
+      copy[key] = cloneDeep(obj[key]);
+    });
+    return copy;
+  }
+  return obj;
+};
 const clone = (obj) => {
   if (isPrimitive(obj)) {
     return obj;
@@ -937,4 +973,4 @@ const trim = (str, charsToTrim = " ") => {
   return str.replace(regex, "");
 };
 
-export { all, alphabetical, assign, boil, callable, camel, capitalize, chain, clone, cluster, compose, construct, counting, crush, dash, debounce, defer, diff, draw, first, flat, fork, get, group, guard, inRange, intersects, invert, isArray, isDate, isEmpty, isEqual, isFloat, isFunction, isInt, isNumber, isObject, isPrimitive, isPromise, isString, isSymbol, iterate, keys, last, list, listify, lowerize, map, mapEntries, mapKeys, mapValues, max, memo, merge, min, objectify, omit, parallel, partial, partob, pascal, pick, proxied, random, range, reduce, replace, replaceOrAppend, retry, select, series, set, shake, shift, shuffle, sift, sleep, snake, sort, sum, template, throttle, title, toFloat, toInt, toggle, trim, tryit as try, tryit, uid, unique, upperize, zip, zipToObject };
+export { all, alphabetical, assign, boil, callable, camel, capitalize, chain, clone, cloneDeep, cluster, compose, construct, counting, crush, dash, debounce, defer, diff, draw, first, flat, fork, get, group, guard, inRange, intersects, invert, isArray, isDate, isEmpty, isEqual, isFloat, isFunction, isInt, isNumber, isObject, isPrimitive, isPromise, isString, isSymbol, iterate, keys, last, list, listify, lowerize, map, mapEntries, mapKeys, mapValues, max, memo, merge, min, objectify, omit, parallel, partial, partob, pascal, pick, proxied, random, range, reduce, replace, replaceOrAppend, retry, select, series, set, shake, shift, shuffle, sift, sleep, snake, sort, sum, template, throttle, title, toFloat, toInt, toggle, trim, tryit as try, tryit, uid, unique, upperize, zip, zipToObject };

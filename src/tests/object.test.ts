@@ -681,3 +681,75 @@ describe('object module', () => {
     })
   })
 })
+
+describe('cloneDeep function', () => {
+  test('returns primitives as-is', () => {
+    assert.strictEqual(_.cloneDeep(0), 0)
+    assert.strictEqual(_.cloneDeep('a'), 'a')
+    assert.strictEqual(_.cloneDeep(true), true)
+    assert.strictEqual(_.cloneDeep(null), null)
+    assert.strictEqual(_.cloneDeep(undefined), undefined)
+  })
+  test('returns functions as-is', () => {
+    const fn = () => 1
+    assert.strictEqual(_.cloneDeep(fn), fn)
+  })
+  test('clones dates independently', () => {
+    const d = new Date(2020, 0, 1)
+    const clone = _.cloneDeep(d)
+    assert.notStrictEqual(clone, d)
+    assert.strictEqual(clone.getTime(), d.getTime())
+  })
+  test('clones regexps preserving source and flags', () => {
+    const r = /abc/gi
+    const clone = _.cloneDeep(r)
+    assert.notStrictEqual(clone, r)
+    assert.strictEqual(clone.source, r.source)
+    assert.strictEqual(clone.flags, r.flags)
+  })
+  test('clones maps deeply and independently', () => {
+    const m = new Map([['a', { x: 1 }]])
+    const clone = _.cloneDeep(m)
+    assert.notStrictEqual(clone, m)
+    assert.deepEqual(clone.get('a'), { x: 1 })
+    ;(clone.get('a') as any).x = 2
+    assert.strictEqual((m.get('a') as any).x, 1)
+  })
+  test('clones sets deeply and independently', () => {
+    const s = new Set([{ x: 1 }])
+    const clone = _.cloneDeep(s)
+    assert.notStrictEqual(clone, s)
+    const arr = [...clone]
+    assert.deepEqual(arr[0], { x: 1 })
+    arr[0].x = 2
+    assert.strictEqual([...s][0].x, 1)
+  })
+  test('clones arrays deeply and independently', () => {
+    const a = [{ x: 1 }]
+    const clone = _.cloneDeep(a)
+    assert.notStrictEqual(clone, a)
+    assert.notStrictEqual(clone[0], a[0])
+    assert.deepEqual(clone, a)
+  })
+  test('clones plain objects with nested values independently', () => {
+    const o = { a: 1, b: { c: 2 } }
+    const clone = _.cloneDeep(o)
+    assert.notStrictEqual(clone, o)
+    assert.notStrictEqual(clone.b, o.b)
+    assert.deepEqual(clone, o)
+  })
+  test('clones objects with symbol keys', () => {
+    const sym = Symbol('k')
+    const o = { [sym]: 1 }
+    const clone = _.cloneDeep(o) as any
+    assert.strictEqual(clone[sym], 1)
+    assert.notStrictEqual(clone, o)
+  })
+  test('returns plain constructor objects as-is when not a plain object', () => {
+    class Foo {
+      bar = 1
+    }
+    const f = new Foo()
+    assert.strictEqual(_.cloneDeep(f), f)
+  })
+})

@@ -118,6 +118,49 @@ export const upperize = <T extends Record<string, any>>(obj: T) =>
   mapKeys(obj, k => k.toUpperCase()) as UppercasedKeys<T>
 
 /**
+ * Creates a deep copy of the given object/value. Unlike {@link clone}
+ * (shallow), nested objects, arrays, Dates, RegExps, Maps and Sets are
+ * recursively cloned so the result shares no references with the original.
+ * Primitives and functions are returned as-is. See issue #384.
+ */
+export const cloneDeep = <T>(obj: T): T => {
+  if (isPrimitive(obj) || typeof obj === 'function') {
+    return obj
+  }
+  if (obj instanceof Date) {
+    return new Date(obj.getTime()) as T
+  }
+  if (obj instanceof RegExp) {
+    return new RegExp(obj.source, obj.flags) as T
+  }
+  if (obj instanceof Map) {
+    const map = new Map()
+    for (const [key, value] of obj) {
+      map.set(cloneDeep(key), cloneDeep(value))
+    }
+    return map as T
+  }
+  if (obj instanceof Set) {
+    const set = new Set()
+    for (const value of obj) {
+      set.add(cloneDeep(value))
+    }
+    return set as T
+  }
+  if (Array.isArray(obj)) {
+    return obj.map(item => cloneDeep(item)) as T
+  }
+  if (isObject(obj)) {
+    const copy: Record<string | symbol, any> = {}
+    Reflect.ownKeys(obj).forEach(key => {
+      copy[key] = cloneDeep((obj as any)[key])
+    })
+    return copy as T
+  }
+  return obj
+}
+
+/**
  * Creates a shallow copy of the given obejct/value.
  * @param {*} obj value to clone
  * @returns {*} shallow clone of the given value

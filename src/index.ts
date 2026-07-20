@@ -57,6 +57,7 @@ export { inRange, toFloat, toInt } from './number'
 export {
   assign,
   clone,
+  cloneDeep,
   construct,
   crush,
   get,
