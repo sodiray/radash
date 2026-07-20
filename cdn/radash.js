@@ -173,6 +173,28 @@ var radash = (function (exports) {
       return acc;
     }, {});
   };
+  function listToTree(items, options = {}) {
+    const idKey = options.idKey ?? "id";
+    const parentKey = options.parentKey ?? "parent";
+    const childrenKey = options.childrenKey ?? "children";
+    const nodes = /* @__PURE__ */ new Map();
+    for (const item of items) {
+      const node = { ...item, [childrenKey]: [] };
+      nodes.set(item[idKey], node);
+    }
+    const roots = [];
+    for (const item of items) {
+      const node = nodes.get(item[idKey]);
+      const parentValue = item[parentKey];
+      if (parentValue !== void 0 && parentValue !== null && nodes.has(parentValue)) {
+        const parent = nodes.get(parentValue);
+        parent[childrenKey].push(node);
+      } else {
+        roots.push(node);
+      }
+    }
+    return roots;
+  }
   const select = (array, mapper, condition) => {
     if (!array)
       return [];
@@ -985,6 +1007,7 @@ var radash = (function (exports) {
   exports.keys = keys;
   exports.last = last;
   exports.list = list;
+  exports.listToTree = listToTree;
   exports.listify = listify;
   exports.lowerize = lowerize;
   exports.map = map;

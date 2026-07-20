@@ -778,3 +778,41 @@ describe('array module', () => {
     })
   })
 })
+
+describe('listToTree function', () => {
+  test('builds a tree with default keys', () => {
+    const items = [
+      { id: 1, parent: null },
+      { id: 2, parent: 1 },
+      { id: 3, parent: 1 },
+      { id: 4, parent: 2 }
+    ]
+    const tree = _.listToTree(items as any)
+    assert.strictEqual(tree.length, 1)
+    assert.strictEqual(tree[0].id, 1)
+    assert.strictEqual(tree[0].children.length, 2)
+    assert.strictEqual(tree[0].children[0].children.length, 1)
+  })
+  test('uses custom key names', () => {
+    const items = [
+      { key: 'a', pid: null },
+      { key: 'b', pid: 'a' }
+    ]
+    const tree = _.listToTree(items as any, {
+      idKey: 'key',
+      parentKey: 'pid',
+      childrenKey: 'kids'
+    })
+    assert.strictEqual(tree[0].kids.length, 1)
+    assert.strictEqual(tree[0].kids[0].key, 'b')
+  })
+  test('orphans whose parent is missing become roots', () => {
+    const tree = _.listToTree([{ id: 1, parent: 99 }] as any)
+    assert.strictEqual(tree.length, 1)
+    assert.strictEqual(tree[0].id, 1)
+  })
+  test('nodes with undefined parent are roots', () => {
+    const tree = _.listToTree([{ id: 1 }] as any)
+    assert.strictEqual(tree[0].children.length, 0)
+  })
+})

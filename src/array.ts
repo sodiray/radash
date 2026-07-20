@@ -212,6 +212,47 @@ export const objectify = <T, Key extends string | number | symbol, Value = T>(
 }
 
 /**
+ * Builds a tree from a flat array of nodes linked by a parent reference. See
+ * issue #399.
+ */
+export function listToTree<T extends Record<string, any>>(
+  items: T[],
+  options: {
+    idKey?: string
+    parentKey?: string
+    childrenKey?: string
+  } = {}
+): T[] {
+  const idKey = options.idKey ?? 'id'
+  const parentKey = options.parentKey ?? 'parent'
+  const childrenKey = options.childrenKey ?? 'children'
+
+  const nodes = new Map<unknown, T>()
+  for (const item of items) {
+    const node: T = { ...item, [childrenKey]: [] } as T
+    nodes.set(item[idKey], node)
+  }
+
+  const roots: T[] = []
+  for (const item of items) {
+    const node = nodes.get(item[idKey])!
+    const parentValue = item[parentKey]
+    if (
+      parentValue !== undefined &&
+      parentValue !== null &&
+      nodes.has(parentValue)
+    ) {
+      const parent = nodes.get(parentValue)!
+      ;(parent as any)[childrenKey].push(node)
+    } else {
+      roots.push(node)
+    }
+  }
+
+  return roots
+}
+
+/**
  * Select performs a filter and a mapper inside of a reduce,
  * only iterating the list one time.
  *

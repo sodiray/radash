@@ -12,6 +12,7 @@ export {
   iterate,
   last,
   list,
+  listToTree,
   max,
   merge,
   min,
