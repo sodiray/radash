@@ -327,6 +327,22 @@ var radash = (function (exports) {
     }, {});
     return root.filter((a) => !bKeys[identity(a)]);
   };
+  const collect = (array, fn) => {
+    return array.reduce((acc, item, index) => {
+      const result = fn(item, index);
+      if (result !== void 0)
+        acc.push(result);
+      return acc;
+    }, []);
+  };
+  const collectFirst = (array, fn) => {
+    for (let i = 0; i < array.length; i++) {
+      const result = fn(array[i], i);
+      if (result !== void 0)
+        return result;
+    }
+    return void 0;
+  };
   function shift(arr, n) {
     if (arr.length === 0)
       return arr;
@@ -950,6 +966,8 @@ var radash = (function (exports) {
   exports.chain = chain;
   exports.clone = clone;
   exports.cluster = cluster;
+  exports.collect = collect;
+  exports.collectFirst = collectFirst;
   exports.compose = compose;
   exports.construct = construct;
   exports.counting = counting;

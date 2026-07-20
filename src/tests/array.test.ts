@@ -778,3 +778,50 @@ describe('array module', () => {
     })
   })
 })
+
+describe('collect function', () => {
+  test('keeps only defined results', () => {
+    assert.deepEqual(
+      _.collect([1, 2, 3, 4], x => (x % 2 === 0 ? x : undefined)),
+      [2, 4]
+    )
+  })
+  test('returns empty array when all undefined', () => {
+    assert.deepEqual(
+      _.collect([1, 2], () => undefined),
+      []
+    )
+  })
+  test('passes index to fn', () => {
+    assert.deepEqual(
+      _.collect(['a', 'b'], (x, i) => `${x}${i}`),
+      ['a0', 'b1']
+    )
+  })
+})
+describe('collectFirst function', () => {
+  test('returns the first defined result', () => {
+    assert.strictEqual(
+      _.collectFirst([1, 2, 3], x => (x > 1 ? x * 10 : undefined)),
+      20
+    )
+  })
+  test('returns undefined when no element maps to a defined value', () => {
+    assert.strictEqual(
+      _.collectFirst([1, 2], () => undefined),
+      undefined
+    )
+  })
+  test('returns undefined for an empty array', () => {
+    assert.strictEqual(
+      _.collectFirst([], () => 1),
+      undefined
+    )
+  })
+  test('passes index to fn', () => {
+    assert.strictEqual(
+      _.collectFirst(['a', 'b'], (x, i) => (i === 1 ? x : undefined)),
+      'b'
+    )
+  })
+})

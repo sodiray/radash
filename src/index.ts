@@ -2,6 +2,8 @@ export {
   alphabetical,
   boil,
   cluster,
+  collect,
+  collectFirst,
   counting,
   diff,
   first,

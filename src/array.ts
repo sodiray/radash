@@ -537,6 +537,37 @@ export const diff = <T>(
 }
 
 /**
+ * A map+filter combo: maps `array` through `fn`, keeping only results that are
+ * not `undefined`. See issue #269 (Scala's `collect`).
+ */
+export const collect = <T, R>(
+  array: readonly T[],
+  fn: (item: T, index: number) => R | undefined
+): R[] => {
+  return array.reduce((acc, item, index) => {
+    const result = fn(item, index)
+    if (result !== undefined) acc.push(result)
+    return acc
+  }, [] as R[])
+}
+
+/**
+ * Returns the first defined result of mapping `array` through `fn`, or
+ * `undefined` if no element maps to a defined value. See issue #269
+ * (Scala's `collectFirst`).
+ */
+export const collectFirst = <T, R>(
+  array: readonly T[],
+  fn: (item: T, index: number) => R | undefined
+): R | undefined => {
+  for (let i = 0; i < array.length; i++) {
+    const result = fn(array[i], i)
+    if (result !== undefined) return result
+  }
+  return undefined
+}
+
+/**
  * Shift array items by n steps
  * If n > 0 items will shift n steps to the right
  * If n < 0 items will shift n steps to the left
