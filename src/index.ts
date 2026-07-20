@@ -53,7 +53,7 @@ export {
   proxied,
   throttle
 } from './curry'
-export { inRange, toFloat, toInt } from './number'
+export { inRange, round, toFloat, toInt } from './number'
 export {
   assign,
   clone,

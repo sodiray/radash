@@ -65,3 +65,12 @@ export const toInt = <T extends number | null = number>(
   const result = parseInt(value)
   return isNaN(result) ? def : result
 }
+
+/**
+ * Rounds `value` to `precision` decimal places, mirroring lodash's `round`.
+ * Uses exponential notation internally to avoid the common floating-point
+ * issue (e.g. `round(1.005, 2)` is `1.01`, not `1`). See issue #61.
+ */
+export function round(value: number, precision = 0): number {
+  return Number(`${Math.round(Number(`${value}e+${precision}`))}e-${precision}`)
+}

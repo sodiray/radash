@@ -617,6 +617,9 @@ var radash = (function (exports) {
     const result = parseInt(value);
     return isNaN(result) ? def : result;
   };
+  function round(value, precision = 0) {
+    return Number(`${Math.round(Number(`${value}e+${precision}`))}e-${precision}`);
+  }
 
   const shake = (obj, filter = (x) => x === void 0) => {
     if (!obj)
@@ -1009,6 +1012,7 @@ var radash = (function (exports) {
   exports.replace = replace;
   exports.replaceOrAppend = replaceOrAppend;
   exports.retry = retry;
+  exports.round = round;
   exports.select = select;
   exports.series = series;
   exports.set = set;

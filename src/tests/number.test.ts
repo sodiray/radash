@@ -93,3 +93,19 @@ describe('number module', () => {
     })
   })
 })
+
+describe('round function', () => {
+  test('rounds to integer by default', () => {
+    assert.strictEqual(_.round(2.6), 3)
+    assert.strictEqual(_.round(2.4), 2)
+  })
+  test('rounds to given precision avoiding floating point issues', () => {
+    assert.strictEqual(_.round(1.005, 2), 1.01)
+    assert.strictEqual(_.round(1.2345, 2), 1.23)
+    assert.strictEqual(_.round(1.235, 2), 1.24)
+  })
+  test('handles zero value and negative numbers', () => {
+    assert.strictEqual(_.round(0, 2), 0)
+    assert.strictEqual(_.round(-1.5, 0), -1)
+  })
+})
