@@ -462,6 +462,42 @@ describe('async module', () => {
       // or 2 milliseconds after.
       assert.isAtLeast(diff, backoffs)
     })
+    test('calls onRetry with count and error on each retry', async () => {
+      const calls: { count: number; error: any }[] = []
+      let attempts = 0
+      const result = await _.retry(
+        {
+          times: 3,
+          onRetry: info => {
+            calls.push(info)
+          }
+        },
+        async () => {
+          attempts++
+          if (attempts < 3) throw `fail ${attempts}`
+          return 'done'
+        }
+      )
+      assert.equal(result, 'done')
+      assert.equal(calls.length, 2)
+      assert.equal(calls[0].count, 1)
+      assert.equal(calls[0].error, 'fail 1')
+      assert.equal(calls[1].count, 2)
+      assert.equal(calls[1].error, 'fail 2')
+    })
+    test('does not call onRetry when it succeeds on the first try', async () => {
+      let calls = 0
+      const result = await _.retry(
+        {
+          onRetry: () => {
+            calls++
+          }
+        },
+        async () => 'hello'
+      )
+      assert.equal(result, 'hello')
+      assert.equal(calls, 0)
+    })
   })
 
   describe('_.guard', () => {

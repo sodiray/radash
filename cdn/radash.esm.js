@@ -438,6 +438,7 @@ const retry = async (options, func) => {
   const times = options?.times ?? 3;
   const delay = options?.delay;
   const backoff = options?.backoff ?? null;
+  const onRetry = options?.onRetry;
   for (const i of range(1, times)) {
     const [err, result] = await tryit(func)((err2) => {
       throw { _exited: err2 };
@@ -446,6 +447,8 @@ const retry = async (options, func) => {
       return result;
     if (err._exited)
       throw err._exited;
+    if (onRetry)
+      onRetry({ count: i, error: err });
     if (i === times)
       throw err;
     if (delay)
