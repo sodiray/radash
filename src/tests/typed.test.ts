@@ -328,9 +328,7 @@ describe('typed module', () => {
       const map = new Map()
       map.set('a', 1)
       assert.isFalse(_.isEmpty(map))
-      assert.isFalse(
-        _.isEmpty({ nodeType: 1, childNodes: [{ nodeType: 3 }] })
-      )
+      assert.isFalse(_.isEmpty({ nodeType: 1, childNodes: [{ nodeType: 3 }] }))
     })
   })
 
