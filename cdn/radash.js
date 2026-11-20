@@ -61,6 +61,9 @@ var radash = (function (exports) {
     const size = value.size;
     if (isNumber(size))
       return size === 0;
+    if (isNumber(value.nodeType) && value.childNodes) {
+      return value.childNodes.length === 0;
+    }
     const keys = Object.keys(value).length;
     return keys === 0;
   };
