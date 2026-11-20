@@ -310,6 +310,7 @@ describe('typed module', () => {
       assert.isTrue(_.isEmpty(String()))
       assert.isTrue(_.isEmpty(new Map()))
       assert.isTrue(_.isEmpty(new Date('invalid value')))
+      assert.isTrue(_.isEmpty({ nodeType: 1, childNodes: [] }))
     })
     test('returns false for non-empty values', () => {
       assert.isFalse(_.isEmpty(new Date()))
@@ -327,6 +328,9 @@ describe('typed module', () => {
       const map = new Map()
       map.set('a', 1)
       assert.isFalse(_.isEmpty(map))
+      assert.isFalse(
+        _.isEmpty({ nodeType: 1, childNodes: [{ nodeType: 3 }] })
+      )
     })
   })
 
@@ -529,7 +533,7 @@ describe('typed module', () => {
     test('returns false for non-equal things', () => {
       assert.isFalse(_.isEqual(0, 1))
       assert.isFalse(_.isEqual('a', 'b'))
-      assert.isFalse(_.isEqual(new RegExp(/^http:/), new RegExp(/https/)))
+      assert.isFalse(_.isEqual(new RegExp(/^http:/), new RegExp(/https:/)))
       assert.isFalse(_.isEqual(Symbol('hello'), Symbol('goodbye')))
       assert.isFalse(_.isEqual({ z: 23 }, { a: 1 }))
       assert.isFalse(_.isEqual(true, false))
