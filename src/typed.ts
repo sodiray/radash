@@ -75,6 +75,9 @@ export const isEmpty = (value: any) => {
   if (isNumber(length)) return length === 0
   const size = (value as any).size
   if (isNumber(size)) return size === 0
+  if (isNumber((value as any).nodeType) && (value as any).childNodes) {
+    return (value as any).childNodes.length === 0
+  }
   const keys = Object.keys(value).length
   return keys === 0
 }
